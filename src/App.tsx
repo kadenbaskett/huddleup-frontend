@@ -10,14 +10,15 @@ function App() {
   return (
     <AppShell
         fixed
-        navbarOffsetBreakpoint="sm"
+        // navbarOffsetBreakpoint="sm"
         header={
           <Header height={50}>
               <Burger
                 opened={opened}
                 onClick={() => setOpened((o) => !o)}
-                size="sm"
-                mr="xl"
+                size="lg"
+                mr="lg"
+                ml="lg"
               />
           </Header>
         }
