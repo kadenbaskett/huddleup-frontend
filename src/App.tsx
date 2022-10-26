@@ -9,43 +9,52 @@ import {
   Header,
   Burger,
   Anchor,
-  Title,
-  Group,
+  MantineProvider,
 } from '@mantine/core';
+import { Route, Routes } from 'react-router-dom';
+import DefaultHome from './pages/defaultHome';
 
 function App() {
   const [opened, setOpened] = useState(false);
   return (
-    <AppShell
-      fixed
-      header={
-        <Header height={50}>
-          <Group spacing="lg">
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: 'dark',
+      }}
+    >
+      <AppShell
+        fixed
+        header={
+          <Header height={50}>
             <Burger
               opened={opened}
               onClick={() => setOpened((o) => !o)}
               size="lg"
+              mr="lg"
               ml="lg"
             />
-            <Title size="h1">HUDDLE UP</Title>
-          </Group>
-        </Header>
-      }
-      navbar={
-        <Navbar
-          hiddenBreakpoint={5000}
-          width={{ base: '100%' }}
-          hidden={!opened}
-          ml="lg"
-        >
-          <Anchor>Home</Anchor>
-          <Anchor>Features</Anchor>
-          <Anchor>Pricing</Anchor>
-        </Navbar>
-      }
-    >
-      App
-    </AppShell>
+          </Header>
+        }
+        navbar={
+          <Navbar
+            hiddenBreakpoint="xl"
+            width={{ base: '100%' }}
+            hidden={!opened}
+          >
+            <Anchor>Home</Anchor>
+            <Anchor>Default Home</Anchor>
+            <Anchor>Features</Anchor>
+            <Anchor>Pricing</Anchor>
+          </Navbar>
+        }
+      >
+        <Routes>
+          <Route path="/default" element={<DefaultHome />} />
+        </Routes>
+      </AppShell>
+    </MantineProvider>
   );
 }
 
