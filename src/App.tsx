@@ -10,7 +10,6 @@ function App() {
   return (
     <AppShell
       fixed
-      //navbarOffsetBreakpoint="sm"
       header={
         <Header height={50}>
           <Burger
