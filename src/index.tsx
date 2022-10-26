@@ -16,6 +16,12 @@ root.render(
       withNormalizeCSS
       theme={{
         colorScheme: 'dark',
+        headings: {
+          fontFamily: 'Varsity',
+          sizes: {
+            h1: { fontWeight: 100, fontSize: 32, lineHeight: 1.4 },
+          },
+        },
       }}
     >
       <App />
