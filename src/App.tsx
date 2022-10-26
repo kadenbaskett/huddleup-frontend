@@ -1,21 +1,40 @@
 import logo from "./logo.svg";
 import "./App.css";
+import { useState } from "react";
 import LoginPage from './pages/loginPage/loginPage';
 import HomePage from './pages/homePage/homePage'
-import Navbar from './components/navbar/navbar';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AppShell, Navbar, Header, MediaQuery, Burger, Anchor} from "@mantine/core";
 
 function App() {
+  const [opened, setOpened] = useState(false);
   return (
-    <div className="App">
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-        </Routes>
-    </Router>
-    </div>
+    <AppShell
+        fixed
+        navbarOffsetBreakpoint="sm"
+        header={
+          <Header height={50}>
+              <Burger
+                opened={opened}
+                onClick={() => setOpened((o) => !o)}
+                size="sm"
+                mr="xl"
+              />
+          </Header>
+        }
+        navbar={
+          <Navbar
+            // className={classes.navbar}
+            width={{ base: "100%"}}
+            hidden={!opened}
+          >
+            <Anchor>Home</Anchor>
+            <Anchor>Features</Anchor>
+            <Anchor>Pricing</Anchor>
+          </Navbar>
+        }
+      >
+        App
+      </AppShell>
   );
 }
 
