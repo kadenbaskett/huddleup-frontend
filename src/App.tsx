@@ -39,7 +39,7 @@ function App() {
         }
         navbar={
           <Navbar
-            hiddenBreakpoint="xl"
+            hiddenBreakpoint={5000}
             width={{ base: '100%' }}
             hidden={!opened}
           >
