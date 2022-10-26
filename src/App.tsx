@@ -10,6 +10,8 @@ import {
   Burger,
   Anchor,
   MantineProvider,
+  Group,
+  Title,
 } from '@mantine/core';
 import { Route, Routes } from 'react-router-dom';
 import DefaultHome from './pages/defaultHome';
@@ -28,13 +30,15 @@ function App() {
         fixed
         header={
           <Header height={50}>
-            <Burger
-              opened={opened}
-              onClick={() => setOpened((o) => !o)}
-              size="lg"
-              mr="lg"
-              ml="lg"
-            />
+            <Group spacing="lg">
+              <Burger
+                opened={opened}
+                onClick={() => setOpened((o) => !o)}
+                size="lg"
+                ml="lg"
+              />
+              <Title size="h1">HUDDLE UP</Title>
+            </Group>
           </Header>
         }
         navbar={
