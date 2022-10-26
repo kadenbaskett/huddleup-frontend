@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
-import LoginPage from './pages/loginPage/loginPage';
+import LoginPage from './pages/login/login';
 import HomePage from './pages/homePage/homePage';
 import { AppShell, Navbar, Header, Burger, Anchor } from '@mantine/core';
 
@@ -10,7 +10,7 @@ function App() {
   return (
     <AppShell
       fixed
-      // navbarOffsetBreakpoint="sm"
+      navbarOffsetBreakpoint="sm"
       header={
         <Header height={50}>
           <Burger
@@ -23,11 +23,7 @@ function App() {
         </Header>
       }
       navbar={
-        <Navbar
-          // className={classes.navbar}
-          width={{ base: '100%' }}
-          hidden={!opened}
-        >
+        <Navbar hiddenBreakpoint="xl" width={{ base: '100%' }} hidden={!opened}>
           <Anchor>Home</Anchor>
           <Anchor>Features</Anchor>
           <Anchor>Pricing</Anchor>

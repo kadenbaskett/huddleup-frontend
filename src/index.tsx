@@ -16,7 +16,6 @@ root.render(
       withNormalizeCSS
       theme={{
         colorScheme: 'dark',
-        fontFamily: 'Open Sans, sans serif',
       }}
     >
       <App />
