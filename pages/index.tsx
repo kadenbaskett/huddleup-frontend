@@ -2,8 +2,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-var test = "double quotes"
-var test2 = 'single quotes';
+// var test = "double quotes"
+// var test2 = 'single quotes test 5';
 
 export default function Home() {
   return (
