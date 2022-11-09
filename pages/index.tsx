@@ -13,16 +13,11 @@ export default function Home() {
         </Head>
 
         <main className={styles.main}>
-          <Image
-            src="/assets/huddle-up-logo.png"
-            alt="huddle logo"
-            width={700}
-            height={700}
-          />
+          <Image src='/assets/huddle-up-logo.png' alt='huddle logo' width={700} height={700} />
         </main>
 
         <footer className={styles.footer}>this is a footer bitch</footer>
       </div>
     </>
-  );
+  )
 }
