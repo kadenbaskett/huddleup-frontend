@@ -2,7 +2,7 @@ import React from 'react'
 // import { render } from 'react-dom';
 // import MyFriends from '../../components/MyFriends/MyFriends';
 import MyNews from '../../components/MyNews/MyNews'
-import MyTeams from '../../components/MyTeams/myTeams'
+import MyTeams from '../../components/MyTeams/MyTeams'
 
 // const names = [];
 
