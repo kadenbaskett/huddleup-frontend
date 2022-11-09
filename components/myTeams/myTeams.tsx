@@ -1,7 +1,7 @@
 import React from 'react';
 
-function myTeams() {
-  return <div>myTeams</div>;
+function MyTeams() {
+  return <div>MyTeams</div>;
 }
 
-export default myTeams;
+export default MyTeams;
