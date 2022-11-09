@@ -2,10 +2,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-// var test = "double quotes"
-const test2 = 'single quotes test 5'
-console.log(test2)
-
 export default function Home() {
   return (
     <div className={styles.container}>
