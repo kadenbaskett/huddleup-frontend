@@ -12,7 +12,6 @@ const Home = (props: any) => {
           <MyTeams />
         </div>
         <div className="pt-5">
-          <MyFriends>names</MyFriends>
         </div>
       </div>
       <div className="col-span-6">
