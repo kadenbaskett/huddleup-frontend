@@ -3,19 +3,20 @@ import { render } from 'react-dom';
 import MyTeams from '../../components/MyTeams/MyTeams';
 import MyFriends from '../../components/MyFriends/MyFriends';
 import MyNews from '../../components/MyNews/MyNews';
+const names = [];
 const Home = (props: any) => {
   return (
-    <div>
-      <div className="grid grid-cols-2 gap-6">
+    <div className="grid grid-cols-10 gap-6 bg-slate-300 p-10">
+      <div className="col-span-4 ">
         <div>
           <MyTeams />
         </div>
-        <div>
-          <MyNews />
+        <div className="pt-5">
+          <MyFriends>names</MyFriends>
         </div>
-        <div>
-          <MyFriends />
-        </div>
+      </div>
+      <div className="col-span-6">
+        <MyNews />
       </div>
     </div>
   );

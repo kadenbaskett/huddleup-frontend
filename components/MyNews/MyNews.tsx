@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function MyNews() {
   return (
-    <div className="grid grid-cols-1 gap-3">
-      <div className="flex justify-center p-6 text-6xl bg-gray-100 border-2 border-gray-300 rounded-xl">
+    <div className="grid grid-cols-1 bg-white rounded-xl">
+      <div className="flex font-varsity justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl">
         News
       </div>
     </div>
