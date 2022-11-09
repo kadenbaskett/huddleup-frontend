@@ -43,8 +43,7 @@
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json}": [
       "prettier --write",
-      "eslint --quite --cache --fix",
-      "git add"
+      "eslint --quiet --cache --fix"
     ]
   }
 }
