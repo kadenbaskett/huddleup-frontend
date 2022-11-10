@@ -23,5 +23,5 @@ export default function Home() {
         <Image className='landingImage' src="/assets/istockfield.png" alt="field png" layout='fill' objectFit='cover' objectPosition='center' />
       </div>
     </>
-  );
+  )
 }

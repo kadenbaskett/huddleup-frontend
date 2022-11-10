@@ -26,16 +26,16 @@ export default function Navbar() {
               </li>
               <li className='nav-item'>
                 <a
-                  className="px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75"
-                  href="#"
+                  className='px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                  href='#'
                 >
                   Friends
                 </a>
               </li>
               <li className='nav-item'>
                 <a
-                  className="px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75"
-                  href="#"
+                  className='px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                  href='#'
                 >
                   Leagues
                 </a>
