@@ -27,6 +27,7 @@
         "no-multi-spaces": "error",
         "object-curly-spacing": ["error", "always"],
         "array-bracket-spacing": ["error", "always"],
+        "semi": ["error", "always"],
         "comma-dangle": ["error", "always-multiline"]
     },
     "settings": {
