@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+echo ********* Linting Staged Files *********
+
 npx lint-staged # && npx test:ci # this runs All app tests
 

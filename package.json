@@ -41,13 +41,13 @@
     "typescript": "^4.8.4"
   },
   "husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
-	},
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "eslint --fix --quiet",
       "prettier --write"
     ]
   }
