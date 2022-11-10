@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import MyTeams from '../../components/MyTeams/MyTeams';
+import MyTeams from '../../components/myTeams/myTeams';
 import MyFriends from '../../components/MyFriends/MyFriends';
 import MyNews from '../../components/MyNews/MyNews';
 const names = [];
