@@ -6,3 +6,12 @@
   font-family: 'Varsity Team';
   src: url('/assets/fonts/VarsityTeam-Bold.otf') format('otf');
 }
+
+.landingImage {
+  z-index: -10;
+}
+.landingText {
+  color: white;
+  font-size: 25px;
+  text-shadow: 5px 5px #0000;
+}
