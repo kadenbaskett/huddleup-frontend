@@ -26,7 +26,8 @@
         "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
         "no-multi-spaces": "error",
         "object-curly-spacing": ["error", "always"],
-        "array-bracket-spacing": ["error", "always"]
+        "array-bracket-spacing": ["error", "always"],
+        "comma-dangle": ["error", "always"]
     },
     "settings": {
         "import/resolver": {
