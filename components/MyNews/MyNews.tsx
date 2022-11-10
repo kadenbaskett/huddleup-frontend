@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import './MyNews.module.css';
 
 export default function MyNews() {
   return (
@@ -7,5 +8,5 @@ export default function MyNews() {
         News
       </div>
     </div>
-  )
+  );
 }

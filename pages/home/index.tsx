@@ -1,4 +1,5 @@
 import React from 'react';
+import MyFriends from '../../components/MyFriends/MyFriends';
 // import { render } from 'react-dom';
 // import MyFriends from '../../components/MyFriends/MyFriends';
 import MyNews from '../../components/MyNews/MyNews';
@@ -12,7 +13,9 @@ const Home = (props: any) => {
         <div>
           <MyTeams />
         </div>
-        <div className='pt-5'></div>
+        <div className='pt-5'>
+          <MyFriends />
+        </div>
       </div>
       <div className='col-span-6'>
         <MyNews />

@@ -1,9 +1,5 @@
 import React from 'react';
-// import { classicNameResolver } from 'typescript'
 import './MyTeams.module.css';
-
-const i = '';
-console.log(i);
 
 export default function MyTeams() {
   return (
