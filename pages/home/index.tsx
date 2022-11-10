@@ -1,12 +1,11 @@
-import React from 'react'
-import MyFriends from '../../components/MyFriends/MyFriends'
+import React from 'react';
+import MyFriends from '../../components/MyFriends/MyFriends';
 // import { render } from 'react-dom';
 // import MyFriends from '../../components/MyFriends/MyFriends';
-import MyNews from '../../components/MyNews/MyNews'
-import MyTeams from '../../components/MyTeams/MyTeams'
+import MyNews from '../../components/MyNews/MyNews';
+import MyTeams from '../../components/MyTeams/MyTeams';
 
 // const names = [];
-
 const Home = (props: any) => {
   return (
     <div className='grid grid-cols-10 gap-6 bg-slate-300 p-10'>
@@ -22,7 +21,7 @@ const Home = (props: any) => {
         <MyNews />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

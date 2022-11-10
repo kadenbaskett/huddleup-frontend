@@ -1,5 +1,5 @@
-import React from 'react'
-import './MyFriends.module.css'
+import React from 'react';
+import './MyFriends.module.css';
 
 export default function MyFriends() {
   return (
@@ -12,5 +12,5 @@ export default function MyFriends() {
       <div className='flex justify-center p-3 text-2xl '>Kaden Bobskett</div>
       <div className='flex justify-center p-3 text-2xl '>Justin Cuntez </div>
     </div>
-  )
+  );
 }
