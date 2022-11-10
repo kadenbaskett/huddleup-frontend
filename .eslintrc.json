@@ -21,8 +21,7 @@
         "@typescript-eslint/explicit-function-return-type": "off",
         "react/react-in-jsx-scope": "off",
         "no-var": "error",
-        "jsx-quotes": ["error", "prefer-single"],
-        "prettier/prettier": "error"
+        "jsx-quotes": ["error", "prefer-single"]
     },
     "settings": {
         "import/resolver": {

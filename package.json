@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint **/*.{js,jsx,ts,tsx,json}",
-    "lint:fix": "eslint --fix **/*.{js,jsx,ts,tsx,json}",
+    "lint": "eslint **/*.{js,jsx,ts,tsx}",
+    "lint:fix": "eslint --fix **/*.{js,jsx,ts,tsx}",
     "format": "prettier --write **/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc",
     "prepare": "husky install"
   },
@@ -46,8 +46,9 @@
 		}
 	},
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,json}": [
-      "eslint --fix"
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
     ]
   }
 }
