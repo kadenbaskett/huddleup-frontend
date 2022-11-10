@@ -1,8 +1,6 @@
 import React from 'react'
-// import { classicNameResolver } from 'typescript'
 import './MyTeams.module.css'
 
-// new comment to change file name
 export default function MyTeams() {
   return (
     <div className='grid grid-cols-1 bg-white rounded-xl'>

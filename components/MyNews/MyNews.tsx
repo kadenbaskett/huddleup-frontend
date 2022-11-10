@@ -1,4 +1,5 @@
 import React from 'react'
+import './MyNews.module.css'
 
 export default function MyNews() {
   return (
