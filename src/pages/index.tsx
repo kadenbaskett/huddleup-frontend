@@ -6,9 +6,6 @@ import * as bgImg from './../public/assets/istockfield.png';
 // import NavBar from '../components/NavBar/NavBar';
 import styles from '../styles/Home.module.css';
 
-const i = ' ';
-console.log(i);
-
 export default function Home() {
   return (
     <>
