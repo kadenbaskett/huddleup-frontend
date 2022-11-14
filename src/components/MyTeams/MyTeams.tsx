@@ -41,7 +41,7 @@ export default function MyTeams() {
 
   return (
     <div className='grid grid-cols-1 bg-white rounded-xl'>
-      <div className='flex huddleFont justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl'>
+      <div className='flex font-varsity justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl'>
         My Teams
       </div>
       {renderRows()}

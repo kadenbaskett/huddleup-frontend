@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: 'Varsity Team';
-  src: url('/src/public/assets/fonts/VarsityTeam-Bold.otf') format('otf');
+  src: url('../public/assets/fonts/VarsityTeam-Bold.otf');
 }
 
 .landingImage {
@@ -14,6 +14,7 @@
   color: white;
   font-size: 25px;
   text-shadow: 5px 5px #0000;
+<<<<<<< HEAD
 }
 .huddleFont {
   font-family: 'Varsity Team', sans-serif;
@@ -23,3 +24,6 @@
 .circularImage {
   border-radius: 50%;
 }
+=======
+}
+>>>>>>> develop
