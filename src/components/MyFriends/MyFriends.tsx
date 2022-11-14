@@ -1,15 +1,28 @@
 import React from 'react';
-import './MyFriends.module.css';
-
-const names = ['jake', 'joe', 'justin', 'kaden'];
+import Image from 'next/image';
+import ProfilePic from '../../public/assets/jakewhiteprofessionalpic.png';
+const names = ['jake', 'joe', 'justinblahblahblahblahblbhasfasdgasd', 'kaden'];
 
 export default function MyFriends() {
   const renderRows = () => {
     return names.map((name) => renderRow(name));
   };
 
-  const renderRow = (name: String) => {
-    return <div className='flex justify-center p-3 text-2xl '>{name}</div>;
+  const renderRow = (name: string) => {
+    return (
+      <div className='grid grid-cols-4'>
+        <Image
+          className='circularImage justify-right col-span-1 align-middle'
+          src={ProfilePic}
+          alt={name + ' profile pic'}
+          width={92}
+          height={92}
+        />
+        <div className='justify-center col-span-3 p-3 text-4xl break-words align-middle'>
+          {name}
+        </div>
+      </div>
+    );
   };
 
   return (

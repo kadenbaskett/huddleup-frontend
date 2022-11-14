@@ -19,3 +19,7 @@
   font-family: 'Varsity Team', sans-serif;
   color: white;
 }
+
+.circularImage {
+  border-radius: 50%;
+}
