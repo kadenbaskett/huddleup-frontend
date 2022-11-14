@@ -21,7 +21,14 @@
         "@typescript-eslint/explicit-function-return-type": "off",
         "react/react-in-jsx-scope": "off",
         "no-var": "error",
-        "jsx-quotes": ["error", "prefer-single"]
+        "jsx-quotes": ["error", "prefer-single"],
+        "semi-style": ["error", "last"],
+        "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+        "no-multi-spaces": "error",
+        "object-curly-spacing": ["error", "always"],
+        "array-bracket-spacing": ["error", "always"],
+        "semi": ["error", "always"],
+        "comma-dangle": ["error", "always-multiline"]
     },
     "settings": {
         "import/resolver": {

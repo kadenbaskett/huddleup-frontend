@@ -1,5 +1,5 @@
-import React from 'react'
-import './NavBar.module.css'
+import React from 'react';
+import './NavBar.module.css';
 
 export default function Navbar() {
   return (
@@ -45,5 +45,5 @@ export default function Navbar() {
         </div>
       </nav>
     </>
-  )
+  );
 }

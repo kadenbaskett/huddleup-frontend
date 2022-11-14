@@ -1,5 +1,5 @@
-import React from 'react'
-import './MyTeams.module.css'
+import React from 'react';
+import './MyTeams.module.css';
 
 export default function MyTeams() {
   return (
@@ -12,5 +12,5 @@ export default function MyTeams() {
       <div className='flex justify-center p-3 text-2xl '>kadens gay team</div>
       <div className='flex justify-center p-3 text-2xl'>my cool ass team</div>
     </div>
-  )
+  );
 }
