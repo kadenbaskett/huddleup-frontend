@@ -25,8 +25,8 @@
         "semi-style": ["error", "last"],
         "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
         "no-multi-spaces": "error",
-        "object-curly-spacing": ["error", "always"],
-        "array-bracket-spacing": ["error", "always"],
+        "object-curly-spacing": ["error", "never"],
+        "array-bracket-spacing": ["error", "never"],
         "semi": ["error", "always"],
         "comma-dangle": ["error", "always-multiline"]
     },

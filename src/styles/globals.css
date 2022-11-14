@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: 'Varsity Team';
-  src: url('/assets/fonts/VarsityTeam-Bold.otf') format('otf');
+  src: url('/src/public/assets/fonts/VarsityTeam-Bold.otf') format('otf');
 }
 
 .landingImage {
@@ -16,6 +16,6 @@
   text-shadow: 5px 5px #0000;
 }
 .huddleFont {
-  font-family: "Varsity Team", sans-serif;
+  font-family: 'Varsity Team', sans-serif;
   color: white;
 }
