@@ -49,7 +49,7 @@ export default function index() {
       <div className='grid'>
         <label className='font-OpenSans font-bold text-2xl'>Number of Teams: {teams}</label>
         <Slider
-          label={(val) => numTeams.find((mark) => mark.value === val)?.label}
+          label={(val: number) => numTeams.find((mark) => mark.value === val)?.label}
           labelTransition='skew-down'
           labelTransitionDuration={150}
           labelTransitionTimingFunction='ease'
@@ -69,7 +69,7 @@ export default function index() {
           Number of Players per Team: {players}
         </label>
         <Slider
-          label={(val) => numPlayers.find((mark) => mark.value === val)?.label}
+          label={(val: number) => numPlayers.find((mark) => mark.value === val)?.label}
           labelTransition='skew-down'
           labelTransitionDuration={150}
           labelTransitionTimingFunction='ease'
