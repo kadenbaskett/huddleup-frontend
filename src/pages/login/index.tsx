@@ -39,7 +39,9 @@ function Login() {
   return (
     <div className='grid content-center h-screen place-items-center'>
       <div className='place-items-center h-auto w-5/12 content-center bg-white rounded-lg'>
-        <h1 className=' mt-10 text-center text-form-title font-bold'>LOGIN</h1>
+        <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold'>
+          LOGIN
+        </h1>
         <div className='mb-10 mx-auto w-3/4'>
           <FormInput
             label='Email'
