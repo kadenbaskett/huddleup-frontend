@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import {LeagueCard, leagueCardProps} from '../../components/LeagueCard/LeagueCard';
 
@@ -33,9 +34,11 @@ function leagues() {
           <button className='py-7 px-20 hover:bg-transparent hover:text-orange text-xl font-bold border border-orange rounded bg-orange text-white transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
             Join a League
           </button>
-          <button className='py-7 px-20 hover:bg-transparent hover:text-green text-xl font-bold border border-green rounded bg-green text-white transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
-            Create a League
-          </button>
+          <Link href={'/leagues/create'}>
+            <button className='py-7 px-20 hover:bg-transparent hover:text-green text-xl font-bold border border-green rounded bg-green text-white transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
+              Create a League
+            </button>
+          </Link>
         </div>
       </div>
       {renderLeagues()}
