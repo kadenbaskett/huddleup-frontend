@@ -4,7 +4,7 @@ import './NavBar.module.css';
 export default function Navbar() {
   return (
     <>
-      <nav className='relative flex flex-wrap items-center justify-between px-2 py-3 bg-darkBlue mb-3'>
+      <nav className='relative flex flex-wrap items-center justify-between px-2 py-3 bg-darkBlue'>
         <div className='container px-4 mx-auto flex flex-wrap items-center justify-between'>
           <div className='w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start'>
             <a
@@ -35,7 +35,7 @@ export default function Navbar() {
               <li className='nav-item'>
                 <a
                   className='px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                  href='#'
+                  href='/leagues'
                 >
                   Leagues
                 </a>
