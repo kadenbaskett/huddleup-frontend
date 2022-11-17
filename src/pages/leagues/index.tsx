@@ -1,15 +1,17 @@
 import React from 'react';
-import {LeagueCard, leagueCardProps} from '../../components/LeagueCard/LeagueCard';
+import {LeagueCard, leagueProps} from '../../components/LeagueCard/LeagueCard';
 
-const leagueData: leagueCardProps[] = [
+const leagueData: leagueProps[] = [
   {
     name: 'Hunter Biden Fan Club',
     subText: 'This is an example league description',
+    id: '1',
   },
   {
     name: 'That bad bad canker sore',
     subText:
       'This is an example long league description that could potentially be too big but its not a big deal because the text should rap, wait I mean it should wrap, the text isnt Drake',
+    id: '2',
   },
 ];
 
@@ -17,7 +19,7 @@ const renderLeagues = () => {
   return leagueData.map((league) => renderLeague(league));
 };
 
-const renderLeague = (league: leagueCardProps) => {
+const renderLeague = (league: leagueProps) => {
   return (
     <div className='grid col-span-10'>
       <LeagueCard {...league} />
