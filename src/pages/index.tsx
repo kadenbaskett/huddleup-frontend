@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import * as logo from './../public/assets/huddle-up-logo.png';
 import * as bgImg from './../public/assets/istockfield.png';
 // import NavBar from '../components/NavBar/NavBar';
@@ -21,12 +22,16 @@ export default function Home() {
             how sick this is
           </p>
           <div className='grid grid-cols-2 gap-3'>
-            <button className='py-7 px-20 hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
-              Sign Up
-            </button>
-            <button className='py-7 px-20 hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
-              Login
-            </button>
+            <Link href='/signup'>
+              <button className='w-full h-full py-7 px-20 hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
+                Sign Up
+              </button>
+            </Link>
+            <Link href='/login'>
+              <button className='w-full h-full py-7 px-20 hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
+                Login
+              </button>
+            </Link>
           </div>
         </main>
         <Image
