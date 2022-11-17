@@ -10,6 +10,9 @@ module.exports = {
       fontFamily: {
         varsity: ['Varsity Team'],
       },
+      fontSize: {
+        'form-title': ['32px', '40px'],
+      },
       colors: {
         green: '#1A9345',
         orange: '#FF6B00',
