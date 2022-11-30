@@ -1,39 +1,50 @@
 import React, {useState} from 'react';
 import FormInput from '../../components/FormInput/FormInput';
-// import {useRouter} from 'next/router';
+import axios from 'axios';
+import {useRouter} from 'next/router';
 
 function Login() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
 
-  const handleRememberMe = (e) => {
+  const handleRememberMe = () => {
     setRememberMe((current) => !current);
-    console.log('Firing: ', rememberMe);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async function () {
     // reset error
     setError('');
+    const email = (document.getElementById('emailInput') as HTMLInputElement).value;
+    const password = (document.getElementById('passwordInput') as HTMLInputElement).value;
 
-    // const email = (document.getElementById('emailInput') as HTMLInputElement).value;
-    // const password = (document.getElementById('passwordInput') as HTMLInputElement).value;
+    // call to HuddleUp backend authenticate
 
-    // call to firebase to authenticate
+    // TODO: send rememberme to firebase and turn on
+    console.log(rememberMe);
 
-    // // if succesful redirect
-    // void router.push('/home');
-
-    // else show login error
-    // handle unauthorized
-    setError('Invalid email or password');
-    // setErrorCSS('');
-
-    // // handle error loggin in
-    // setError('Error logging in please try again');
-    // setErrorCSS('');
-
-    // stop form submission
+    await axios
+      .post('/users/loginUser', {
+        email,
+        password,
+      })
+      .then((resp) => {
+        console.log('JWT:', resp.data);
+        localStorage.setItem('jwt', resp.data);
+        // redirect to home after succesful login
+        void router.push('/home');
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          // handle unauthorized
+          setError('Invalid email or password');
+          // setErrorCSS('');
+        } else {
+          // handle error loggin in
+          setError('Error logging in please try again');
+          // setErrorCSS('');
+        }
+      });
   };
 
   return (

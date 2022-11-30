@@ -4,4 +4,17 @@ const nextConfig = {
   swcMinify: true,
 };
 
-module.exports = nextConfig;
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/users/createUser',
+        destination: 'http://localhost:8000/users/createUser',
+      },
+      {
+        source: '/users/loginUser',
+        destination: 'http://localhost:8000/users/loginUser',
+      },
+    ];
+  },
+};
