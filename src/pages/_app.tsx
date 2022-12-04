@@ -4,9 +4,9 @@ import NavBar from '../components/NavBar/NavBar';
 
 export default function App({Component, pageProps}: AppProps) {
   return (
-    <>
+    <div>
       <NavBar />
       <Component {...pageProps} />
-    </>
+    </div>
   );
 }
