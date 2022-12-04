@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Button, Group, RangeSlider, Slider, Textarea, TextInput} from '@mantine/core';
+import Link from 'next/link';
 interface teamSlider {
   value: number;
   label: string;
@@ -160,17 +161,20 @@ export default function index() {
         </div>
 
         <Group position='center'>
-          <Button
-            className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-            variant='default'
-            size='xl'
-          >
-            Cancel
-          </Button>
+          <Link href='/leagues'>
+            <Button
+              className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+              variant='default'
+              size='xl'
+            >
+              Cancel
+            </Button>
+          </Link>
           <Button
             className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
             variant='default'
             size='xl'
+            type='submit'
           >
             Submit
           </Button>

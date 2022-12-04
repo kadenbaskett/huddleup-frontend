@@ -1,6 +1,9 @@
+import {Button, Group} from '@mantine/core';
 import Link from 'next/link';
 import React from 'react';
 import {LeagueCard, leagueProps} from '../../components/LeagueCard/LeagueCard';
+import {HiUserGroup} from 'react-icons/hi';
+import {BsPlusLg} from 'react-icons/bs';
 
 const leagueData: leagueProps[] = [
   {
@@ -32,16 +35,26 @@ function leagues() {
   return (
     <div className='grid grid-cols-10 bg-slate-300 p-10 min-h-screen gap-3 flex items-start'>
       <div className='col-span-4'>
-        <div className='grid grid-cols-2 gap-3'>
-          <button className='py-7 px-20 hover:bg-transparent hover:text-orange text-xl font-bold border border-orange rounded bg-orange text-white transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
-            Join a League
-          </button>
+        <Group>
+          <Button
+            leftIcon={<HiUserGroup />}
+            className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+            variant='default'
+            size='xl'
+          >
+            Join a league
+          </Button>
           <Link href={'/leagues/create'}>
-            <button className='py-7 px-20 hover:bg-transparent hover:text-green text-xl font-bold border border-green rounded bg-green text-white transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'>
+            <Button
+              leftIcon={<BsPlusLg />}
+              className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+              variant='default'
+              size='xl'
+            >
               Create a League
-            </button>
+            </Button>
           </Link>
-        </div>
+        </Group>
       </div>
       {renderLeagues()}
     </div>
