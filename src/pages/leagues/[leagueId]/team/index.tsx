@@ -12,9 +12,9 @@ function league() {
         teamId={2}
         leagueName='league name'
         leagueId={Number(leagueId)}
-        page='home'
+        page='team'
       />
-      <div>This will display the home information of league - {leagueId}</div>
+      <div>This will display the team information of league - {leagueId}</div>
     </>
   );
 }
