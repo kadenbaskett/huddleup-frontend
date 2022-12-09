@@ -1,13 +1,13 @@
-import {Button} from '@mantine/core';
+import { Button } from '@mantine/core';
 import Link from 'next/link';
 import React from 'react';
-import {HiArrowLeft} from 'react-icons/hi';
-import {CiFootball} from 'react-icons/ci';
-import {TiFlowMerge} from 'react-icons/ti';
-import {RiBarChart2Fill} from 'react-icons/ri';
-import {TbClipboardText} from 'react-icons/tb';
-import {BsFillPeopleFill} from 'react-icons/bs';
-import {FiSettings} from 'react-icons/fi';
+import { HiArrowLeft } from 'react-icons/hi';
+import { CiFootball } from 'react-icons/ci';
+import { TiFlowMerge } from 'react-icons/ti';
+import { RiBarChart2Fill } from 'react-icons/ri';
+import { TbClipboardText } from 'react-icons/tb';
+import { BsFillPeopleFill } from 'react-icons/bs';
+import { FiSettings } from 'react-icons/fi';
 export interface leagueNavbarProps {
   teamName: string;
   teamId: Number;
@@ -20,7 +20,7 @@ export default function LeagueNavBar(props: leagueNavbarProps) {
   if (props.page === 'home') {
     console.log('home');
   } else {
-    console.log('nah');
+    // console.log('nah');
   }
   return (
     <>
