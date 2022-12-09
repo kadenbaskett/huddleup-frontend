@@ -6,6 +6,8 @@ import { StoreState, wrapper } from '@store/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchPlayersThunk } from '@store/slices/playersSlice';
 
+import { Table } from '@mantine/core';
+
 function league(props) {
   const router = useRouter();
   const { leagueId } = router.query;
@@ -15,10 +17,22 @@ function league(props) {
   const playerFetchStatus = useSelector((state: StoreState) => state.players.status);
   console.log('players: ', players);
 
-  const listItems = players.map((p) => (
-    <li key={p.id}>
-      {p.first_name} {p.last_name}
-    </li>
+  const rows = players.map((p) => (
+    <tr key={p.id}>
+      <td>
+        {p.first_name} {p.last_name}
+      </td>
+      <td>{p.id}</td>
+      <td>{p.external_id}</td>
+      <td>{p.position}</td>
+      <td>
+        {p.nfl_team.city} {p.nfl_team.name}
+      </td>
+      <td>{p.status}</td>
+      <td>
+        <img src={p.photo_url}></img>
+      </td>
+    </tr>
   ));
 
   useEffect(() => {
@@ -37,9 +51,20 @@ function league(props) {
         leagueId={Number(leagueId)}
         page='players'
       />
-      <div>This will display the players information of league - {leagueId}</div>
-
-      <ul>{listItems}</ul>
+      <Table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>id (for dev)</th>
+            <th>external_id (for dev)</th>
+            <th>Position</th>
+            <th>Team</th>
+            <th>Status</th>
+            <th>Image</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </Table>
     </>
   );
 }
