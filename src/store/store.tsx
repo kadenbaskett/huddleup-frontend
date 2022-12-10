@@ -3,16 +3,16 @@ import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 
 // Import and combine all slices
 import playersSlice, { playersSliceState } from '@store/slices/playersSlice';
-import usersSlice, { usersSliceState } from '@store/slices/usersSlice';
+import userSlice, { userSliceState } from '@store/slices/userSlice';
 
 export interface StoreState {
   players: playersSliceState;
-  users: usersSliceState;
+  user: userSliceState;
 }
 
 const combinedReducer = combineReducers({
   [playersSlice.name]: playersSlice.reducer,
-  [usersSlice.name]: usersSlice.reducer,
+  [userSlice.name]: userSlice.reducer,
 });
 
 const masterReducer = (state, action) => {
@@ -25,8 +25,15 @@ const masterReducer = (state, action) => {
         status: state.players.status,
         player_list: [...action.payload.players.player_list, ...state.players.player_list],
       },
-      users: {
-        user_list: [...action.payload.users.user_list, ...state.users.user_list],
+      user: {
+        user_info: {
+          ...state.user.user_info,
+          ...action.payload.user.user_info,
+        },
+        leagues: {
+          ...state.user.leagues,
+          ...action.payload.user.leagues,
+        },
       },
     };
     return nextState;
