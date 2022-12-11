@@ -45,6 +45,11 @@ export async function fetchPublicLeagues(): Promise<respObj> {
   return await getRequest(url);
 }
 
+export async function fetchLeagueInfo(leagueId: number): Promise<respObj> {
+  const url = `${BASE_URL}/database/league/${leagueId}`;
+  return await getRequest(url);
+}
+
 export async function fetchUserLeagues(userId: number): Promise<respObj> {
   userId = 1;
   const url = `${BASE_URL}/database/leagues/user/${userId}`;

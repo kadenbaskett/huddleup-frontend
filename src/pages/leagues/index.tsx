@@ -13,10 +13,7 @@ function leagues() {
   const leagues = useSelector((state: StoreState) => state.user.leagues);
   const userFetchStatus = useSelector((state: StoreState) => state.user.status);
 
-  console.log(leagues);
-
   useEffect(() => {
-    console.log('Use effect');
     if (userFetchStatus === 'idle') {
       dispatch(fetchUserLeaguesThunk());
     }
@@ -36,7 +33,7 @@ function leagues() {
 
   const renderLeague = (league: leagueProps) => {
     return (
-      <div className='grid col-span-10'>
+      <div key={league.id} className='grid col-span-10'>
         <LeagueCard {...league} />
       </div>
     );

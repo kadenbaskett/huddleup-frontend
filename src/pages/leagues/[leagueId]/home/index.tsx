@@ -3,21 +3,37 @@ import { StoreState } from '@store/store';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import LeagueNavBar from '../../../../components/LeagueNavBar/LeagueNavBar';
+import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
+import { Table } from '@mantine/core';
 
 function league() {
   const router = useRouter();
   const { leagueId } = router.query;
 
   const dispatch = useDispatch();
-  const playerFetchStatus = useSelector((state: StoreState) => state.league.status);
+  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueStatus);
+  const teams = useSelector((state: StoreState) => state.league.teams);
+  console.log('teams: ', teams);
 
   useEffect(() => {
-    console.log('Use effect');
-    if (playerFetchStatus === 'idle') {
-      dispatch(fetchLeagueInfoThunk(9));
+    if (leagueInfoFetchStatus === 'idle' && leagueId) {
+      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
     }
-  }, [playerFetchStatus, dispatch]);
+  }, [leagueInfoFetchStatus, dispatch, leagueId]);
+
+  const rows = teams.map((t) => (
+    <tr key={t.id}>
+      <td>{t.id}</td>
+      <td>{t.name}</td>
+      <td>
+        <ul>
+          {t.managers.map((manager) => (
+            <li key={manager.id}>{manager.user.username}</li>
+          ))}
+        </ul>
+      </td>
+    </tr>
+  ));
 
   return (
     <>
@@ -28,7 +44,16 @@ function league() {
         leagueId={Number(leagueId)}
         page='home'
       />
-      <div>This will display the home information of league - {leagueId}</div>
+      <Table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Managers</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </Table>
     </>
   );
 }

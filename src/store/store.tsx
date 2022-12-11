@@ -25,6 +25,7 @@ const masterReducer = (state: StoreState, action) => {
       league: {
         ...state.league,
         player_list: [...action.payload.league.player_list, ...state.league.player_list],
+        teams: [...action.payload.league.teams, ...state.league.teams],
       },
       user: {
         ...state.user,

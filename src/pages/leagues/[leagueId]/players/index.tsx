@@ -4,17 +4,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { Table } from '@mantine/core';
 import { StoreState } from '@store/store';
-import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
+import { fetchLeagueInfoThunk, fetchLeaguePlayersThunk } from '@store/slices/leagueSlice';
 
 function league(props) {
   const router = useRouter();
   const { leagueId } = router.query;
 
   const dispatch = useDispatch();
-  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.status);
+  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueStatus);
+  const leaguePlayerFetchStatus = useSelector((state: StoreState) => state.league.status);
   const players = useSelector((state: StoreState) => state.league.player_list);
 
-  console.log(players);
+  // console.log(players);
+
+  useEffect(() => {
+    if ((leagueInfoFetchStatus === 'idle' || leaguePlayerFetchStatus === 'idle') && leagueId) {
+      dispatch(fetchLeaguePlayersThunk(Number(leagueId)));
+      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
+    }
+  }, [leagueInfoFetchStatus, leaguePlayerFetchStatus, dispatch, leagueId]);
 
   const rows = players.map((p) => (
     <tr key={p.id}>
@@ -33,12 +41,6 @@ function league(props) {
       </td>
     </tr>
   ));
-
-  useEffect(() => {
-    if (leagueInfoFetchStatus === 'idle' && leagueId) {
-      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
-    }
-  }, [leagueInfoFetchStatus, dispatch, leagueId]);
 
   return (
     <>

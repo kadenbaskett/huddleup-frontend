@@ -1,10 +1,23 @@
-import {useRouter} from 'next/router';
-import React from 'react';
-import LeagueNavBar from '../../../../components/LeagueNavBar/LeagueNavBar';
+import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
+import { StoreState } from '@store/store';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 
 function league() {
   const router = useRouter();
-  const {leagueId} = router.query;
+  const { leagueId } = router.query;
+
+  const dispatch = useDispatch();
+  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueStatus);
+
+  useEffect(() => {
+    if (leagueInfoFetchStatus === 'idle' && leagueId) {
+      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
+    }
+  }, [leagueInfoFetchStatus, dispatch, leagueId]);
+
   return (
     <>
       <LeagueNavBar
