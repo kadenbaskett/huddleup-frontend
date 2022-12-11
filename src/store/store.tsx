@@ -2,30 +2,32 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 
 // Import and combine all slices
-import playersSlice, { playersSliceState } from '@store/slices/playersSlice';
+import leagueSlice, { leagueSliceState } from '@store/slices/leagueSlice';
 import userSlice, { userSliceState } from '@store/slices/userSlice';
 
 export interface StoreState {
-  players: playersSliceState;
+  league: leagueSliceState;
   user: userSliceState;
 }
 
 const combinedReducer = combineReducers({
-  [playersSlice.name]: playersSlice.reducer,
+  [leagueSlice.name]: leagueSlice.reducer,
   [userSlice.name]: userSlice.reducer,
 });
 
-const masterReducer = (state, action) => {
+const masterReducer = (state: StoreState, action) => {
   if (action.type === HYDRATE) {
     const nextState: StoreState = {
       ...state, // use previous state
 
       // Update each slice
-      players: {
-        status: state.players.status,
-        player_list: [...action.payload.players.player_list, ...state.players.player_list],
+      // TODO update the rest of the league slice
+      league: {
+        ...state.league,
+        player_list: [...action.payload.league.player_list, ...state.league.player_list],
       },
       user: {
+        ...state.user,
         user_info: {
           ...state.user.user_info,
           ...action.payload.user.user_info,
@@ -43,4 +45,4 @@ const masterReducer = (state, action) => {
 };
 
 const makeStore = () => configureStore({ reducer: masterReducer });
-export const wrapper = createWrapper(makeStore, { debug: true });
+export const wrapper = createWrapper(makeStore, { debug: false });

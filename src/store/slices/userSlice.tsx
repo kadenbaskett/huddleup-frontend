@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { League } from '@interfaces/league.interface';
 import { User } from '@interfaces/user.interface';
+import { fetchPublicLeagues } from '@services/apiClient';
 
 export interface userSliceState {
   user_info: User;
@@ -30,7 +31,7 @@ export const userSlice = createSlice({
       state.leagues = action.payload.leauges;
     },
     addLeague: (state, action) => {
-      state.leagues.concat(action.payload.league);
+      state.leagues.push(action.payload.league);
     },
     removeLeague: (state, action) => {
       const leagueID = action.payload;
@@ -54,7 +55,7 @@ export const userSlice = createSlice({
 });
 
 export const fetchUserLeaguesThunk = createAsyncThunk('user/fetchUserLeagues', async () => {
-  const response = await fetchUserLeaguesThunk();
+  const response = await fetchPublicLeagues();
   return response.data ? response.data : [];
 });
 

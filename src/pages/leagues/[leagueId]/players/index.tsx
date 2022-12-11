@@ -1,21 +1,20 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-
-import { StoreState, wrapper } from '@store/store';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPlayersThunk } from '@store/slices/playersSlice';
-
+import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { Table } from '@mantine/core';
+import { StoreState } from '@store/store';
+import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
 
 function league(props) {
   const router = useRouter();
   const { leagueId } = router.query;
 
   const dispatch = useDispatch();
-  const players = useSelector((state: StoreState) => state.players.player_list);
-  const playerFetchStatus = useSelector((state: StoreState) => state.players.status);
-  console.log('players: ', players);
+  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.status);
+  const players = useSelector((state: StoreState) => state.league.player_list);
+
+  console.log(players);
 
   const rows = players.map((p) => (
     <tr key={p.id}>
@@ -26,7 +25,7 @@ function league(props) {
       <td>{p.external_id}</td>
       <td>{p.position}</td>
       <td>
-        {p.nfl_team.city} {p.nfl_team.name}
+        {p.nfl_team ? p.nfl_team.city : ''} {p.nfl_team ? p.nfl_team.name : ''}
       </td>
       <td>{p.status}</td>
       <td>
@@ -36,11 +35,10 @@ function league(props) {
   ));
 
   useEffect(() => {
-    console.log('Use effect');
-    if (playerFetchStatus === 'idle') {
-      dispatch(fetchPlayersThunk());
+    if (leagueInfoFetchStatus === 'idle' && leagueId) {
+      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
     }
-  }, [playerFetchStatus, dispatch]);
+  }, [leagueInfoFetchStatus, dispatch, leagueId]);
 
   return (
     <>
@@ -68,13 +66,5 @@ function league(props) {
     </>
   );
 }
-
-export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
-  // const response = await fetch(`https://reqres.in/api/users/${Math.floor(Math.random() * 10 + 1)}`);
-  // const {data} = await response.json();
-  // store.dispatch(addUser(`${data.first_name} ${data.last_name}`));
-  // return {
-  // };
-});
 
 export default league;

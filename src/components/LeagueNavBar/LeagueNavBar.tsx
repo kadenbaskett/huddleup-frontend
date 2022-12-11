@@ -17,11 +17,6 @@ export interface leagueNavbarProps {
 }
 
 export default function LeagueNavBar(props: leagueNavbarProps) {
-  if (props.page === 'home') {
-    console.log('home');
-  } else {
-    // console.log('nah');
-  }
   return (
     <>
       <div className='grid flex bg-slate-300 h-40"'>

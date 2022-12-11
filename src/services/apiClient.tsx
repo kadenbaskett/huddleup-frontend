@@ -35,13 +35,18 @@ export async function createLeague(leageData: object) {
   return await postRequest(url, leageData);
 }
 
-export async function fetchPlayers(): Promise<respObj> {
-  const url = `${BASE_URL}/database/players`;
+export async function fetchLeaguePlayers(leagueId: number): Promise<respObj> {
+  const url = `${BASE_URL}/database/players/league/${leagueId}`;
   return await getRequest(url);
 }
 
-export async function fetchUserLeagues(): Promise<respObj> {
-  const userId = 1;
-  const url = `${BASE_URL}/database/leagues/${userId}`;
+export async function fetchPublicLeagues(): Promise<respObj> {
+  const url = `${BASE_URL}/database/leagues/public`;
+  return await getRequest(url);
+}
+
+export async function fetchUserLeagues(userId: number): Promise<respObj> {
+  userId = 1;
+  const url = `${BASE_URL}/database/leagues/user/${userId}`;
   return await getRequest(url);
 }
