@@ -1,39 +1,32 @@
 import React, {useState} from 'react';
 import FormInput from '../../components/FormInput/FormInput';
-// import {useRouter} from 'next/router';
+import {useRouter} from 'next/router';
+import {login} from '../../firebase';
 
 function Login() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
 
   const handleRememberMe = (e) => {
     setRememberMe((current) => !current);
     console.log('Firing: ', rememberMe);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async () => {
     // reset error
     setError('');
 
-    // const email = (document.getElementById('emailInput') as HTMLInputElement).value;
-    // const password = (document.getElementById('passwordInput') as HTMLInputElement).value;
+    const email = (document.getElementById('emailInput') as HTMLInputElement).value;
+    const password = (document.getElementById('passwordInput') as HTMLInputElement).value;
 
-    // call to firebase to authenticate
-
-    // // if succesful redirect
-    // void router.push('/home');
-
-    // else show login error
-    // handle unauthorized
-    setError('Invalid email or password');
-    // setErrorCSS('');
-
-    // // handle error loggin in
-    // setError('Error logging in please try again');
-    // setErrorCSS('');
-
-    // stop form submission
+    if (await login(email, password)) {
+      console.log('Login successful!');
+      void router.push('/home');
+    } else {
+      console.log('Login failed!');
+      setError('Error logging in please try again');
+    }
   };
 
   return (
