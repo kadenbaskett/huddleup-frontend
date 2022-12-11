@@ -11,7 +11,7 @@ export function fantasyPoints(s, pprValue = 1) {
     points += 0.1 * s.rush_yards;
     points += 0.1 * s.rush_td;
     points += 2 * s.two_point_conversion_passes;
-    points += 2 * s.two_point_conversion_rec;
+    points += 2 * s.two_point_conversion_receptions;
     points += 2 * s.two_point_conversion_runs;
 
     return points;

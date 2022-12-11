@@ -18,10 +18,9 @@ function league() {
   // TODO we are just using the first team in the league right now
   // This just gets the latest roster of the first team
   // Also dont have such a messy if statement
-  const { teams } = league;
   let players = [];
-  if (teams?.[0]?.rosters?.players?.length) {
-    players = teams.rosters.at(-1).players;
+  if (league?.teams?.[0]?.rosters) {
+    players = league.teams[0].rosters.at(-1).players;
   }
 
   useEffect(() => {
@@ -53,7 +52,7 @@ function league() {
       <LeagueNavBar
         teamName='team name'
         teamId={2}
-        leagueName={league ? league.name : ''}
+        leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='team'
       />

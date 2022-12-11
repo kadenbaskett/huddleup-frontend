@@ -24,7 +24,7 @@ function league() {
       <LeagueNavBar
         teamName='team name'
         teamId={2}
-        leagueName={league ? league.name : ''}
+        leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='settings'
       />

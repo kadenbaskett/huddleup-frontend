@@ -4,12 +4,18 @@ import { fetchPublicLeagues } from '@services/apiClient';
 
 export interface globalSliceState {
   publicLeagues: League[];
+  week: number;
+  season: number;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  timeframeStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: globalSliceState = {
   publicLeagues: [],
+  week: null,
+  season: null,
   status: 'idle',
+  timeframeStatus: 'idle',
 };
 
 export const globalSlice = createSlice({
@@ -27,12 +33,28 @@ export const globalSlice = createSlice({
       })
       .addCase(fetchPublicLeaguesThunk.rejected, (state, action) => {
         state.status = 'failed';
+      })
+      .addCase(fetchTimeframesThunk.pending, (state, action) => {
+        state.timeframeStatus = 'loading';
+      })
+      .addCase(fetchTimeframesThunk.fulfilled, (state, action) => {
+        state.timeframeStatus = 'succeeded';
+        state.week = action.payload.week;
+        state.season = action.payload.season;
+      })
+      .addCase(fetchTimeframesThunk.rejected, (state, action) => {
+        state.timeframeStatus = 'failed';
       });
   },
 });
 
 export const fetchPublicLeaguesThunk = createAsyncThunk('global/fetchPublicLeagues', async () => {
   const response = await fetchPublicLeagues();
+  return response.data ? response.data : [];
+});
+
+export const fetchTimeframesThunk = createAsyncThunk('global/fetchTimeframes', async () => {
+  const response = await fetchTimeframe();
   return response.data ? response.data : [];
 });
 
