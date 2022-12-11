@@ -3,26 +3,16 @@ import { fetchLeagueInfo, fetchLeaguePlayers } from '@services/apiClient';
 
 export interface leagueSliceState {
   league: any;
-  settings: any;
-  standings: any;
-  matchups: any;
-  teams: any[];
-  rosters: any[];
-  player_list: any[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  leagueStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  playerList: any[];
+  playerFetchStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  leagueFetchStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: leagueSliceState = {
   league: null,
-  settings: null,
-  standings: null,
-  matchups: null,
-  teams: [],
-  rosters: [],
-  player_list: [],
-  status: 'idle',
-  leagueStatus: 'idle',
+  playerList: [],
+  playerFetchStatus: 'idle',
+  leagueFetchStatus: 'idle',
 };
 
 export const leagueSlice = createSlice({
@@ -34,25 +24,24 @@ export const leagueSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchLeaguePlayersThunk.pending, (state, action) => {
-        state.status = 'loading';
+        state.playerFetchStatus = 'loading';
       })
       .addCase(fetchLeaguePlayersThunk.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.player_list = action.payload;
+        state.playerFetchStatus = 'succeeded';
+        state.playerList = action.payload;
       })
       .addCase(fetchLeaguePlayersThunk.rejected, (state, action) => {
-        state.status = 'failed';
+        state.playerFetchStatus = 'failed';
       })
       .addCase(fetchLeagueInfoThunk.pending, (state, action) => {
-        state.leagueStatus = 'loading';
+        state.leagueFetchStatus = 'loading';
       })
       .addCase(fetchLeagueInfoThunk.fulfilled, (state, action) => {
-        state.leagueStatus = 'succeeded';
+        state.leagueFetchStatus = 'succeeded';
         state.league = action.payload;
-        state.teams = action.payload.teams;
       })
       .addCase(fetchLeagueInfoThunk.rejected, (state, action) => {
-        state.leagueStatus = 'failed';
+        state.leagueFetchStatus = 'failed';
       });
   },
 });

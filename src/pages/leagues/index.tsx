@@ -1,34 +1,36 @@
 import { Button, Group } from '@mantine/core';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { LeagueCard, leagueProps } from '../../components/LeagueCard/LeagueCard';
+import { LeagueCard, leagueProps } from '@components/LeagueCard/LeagueCard';
 import { HiUserGroup } from 'react-icons/hi';
 import { BsPlusLg } from 'react-icons/bs';
 import { StoreState } from '@store/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserLeaguesThunk } from '@store/slices/userSlice';
+import { fetchPublicLeaguesThunk } from '@store/slices/globalSlice';
 
 function leagues() {
   const dispatch = useDispatch();
-  const leagues = useSelector((state: StoreState) => state.user.leagues);
-  const userFetchStatus = useSelector((state: StoreState) => state.user.status);
+  // const userLeaguesFetchStatus = useSelector((state: StoreState) => state.user.status);
+  const globalFetchStatus = useSelector((state: StoreState) => state.global.status);
+  const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
 
   useEffect(() => {
-    if (userFetchStatus === 'idle') {
-      dispatch(fetchUserLeaguesThunk());
+    if (globalFetchStatus === 'idle') {
+      dispatch(fetchPublicLeaguesThunk());
     }
-  }, [userFetchStatus, dispatch]);
+  }, [globalFetchStatus, dispatch]);
 
-  const leagueData = leagues.map((league) => {
-    return {
+  const leagueData = publicLeagues.map((league) => {
+    const l: leagueProps = {
       name: league.name,
       id: league.id,
       subText: 'This is an example league description',
     };
+    return l;
   });
 
   const renderLeagues = () => {
-    return leagueData.map((league) => renderLeague(league));
+    return leagueData.map((league: leagueProps) => renderLeague(league));
   };
 
   const renderLeague = (league: leagueProps) => {

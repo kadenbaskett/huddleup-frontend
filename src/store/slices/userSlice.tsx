@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { League } from '@interfaces/league.interface';
 import { User } from '@interfaces/user.interface';
-import { fetchPublicLeagues } from '@services/apiClient';
+import { fetchUserLeagues } from '@services/apiClient';
 
 export interface userSliceState {
-  user_info: User;
+  userInfo: User;
   leagues: League[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: userSliceState = {
-  user_info: null,
+  userInfo: null,
   leagues: [],
   status: 'idle',
 };
@@ -25,7 +25,7 @@ export const userSlice = createSlice({
         username: action.payload.username,
         email: action.payload.email,
       };
-      state.user_info = user;
+      state.userInfo = user;
     },
     setLeagues: (state, action) => {
       state.leagues = action.payload.leauges;
@@ -49,15 +49,17 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserLeaguesThunk.rejected, (state, action) => {
         state.status = 'failed';
-        // state.error = action.error.message;
       });
   },
 });
 
-export const fetchUserLeaguesThunk = createAsyncThunk('user/fetchUserLeagues', async () => {
-  const response = await fetchPublicLeagues();
-  return response.data ? response.data : [];
-});
+export const fetchUserLeaguesThunk = createAsyncThunk(
+  'user/fetchUserLeagues',
+  async (userId: number) => {
+    const response = await fetchUserLeagues(userId);
+    return response.data ? response.data : [];
+  },
+);
 
 export const { setUser, setLeagues, addLeague, removeLeague } = userSlice.actions;
 
