@@ -20,12 +20,22 @@ function Login() {
     const email = (document.getElementById('emailInput') as HTMLInputElement).value;
     const password = (document.getElementById('passwordInput') as HTMLInputElement).value;
 
-    if (await login(email, password)) {
+    const resp = await login(email, password);
+    console.log('Object: ', resp);
+
+    if (resp === 'success') {
       console.log('Login successful!');
       void router.push('/home');
+    } else if (resp.includes('wrong-password')) {
+      console.log('Incorrect password!');
+      setError('Incorrect password');
+    } else if (resp.includes('user-not-found')) {
+      console.log(resp);
+      setError('User not found for given email');
     } else {
-      console.log('Login failed!');
-      setError('Error logging in please try again');
+      // general error
+      console.log(resp);
+      setError('Error logging in. Please try again');
     }
   };
 

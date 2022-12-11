@@ -27,11 +27,10 @@ const login = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
 
     // TODO: get any additional information from our DB
-    return true;
+    return 'success';
   } catch (err) {
     console.error(err);
-    alert(err.message);
-    return false;
+    return err.message;
   }
 };
 
