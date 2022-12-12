@@ -5,6 +5,9 @@ import {
   signOut,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  setPersistence,
+  browserSessionPersistence,
+  browserLocalPersistence,
 } from 'firebase/auth';
 
 // test Huddle Up Firebase configuration
@@ -22,8 +25,11 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 const auth = getAuth();
 
-const login = async (email, password) => {
+const login = async (email, password, rememberMe) => {
   try {
+    // LOCAL = explicict sign out is needed | SESSION = persists during current tab
+    await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
+
     await signInWithEmailAndPassword(auth, email, password);
 
     // TODO: get any additional information from our DB
@@ -36,19 +42,18 @@ const login = async (email, password) => {
 const createAccount = async (username, email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
-    console.log('Response: ' + res);
-    // TODO: add user to our database
-    //   const user = res.user;
 
-    return true;
+    // TODO: add user to our database
+    const user = res.user;
+    console.log(user); // here to cancel error on user for not being used(linter)
+
+    return 'success';
   } catch (err) {
-    console.error(err);
-    alert(err.message);
-    return false;
+    return err.message;
   }
 };
 
-const logout = () => {
+const logout = async () => {
   signOut(auth);
 };
 
@@ -57,7 +62,6 @@ const sendPasswordReset = async (email) => {
     await sendPasswordResetEmail(auth, email);
     return 'success';
   } catch (err) {
-    console.error(err);
     return err.message;
   }
 };

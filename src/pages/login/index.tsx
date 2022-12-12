@@ -10,29 +10,38 @@ function Login() {
 
   const handleRememberMe = (e) => {
     setRememberMe((current) => !current);
-    console.log('Firing: ', rememberMe);
   };
 
   const handleLogin = async () => {
-    // reset error
     setError('');
 
     const email = (document.getElementById('emailInput') as HTMLInputElement).value;
     const password = (document.getElementById('passwordInput') as HTMLInputElement).value;
 
-    const resp = await login(email, password);
+    const re =
+      /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (resp === 'success') {
-      console.log('Login successful!');
-      void router.push('/home');
-    } else if (resp.includes('wrong-password')) {
-      setError('Incorrect password');
-    } else if (resp.includes('user-not-found')) {
-      setError('User not found for email');
+    if (!re.test(email)) {
+      setError('Invalid email entered');
+    } else if (password === '') {
+      setError('Enter a password');
     } else {
-      // general error
-      console.log(resp);
-      setError('Error logging in. Please try again');
+      const resp = await login(email, password, rememberMe);
+
+      // TODO: add remember me through firebase
+
+      if (resp === 'success') {
+        console.log('Login successful!');
+        void router.push('/home');
+      } else if (resp.includes('wrong-password')) {
+        setError('Incorrect password');
+      } else if (resp.includes('user-not-found')) {
+        setError('User not found for email');
+      } else {
+        // general error
+        console.log(resp);
+        setError('Error logging in. Please try again');
+      }
     }
   };
 
