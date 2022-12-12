@@ -29,7 +29,6 @@ const login = async (email, password) => {
     // TODO: get any additional information from our DB
     return 'success';
   } catch (err) {
-    console.error(err);
     return err.message;
   }
 };
@@ -56,10 +55,10 @@ const logout = () => {
 const sendPasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);
-    alert('Password reset link sent!');
+    return 'success';
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    return err.message;
   }
 };
 
