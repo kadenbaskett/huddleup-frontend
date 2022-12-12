@@ -10,26 +10,35 @@ function ForgotPassword() {
 
   const handleReset = async () => {
     const email = (document.getElementById('emailInput') as HTMLInputElement).value;
-    const resp = await sendPasswordReset(email);
 
-    console.log('Response: ', resp);
+    // check that the input is a valid email
+    const re =
+      /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (re.test(email)) {
+      const resp = await sendPasswordReset(email);
 
-    if (resp === 'success') {
-      setIsError(false);
-      setMessage('Password reset link sent');
-    } else if (resp.includes('user-not-found')) {
-      setIsError(true);
-      setMessage('User not found for email');
-    } else if (resp.includes('missing-email')) {
-      setIsError(true);
-      setMessage('Please enter an email address');
-    } else if (resp.includes('invalid-email')) {
-      setIsError(true);
-      setMessage('Email entered is not a valid email address');
+      console.log('Response: ', resp);
+
+      if (resp === 'success') {
+        setIsError(false);
+        setMessage('Password reset link sent');
+      } else if (resp.includes('user-not-found')) {
+        setIsError(true);
+        setMessage('User not found for email');
+      } else if (resp.includes('missing-email')) {
+        setIsError(true);
+        setMessage('Please enter an email address');
+      } else if (resp.includes('invalid-email')) {
+        setIsError(true);
+        setMessage('Email entered is not a valid email address');
+      } else {
+        // general error
+        setIsError(true);
+        setMessage('Error sending password reset link');
+      }
     } else {
-      // general error
       setIsError(true);
-      setMessage('Error sending password reset link');
+      setMessage('Entered email is not valid');
     }
   };
 
