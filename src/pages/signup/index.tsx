@@ -1,11 +1,15 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
-import {createAccount} from '../../firebase';
-import {useRouter} from 'next/router';
+import { createAccount } from '../../firebase';
+import { useRouter } from 'next/router';
+import { addUserThunk } from '@store/slices/userSlice';
+import { AppDispatch } from '@store/store';
+import { useDispatch } from 'react-redux';
 
 function Signup() {
   const [error, setError] = useState('');
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleCreateAccount = async () => {
     setError('');
@@ -28,6 +32,7 @@ function Signup() {
 
       if (resp === 'success') {
         console.log('Account created succesfully!');
+        dispatch(addUserThunk({ username, email }));
         void router.push('/home');
       } else if (resp.includes('email-already-in-use')) {
         setError('Email is already in use');
