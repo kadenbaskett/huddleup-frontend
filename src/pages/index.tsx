@@ -2,11 +2,11 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import * as logo from './../public/assets/huddle-up-logo.png';
-import * as bgImg from './../public/assets/fieldFixed.png';
+import * as logo from '@public/assets/huddle-up-logo.png';
+import * as bgImg from '@public/assets/fieldFixed.png';
 // import NavBar from '../components/NavBar/NavBar';
-import styles from '../styles/Home.module.css';
-import {Button, Group} from '@mantine/core';
+import styles from '@styles/Home.module.css';
+import { Button, Group } from '@mantine/core';
 
 export default function Home() {
   return (

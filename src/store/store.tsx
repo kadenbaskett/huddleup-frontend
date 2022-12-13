@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 
 // Import and combine all slices
@@ -22,24 +22,7 @@ const masterReducer = (state: StoreState, action) => {
   if (action.type === HYDRATE) {
     const nextState: StoreState = {
       ...state, // use previous state
-
-      // Update each slice
-      // TODO update the rest of the league slice
-      league: {
-        ...state.league,
-        playerList: [...action.payload.league.playerList, ...state.league.playerList],
-      },
-      user: {
-        ...state.user,
-        userInfo: {
-          ...state.user.userInfo,
-          ...action.payload.user.userInfo,
-        },
-        leagues: {
-          ...state.user.leagues,
-          ...action.payload.user.leagues,
-        },
-      },
+      ...action.payload, // apply delta from hydration
     };
     return nextState;
   } else {
@@ -49,3 +32,8 @@ const masterReducer = (state: StoreState, action) => {
 
 const makeStore = () => configureStore({ reducer: masterReducer });
 export const wrapper = createWrapper(makeStore, { debug: false });
+
+export type AppStore = ReturnType<typeof makeStore>;
+export type AppState = ReturnType<AppStore['getState']>;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action>;
+export type AppDispatch = ReturnType<AppStore['dispatch']>;

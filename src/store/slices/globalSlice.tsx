@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { League } from '@interfaces/league.interface';
-import { fetchPublicLeagues } from '@services/apiClient';
+import { fetchPublicLeagues, fetchTimeframe } from '@services/apiClient';
 
 export interface globalSliceState {
   publicLeagues: League[];
@@ -46,6 +46,11 @@ export const globalSlice = createSlice({
         state.timeframeStatus = 'failed';
       });
   },
+});
+
+export const handleAppInitThunk = createAsyncThunk('global/fetchPublicLeagues', async () => {
+  const response = await fetchPublicLeagues();
+  return response.data ? response.data : [];
 });
 
 export const fetchPublicLeaguesThunk = createAsyncThunk('global/fetchPublicLeagues', async () => {

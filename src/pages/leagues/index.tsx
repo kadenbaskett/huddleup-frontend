@@ -4,12 +4,12 @@ import React, { useEffect } from 'react';
 import { LeagueCard, leagueProps } from '@components/LeagueCard/LeagueCard';
 import { HiUserGroup } from 'react-icons/hi';
 import { BsPlusLg } from 'react-icons/bs';
-import { StoreState } from '@store/store';
+import { AppDispatch, StoreState } from '@store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPublicLeaguesThunk } from '@store/slices/globalSlice';
 
 function leagues() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   // const userLeaguesFetchStatus = useSelector((state: StoreState) => state.user.status);
   const globalFetchStatus = useSelector((state: StoreState) => state.global.status);
   const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
