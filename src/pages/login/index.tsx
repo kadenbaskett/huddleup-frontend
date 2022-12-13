@@ -1,39 +1,48 @@
 import React, {useState} from 'react';
 import FormInput from '../../components/FormInput/FormInput';
-// import {useRouter} from 'next/router';
+import {useRouter} from 'next/router';
+import {login} from '../../firebase';
 
 function Login() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
 
   const handleRememberMe = (e) => {
     setRememberMe((current) => !current);
-    console.log('Firing: ', rememberMe);
   };
 
-  const handleLogin = (e) => {
-    // reset error
+  const handleLogin = async () => {
     setError('');
 
-    // const email = (document.getElementById('emailInput') as HTMLInputElement).value;
-    // const password = (document.getElementById('passwordInput') as HTMLInputElement).value;
+    const email = (document.getElementById('emailInput') as HTMLInputElement).value;
+    const password = (document.getElementById('passwordInput') as HTMLInputElement).value;
 
-    // call to firebase to authenticate
+    const re =
+      /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    // // if succesful redirect
-    // void router.push('/home');
+    if (!re.test(email)) {
+      setError('Invalid email entered');
+    } else if (password === '') {
+      setError('Enter a password');
+    } else {
+      const resp = await login(email, password, rememberMe);
 
-    // else show login error
-    // handle unauthorized
-    setError('Invalid email or password');
-    // setErrorCSS('');
+      // TODO: add remember me through firebase
 
-    // // handle error loggin in
-    // setError('Error logging in please try again');
-    // setErrorCSS('');
-
-    // stop form submission
+      if (resp === 'success') {
+        console.log('Login successful!');
+        void router.push('/home');
+      } else if (resp.includes('wrong-password')) {
+        setError('Incorrect password');
+      } else if (resp.includes('user-not-found')) {
+        setError('User not found for email');
+      } else {
+        // general error
+        console.log(resp);
+        setError('Error logging in. Please try again');
+      }
+    }
   };
 
   return (
