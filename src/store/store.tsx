@@ -1,43 +1,28 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 
 // Import and combine all slices
 import leagueSlice, { leagueSliceState } from '@store/slices/leagueSlice';
 import userSlice, { userSliceState } from '@store/slices/userSlice';
+import globalSlice, { globalSliceState } from '@store/slices/globalSlice';
 
 export interface StoreState {
   league: leagueSliceState;
   user: userSliceState;
+  global: globalSliceState;
 }
 
 const combinedReducer = combineReducers({
   [leagueSlice.name]: leagueSlice.reducer,
   [userSlice.name]: userSlice.reducer,
+  [globalSlice.name]: globalSlice.reducer,
 });
 
 const masterReducer = (state: StoreState, action) => {
   if (action.type === HYDRATE) {
     const nextState: StoreState = {
       ...state, // use previous state
-
-      // Update each slice
-      // TODO update the rest of the league slice
-      league: {
-        ...state.league,
-        player_list: [...action.payload.league.player_list, ...state.league.player_list],
-        teams: [...action.payload.league.teams, ...state.league.teams],
-      },
-      user: {
-        ...state.user,
-        user_info: {
-          ...state.user.user_info,
-          ...action.payload.user.user_info,
-        },
-        leagues: {
-          ...state.user.leagues,
-          ...action.payload.user.leagues,
-        },
-      },
+      ...action.payload, // apply delta from hydration
     };
     return nextState;
   } else {
@@ -47,3 +32,8 @@ const masterReducer = (state: StoreState, action) => {
 
 const makeStore = () => configureStore({ reducer: masterReducer });
 export const wrapper = createWrapper(makeStore, { debug: false });
+
+export type AppStore = ReturnType<typeof makeStore>;
+export type AppState = ReturnType<AppStore['getState']>;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action>;
+export type AppDispatch = ReturnType<AppStore['dispatch']>;

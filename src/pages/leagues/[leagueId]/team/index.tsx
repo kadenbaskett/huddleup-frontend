@@ -5,19 +5,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { Table } from '@mantine/core';
 import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
+import { fantasyPoints } from '@services/helpers';
 
 function league() {
   const router = useRouter();
   const { leagueId } = router.query;
 
   const dispatch = useDispatch();
-  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueStatus);
-  const teams = useSelector((state: StoreState) => state.league.teams);
+  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
+  const league = useSelector((state: StoreState) => state.league.league);
 
-  let roster = {};
-
-  if (teams) {
-    roster = teams[0]?.rosters[teams[0]?.rosters.length - 1];
+  // TODO we are just using the first team in the league right now
+  // This just gets the latest roster of the first team
+  // Also dont have such a messy if statement
+  let players = [];
+  if (league?.teams?.[0]?.rosters) {
+    players = league.teams[0].rosters.at(-1).players;
   }
 
   useEffect(() => {
@@ -26,24 +29,7 @@ function league() {
     }
   }, [leagueInfoFetchStatus, dispatch, leagueId]);
 
-  const fantasyPoints = (s) => {
-    if (s) {
-      let points = 0;
-      points -= 2 * s.interceptions_thrown;
-      points += 4 * s.pass_td;
-      points += 0.25 * s.pass_yards;
-      points += 0.1 * s.rec_yards;
-      points += 1 * s.receptions;
-      points += 0.1 * s.rush_yards;
-      points += 0.1 * s.rush_td;
-
-      return points;
-    }
-
-    return '';
-  };
-
-  const rows = roster?.players?.map((p) => (
+  const rows = players.map((p) => (
     <tr key={p.id}>
       <td>
         {p.player.first_name} {p.player.last_name}
@@ -66,7 +52,7 @@ function league() {
       <LeagueNavBar
         teamName='team name'
         teamId={2}
-        leagueName={league ? league.name : ''}
+        leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='team'
       />

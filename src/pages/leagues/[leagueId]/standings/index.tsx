@@ -10,7 +10,8 @@ function league() {
   const { leagueId } = router.query;
 
   const dispatch = useDispatch();
-  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueStatus);
+  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
+  const league = useSelector((state: StoreState) => state.league.league);
 
   useEffect(() => {
     if (leagueInfoFetchStatus === 'idle' && leagueId) {
@@ -23,7 +24,7 @@ function league() {
       <LeagueNavBar
         teamName='team name'
         teamId={2}
-        leagueName='league name'
+        leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='standings'
       />

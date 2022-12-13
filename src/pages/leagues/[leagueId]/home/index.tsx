@@ -11,15 +11,16 @@ function league() {
   const { leagueId } = router.query;
 
   const dispatch = useDispatch();
-  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueStatus);
-  const teams = useSelector((state: StoreState) => state.league.teams);
-  console.log('teams: ', teams);
+  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
+  const league = useSelector((state: StoreState) => state.league.league);
 
   useEffect(() => {
     if (leagueInfoFetchStatus === 'idle' && leagueId) {
       dispatch(fetchLeagueInfoThunk(Number(leagueId)));
     }
   }, [leagueInfoFetchStatus, dispatch, leagueId]);
+
+  const teams = league ? league.teams : [];
 
   const rows = teams.map((t) => (
     <tr key={t.id}>
@@ -40,7 +41,7 @@ function league() {
       <LeagueNavBar
         teamName='team name'
         teamId={2}
-        leagueName='league name'
+        leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='home'
       />
