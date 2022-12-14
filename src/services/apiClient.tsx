@@ -30,9 +30,19 @@ async function postRequest(url: string, data: object): Promise<respObj> {
   }
 }
 
+export async function addUser(username: string, email: string) {
+  const url = `${BASE_URL}/database/user`;
+  return await postRequest(url, { username, email });
+}
+
 export async function createLeague(leageData: object) {
   const url = `${BASE_URL}/database/league`;
   return await postRequest(url, leageData);
+}
+
+export async function fetchUser(email: string) {
+  const url = `${BASE_URL}/database/user/${email}`;
+  return await getRequest(url);
 }
 
 export async function fetchLeaguePlayers(leagueId: number): Promise<respObj> {

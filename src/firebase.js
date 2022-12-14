@@ -1,4 +1,4 @@
-import {initializeApp} from 'firebase/app';
+import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -30,7 +30,8 @@ const login = async (email, password, rememberMe) => {
     // LOCAL = explicict sign out is needed | SESSION = persists during current tab
     await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
 
-    await signInWithEmailAndPassword(auth, email, password);
+    const user = await signInWithEmailAndPassword(auth, email, password);
+    console.log(user);
 
     // TODO: get any additional information from our DB
     return 'success';
@@ -66,4 +67,4 @@ const sendPasswordReset = async (email) => {
   }
 };
 
-export {auth, login, createAccount, sendPasswordReset, logout};
+export { auth, login, createAccount, sendPasswordReset, logout };

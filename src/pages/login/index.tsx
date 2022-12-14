@@ -1,12 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
-import {useRouter} from 'next/router';
-import {login} from '../../firebase';
+import { useRouter } from 'next/router';
+import { login } from '../../firebase';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@store/store';
+import { fetchUserThunk } from '@store/slices/userSlice';
 
 function Login() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleRememberMe = (e) => {
     setRememberMe((current) => !current);
@@ -32,6 +36,7 @@ function Login() {
 
       if (resp === 'success') {
         console.log('Login successful!');
+        dispatch(fetchUserThunk(email));
         void router.push('/home');
       } else if (resp.includes('wrong-password')) {
         setError('Incorrect password');
