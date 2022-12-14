@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
-import { createAccount } from '../../firebase';
+import { createAccount } from '../../firebase/firebase';
 import { useRouter } from 'next/router';
 import { addUserThunk } from '@store/slices/userSlice';
 import { AppDispatch } from '@store/store';

@@ -10,7 +10,6 @@ import {
   browserLocalPersistence,
 } from 'firebase/auth';
 
-// test Huddle Up Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -20,8 +19,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase app
-const firebase = initializeApp(firebaseConfig);
+// eslint-disable-next-line no-unused-vars
+const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 const login = async (email, password, rememberMe) => {
@@ -66,4 +65,4 @@ const sendPasswordReset = async (email) => {
   }
 };
 
-export { firebase, auth, login, createAccount, sendPasswordReset, logout };
+export { auth, login, createAccount, sendPasswordReset, logout };
