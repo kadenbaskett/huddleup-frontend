@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
 import { useRouter } from 'next/router';
-import { login } from '../../firebase';
+import { login } from '../../firebase/firebase';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@store/store';
 import { fetchUserThunk } from '@store/slices/userSlice';

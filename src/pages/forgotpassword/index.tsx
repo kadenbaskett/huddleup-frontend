@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
-import {sendPasswordReset} from '../../firebase';
+import { sendPasswordReset } from '../../firebase/firebase';
 // import {useRouter} from 'next/router';
 
 function ForgotPassword() {

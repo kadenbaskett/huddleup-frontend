@@ -10,19 +10,17 @@ import {
   browserLocalPersistence,
 } from 'firebase/auth';
 
-// test Huddle Up Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyC3VhVqA-zR0mOA9-sUwTw-0JohqqIxPCY',
-  authDomain: 'test-fanhuddle.firebaseapp.com',
-  projectId: 'test-fanhuddle',
-  storageBucket: 'test-fanhuddle.appspot.com',
-  messagingSenderId: '526044775750',
-  appId: '1:526044775750:web:d8242c7328c52df3b55147',
-  measurementId: 'G-NX81Y3HZPH',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase app
-initializeApp(firebaseConfig);
+// eslint-disable-next-line no-unused-vars
+const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 const login = async (email, password, rememberMe) => {
