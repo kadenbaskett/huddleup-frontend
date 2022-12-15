@@ -14,7 +14,7 @@ export function LeagueCard(league: leagueProps) {
       <div className='grid grid-cols-5 bg-white rounded-xl h-80 border hover:border-orange border-white'>
         <div
           className='grid col-span-1 items-center'
-          style={{width: 'auto', height: '17rem', position: 'relative'}}
+          style={{ width: 'auto', height: '17rem', position: 'relative' }}
         >
           <Image src={NFL} alt={league.name + '-image'} layout='fill' objectFit='contain' />
         </div>

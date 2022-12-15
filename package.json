@@ -12,15 +12,25 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@mantine/core": "^5.8.0",
+    "@mantine/hooks": "^5.8.0",
+    "@reduxjs/toolkit": "^1.9.1",
+    "@tabler/icons": "^1.111.0",
     "@types/node": "18.11.9",
     "@types/react": "^18.0.25",
     "@types/react-dom": "18.0.8",
+    "axios": "^1.2.1",
     "eslint-config-next": "13.0.2",
+    "firebase": "^9.15.0",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
     "next": "13.0.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "next-redux-wrapper": "^8.0.0",
+    "react": "^18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.7.1",
+    "react-redux": "^8.0.5",
+    "react-svg": "^15.1.14"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.42.1",

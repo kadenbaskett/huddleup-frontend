@@ -1,5 +1,7 @@
 import React from 'react';
 import './NavBar.module.css';
+import { FaRegUser } from 'react-icons/fa';
+import { auth } from '../../firebase/firebase';
 
 export default function Navbar() {
   return (
@@ -35,10 +37,27 @@ export default function Navbar() {
               <li className='nav-item'>
                 <a
                   className='px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                  href='#'
+                  href='/leagues'
                 >
                   Leagues
                 </a>
+              </li>
+              <li className='nav-item'>
+                {auth.currentUser == null ? (
+                  <a
+                    className='bg-orange rounded-lg px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                    href='/login'
+                  >
+                    Login
+                  </a>
+                ) : (
+                  <a
+                    href='/profile'
+                    className='text-orange px-3 py-2 flex items-center  hover:opacity-75'
+                  >
+                    <FaRegUser size='1.7rem' />
+                  </a>
+                )}
               </li>
             </ul>
           </div>

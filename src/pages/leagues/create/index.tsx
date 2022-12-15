@@ -1,21 +1,21 @@
-import React, {useState} from 'react';
-import {Button, Group, RangeSlider, Slider, Textarea, TextInput} from '@mantine/core';
+import React, { useState } from 'react';
+import { Button, Group, RangeSlider, Slider, Textarea, TextInput } from '@mantine/core';
 import Link from 'next/link';
 interface teamSlider {
   value: number;
   label: string;
 }
 const numTeams: teamSlider[] = [
-  {value: 2, label: '2'},
-  {value: 4, label: '4'},
-  {value: 6, label: '6'},
-  {value: 8, label: '8'},
-  {value: 10, label: '10'},
-  {value: 12, label: '12'},
-  {value: 14, label: '14'},
-  {value: 16, label: '16'},
-  {value: 18, label: '18'},
-  {value: 20, label: '20'},
+  { value: 2, label: '2' },
+  { value: 4, label: '4' },
+  { value: 6, label: '6' },
+  { value: 8, label: '8' },
+  { value: 10, label: '10' },
+  { value: 12, label: '12' },
+  { value: 14, label: '14' },
+  { value: 16, label: '16' },
+  { value: 18, label: '18' },
+  { value: 20, label: '20' },
 ];
 
 interface numPlayersSlider {
@@ -23,11 +23,11 @@ interface numPlayersSlider {
   label: string;
 }
 const numPlayers: numPlayersSlider[] = [
-  {value: 2, label: '2'},
-  {value: 3, label: '3'},
-  {value: 4, label: '4'},
-  {value: 5, label: '5'},
-  {value: 6, label: '6'},
+  { value: 2, label: '2' },
+  { value: 3, label: '3' },
+  { value: 4, label: '4' },
+  { value: 5, label: '5' },
+  { value: 6, label: '6' },
 ];
 
 export default function index() {
@@ -40,7 +40,7 @@ export default function index() {
     setMaxPlayerRange(value[1]);
   }
 
-  function handleSubmit(event: {preventDefault: () => void; target: any}) {
+  function handleSubmit(event) {
     event.preventDefault();
     console.log('event', event.target);
   }
@@ -52,13 +52,11 @@ export default function index() {
           <label className='font-varsity text-6xl'>Create Your League</label>
         </div>
         <div>
-          <label className='font-OpenSans font-bold text-2xl'>Search League:</label>
+          <label className='font-OpenSans font-bold text-2xl'>League Name:</label>
           <TextInput
             placeholder='Sample League Name'
             size='xl'
             required
-            autoFocus
-            autoComplete='off'
             styles={() => ({
               input: {
                 fontFamily: 'Varsity Team',
@@ -150,7 +148,7 @@ export default function index() {
                   <div className='w-full text-lg font-OpenSans font-bold'>
                     No Points Per Reception
                   </div>
-                  <div className='w-full'>Dont get extra points for catches by receivers</div>
+                  <div className='w-full'>Don't get extra points for catches by receivers</div>
                 </div>
               </label>
             </div>

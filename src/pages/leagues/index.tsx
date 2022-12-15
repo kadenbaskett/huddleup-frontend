@@ -1,8 +1,8 @@
 import React from 'react';
-import {LeagueCard, leagueProps} from '../../components/LeagueCard/LeagueCard';
-import {HiUserGroup} from 'react-icons/hi';
-import {BsPlusLg} from 'react-icons/bs';
-import {Button, Group} from '@mantine/core';
+import { LeagueCard, leagueProps } from '../../components/LeagueCard/LeagueCard';
+import { HiUserGroup } from 'react-icons/hi';
+import { BsPlusLg } from 'react-icons/bs';
+import { Button, Group } from '@mantine/core';
 import Link from 'next/link';
 
 const leagueData: leagueProps[] = [

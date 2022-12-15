@@ -8,10 +8,10 @@ interface team {
 }
 
 const teams: team[] = [
-  {team: 'gay team 1', league: 'league 1'},
-  {team: 'gay team 2', league: 'league 2'},
-  {team: 'gay team 3', league: 'league 3'},
-  {team: 'gay team 4', league: 'league 4'},
+  { team: 'Example team 1', league: 'league 1' },
+  { team: 'Example team 2', league: 'league 2' },
+  { team: 'Example team 3', league: 'league 3' },
+  { team: 'Example team 4', league: 'league 4' },
 ];
 
 export default function MyTeams() {
