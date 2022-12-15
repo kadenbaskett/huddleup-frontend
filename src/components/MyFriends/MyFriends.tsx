@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import ProfilePic from '../../public/assets/jakewhiteprofessionalpic.png';
-const names = ['jake', 'joe', 'justinblahblahblahblahblbhasfasdgasd', 'kaden'];
+const names = ['Jake', 'Joe', 'Justin', 'Kaden'];
 
 export default function MyFriends() {
   const renderRows = () => {
