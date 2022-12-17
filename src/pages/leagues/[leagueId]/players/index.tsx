@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import { Table } from '@mantine/core';
+import { Avatar, Table } from '@mantine/core';
 import { AppDispatch, StoreState } from '@store/store';
 import { fetchLeagueInfoThunk, fetchLeaguePlayersThunk } from '@store/slices/leagueSlice';
+import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 
 function league(props) {
   const router = useRouter();
@@ -15,12 +16,33 @@ function league(props) {
   const leaguePlayerFetchStatus = useSelector(
     (state: StoreState) => state.league.playerFetchStatus,
   );
-  const players = useSelector((state: StoreState) => state.league.playerList);
+  let players = useSelector((state: StoreState) => state.league.playerList);
   const league = useSelector((state: StoreState) => state.league.league);
 
   if (players) {
-    console.log(players[0]);
+    const allowedPositions = ['QB', 'RB', 'WR', 'TE'];
+    const offense = players.filter(
+      (p) => allowedPositions.includes(p.position) && p.status === 'Active',
+    );
+    const playersWhoPlay = offense.filter((p) => p.player_game_stats.length > 8);
+    const owned = playersWhoPlay.filter((p) => p.roster_players.length);
+    players = owned.slice(0, 50);
+    // console.log(players[0]);
   }
+
+  // Player popup
+  const [opened, setOpened] = useState(false);
+  const [openPlayer, setOpenPlayer] = useState(null);
+
+  const onClose = () => {
+    setOpened(false);
+    setOpenPlayer(null);
+  };
+
+  const onOpen = (p) => {
+    setOpenPlayer(p);
+    setOpened(true);
+  };
 
   useEffect(() => {
     if ((leagueInfoFetchStatus === 'idle' || leaguePlayerFetchStatus === 'idle') && leagueId) {
@@ -30,9 +52,9 @@ function league(props) {
   }, [leagueInfoFetchStatus, leaguePlayerFetchStatus, dispatch, leagueId]);
 
   const rows = players.map((p) => (
-    <tr key={p.id}>
+    <tr key={p.id} onClick={() => onOpen(p)}>
       <td>
-        <img src={p.photo_url}></img>
+        <Avatar src={p.photo_url} alt={'player image'} />
       </td>
       <td>
         {p.first_name} {p.last_name}
@@ -68,6 +90,7 @@ function league(props) {
         </thead>
         <tbody>{rows}</tbody>
       </Table>
+      <PlayerPopup player={openPlayer} opened={opened} onClose={onClose} />
     </>
   );
 }
