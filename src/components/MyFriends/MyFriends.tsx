@@ -1,36 +1,31 @@
 import React from 'react';
 import Image from 'next/image';
 import ProfilePic from '../../public/assets/jakewhiteprofessionalpic.png';
-const names = ['jake', 'joe', 'justinblahblahblahblahblbhasfasdgasd', 'kaden'];
+import styles from './MyFriends.module.css';
+import { Anchor, Grid, Group } from '@mantine/core';
+export interface myFriendProps {
+  name: string;
+  // This subtext could probably be the mutual leagues count
+  // subText: string;
+  id: number;
+}
 
-export default function MyFriends() {
-  const renderRows = () => {
-    return names.map((name) => renderRow(name));
-  };
-
-  const renderRow = (name: string) => {
-    return (
-      <div className='grid grid-cols-4'>
-        <Image
-          className='circularImage justify-right col-span-1 align-middle'
-          src={ProfilePic}
-          alt={name + ' profile pic'}
-          width={92}
-          height={92}
-        />
-        <div className='justify-center col-span-3 p-3 text-4xl break-words align-middle'>
-          {name}
-        </div>
-      </div>
-    );
-  };
-
+export default function MyFriends(friend: myFriendProps) {
   return (
-    <div className='grid grid-cols-1 bg-white rounded-xl'>
-      <div className='flex font-varsity justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl'>
-        My Friends
+    <Anchor href={`/friends/${friend.id}/profile`} variant='text'>
+      <div
+        id={styles.card}
+        className='bg-white rounded-xl border border-white h-[7rem] hover:border-orange'
+      >
+        <Grid>
+          <Grid.Col span='auto'>
+            <Group position='left'>
+              <Image src={ProfilePic} alt={friend.name + '-image'} height={100} width={100} />
+              <div className='text-4xl font-varsity text-darkBlue pt-1'>{friend.name}</div>
+            </Group>
+          </Grid.Col>
+        </Grid>
       </div>
-      {renderRows()}
-    </div>
+    </Anchor>
   );
 }

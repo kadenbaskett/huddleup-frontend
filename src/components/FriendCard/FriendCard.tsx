@@ -17,10 +17,9 @@ export function FriendCard(friend: friendProps) {
   return (
     <div
       id={styles.card}
-      // eslint-disable-next-line no-template-curly-in-string
       className='bg-white rounded-xl border border-white h-[7rem] hover:border-orange'
     >
-      <Grid columns={24}>
+      <Grid>
         <Grid.Col span='auto'>
           <Group position='left'>
             <Image src={NFL} alt={friend.name + '-image'} height={100} width={100} />
@@ -44,7 +43,7 @@ export function FriendCard(friend: friendProps) {
                 </Anchor>
               </Grid.Col>
               <Grid.Col className='pb-5 pl-5 pr-5'>
-                <Anchor href='https://mantine.dev/'>
+                <Anchor href='/friends'>
                   <Button
                     leftIcon={<AiOutlineMinus />}
                     className='hover:bg-red hover:text-white text-xl font-bold hover:border hover:border-red rounded bg-transparent text-red border-red transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
