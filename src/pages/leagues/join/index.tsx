@@ -1,71 +1,64 @@
 import { Button, TextInput } from '@mantine/core';
-import React, { useState } from 'react';
+import { fetchPublicLeaguesThunk } from '@store/slices/globalSlice';
+import { AppDispatch, StoreState } from '@store/store';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { JoinLeagueCard, joinleagueProps } from '../../../components/JoinLeagueCard/JoinLeagueCard';
 
-const leagueData: joinleagueProps[] = [
-  {
-    name: 'Longer league name',
-    subText: 'This is an example league description',
-    id: '1',
-    numMinPlayers: 2,
-    numMaxPlayers: 6,
-    scoring: 'No Points Per Reception',
-    totalTeams: 15,
-    numTeams: 12,
-  },
-  {
-    name: 'League 2',
-    subText:
-      'This is an example long league description that could potentially be too big but its not a big deal because the text should rap, wait I mean it should wrap, the text isnt Drake',
-    id: '2',
-    numMinPlayers: 2,
-    numMaxPlayers: 6,
-    scoring: 'Points Per Reception',
-    totalTeams: 15,
-    numTeams: 12,
-  },
-  {
-    name: 'League 3',
-    subText:
-      'This is an example long league description that could potentially be too big but its not a big deal because the text should rap, wait I mean it should wrap, the text isnt Drake',
-    id: '3',
-    numMinPlayers: 2,
-    numMaxPlayers: 5,
-    scoring: 'Points Per Reception',
-    totalTeams: 10,
-    numTeams: 5,
-  },
-  {
-    name: 'League 4',
-    subText: 'Just a basic description',
-    id: '4',
-    numMinPlayers: 2,
-    numMaxPlayers: 3,
-    scoring: 'No Points Per Reception',
-    totalTeams: 20,
-    numTeams: 10,
-  },
-];
-
-const renderLeagues = () => {
-  return leagueData.map((league) => renderLeague(league));
-};
-
-const renderLeague = (league: joinleagueProps) => {
-  return (
-    <div className='grid col-span-10 pb-2'>
-      <JoinLeagueCard {...league} />
-    </div>
-  );
-};
-
 function leagues() {
-  const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-    setSearchTerm(event.target.value);
-    //  when this changes I can search the database here for public leagues that have a name similar to this.
-  };
+  /*
+   * Use this later to search for leagues that have the 'searchTerm' in it and populate the page with those leagues
+   */
   const [searchTerm, setSearchTerm] = useState('');
 
+  const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+    setSearchTerm(event.target.value);
+    //  when this changes I can searchs the database here for public leagues that have a name similar to this.
+  };
+
+  /*
+   * Pulling data from backend
+   */
+  const dispatch = useDispatch<AppDispatch>();
+  // const userLeaguesFetchStatus = useSelector((state: StoreState) => state.user.status);
+  const globalFetchStatus = useSelector((state: StoreState) => state.global.status);
+  const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
+
+  useEffect(() => {
+    if (globalFetchStatus === 'idle') {
+      dispatch(fetchPublicLeaguesThunk());
+    }
+  }, [globalFetchStatus, dispatch]);
+
+  const leagueData = publicLeagues.map((league) => {
+    const l: joinleagueProps = {
+      name: league.name,
+      id: league.id,
+      subText: 'This is an example league description',
+      numMaxPlayers: 6,
+      numMinPlayers: 2,
+      scoring: 'Points Per Reception',
+      totalTeams: 15,
+      numTeams: 10,
+    };
+    return l;
+  });
+
+  const renderLeagues = () => {
+    return leagueData.map((league) => renderLeague(league));
+  };
+
+  const renderLeague = (league: joinleagueProps) => {
+    return (
+      <div className='grid col-span-10 pb-2'>
+        <JoinLeagueCard {...league} />
+      </div>
+    );
+  };
+
+  /*
+   * Start of Join a League Page
+   */
   return (
     <div className='bg-lightGrey min-h-screen'>
       <div>

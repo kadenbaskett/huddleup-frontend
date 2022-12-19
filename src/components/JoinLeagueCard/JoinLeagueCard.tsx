@@ -7,7 +7,7 @@ import styles from './JoinLeagueCard.module.css';
 export interface joinleagueProps {
   name: string;
   subText: string;
-  id: string;
+  id: number;
   numMinPlayers: number;
   numMaxPlayers: number;
   scoring: string;
@@ -17,7 +17,7 @@ export interface joinleagueProps {
 
 export function JoinLeagueCard(league: joinleagueProps) {
   return (
-    <a href={'/leagues/' + league.id + '/home'}>
+    <a href={'/leagues/' + league.id.toString() + '/home'}>
       <div
         id={styles.card}
         // eslint-disable-next-line no-template-curly-in-string
