@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import NFL from '../../public/assets/NFL.png';
-import {Button, Grid} from '@mantine/core';
+import { Button, Grid } from '@mantine/core';
 import styles from './JoinLeagueCard.module.css';
 
 export interface joinleagueProps {
@@ -16,16 +16,12 @@ export interface joinleagueProps {
 }
 
 export function JoinLeagueCard(league: joinleagueProps) {
-  const stringLength = league.subText.length;
-  let size = 0;
-  if (stringLength > 200) size = 12;
-  else size = 10;
   return (
     <a href={'/leagues/' + league.id + '/home'}>
       <div
         id={styles.card}
         // eslint-disable-next-line no-template-curly-in-string
-        className={`bg-white rounded-xl border hover:border-orange border-white h-[7rem] hover:h-[${size}rem]`}
+        className='bg-white rounded-xl border hover:border-orange border-white h-[7rem] hover:h-[10rem]'
       >
         <Grid grow align='center' justify='flex-start'>
           <Grid.Col span={1}>
@@ -36,25 +32,33 @@ export function JoinLeagueCard(league: joinleagueProps) {
             {league.name}
           </Grid.Col>
           <Grid.Col span={2} className='text-2xl text-darkBlue'>
-            {league.numMinPlayers} - {league.numMaxPlayers}
+            {league.numMinPlayers} - {league.numMaxPlayers} Teammates
           </Grid.Col>
           <Grid.Col span={2} className='text-2xl text-darkBlue'>
             {league.scoring}
           </Grid.Col>
+
           <Grid.Col span={2} className='text-2xl text-darkBlue'>
-            {league.numTeams} of {league.totalTeams} teams
+            <Grid>
+              <Grid.Col>
+                <Button
+                  className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform active:translate-y-0'
+                  variant='default'
+                  size='md'
+                  type='submit'
+                >
+                  Register
+                </Button>
+              </Grid.Col>
+              <Grid.Col className='text-2xl text-orange'>
+                {league.numTeams} of {league.totalTeams} teams
+              </Grid.Col>
+            </Grid>
           </Grid.Col>
         </Grid>
-        <div className={styles.descriptionDiv}>
+        <div className={`${styles.descriptionDiv} text-xl text-darkBlue`}>
           {league.subText}
-          <Button
-            className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-            variant='default'
-            size='lg'
-            type='submit'
-          >
-            Register
-          </Button>
+          <br />
         </div>
       </div>
     </a>

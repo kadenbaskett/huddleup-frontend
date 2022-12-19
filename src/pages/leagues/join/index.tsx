@@ -1,6 +1,6 @@
-import {Button, TextInput} from '@mantine/core';
-import React, {useState} from 'react';
-import {JoinLeagueCard, joinleagueProps} from '../../../components/JoinLeagueCard/JoinLeagueCard';
+import { Button, TextInput } from '@mantine/core';
+import React, { useState } from 'react';
+import { JoinLeagueCard, joinleagueProps } from '../../../components/JoinLeagueCard/JoinLeagueCard';
 
 const leagueData: joinleagueProps[] = [
   {
@@ -60,7 +60,7 @@ const renderLeague = (league: joinleagueProps) => {
 };
 
 function leagues() {
-  const handleChange = (event: {target: {value: React.SetStateAction<string>}}) => {
+  const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setSearchTerm(event.target.value);
     //  when this changes I can search the database here for public leagues that have a name similar to this.
   };
