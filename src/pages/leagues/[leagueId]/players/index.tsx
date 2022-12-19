@@ -18,6 +18,7 @@ function league(props) {
   );
   let players = useSelector((state: StoreState) => state.league.playerList);
   const league = useSelector((state: StoreState) => state.league.league);
+  const currentWeek = useSelector((state: StoreState) => state.global.week);
 
   if (players) {
     const allowedPositions = ['QB', 'RB', 'WR', 'TE'];
@@ -51,6 +52,28 @@ function league(props) {
     }
   }, [leagueInfoFetchStatus, leaguePlayerFetchStatus, dispatch, leagueId]);
 
+  const getPlayerAvailability = (player) => {
+    let currentRosterPlayer = player.roster_players.find((rp) => rp.roster.week === currentWeek);
+
+    // TODO HACKED IN
+    if (player.roster_players.length) {
+      currentRosterPlayer = player.roster_players.at(-1);
+    }
+
+    const currentRoster = currentRosterPlayer.roster;
+
+    if (currentRoster) {
+      return currentRoster.team.name;
+    }
+    // else if(onWaivers)
+    // {
+    //   return 'Waivers';
+    // }
+    else {
+      return 'Available';
+    }
+  };
+
   const rows = players.map((p) => (
     <tr key={p.id} onClick={() => onOpen(p)}>
       <td>
@@ -65,6 +88,7 @@ function league(props) {
         {p.current_nfl_team ? p.current_nfl_team.name : ''}
       </td>
       <td>{p.status}</td>
+      <td>{getPlayerAvailability(p)}</td>
     </tr>
   ));
 
