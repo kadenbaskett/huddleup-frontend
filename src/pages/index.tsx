@@ -17,8 +17,8 @@ export default function Home() {
       <main className={styles.main}>
         <Image src={logo} alt='huddle logo' width={700} height={700} />
         <p className='landingText'>
-          Huddle up is and will remain the dopest shit you've ever seen. You can't even comprehend
-          how sick this is
+          Huddle up is a group fantasy football app intended to recreate the comradery of team
+          sports.
         </p>
         <Group>
           <Link href='/signup'>
