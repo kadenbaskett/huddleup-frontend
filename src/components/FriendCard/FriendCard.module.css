@@ -1,0 +1,11 @@
+#card .descriptionDiv {
+  visibility: hidden;
+}
+
+#card:hover .descriptionDiv {
+  visibility: visible;
+}
+
+.descriptionDiv {
+  display: inline-block;
+}

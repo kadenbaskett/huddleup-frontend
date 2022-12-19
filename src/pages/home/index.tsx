@@ -5,7 +5,7 @@ import MyTeams from '../../components/MyTeams/MyTeams';
 
 export default function Home(props: any) {
   return (
-    <div className='grid grid-cols-10 gap-6 bg-slate-300 p-10 min-h-screen'>
+    <div className='grid grid-cols-10 gap-6 bg-lightGrey p-10 min-h-screen'>
       <div className='col-span-3'>
         <div>
           <MyTeams />
