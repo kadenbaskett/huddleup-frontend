@@ -16,7 +16,7 @@ function league() {
 
   useEffect(() => {
     if (leagueInfoFetchStatus === 'idle' && leagueId) {
-      dispatch(fetchLeagueInfoThunk(number(leagueId)));
+      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
     }
   }, [leagueInfoFetchStatus, dispatch, leagueId]);
 
