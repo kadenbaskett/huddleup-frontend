@@ -1,4 +1,4 @@
-import { StoreState } from '@store/store';
+import { AppDispatch, StoreState } from '@store/store';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ function league() {
   const router = useRouter();
   const { leagueId } = router.query;
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
   const league = useSelector((state: StoreState) => state.league.league);
 

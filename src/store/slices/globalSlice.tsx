@@ -4,6 +4,7 @@ import { fetchPublicLeagues, fetchTimeframe } from '@services/apiClient';
 
 export interface globalSliceState {
   publicLeagues: League[];
+  totalWeeks: number;
   week: number;
   season: number;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -13,6 +14,7 @@ export interface globalSliceState {
 const initialState: globalSliceState = {
   publicLeagues: [],
   week: null,
+  totalWeeks: 18,
   season: null,
   status: 'idle',
   timeframeStatus: 'idle',
