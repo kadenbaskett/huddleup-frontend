@@ -18,22 +18,13 @@ import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 
 // TODO config this
-const allowedPositions = ['QB', 'RB', 'WR', 'TE'];
 const flexPlayers = ['RB', 'WR', 'TE'];
 
 function league(props) {
   const router = useRouter();
   const { leagueId } = router.query;
 
-  // Form stuff
-  const form = useForm({
-    initialValues: {
-      player: '',
-      position: 'QB',
-      availability: 'Available',
-    },
-  });
-
+  // Application state
   const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
   const leaguePlayerFetchStatus = useSelector(
@@ -42,30 +33,44 @@ function league(props) {
   const league = useSelector((state: StoreState) => state.league.league);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
-  let players = allPlayers;
+
+  // Player popup
+  const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
+  const [openPlayer, setOpenPlayer] = useState(null);
+
+  const onPlayerPopupClose = () => {
+    setPlayerPopupOpen(false);
+    setOpenPlayer(null);
+  };
+
+  const onPlayerClick = (p) => {
+    setOpenPlayer(p);
+    setPlayerPopupOpen(true);
+  };
+
+  // Player filtering
+  const form = useForm({
+    initialValues: {
+      player: '',
+      position: 'All',
+      availability: 'Available',
+    },
+  });
 
   const [position, setPosition] = useState(form.values.position);
   const [availability, setAvailability] = useState(form.values.availability);
 
-  useEffect(() => {
-    players = allPlayers;
-
-    // TODO hacked in to not display all players
-    if (players) {
-      const offense = players.filter(
-        (p) => allowedPositions.includes(p.position) && p.status === 'Active',
-      );
-      const playersWhoPlay = offense.filter((p) => p.player_game_stats.length > 8);
-      // const owned = playersWhoPlay.filter((p) => p.roster_players.length);
-      const owned = playersWhoPlay;
-      players = owned.slice(0, 500);
-    }
+  const filterPlayers = () => {
+    let players = allPlayers;
+    console.log(players);
 
     if (position === 'FLEX') {
-      players = allPlayers.filter((player) => flexPlayers.includes(player.position));
-    } else if (position !== 'ALL') {
-      players = allPlayers.filter((player) => player.position === position);
+      players = players.filter((player) => flexPlayers.includes(player.position));
+    } else if (position !== 'All') {
+      players = players.filter((player) => player.position === position);
     }
+
+    console.log(position);
 
     if (availability === 'Available') {
       // players = players.filter((player) => player.status === 'Active');
@@ -73,23 +78,10 @@ function league(props) {
       // TODO implement waivers
     }
 
-    console.log(players);
-  });
-
-  // Player popup
-  const [opened, setOpened] = useState(false);
-  const [openPlayer, setOpenPlayer] = useState(null);
-
-  const onClose = () => {
-    setOpened(false);
-    setOpenPlayer(null);
+    return players;
   };
 
-  const onOpen = (p) => {
-    setOpenPlayer(p);
-    setOpened(true);
-  };
-
+  // If the app state has yet to fetch the league, run this
   useEffect(() => {
     if ((leagueInfoFetchStatus === 'idle' || leaguePlayerFetchStatus === 'idle') && leagueId) {
       dispatch(fetchLeaguePlayersThunk(Number(leagueId)));
@@ -98,8 +90,8 @@ function league(props) {
   }, [leagueInfoFetchStatus, leaguePlayerFetchStatus, dispatch, leagueId]);
 
   const getCurrentRosterPlayer = (player, week) => {
-    // Week is a hack
     week = 10;
+    console.log(player.roster_players);
     return player.roster_players.find((rp) => rp.roster.week === week);
   };
 
@@ -108,19 +100,17 @@ function league(props) {
 
     if (currentRosterPlayer) {
       return currentRosterPlayer.roster.team.name;
-    }
-    // else if(onWaivers)
-    // {
-    //   return 'Waivers';
-    // }
-    else {
+    } else {
       return 'Available';
     }
   };
 
-  const rows = (displayPlayers) =>
-    displayPlayers.map((p) => (
-      <tr key={p.id} onClick={() => onOpen(p)}>
+  function getPlayerRows() {
+    const players = filterPlayers();
+    console.log(players);
+
+    return players.map((p) => (
+      <tr key={p.id} onClick={() => onPlayerClick(p)}>
         <td>
           <Avatar src={p.photo_url} alt={'player image'} />
         </td>
@@ -136,6 +126,7 @@ function league(props) {
         <td>{getPlayerAvailability(p)}</td>
       </tr>
     ));
+  }
 
   return (
     <>
@@ -198,9 +189,9 @@ function league(props) {
             <th>Availability</th>
           </tr>
         </thead>
-        <tbody>{rows(players)}</tbody>
+        <tbody>{getPlayerRows()}</tbody>
       </Table>
-      <PlayerPopup player={openPlayer} opened={opened} onClose={onClose} />
+      <PlayerPopup player={openPlayer} opened={playerPopupOpen} onClose={onPlayerPopupClose} />
     </>
   );
 }

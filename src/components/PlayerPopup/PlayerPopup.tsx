@@ -9,8 +9,6 @@ export default function PlayerPopup({ player, opened, onClose }) {
   const currentWeek = useSelector((state: StoreState) => state.global.week);
   // const totalWeeks = useSelector((state: StoreState) => state.global.totalWeeks);
 
-  console.log(player);
-
   const getPlayerOutlook = (player) => {
     if (!player) return <></>;
     const game = player.player_game_stats.length ? player.player_game_stats.slice(0, 1) : [];
