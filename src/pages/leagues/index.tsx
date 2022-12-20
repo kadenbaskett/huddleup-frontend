@@ -33,7 +33,7 @@ const renderLeague = (league: leagueProps) => {
 
 function leagues() {
   return (
-    <div className='grid grid-cols-10 bg-slate-300 p-10 min-h-screen gap-3 flex items-start'>
+    <div className='grid grid-cols-10 bg-lightGrey p-10 min-h-screen gap-3 flex items-start'>
       <div className='col-span-4'>
         <Group>
           <Link href={'/leagues/join'}>
