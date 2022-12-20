@@ -1,6 +1,6 @@
 import React from 'react';
 
-function FormInput({label, inputId, placeholder = ''}) {
+function FormInput({ label, inputId, placeholder = '' }) {
   return (
     <div className='w-full'>
       <label className='block mb-1 mt-6 text-sm leading-5 font-medium text-gray-700'>{label}</label>
