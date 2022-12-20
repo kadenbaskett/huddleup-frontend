@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Group, RangeSlider, Slider, Textarea, TextInput } from '@mantine/core';
+import {
+  Button,
+  Group,
+  NativeSelect,
+  RangeSlider,
+  Slider,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import Link from 'next/link';
 interface teamSlider {
   value: number;
@@ -153,6 +161,14 @@ export default function index() {
               </label>
             </div>
           </div>
+        </div>
+
+        <div>
+          <label className='font-OpenSans font-bold text-2xl'>Public or Private:</label>
+          <NativeSelect
+            data={['Public', 'Private']}
+            label='Allow anyone to join or only people you invite'
+          />
         </div>
 
         <div>
