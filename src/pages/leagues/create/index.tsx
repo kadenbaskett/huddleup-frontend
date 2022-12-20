@@ -1,21 +1,29 @@
-import React, {useState} from 'react';
-import {Button, Group, RangeSlider, Slider, Textarea, TextInput} from '@mantine/core';
+import React, { useState } from 'react';
+import {
+  Button,
+  Group,
+  NativeSelect,
+  RangeSlider,
+  Slider,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import Link from 'next/link';
 interface teamSlider {
   value: number;
   label: string;
 }
 const numTeams: teamSlider[] = [
-  {value: 2, label: '2'},
-  {value: 4, label: '4'},
-  {value: 6, label: '6'},
-  {value: 8, label: '8'},
-  {value: 10, label: '10'},
-  {value: 12, label: '12'},
-  {value: 14, label: '14'},
-  {value: 16, label: '16'},
-  {value: 18, label: '18'},
-  {value: 20, label: '20'},
+  { value: 2, label: '2' },
+  { value: 4, label: '4' },
+  { value: 6, label: '6' },
+  { value: 8, label: '8' },
+  { value: 10, label: '10' },
+  { value: 12, label: '12' },
+  { value: 14, label: '14' },
+  { value: 16, label: '16' },
+  { value: 18, label: '18' },
+  { value: 20, label: '20' },
 ];
 
 interface numPlayersSlider {
@@ -23,11 +31,11 @@ interface numPlayersSlider {
   label: string;
 }
 const numPlayers: numPlayersSlider[] = [
-  {value: 2, label: '2'},
-  {value: 3, label: '3'},
-  {value: 4, label: '4'},
-  {value: 5, label: '5'},
-  {value: 6, label: '6'},
+  { value: 2, label: '2' },
+  { value: 3, label: '3' },
+  { value: 4, label: '4' },
+  { value: 5, label: '5' },
+  { value: 6, label: '6' },
 ];
 
 export default function index() {
@@ -153,6 +161,14 @@ export default function index() {
               </label>
             </div>
           </div>
+        </div>
+
+        <div>
+          <label className='font-OpenSans font-bold text-2xl'>Public or Private:</label>
+          <NativeSelect
+            data={['Public', 'Private']}
+            label='Allow anyone to join or only people you invite'
+          />
         </div>
 
         <div>
