@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,11 +10,12 @@ import {
   Group,
   Box,
   SegmentedControl,
-  Select,
+  NativeSelect,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { AppDispatch, StoreState } from '@store/store';
 import { fetchLeagueInfoThunk, fetchLeaguePlayersThunk } from '@store/slices/leagueSlice';
+import { fetchTimeframesThunk } from '@store/slices/globalSlice';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 
@@ -27,12 +29,13 @@ function league(props) {
   // Application state
   const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
+  const allPlayers = useSelector((state: StoreState) => state.league.playerList);
   const leaguePlayerFetchStatus = useSelector(
     (state: StoreState) => state.league.playerFetchStatus,
   );
+  const timeframeFetchStatus = useSelector((state: StoreState) => state.global.timeframeStatus);
   const league = useSelector((state: StoreState) => state.league.league);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
-  const allPlayers = useSelector((state: StoreState) => state.league.playerList);
 
   // Player popup
   const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
@@ -57,12 +60,11 @@ function league(props) {
     },
   });
 
-  const [position, setPosition] = useState(form.values.position);
-  const [availability, setAvailability] = useState(form.values.availability);
+  const [position, setPosition] = useState<string | null>(form.values.position);
 
   const filterPlayers = () => {
     let players = allPlayers;
-    console.log(players);
+    console.log(players.length);
 
     if (position === 'FLEX') {
       players = players.filter((player) => flexPlayers.includes(player.position));
@@ -70,12 +72,38 @@ function league(props) {
       players = players.filter((player) => player.position === position);
     }
 
-    console.log(position);
+    const availability = form.values.availability;
 
     if (availability === 'Available') {
-      // players = players.filter((player) => player.status === 'Active');
+      players = players.filter((player) => {
+        return !getTeamThatOwnsPlayer(player);
+      });
     } else if (availability === 'Waivers') {
       // TODO implement waivers
+    } else if (availability === 'Free Agents') {
+      // TODO also filter out waivers
+      players = players.filter((player) => {
+        return !getTeamThatOwnsPlayer(player);
+      });
+    } else if (availability === 'On Rosters') {
+      players = players.filter((player) => {
+        return getTeamThatOwnsPlayer(player);
+      });
+    }
+
+    const playerSearchName = form.values.player;
+
+    if (playerSearchName !== '') {
+      const words = playerSearchName.split(' ');
+
+      players = players.filter((player) => {
+        const fullName = `${player.first_name}${player.last_name}`;
+
+        for (const word of words) {
+          if (fullName.includes(word)) return true;
+        }
+        return false;
+      });
     }
 
     return players;
@@ -83,31 +111,38 @@ function league(props) {
 
   // If the app state has yet to fetch the league, run this
   useEffect(() => {
-    if ((leagueInfoFetchStatus === 'idle' || leaguePlayerFetchStatus === 'idle') && leagueId) {
+    if (
+      (leagueInfoFetchStatus === 'idle' ||
+        leaguePlayerFetchStatus === 'idle' ||
+        timeframeFetchStatus === 'idle') &&
+      leagueId
+    ) {
       dispatch(fetchLeaguePlayersThunk(Number(leagueId)));
       dispatch(fetchLeagueInfoThunk(Number(leagueId)));
+      dispatch(fetchTimeframesThunk());
     }
   }, [leagueInfoFetchStatus, leaguePlayerFetchStatus, dispatch, leagueId]);
 
-  const getCurrentRosterPlayer = (player, week) => {
-    week = 10;
-    console.log(player.roster_players);
-    return player.roster_players.find((rp) => rp.roster.week === week);
+  const getTeamThatOwnsPlayer = (player) => {
+    const currentRosterPlayer = player.roster_players.find((rp) => rp.roster.week === currentWeek);
+    return currentRosterPlayer ? currentRosterPlayer.roster.team.name : null;
   };
 
   const getPlayerAvailability = (player) => {
-    const currentRosterPlayer = getCurrentRosterPlayer(player, currentWeek);
+    const teamName = getTeamThatOwnsPlayer(player);
+    const onWaivers = false;
 
-    if (currentRosterPlayer) {
-      return currentRosterPlayer.roster.team.name;
+    if (teamName) {
+      return teamName;
+    } else if (onWaivers) {
+      return 'Waivers';
     } else {
-      return 'Available';
+      return 'Free Agent';
     }
   };
 
   function getPlayerRows() {
     const players = filterPlayers();
-    console.log(players);
 
     return players.map((p) => (
       <tr key={p.id} onClick={() => onPlayerClick(p)}>
@@ -158,18 +193,9 @@ function league(props) {
             {...form.getInputProps('player')}
           />
 
-          <Select
+          <NativeSelect
             label='Availability'
-            placeholder={availability}
-            data={[
-              { value: 'All', label: 'All' },
-              { value: 'Available', label: 'Available' },
-              { value: 'Waivers', label: 'Waivers' },
-              { value: 'Free Agents', label: 'Free Agents' },
-              { value: 'On Rosters', label: 'On Rosters' },
-            ]}
-            onChange={setAvailability}
-            value={availability}
+            data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
             {...form.getInputProps('availability')}
           />
 

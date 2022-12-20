@@ -41,8 +41,8 @@ export const globalSlice = createSlice({
       })
       .addCase(fetchTimeframesThunk.fulfilled, (state, action) => {
         state.timeframeStatus = 'succeeded';
-        state.week = action.payload.week;
-        state.season = action.payload.season;
+        state.week = action.payload.current_week;
+        state.season = action.payload.current_season;
       })
       .addCase(fetchTimeframesThunk.rejected, (state, action) => {
         state.timeframeStatus = 'failed';
