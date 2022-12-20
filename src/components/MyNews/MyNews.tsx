@@ -7,12 +7,12 @@ interface News {
 
 const mynews: News[] = [
   {news: 'This wil be news about something'},
-  {news: 'This should be some other news about a player or something along those lines'},
+  {news: 'This should be some other news about a player or something along those lines.'},
   {
-    news: 'Then this one will be some other news from something that is also got some news or something like that lmao',
+    news: 'Some more relevant news.',
   },
   {
-    news: 'Then this last one will also have some other stuff here that could probably help you make decisions for this week and who to play or whatever',
+    news: 'Finally more news',
   },
 ];
 
