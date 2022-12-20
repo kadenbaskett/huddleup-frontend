@@ -2,15 +2,15 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { GrAddCircle, GrDisabledOutline, GrLinkNext } from 'react-icons/gr';
 import {
   Avatar,
-  Table,
   TextInput,
-  Button,
-  Group,
   Box,
   SegmentedControl,
   NativeSelect,
+  Group,
+  Table,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { AppDispatch, StoreState } from '@store/store';
@@ -18,6 +18,7 @@ import { fetchLeagueInfoThunk, fetchLeaguePlayersThunk } from '@store/slices/lea
 import { fetchTimeframesThunk } from '@store/slices/globalSlice';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
+import { fantasyPoints } from '@services/helpers';
 
 // TODO config this
 const flexPlayers = ['RB', 'WR', 'TE'];
@@ -141,24 +142,69 @@ function league(props) {
     }
   };
 
+  const getPlayerAction = (player) => {
+    const av = getPlayerAvailability(player);
+    const myTeamName = 'My team';
+
+    if (av === 'Free Agent') {
+      return (
+        <Group>
+          <GrAddCircle />
+          {av}
+        </Group>
+      );
+    } else if (av === 'Waivers') {
+      return (
+        <Group>
+          <GrAddCircle />
+          {av}
+        </Group>
+      );
+    } else if (av === myTeamName) {
+      return (
+        <Group>
+          <GrDisabledOutline />
+          {av}
+        </Group>
+      );
+    } else {
+      return (
+        <Group>
+          <GrLinkNext />
+          {av}
+        </Group>
+      );
+    }
+  };
+
+  const onPlayerActionClick = (player) => {
+    console.log(player);
+  };
+
   function getPlayerRows() {
     const players = filterPlayers();
 
     return players.map((p) => (
-      <tr key={p.id} onClick={() => onPlayerClick(p)}>
+      <tr key={p.id}>
         <td>
-          <Avatar src={p.photo_url} alt={'player image'} />
+          <a href='#'>
+            <Group onClick={() => onPlayerClick(p)}>
+              <Avatar src={p.photo_url} alt={'player image'} />
+              {p.first_name} {p.last_name}
+              {'\n'}
+              {p.position}
+              {'\n'}
+              {p.current_nfl_team ? p.current_nfl_team.key : ''}
+            </Group>
+          </a>
         </td>
         <td>
-          {p.first_name} {p.last_name}
+          <a href='#' onClick={() => onPlayerActionClick(p)}>
+            {getPlayerAction(p)}
+          </a>
         </td>
-        <td>{p.position}</td>
-        <td>
-          {p.current_nfl_team ? p.current_nfl_team.city : ''}{' '}
-          {p.current_nfl_team ? p.current_nfl_team.name : ''}
-        </td>
-        <td>{p.status}</td>
-        <td>{getPlayerAvailability(p)}</td>
+        <td>{fantasyPoints(p.player_game_stats.at(-2))}</td>
+        <td>{fantasyPoints(p.player_game_stats.at(-1))}</td>
       </tr>
     ));
   }
@@ -172,7 +218,7 @@ function league(props) {
         leagueId={Number(leagueId)}
         page='players'
       />
-      <Box sx={{ maxWidth: 300 }} mx='auto'>
+      <Box sx={{ maxWidth: 300 }}>
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           <SegmentedControl
             data={[
@@ -198,21 +244,15 @@ function league(props) {
             data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
             {...form.getInputProps('availability')}
           />
-
-          <Group position='right' mt='md'>
-            <Button type='submit'>Submit</Button>
-          </Group>
         </form>
       </Box>
-      <Table>
+      <Table striped highlightOnHover withBorder withColumnBorders>
         <thead>
           <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Team</th>
+            <th>Player</th>
             <th>Status</th>
-            <th>Availability</th>
+            <th>NFL Week {currentWeek}</th>
+            <th>NFL Week {currentWeek - 1}</th>
           </tr>
         </thead>
         <tbody>{getPlayerRows()}</tbody>
