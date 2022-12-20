@@ -11,6 +11,7 @@ import {
   NativeSelect,
   Group,
   Table,
+  Container,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { AppDispatch, StoreState } from '@store/store';
@@ -47,7 +48,8 @@ function league(props) {
     setOpenPlayer(null);
   };
 
-  const onPlayerClick = (p) => {
+  const onPlayerClick = (event, p) => {
+    event.preventDefault();
     setOpenPlayer(p);
     setPlayerPopupOpen(true);
   };
@@ -177,7 +179,8 @@ function league(props) {
     }
   };
 
-  const onPlayerActionClick = (player) => {
+  const onPlayerActionClick = (event, player) => {
+    event.preventDefault();
     console.log(player);
   };
 
@@ -187,8 +190,8 @@ function league(props) {
     return players.map((p) => (
       <tr key={p.id}>
         <td>
-          <a href='#'>
-            <Group onClick={() => onPlayerClick(p)}>
+          <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
+            <Group>
               <Avatar src={p.photo_url} alt={'player image'} />
               {p.first_name} {p.last_name}
               {'\n'}
@@ -199,7 +202,7 @@ function league(props) {
           </a>
         </td>
         <td>
-          <a href='#' onClick={() => onPlayerActionClick(p)}>
+          <a href='#' onClick={(evt) => onPlayerActionClick(evt, p)}>
             {getPlayerAction(p)}
           </a>
         </td>
@@ -218,46 +221,48 @@ function league(props) {
         leagueId={Number(leagueId)}
         page='players'
       />
-      <Box sx={{ maxWidth: 300 }}>
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
-          <SegmentedControl
-            data={[
-              { label: 'All', value: 'All' },
-              { label: 'QB', value: 'QB' },
-              { label: 'RB', value: 'RB' },
-              { label: 'WR', value: 'WR' },
-              { label: 'TE', value: 'TE' },
-              { label: 'FLEX', value: 'FLEX' },
-            ]}
-            {...form.getInputProps('position')}
-            onChange={setPosition}
-            value={position}
-          />
-          <TextInput
-            label='Player Name'
-            placeholder='Justin Jefferson'
-            {...form.getInputProps('player')}
-          />
+      <Container>
+        <Box sx={{ maxWidth: 300 }}>
+          <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <SegmentedControl
+              data={[
+                { label: 'All', value: 'All' },
+                { label: 'QB', value: 'QB' },
+                { label: 'RB', value: 'RB' },
+                { label: 'WR', value: 'WR' },
+                { label: 'TE', value: 'TE' },
+                { label: 'FLEX', value: 'FLEX' },
+              ]}
+              {...form.getInputProps('position')}
+              onChange={setPosition}
+              value={position}
+            />
+            <TextInput
+              label='Player Name'
+              placeholder='Justin Jefferson'
+              {...form.getInputProps('player')}
+            />
 
-          <NativeSelect
-            label='Availability'
-            data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
-            {...form.getInputProps('availability')}
-          />
-        </form>
-      </Box>
-      <Table striped highlightOnHover withBorder withColumnBorders>
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Status</th>
-            <th>NFL Week {currentWeek}</th>
-            <th>NFL Week {currentWeek - 1}</th>
-          </tr>
-        </thead>
-        <tbody>{getPlayerRows()}</tbody>
-      </Table>
-      <PlayerPopup player={openPlayer} opened={playerPopupOpen} onClose={onPlayerPopupClose} />
+            <NativeSelect
+              label='Availability'
+              data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
+              {...form.getInputProps('availability')}
+            />
+          </form>
+        </Box>
+        <Table striped highlightOnHover withBorder withColumnBorders>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Status</th>
+              <th>NFL Week {currentWeek}</th>
+              <th>NFL Week {currentWeek - 1}</th>
+            </tr>
+          </thead>
+          <tbody>{getPlayerRows()}</tbody>
+        </Table>
+        <PlayerPopup player={openPlayer} opened={playerPopupOpen} onClose={onPlayerPopupClose} />
+      </Container>
     </>
   );
 }
