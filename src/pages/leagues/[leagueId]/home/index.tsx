@@ -20,7 +20,7 @@ function league() {
     }
   }, [leagueInfoFetchStatus, dispatch, leagueId]);
 
-  const teams = league ? league.teams : [];
+  const teams = league?.teams ? league.teams : [];
 
   const rows = teams.map((t) => (
     <tr key={t.id}>
