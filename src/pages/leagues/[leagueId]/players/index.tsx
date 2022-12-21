@@ -10,7 +10,6 @@ import {
   SegmentedControl,
   NativeSelect,
   Group,
-  Table,
   Container,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -20,6 +19,8 @@ import { fetchTimeframesThunk } from '@store/slices/globalSlice';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { fantasyPoints } from '@services/helpers';
+import { DataTable, DataTableSortStatus } from 'mantine-datatable';
+import sortBy from 'lodash/sortBy';
 
 // TODO config this
 const flexPlayers = ['RB', 'WR', 'TE'];
@@ -63,11 +64,21 @@ function league(props) {
     },
   });
 
-  const [position, setPosition] = useState<string | null>(form.values.position);
+  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+    columnAccessor: 'projection',
+    direction: 'desc',
+  });
+  const [records, setRecords] = useState(sortBy(allPlayers, 'projection'));
+
+  useEffect(() => {
+    const data = sortBy(filterPlayers(), sortStatus.columnAccessor);
+    setRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
+  }, [sortStatus, allPlayers, form.values]);
 
   const filterPlayers = () => {
     let players = allPlayers;
-    console.log(players.length);
+
+    const position = form.values.position;
 
     if (position === 'FLEX') {
       players = players.filter((player) => flexPlayers.includes(player.position));
@@ -108,6 +119,18 @@ function league(props) {
         return false;
       });
     }
+
+    // Only display first 50 results
+    players = players.slice(0, 50);
+
+    // Add extra fields for the table sorting
+    players = players.map((p) => {
+      return {
+        ...p,
+        projection: fantasyPoints(p.player_game_stats.at(-1)),
+        lastWeek: fantasyPoints(p.player_game_stats.at(-2)),
+      };
+    });
 
     return players;
   };
@@ -184,34 +207,6 @@ function league(props) {
     console.log(player);
   };
 
-  function getPlayerRows() {
-    const players = filterPlayers();
-
-    return players.map((p) => (
-      <tr key={p.id}>
-        <td>
-          <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
-            <Group>
-              <Avatar src={p.photo_url} alt={'player image'} />
-              {p.first_name} {p.last_name}
-              {'\n'}
-              {p.position}
-              {'\n'}
-              {p.current_nfl_team ? p.current_nfl_team.key : ''}
-            </Group>
-          </a>
-        </td>
-        <td>
-          <a href='#' onClick={(evt) => onPlayerActionClick(evt, p)}>
-            {getPlayerAction(p)}
-          </a>
-        </td>
-        <td>{fantasyPoints(p.player_game_stats.at(-2))}</td>
-        <td>{fantasyPoints(p.player_game_stats.at(-1))}</td>
-      </tr>
-    ));
-  }
-
   return (
     <>
       <LeagueNavBar
@@ -234,8 +229,6 @@ function league(props) {
                 { label: 'FLEX', value: 'FLEX' },
               ]}
               {...form.getInputProps('position')}
-              onChange={setPosition}
-              value={position}
             />
             <TextInput
               label='Player Name'
@@ -250,17 +243,64 @@ function league(props) {
             />
           </form>
         </Box>
-        <Table striped highlightOnHover withBorder withColumnBorders>
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Status</th>
-              <th>NFL Week {currentWeek}</th>
-              <th>NFL Week {currentWeek - 1}</th>
-            </tr>
-          </thead>
-          <tbody>{getPlayerRows()}</tbody>
-        </Table>
+        <DataTable
+          withBorder
+          withColumnBorders
+          records={records}
+          columns={[
+            {
+              accessor: 'first_name',
+              title: 'Player',
+              width: '40%',
+              render: (p) => (
+                <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
+                  <Group>
+                    <Avatar src={p.photo_url} alt={'player image'} />
+                    {p.first_name} {p.last_name}
+                    {'\n'}
+                    {p.position}
+                    {'\n'}
+                    {p.current_nfl_team ? p.current_nfl_team.key : ''}
+                  </Group>
+                </a>
+              ),
+            },
+            {
+              accessor: 'status',
+              title: 'Status',
+              width: 160,
+              render: (p) => (
+                <a href='#' onClick={(evt) => onPlayerActionClick(evt, p)}>
+                  {getPlayerAction(p)}
+                </a>
+              ),
+            },
+            {
+              accessor: 'projection',
+              title: `Week ${currentWeek}`,
+              width: 160,
+              sortable: true,
+              // render: ( p ) => (
+              //   <div>
+              //     {fantasyPoints(p.player_game_stats.at(-1))}
+              //   </div>
+              // ),
+            },
+            {
+              accessor: 'lastWeek',
+              title: `Week ${currentWeek - 1}`,
+              width: 160,
+              sortable: true,
+              // render: ( p ) => (
+              //   <div>
+              //     {fantasyPoints(p.player_game_stats.at(-2))}
+              //   </div>
+              // ),
+            },
+          ]}
+          sortStatus={sortStatus}
+          onSortStatusChange={setSortStatus}
+        />
         <PlayerPopup player={openPlayer} opened={playerPopupOpen} onClose={onPlayerPopupClose} />
       </Container>
     </>

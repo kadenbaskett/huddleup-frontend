@@ -12,6 +12,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.10.0",
     "@mantine/core": "^5.9.5",
     "@mantine/form": "^5.9.5",
     "@mantine/hooks": "^5.9.5",
@@ -25,6 +27,8 @@
     "firebase": "^9.15.0",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
+    "lodash": "^4.17.21",
+    "mantine-datatable": "^1.7.30",
     "next": "13.0.2",
     "next-redux-wrapper": "^8.0.0",
     "react": "^18.2.0",
