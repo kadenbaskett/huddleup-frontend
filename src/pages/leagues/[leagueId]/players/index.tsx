@@ -218,79 +218,79 @@ function league(props) {
         page='players'
       />
       <Grid>
-        <Grid.Col span={4}>
-          {/* <Box sx={{ maxWidth: 300 }}> */}
-          <form onSubmit={form.onSubmit((values) => console.log(values))}>
-            <SegmentedControl
-              data={[
-                { label: 'All', value: 'All' },
-                { label: 'QB', value: 'QB' },
-                { label: 'RB', value: 'RB' },
-                { label: 'WR', value: 'WR' },
-                { label: 'TE', value: 'TE' },
-                { label: 'FLEX', value: 'FLEX' },
-              ]}
-              {...form.getInputProps('position')}
-            />
-            <TextInput
-              label='Player Name'
-              placeholder='Justin Jefferson'
-              {...form.getInputProps('player')}
-            />
+        <Grid.Col span={10} offset={1}>
+          <Grid.Col span={4}>
+            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+              <SegmentedControl
+                data={[
+                  { label: 'All', value: 'All' },
+                  { label: 'QB', value: 'QB' },
+                  { label: 'RB', value: 'RB' },
+                  { label: 'WR', value: 'WR' },
+                  { label: 'TE', value: 'TE' },
+                  { label: 'FLEX', value: 'FLEX' },
+                ]}
+                {...form.getInputProps('position')}
+              />
+              <TextInput
+                label='Player Name'
+                placeholder='Justin Jefferson'
+                {...form.getInputProps('player')}
+              />
 
-            <NativeSelect
-              label='Availability'
-              data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
-              {...form.getInputProps('availability')}
+              <NativeSelect
+                label='Availability'
+                data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
+                {...form.getInputProps('availability')}
+              />
+            </form>
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <DataTable
+              withBorder
+              withColumnBorders
+              records={records}
+              columns={[
+                {
+                  accessor: 'first_name',
+                  title: 'Player',
+                  render: (p) => (
+                    <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
+                      <Group>
+                        <Avatar src={p.photo_url} alt={'player image'} />
+                        {p.first_name} {p.last_name}
+                        {'\n'}
+                        {p.position}
+                        {'\n'}
+                        {p.current_nfl_team ? p.current_nfl_team.key : ''}
+                      </Group>
+                    </a>
+                  ),
+                },
+                {
+                  accessor: 'status',
+                  title: 'Status',
+                  render: (p) => (
+                    <a href='#' onClick={(evt) => onPlayerActionClick(evt, p)}>
+                      {getPlayerAction(p)}
+                    </a>
+                  ),
+                },
+                {
+                  accessor: 'projection',
+                  title: `Week ${currentWeek}`,
+                  sortable: true,
+                },
+                {
+                  accessor: 'lastWeek',
+                  title: `Week ${currentWeek - 1}`,
+                  sortable: true,
+                },
+              ]}
+              sortStatus={sortStatus}
+              onSortStatusChange={setSortStatus}
             />
-          </form>
-          {/* </Box> */}
-        </Grid.Col>
-        <Grid.Col span={12}>
-          <DataTable
-            withBorder
-            withColumnBorders
-            records={records}
-            columns={[
-              {
-                accessor: 'first_name',
-                title: 'Player',
-                render: (p) => (
-                  <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
-                    <Group>
-                      <Avatar src={p.photo_url} alt={'player image'} />
-                      {p.first_name} {p.last_name}
-                      {'\n'}
-                      {p.position}
-                      {'\n'}
-                      {p.current_nfl_team ? p.current_nfl_team.key : ''}
-                    </Group>
-                  </a>
-                ),
-              },
-              {
-                accessor: 'status',
-                title: 'Status',
-                render: (p) => (
-                  <a href='#' onClick={(evt) => onPlayerActionClick(evt, p)}>
-                    {getPlayerAction(p)}
-                  </a>
-                ),
-              },
-              {
-                accessor: 'projection',
-                title: `Week ${currentWeek}`,
-                sortable: true,
-              },
-              {
-                accessor: 'lastWeek',
-                title: `Week ${currentWeek - 1}`,
-                sortable: true,
-              },
-            ]}
-            sortStatus={sortStatus}
-            onSortStatusChange={setSortStatus}
-          />
+          </Grid.Col>
         </Grid.Col>
         <PlayerPopup player={openPlayer} opened={playerPopupOpen} onClose={onPlayerPopupClose} />
       </Grid>
