@@ -9,6 +9,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import Link from 'next/link';
+import { createLeague } from '@services/apiClient';
 interface teamSlider {
   value: number;
   label: string;
@@ -42,15 +43,28 @@ export default function index() {
   const [teams, setTeamValue] = useState(10);
   const [minPlayerRange, setMinPlayerRange] = useState(2);
   const [maxPlayerRange, setMaxPlayerRange] = useState(4);
+  const [leagueName, setLeagueName] = useState<string>('');
+  const [leagueDescription, setLeagueDescription] = useState<string>('');
+  const [publicOrPrivate, setPublicOrPrivate] = useState('Public');
 
   function setRange(value: number[]) {
     setMinPlayerRange(value[0]);
     setMaxPlayerRange(value[1]);
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log('event', event.target);
+  async function handleSubmit(event: { preventDefault: () => void }) {
+    const scoring = document.querySelector('input[name="hosting"]:checked').getAttribute('value');
+    const league = {
+      leagueName,
+      teams,
+      minPlayerRange,
+      maxPlayerRange,
+      leagueDescription,
+      publicOrPrivate,
+      scoring,
+      // need to add a parameter for the current user because this would be the commisioner of this league
+    };
+    await createLeague(league);
   }
 
   return (
@@ -65,6 +79,8 @@ export default function index() {
             placeholder='Sample League Name'
             size='xl'
             required
+            value={leagueName}
+            onChange={(e) => setLeagueName(e.target.value)}
             styles={() => ({
               input: {
                 fontFamily: 'Varsity Team',
@@ -128,7 +144,7 @@ export default function index() {
               <input type='radio' id='PPR' name='hosting' value='PPR' className='hidden peer' />
               <label
                 htmlFor='PPR'
-                className='inline-flex justify-between items-center p-5 w-full text-darkBlue bg-white rounded-lg border border-white cursor-pointer hover:text-orange border-orange peer-checked:text-orange peer-checked:border-orange peer-checked:text-orange hover:text-orange hover:bg-gray-100 text-darkBlue'
+                className='inline-flex justify-between items-center p-5 w-full text-darkBlue bg-white rounded-lg border border-white cursor-pointer hover:text-orange border-white peer-checked:text-orange peer-checked:border-orange peer-checked:text-orange hover:text-orange hover:bg-gray-100 text-darkBlue'
               >
                 <div className='block'>
                   <div className='w-full text-lg font-OpenSans font-bold'>Points Per Reception</div>
@@ -150,7 +166,7 @@ export default function index() {
               />
               <label
                 htmlFor='NPPR'
-                className='inline-flex justify-between items-center p-5 w-full text-darkBlue bg-white rounded-lg border border-white cursor-pointer hover:text-orange border-orange peer-checked:text-orange peer-checked:border-orange peer-checked:text-orange hover:text-orange hover:bg-gray-100 text-darkBlue'
+                className='inline-flex justify-between items-center p-5 w-full text-darkBlue bg-white rounded-lg border border-white cursor-pointer hover:text-orange border-white peer-checked:text-orange peer-checked:border-orange peer-checked:text-orange hover:text-orange hover:bg-gray-100 text-darkBlue'
               >
                 <div className='block'>
                   <div className='w-full text-lg font-OpenSans font-bold'>
@@ -168,12 +184,22 @@ export default function index() {
           <NativeSelect
             data={['Public', 'Private']}
             label='Allow anyone to join or only people you invite'
+            value={publicOrPrivate}
+            onChange={(event) => setPublicOrPrivate(event.currentTarget.value)}
           />
         </div>
 
         <div>
           <label className='font-OpenSans font-bold text-2xl'>League Description:</label>
-          <Textarea placeholder='Add a league description' autosize minRows={2} size='xl' />
+          <Textarea
+            id='leagueDescription'
+            placeholder='Add a league description'
+            value={leagueDescription}
+            onChange={(e) => setLeagueDescription(e.target.value)}
+            autosize
+            minRows={2}
+            size='xl'
+          />
         </div>
 
         <Group position='center'>

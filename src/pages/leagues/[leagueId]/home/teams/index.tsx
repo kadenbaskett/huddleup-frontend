@@ -1,12 +1,13 @@
+import LeagueHomeNavigation from '@components/LeagueHomeNavigation/LeagueHomeNavigation';
+import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
+import { Table } from '@mantine/core';
 import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
 import { AppDispatch, StoreState } from '@store/store';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import LeagueHomeNavigation from '@components/LeagueHomeNavigation/LeagueHomeNavigation';
 
-function league() {
+function index() {
   const router = useRouter();
   const { leagueId } = router.query;
 
@@ -20,6 +21,21 @@ function league() {
     }
   }, [leagueInfoFetchStatus, dispatch, leagueId]);
 
+  const teams = league ? league.teams : [];
+
+  const rows = teams.map((t) => (
+    <tr key={t.id}>
+      <td>{t.id}</td>
+      <td>{t.name}</td>
+      <td>
+        <ul>
+          {t.managers.map((manager) => (
+            <li key={manager.id}>{manager.user.username}</li>
+          ))}
+        </ul>
+      </td>
+    </tr>
+  ));
   return (
     <div>
       <LeagueNavBar
@@ -33,10 +49,21 @@ function league() {
         leagueId={Number(leagueId)}
         leagueName={league ? league.name : ' '}
         leagueDescription={'This is an example league description'}
-        page='overview'
+        page='teams'
       />
+      <div>This is the teams page for a league</div>
+      <Table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Managers</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </Table>
     </div>
   );
 }
 
-export default league;
+export default index;

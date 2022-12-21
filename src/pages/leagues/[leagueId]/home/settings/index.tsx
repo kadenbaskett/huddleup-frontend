@@ -1,12 +1,12 @@
+import LeagueHomeNavigation from '@components/LeagueHomeNavigation/LeagueHomeNavigation';
+import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
 import { AppDispatch, StoreState } from '@store/store';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import LeagueHomeNavigation from '@components/LeagueHomeNavigation/LeagueHomeNavigation';
 
-function league() {
+function index() {
   const router = useRouter();
   const { leagueId } = router.query;
 
@@ -19,7 +19,6 @@ function league() {
       dispatch(fetchLeagueInfoThunk(Number(leagueId)));
     }
   }, [leagueInfoFetchStatus, dispatch, leagueId]);
-
   return (
     <div>
       <LeagueNavBar
@@ -33,10 +32,11 @@ function league() {
         leagueId={Number(leagueId)}
         leagueName={league ? league.name : ' '}
         leagueDescription={'This is an example league description'}
-        page='overview'
+        page='settings'
       />
+      <div>This is the settings page for a league</div>
     </div>
   );
 }
 
-export default league;
+export default index;
