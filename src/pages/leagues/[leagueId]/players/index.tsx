@@ -114,7 +114,7 @@ function league(props) {
         const fullName = `${player.first_name}${player.last_name}`;
 
         for (const word of words) {
-          if (fullName.includes(word)) return true;
+          if (fullName.toLowerCase().includes(word.toLowerCase())) return true;
         }
         return false;
       });
@@ -251,7 +251,7 @@ function league(props) {
             {
               accessor: 'first_name',
               title: 'Player',
-              width: '40%',
+              // width: '40%',
               render: (p) => (
                 <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
                   <Group>
@@ -268,7 +268,7 @@ function league(props) {
             {
               accessor: 'status',
               title: 'Status',
-              width: 160,
+              // width: 160,
               render: (p) => (
                 <a href='#' onClick={(evt) => onPlayerActionClick(evt, p)}>
                   {getPlayerAction(p)}
@@ -278,7 +278,7 @@ function league(props) {
             {
               accessor: 'projection',
               title: `Week ${currentWeek}`,
-              width: 160,
+              // width: 160,
               sortable: true,
               // render: ( p ) => (
               //   <div>
@@ -289,7 +289,7 @@ function league(props) {
             {
               accessor: 'lastWeek',
               title: `Week ${currentWeek - 1}`,
-              width: 160,
+              // width: 160,
               sortable: true,
               // render: ( p ) => (
               //   <div>
