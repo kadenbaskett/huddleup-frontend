@@ -9,16 +9,15 @@ export default function PlayerPopup({ player, opened, onClose }) {
   const currentWeek = useSelector((state: StoreState) => state.global.week);
   // const totalWeeks = useSelector((state: StoreState) => state.global.totalWeeks);
 
-  console.log(player);
-
   const getPlayerOutlook = (player) => {
-    if (!player) return <></>;
+    if (!player) return <div></div>;
     const game = player.player_game_stats.length ? player.player_game_stats.slice(0, 1) : [];
     const projection = mapPositionToTable(player, game);
     const outlook = <div> Player outlook and news </div>;
 
     return (
       <div>
+        {'Outlook'}
         {projection}
         {outlook}
       </div>
@@ -27,7 +26,13 @@ export default function PlayerPopup({ player, opened, onClose }) {
 
   const getPlayerGameLogs = (player) => {
     if (!player) return <></>;
-    return mapPositionToTable(player, player.player_game_stats);
+    const table = mapPositionToTable(player, player.player_game_stats);
+    return (
+      <div>
+        {'Game Logs'}
+        {table}
+      </div>
+    );
   };
 
   const getPlayerOwner = (player) => {
@@ -70,9 +75,7 @@ export default function PlayerPopup({ player, opened, onClose }) {
         size={'75%'}
       >
         {playerContent(player)}
-        Outlook
         {getPlayerOutlook(player)}
-        Game Logs
         {getPlayerGameLogs(player)}
       </Modal>
     </>
