@@ -12,8 +12,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@mantine/core": "^5.8.0",
-    "@mantine/hooks": "^5.8.0",
+    "@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.10.0",
+    "@mantine/core": "^5.9.5",
+    "@mantine/form": "^5.9.5",
+    "@mantine/hooks": "^5.9.5",
     "@reduxjs/toolkit": "^1.9.1",
     "@tabler/icons": "^1.111.0",
     "@types/node": "18.11.9",
@@ -24,6 +27,8 @@
     "firebase": "^9.15.0",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
+    "lodash": "^4.17.21",
+    "mantine-datatable": "^1.7.30",
     "next": "13.0.2",
     "next-redux-wrapper": "^8.0.0",
     "react": "^18.2.0",
@@ -33,6 +38,7 @@
     "react-svg": "^15.1.14"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
     "autoprefixer": "^10.4.13",
