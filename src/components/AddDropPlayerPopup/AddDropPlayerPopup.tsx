@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useEffect, useState } from 'react';
-import { Button, Group, Modal, Checkbox, Table } from '@mantine/core';
+import { Button, Group, Modal, Checkbox, Table, Text, Grid, Space } from '@mantine/core';
 
-export default function AddPlayerPopup({ roster, player, opened, onClose }) {
+export default function AddDropPlayerPopup({ roster, player, opened, onClose }) {
   const [dropPlayers, setDropPlayers] = useState(new Set());
   const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
     setDropPlayers(new Set());
     setSubmitLoading(false);
-  }, opened);
+  }, [opened]);
 
   const onSubmit = () => {
     setSubmitLoading(true);
@@ -55,16 +55,39 @@ export default function AddPlayerPopup({ roster, player, opened, onClose }) {
     });
 
     return (
-      <Table striped highlightOnHover withBorder withColumnBorders>
-        <thead>
-          <tr>
-            <th>Slot</th>
-            <th>Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
+      <Grid>
+        <Grid.Col>
+          <Text fz='md'>Add Player</Text>
+          <Table striped highlightOnHover withBorder withColumnBorders>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr key={player?.id}>
+                <td>
+                  {player?.first_name} {player?.last_name}
+                </td>
+                <td>{player?.position}</td>
+              </tr>
+            </tbody>
+          </Table>
+          <Space h='md' />
+          <Text fz='md'>Select player(s) to drop</Text>
+          <Table striped highlightOnHover withBorder withColumnBorders>
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </Table>
+        </Grid.Col>
+      </Grid>
     );
   };
 
@@ -73,7 +96,7 @@ export default function AddPlayerPopup({ roster, player, opened, onClose }) {
       <Modal
         opened={opened}
         onClose={() => onClose()}
-        title={'Roster is full, select a player to drop'}
+        title={<Text fz='lg'>Roster full, select player(s) to drop</Text>}
         size={'75%'}
       >
         {getRoster()}

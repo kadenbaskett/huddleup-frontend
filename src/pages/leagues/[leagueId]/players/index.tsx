@@ -15,8 +15,9 @@ import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import sortBy from 'lodash/sortBy';
 import CONFIG from '@services/config';
 import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
+import AddDropPlayerConfirmPopup from '@components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
 
-function league(props) {
+function League(props) {
   const router = useRouter();
   const { leagueId } = router.query;
 
@@ -31,8 +32,14 @@ function league(props) {
   const league = useSelector((state: StoreState) => state.league.league);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
 
+  // Confirm popup
+  const [addDropConfirmPopupOpen, setAddDropConfirmPopupOpen] = useState(false);
+  const [isAddPlayer, setIsAddPlayer] = useState(false);
+
   // Add Drop popup
   const [addDropPopupOpen, setAddDropPopupOpen] = useState(false);
+
+  // Used for both popups
   const [addPlayer, setAddPlayer] = useState(null);
 
   const onAddDropPopupClose = () => {
@@ -40,11 +47,35 @@ function league(props) {
     setAddPlayer(null);
   };
 
+  const onAddDropConfirmClose = () => {
+    setAddDropConfirmPopupOpen(false);
+    setAddPlayer(null);
+  };
+
   // Generic add drop popup
   const onPlayerActionClick = (event, player) => {
     event.preventDefault();
-    setAddDropPopupOpen(true);
-    setAddPlayer(player);
+
+    const avail = getPlayerAvailability(player);
+    const roster = getTeamRoster();
+    const myTeam = 'My team name';
+
+    if (avail === 'Free Agent') {
+      setAddPlayer(player);
+
+      if (roster.players.length < CONFIG.maxRosterSize) {
+        setIsAddPlayer(true);
+        setAddDropConfirmPopupOpen(true);
+      } else {
+        setAddDropPopupOpen(true);
+      }
+    } else if (avail === 'Waivers') {
+      // waivers
+    } else if (avail === myTeam) {
+      // drop
+    } else {
+      // trade
+    }
   };
 
   // Player popup
@@ -209,6 +240,10 @@ function league(props) {
     }
   };
 
+  const getTeamRoster = () => {
+    return league?.teams?.at(-1)?.rosters?.at(-1);
+  };
+
   return (
     <>
       <LeagueNavBar
@@ -295,14 +330,20 @@ function league(props) {
         </Grid.Col>
         <PlayerPopup player={openPlayer} opened={playerPopupOpen} onClose={onPlayerPopupClose} />
         <AddDropPlayerPopup
-          roster={league?.teams?.at(-1)?.rosters?.at(-1)}
+          roster={getTeamRoster()}
           player={addPlayer}
           opened={addDropPopupOpen}
           onClose={onAddDropPopupClose}
+        />
+        <AddDropPlayerConfirmPopup
+          isAdd={isAddPlayer}
+          player={addPlayer}
+          opened={addDropConfirmPopupOpen}
+          onClose={onAddDropConfirmClose}
         />
       </Grid>
     </>
   );
 }
 
-export default league;
+export default League;
