@@ -3,16 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { GrAddCircle, GrDisabledOutline, GrLinkNext } from 'react-icons/gr';
-import {
-  Avatar,
-  TextInput,
-  // Box,
-  SegmentedControl,
-  NativeSelect,
-  Group,
-  // Container,
-  Grid,
-} from '@mantine/core';
+import { Avatar, TextInput, SegmentedControl, NativeSelect, Group, Grid } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { AppDispatch, StoreState } from '@store/store';
 import { fetchLeagueInfoThunk, fetchLeaguePlayersThunk } from '@store/slices/leagueSlice';
@@ -22,9 +13,8 @@ import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { fantasyPoints } from '@services/helpers';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import sortBy from 'lodash/sortBy';
-
-// TODO config this
-const flexPlayers = ['RB', 'WR', 'TE'];
+import CONFIG from '@services/config';
+import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
 
 function league(props) {
   const router = useRouter();
@@ -40,6 +30,22 @@ function league(props) {
   const timeframeFetchStatus = useSelector((state: StoreState) => state.global.timeframeStatus);
   const league = useSelector((state: StoreState) => state.league.league);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
+
+  // Add Drop popup
+  const [addDropPopupOpen, setAddDropPopupOpen] = useState(false);
+  const [addPlayer, setAddPlayer] = useState(null);
+
+  const onAddDropPopupClose = () => {
+    setAddDropPopupOpen(false);
+    setAddPlayer(null);
+  };
+
+  // Generic add drop popup
+  const onPlayerActionClick = (event, player) => {
+    event.preventDefault();
+    setAddDropPopupOpen(true);
+    setAddPlayer(player);
+  };
 
   // Player popup
   const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
@@ -82,7 +88,7 @@ function league(props) {
     const position = form.values.position;
 
     if (position === 'FLEX') {
-      players = players.filter((player) => flexPlayers.includes(player.position));
+      players = players.filter((player) => CONFIG.flexPositions.includes(player.position));
     } else if (position !== 'All') {
       players = players.filter((player) => player.position === position);
     }
@@ -203,11 +209,6 @@ function league(props) {
     }
   };
 
-  const onPlayerActionClick = (event, player) => {
-    event.preventDefault();
-    console.log(player);
-  };
-
   return (
     <>
       <LeagueNavBar
@@ -293,6 +294,12 @@ function league(props) {
           </Grid.Col>
         </Grid.Col>
         <PlayerPopup player={openPlayer} opened={playerPopupOpen} onClose={onPlayerPopupClose} />
+        <AddDropPlayerPopup
+          roster={league?.teams?.at(-1)?.rosters?.at(-1)}
+          player={addPlayer}
+          opened={addDropPopupOpen}
+          onClose={onAddDropPopupClose}
+        />
       </Grid>
     </>
   );
