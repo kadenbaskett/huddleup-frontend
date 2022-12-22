@@ -17,7 +17,7 @@ export interface joinleagueProps {
 
 export function JoinLeagueCard(league: joinleagueProps) {
   return (
-    <a href={'/leagues/' + league.id.toString() + '/home'}>
+    <a href={'/leagues/' + league.id.toString() + '/home/overview'}>
       <div
         id={styles.card}
         // eslint-disable-next-line no-template-curly-in-string

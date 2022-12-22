@@ -21,7 +21,7 @@ function league() {
   }, [leagueInfoFetchStatus, dispatch, leagueId]);
 
   return (
-    <div>
+    <div className='bg-lightGrey min-h-screen'>
       <LeagueNavBar
         teamName='team name'
         teamId={2}
