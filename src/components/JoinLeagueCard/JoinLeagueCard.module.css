@@ -4,6 +4,7 @@
 
 #card:hover .descriptionDiv {
   visibility: visible;
+  transition-delay: 200ms;
 }
 
 .descriptionDiv {

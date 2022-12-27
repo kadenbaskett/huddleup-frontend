@@ -9,13 +9,20 @@ export interface recentActivityCardProps {
   toTeamId: Number;
 }
 // type of activity: drop, add, trade
+// this will also need a player dropped id and a player added id
+// also a date of the activity to display when this occured
 
 export default function RecentActivityCard(props: recentActivityCardProps) {
   if (props.type === 'drop') {
     return (
       <div className='p-2'>
-        <div className=' '>
-          <AiFillMinusCircle />
+        <div className='inline-flex font-OpenSans'>
+          <AiFillMinusCircle
+            style={{
+              color: 'red',
+            }}
+            size='25px'
+          />
           This is a drop on team {props.toTeamId.toString()}
         </div>
         <div>
@@ -27,8 +34,13 @@ export default function RecentActivityCard(props: recentActivityCardProps) {
   } else if (props.type === 'add') {
     return (
       <div className='p-2'>
-        <div className=' '>
-          <IoMdAddCircle />
+        <div className='inline-flex font-OpenSans'>
+          <IoMdAddCircle
+            style={{
+              color: 'green',
+            }}
+            size='25px'
+          />
           This is an add on team {props.toTeamId.toString()}
         </div>
         <div>
@@ -37,13 +49,32 @@ export default function RecentActivityCard(props: recentActivityCardProps) {
         </div>
       </div>
     );
+  } else if (props.type === 'trade') {
+    return (
+      <div className='p-2'>
+        <div className='inline-flex font-OpenSans'>
+          <FaExchangeAlt
+            style={{
+              color: 'orange',
+            }}
+            size='25px'
+          />
+          This is a trade to team {props.toTeamId.toString()} from team{' '}
+          {props.fromTeamId.toString()}
+        </div>
+      </div>
+    );
   } else {
     return (
       <div className='p-2'>
-        <div className=' '>
-          <FaExchangeAlt />
-          This is a trade to team {props.toTeamId.toString()} from team{' '}
-          {props.fromTeamId.toString()}
+        <div className='inline-flex font-OpenSans'>
+          <FaExchangeAlt
+            style={{
+              color: 'orange',
+            }}
+            size='25px'
+          />
+          This is a add and a drop on team {props.fromTeamId.toString()}
         </div>
       </div>
     );

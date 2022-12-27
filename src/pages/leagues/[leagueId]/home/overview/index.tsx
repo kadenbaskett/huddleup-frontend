@@ -6,6 +6,7 @@ import RecentActivityCard, {
 import { Anchor, Grid } from '@mantine/core';
 import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
 import { AppDispatch, StoreState } from '@store/store';
+import { DataTable } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,15 +27,20 @@ const activityData: recentActivityCardProps[] = [
     fromTeamId: 2,
     toTeamId: 1,
   },
+  {
+    type: 'add/drop',
+    fromTeamId: 2,
+    toTeamId: 1,
+  },
 ];
 
-const renderRecentActivityCards = () => {
-  return activityData.map((activty) => renderActivity(activty));
-};
+// const renderRecentActivityCards = () => {
+//   return activityData.map((activty) => renderActivity(activty));
+// };
 
 const renderActivity = (activty: recentActivityCardProps) => {
   return (
-    <div className='grid col-span-10'>
+    <div className=''>
       <RecentActivityCard {...activty} />
     </div>
   );
@@ -75,10 +81,24 @@ function index() {
             <div className='p-4 font-varsity justify-left text-3xl bg-darkBlue text-white rounded-t-xl'>
               Recent Activity
             </div>
-            <div className='bg-white font-OpenSans'>
-              Here we will put all the recent activity in the league
-            </div>
-            <div className='bg-white font-OpenSans'>{renderRecentActivityCards()}</div>
+            <Grid>
+              <Grid.Col>
+                <DataTable
+                  withBorder
+                  withColumnBorders
+                  records={activityData}
+                  columns={[
+                    {
+                      accessor: 'type',
+                      title: 'Details',
+                      render: (p) => renderActivity(activityData[0]),
+                    },
+                    { accessor: 'toTeamId' },
+                    { accessor: 'fromTeamId' },
+                  ]}
+                />
+              </Grid.Col>
+            </Grid>
           </Grid.Col>
           <Grid.Col span={3}>
             <Anchor href={'/leagues/' + String(leagueId) + '/standings'} variant='text'>
