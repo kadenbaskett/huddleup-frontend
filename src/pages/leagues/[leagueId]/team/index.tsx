@@ -1,33 +1,20 @@
-import { AppDispatch, StoreState } from '@store/store';
+import { StoreState } from '@store/store';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { Table } from '@mantine/core';
-import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
 import { fantasyPoints } from '@services/helpers';
 
 function league() {
   const router = useRouter();
   const { leagueId } = router.query;
 
-  const dispatch = useDispatch<AppDispatch>();
-  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
   const league = useSelector((state: StoreState) => state.league.league);
+  const team = useSelector((state: StoreState) => state.league.userTeam);
+  const currentWeek = useSelector((state: StoreState) => state.global.week);
 
-  // TODO we are just using the first team in the league right now
-  // This just gets the latest roster of the first team
-  // Also dont have such a messy if statement
-  let players = [];
-  if (league?.teams?.[0]?.rosters) {
-    players = league.teams[0].rosters.at(-1).players;
-  }
-
-  useEffect(() => {
-    if (leagueInfoFetchStatus === 'idle' && leagueId) {
-      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
-    }
-  }, [leagueInfoFetchStatus, dispatch, leagueId]);
+  const players = team?.rosters.find((roster) => roster.week === currentWeek)?.players;
 
   const rows = players.map((p) => (
     <tr key={p.id}>
@@ -50,8 +37,8 @@ function league() {
   return (
     <>
       <LeagueNavBar
-        teamName='team name'
-        teamId={2}
+        teamName={team ? team.name : ' '}
+        teamId={team ? team.id : ' '}
         leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='team'

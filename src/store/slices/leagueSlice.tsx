@@ -4,15 +4,15 @@ import { fetchLeagueInfo, fetchLeaguePlayers } from '@services/apiClient';
 export interface leagueSliceState {
   league: any;
   playerList: any[];
-  playerFetchStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-  leagueFetchStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  userTeam: any;
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: leagueSliceState = {
   league: null,
-  playerList: [],
-  playerFetchStatus: 'idle',
-  leagueFetchStatus: 'idle',
+  playerList: null,
+  userTeam: null,
+  status: 'idle',
 };
 
 export const leagueSlice = createSlice({
@@ -23,42 +23,39 @@ export const leagueSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(fetchLeaguePlayersThunk.pending, (state, action) => {
-        state.playerFetchStatus = 'loading';
+      .addCase(handleLeagueInitThunk.pending, (state, action) => {
+        state.status = 'loading';
       })
-      .addCase(fetchLeaguePlayersThunk.fulfilled, (state, action) => {
-        state.playerFetchStatus = 'succeeded';
-        state.playerList = action.payload;
+      .addCase(handleLeagueInitThunk.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.playerList = action.payload.players;
+        state.league = action.payload.league;
+        state.userTeam = action.payload.userTeam;
       })
-      .addCase(fetchLeaguePlayersThunk.rejected, (state, action) => {
-        state.playerFetchStatus = 'failed';
-      })
-      .addCase(fetchLeagueInfoThunk.pending, (state, action) => {
-        state.leagueFetchStatus = 'loading';
-      })
-      .addCase(fetchLeagueInfoThunk.fulfilled, (state, action) => {
-        state.leagueFetchStatus = 'succeeded';
-        state.league = action.payload;
-      })
-      .addCase(fetchLeagueInfoThunk.rejected, (state, action) => {
-        state.leagueFetchStatus = 'failed';
+      .addCase(handleLeagueInitThunk.rejected, (state, action) => {
+        state.status = 'failed';
       });
   },
 });
 
-export const fetchLeaguePlayersThunk = createAsyncThunk(
-  'league/fetchLeaguePlayers',
-  async (leagueId: number) => {
-    const players = await fetchLeaguePlayers(leagueId);
-    return players.data ? players.data : [];
-  },
-);
+export const handleLeagueInitThunk = createAsyncThunk(
+  'league/initLeague',
+  async (leagueId: number, { getState }) => {
+    const playersResp = await fetchLeaguePlayers(leagueId);
+    const leagueResp = await fetchLeagueInfo(leagueId);
 
-export const fetchLeagueInfoThunk = createAsyncThunk(
-  'league/fetchLeagueInfo',
-  async (leagueId: number) => {
-    const league = await fetchLeagueInfo(leagueId);
-    return league.data ? league.data : [];
+    const userId = getState().user.userInfo.id;
+    const team = userId
+      ? leagueResp.data.teams.find((team) =>
+          team.managers.find((manager) => manager.user_id === userId),
+        )
+      : null;
+
+    return {
+      players: playersResp.data ? playersResp.data : null,
+      league: leagueResp.data ? leagueResp.data : null,
+      userTeam: team,
+    };
   },
 );
 
