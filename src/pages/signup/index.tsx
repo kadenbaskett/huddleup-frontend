@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { addUserThunk } from '@store/slices/userSlice';
 import { AppDispatch } from '@store/store';
 import { useDispatch } from 'react-redux';
+import Link from 'next/link';
 
 function Signup() {
   const [error, setError] = useState('');
@@ -73,9 +74,9 @@ function Signup() {
             </button>
             <div className='flex justify-center space-x-2 mt-2'>
               <p className='text-center text-sm font-medium text-gray-500'>Have an account?</p>
-              <a href='/login' className='text-center text-sm font-medium text-orange'>
+              <Link href='/login' className='text-center text-sm font-medium text-orange'>
                 Login here
-              </a>
+              </Link>
             </div>
           </div>
         </div>
