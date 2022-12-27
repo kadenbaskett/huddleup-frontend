@@ -33,7 +33,7 @@ function Signup() {
 
       if (resp === 'success') {
         console.log('Account created succesfully!');
-        dispatch(createUserThunk({ username, email }));
+        await dispatch(createUserThunk({ username, email }));
         void router.push('/home');
       } else if (resp.includes('email-already-in-use')) {
         setError('Email is already in use');

@@ -13,7 +13,7 @@ function Login() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleRememberMe = (e) => {
+  const handleRememberMe = () => {
     setRememberMe((current) => !current);
   };
 
@@ -37,7 +37,7 @@ function Login() {
 
       if (resp === 'success') {
         console.log('Login successful!');
-        dispatch(handleUserInitThunk(email));
+        await dispatch(handleUserInitThunk(email));
         void router.push('/home');
       } else if (resp.includes('wrong-password')) {
         setError('Incorrect password');
