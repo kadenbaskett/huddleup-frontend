@@ -52,8 +52,13 @@ export const userSlice = createSlice({
       })
       .addCase(createUserThunk.fulfilled, (state, action) => {
         state.createUserStatus = 'succeeded';
-        state.userInfo.email = action.payload.email;
-        state.userInfo.username = action.payload.username;
+        state.userInfo = {
+          id: action.payload.id,
+          username: action.payload.username,
+          email: action.payload.email,
+        };
+        // state.userInfo.email = action.payload.email;
+        // state.userInfo.username = action.payload.username;
 
         // Set the user in local storage so that the info persists between logins
         const user = {

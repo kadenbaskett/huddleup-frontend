@@ -2,7 +2,7 @@ import { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
 import { createAccount } from '../../firebase/firebase';
 import { useRouter } from 'next/router';
-import { addUserThunk } from '@store/slices/userSlice';
+import { createUserThunk } from '@store/slices/userSlice';
 import { AppDispatch } from '@store/store';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
@@ -33,7 +33,7 @@ function Signup() {
 
       if (resp === 'success') {
         console.log('Account created succesfully!');
-        dispatch(addUserThunk({ username, email }));
+        dispatch(createUserThunk({ username, email }));
         void router.push('/home');
       } else if (resp.includes('email-already-in-use')) {
         setError('Email is already in use');
