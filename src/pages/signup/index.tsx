@@ -30,8 +30,8 @@ function Signup() {
       if (resp === 'success') {
         console.log('Account created succesfully!');
         void router.push('/home');
-      } else if (resp.includes('email-already-in-use')) {
-        setError('Email is already in use');
+      } else {
+        setError(resp);
       }
     }
   };
@@ -57,7 +57,7 @@ function Signup() {
             <FormInput label='Password' inputId='passwordInput'></FormInput>
             <FormInput label='Confirm Password' inputId='confirmPasswordInput'></FormInput>
 
-            <div id='error' className='mt-4 text-red-700 font-md font-bold text-center'>
+            <div id='error' className='mt-4 text-red font-md font-bold text-center'>
               {error}
             </div>
 

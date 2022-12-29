@@ -39,7 +39,7 @@ function Login() {
       } else if (resp.includes('wrong-password')) {
         setError('Incorrect password');
       } else if (resp.includes('user-not-found')) {
-        setError('User not found for email');
+        setError('Account not found for email');
       } else {
         // general error
         console.log(resp);
@@ -81,7 +81,7 @@ function Login() {
               </div>
             </div>
 
-            <div id='loginError' className='mt-4 text-red-700 font-md font-bold text-center'>
+            <div id='loginError' className='mt-4 text-red font-md font-bold text-center'>
               {error}
             </div>
 
