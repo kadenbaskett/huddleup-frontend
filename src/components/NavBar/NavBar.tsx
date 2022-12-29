@@ -1,4 +1,3 @@
-import React from 'react';
 import './NavBar.module.css';
 import { FaRegUser } from 'react-icons/fa';
 import Link from 'next/link';
@@ -54,18 +53,6 @@ export default function Navbar() {
                   >
                     Login
                   </Link>
-                ) : (
-                  <Link
-                    className='bg-orange rounded-lg px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                    href='/logout'
-                  >
-                    Logout
-                  </Link>
-                )}
-              </li>
-              <li className='nav-item'>
-                {user == null ? (
-                  <></>
                 ) : (
                   <Link
                     href='/profile'

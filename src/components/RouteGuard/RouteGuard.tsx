@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@store/store';
-// import { logoutUser } from '@store/slices/userSlice';
-// import { logoutUser } from '@store/slices/userSlice';
 
 export default function RouteGuard({ children }) {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
 
   const user = useSelector((state: StoreState) => state.user.userInfo);
-  // const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     // on initial load - run auth check
@@ -34,23 +31,23 @@ export default function RouteGuard({ children }) {
     const path = url.split('?')[0];
     const publicPaths = ['/login', '/', '/signup']; // pages that logged out users are able to access
 
-    if (!user && !publicPaths.includes(path)) {
+    // Route a logged in user away from login or signup pages
+    if (user && publicPaths.includes(path)) {
+      void router.replace({
+        pathname: '/home',
+      });
+
+      setAuthorized(true);
+    }
+    // Don't let a logged out user access private pages
+    else if (!user && !publicPaths.includes(path)) {
       setAuthorized(false);
-      void router.push({
+      void router.replace({
         pathname: '/login',
       });
     } else {
       setAuthorized(true);
     }
-
-    // if (path === '/logout') {
-    //   dispatch(logoutUser({}));
-
-    //   void router.push({
-    //     pathname: '/',
-    //   });
-    // }
-    // TODO: change landing page after login
   }
 
   return authorized && children;
