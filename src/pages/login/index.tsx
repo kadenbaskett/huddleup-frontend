@@ -33,11 +33,8 @@ function Login() {
     } else {
       const resp = await login(email, password, rememberMe);
 
-      // TODO: add remember me through firebase
-
       if (resp === 'success') {
         console.log('Login successful!');
-        // dispatch(handleUserInitThunk(email));
         void router.push('/home');
       } else if (resp.includes('wrong-password')) {
         setError('Incorrect password');
