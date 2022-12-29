@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, StoreState } from '@store/store';
-import { logoutUser } from '@store/slices/userSlice';
+import { useSelector } from 'react-redux';
+import { StoreState } from '@store/store';
+// import { logoutUser } from '@store/slices/userSlice';
+// import { logoutUser } from '@store/slices/userSlice';
 
 export default function RouteGuard({ children }) {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
 
   const user = useSelector((state: StoreState) => state.user.userInfo);
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     // on initial load - run auth check
@@ -42,13 +43,14 @@ export default function RouteGuard({ children }) {
       setAuthorized(true);
     }
 
-    if (path === '/logout') {
-      dispatch(logoutUser({}));
+    // if (path === '/logout') {
+    //   dispatch(logoutUser({}));
 
-      void router.push({
-        pathname: '/',
-      });
-    }
+    //   void router.push({
+    //     pathname: '/',
+    //   });
+    // }
+    // TODO: change landing page after login
   }
 
   return authorized && children;
