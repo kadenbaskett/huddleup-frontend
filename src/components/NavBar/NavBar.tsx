@@ -1,4 +1,3 @@
-import React from 'react';
 import './NavBar.module.css';
 import { FaRegUser } from 'react-icons/fa';
 import Link from 'next/link';
@@ -7,6 +6,11 @@ import { StoreState } from '@store/store';
 
 export default function Navbar() {
   const user = useSelector((store: StoreState) => store.user.userInfo);
+
+  // for testing if the redux state is updating
+  useEffect(() => {
+    console.log('User just changed: ', user);
+  }, [user]);
 
   return (
     <>

@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { AppProps } from 'next/app';
 import { wrapper } from '@store/store';
-import RouteGuard from '@components/RouteGuard/RouteGuard';
+// import RouteGuard from '@components/RouteGuard/RouteGuard';
 import AppStateInit from '@components/AppStateInit/AppStateInit';
 
 const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
@@ -12,14 +12,12 @@ const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
 
   return (
     <Provider store={store}>
-      <div>
-        <NavBar />
-        <AppStateInit>
-          <RouteGuard>
-            <Component {...props.pageProps} />
-          </RouteGuard>
-        </AppStateInit>
-      </div>
+      <NavBar />
+      <AppStateInit>
+        {/* <RouteGuard> */}
+        <Component {...props.pageProps} />
+        {/* </RouteGuard> */}
+      </AppStateInit>
     </Provider>
   );
 };
