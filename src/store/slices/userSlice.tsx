@@ -22,11 +22,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    logoutUser: (state, action) => {
-      state = initialState;
-      console.log('User logged out thunk fulfilled: ', state.userInfo);
-      // localStorage.removeItem('user');
-    },
+    logoutUser: () => initialState,
   },
   extraReducers(builder) {
     builder
@@ -37,8 +33,6 @@ export const userSlice = createSlice({
         state.status = 'succeeded';
         state.userInfo = action.payload.user;
         state.leagues = action.payload.leagues;
-
-        console.log('User login thunk fulfilled!!!: ', state.userInfo);
 
         // // Set the user in local storage so that the info persists between logins
         // const user = {

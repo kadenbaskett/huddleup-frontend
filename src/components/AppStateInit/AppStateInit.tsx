@@ -3,10 +3,8 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, StoreState } from '@store/store';
 import { handleGlobalInitThunk } from '@store/slices/globalSlice';
-import { handleUserInitThunk, logoutUser } from '@store/slices/userSlice';
+import { handleUserInitThunk } from '@store/slices/userSlice';
 import { handleLeagueInitThunk } from '@store/slices/leagueSlice';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../firebase/firebase';
 
 export default function AppStateInit({ children }) {
   const router = useRouter();
@@ -14,19 +12,6 @@ export default function AppStateInit({ children }) {
 
   const state = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    console.log('Use effect changing');
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log('Auth change: Logged in');
-        dispatch(handleUserInitThunk(user.email));
-      } else {
-        console.log('Auth change: Logged out');
-        dispatch(logoutUser({}));
-      }
-    });
-  }, []);
 
   useEffect(() => {
     // on initial load - init app state

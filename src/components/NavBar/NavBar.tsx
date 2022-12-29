@@ -7,11 +7,6 @@ import { StoreState } from '@store/store';
 export default function Navbar() {
   const user = useSelector((store: StoreState) => store.user.userInfo);
 
-  // for testing if the redux state is updating
-  useEffect(() => {
-    console.log('User just changed: ', user);
-  }, [user]);
-
   return (
     <>
       <nav className='relative flex flex-wrap items-center justify-between px-2 py-3 bg-darkBlue'>
@@ -58,18 +53,6 @@ export default function Navbar() {
                   >
                     Login
                   </Link>
-                ) : (
-                  <Link
-                    className='bg-orange rounded-lg px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                    href='/logout'
-                  >
-                    Logout
-                  </Link>
-                )}
-              </li>
-              <li className='nav-item'>
-                {user == null ? (
-                  <></>
                 ) : (
                   <Link
                     href='/profile'
