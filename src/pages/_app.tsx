@@ -4,6 +4,8 @@ import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { AppProps } from 'next/app';
 import { wrapper } from '@store/store';
+import RouteGuard from '@components/RouteGuard/RouteGuard';
+import AppStateInit from '@components/AppStateInit/AppStateInit';
 
 const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -12,7 +14,11 @@ const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
     <Provider store={store}>
       <div>
         <NavBar />
-        <Component {...props.pageProps} />
+        <AppStateInit>
+          <RouteGuard>
+            <Component {...props.pageProps} />
+          </RouteGuard>
+        </AppStateInit>
       </div>
     </Provider>
   );

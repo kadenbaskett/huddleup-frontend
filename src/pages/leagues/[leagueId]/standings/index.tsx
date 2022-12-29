@@ -1,29 +1,21 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
-import { AppDispatch, StoreState } from '@store/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState } from '@store/store';
+import { useSelector } from 'react-redux';
 
 function league() {
   const router = useRouter();
   const { leagueId } = router.query;
 
-  const dispatch = useDispatch<AppDispatch>();
-  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
   const league = useSelector((state: StoreState) => state.league.league);
-
-  useEffect(() => {
-    if (leagueInfoFetchStatus === 'idle' && leagueId) {
-      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
-    }
-  }, [leagueInfoFetchStatus, dispatch, leagueId]);
+  const team = useSelector((state: StoreState) => state.league.userTeam);
 
   return (
     <>
       <LeagueNavBar
-        teamName='team name'
-        teamId={2}
+        teamName={team ? team.name : ' '}
+        teamId={team ? team.id : ' '}
         leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='standings'

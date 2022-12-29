@@ -4,7 +4,8 @@ import { useRouter } from 'next/router';
 import { login } from '../../firebase/firebase';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@store/store';
-import { fetchUserThunk } from '@store/slices/userSlice';
+import { handleUserInitThunk } from '@store/slices/userSlice';
+import Link from 'next/link';
 
 function Login() {
   const [error, setError] = useState('');
@@ -36,7 +37,7 @@ function Login() {
 
       if (resp === 'success') {
         console.log('Login successful!');
-        dispatch(fetchUserThunk(email));
+        dispatch(handleUserInitThunk(email));
         void router.push('/home');
       } else if (resp.includes('wrong-password')) {
         setError('Incorrect password');
@@ -77,9 +78,9 @@ function Login() {
               </div>
 
               <div className='text-sm'>
-                <a href='/forgotpassword' className='font-medium text-sm text-orange'>
+                <Link href='/forgotpassword' className='font-medium text-sm text-orange'>
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -97,9 +98,9 @@ function Login() {
               <p className='text-center text-sm font-medium text-gray-500'>
                 Don't have an account?
               </p>
-              <a href='/signup' className='text-center text-sm font-medium text-orange'>
+              <Link href='/signup' className='text-center text-sm font-medium text-orange'>
                 Sign up now
-              </a>
+              </Link>
             </div>
           </div>
         </div>

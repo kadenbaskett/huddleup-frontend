@@ -1,9 +1,8 @@
-import { AppDispatch, StoreState } from '@store/store';
+import { StoreState } from '@store/store';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
 import { NotificationCard } from './components/NotificationCard/NotificationCard';
 import { TeamBanner } from '@pages/leagues/[leagueId]/team/components/TeamBanner/TeamBanner';
 import { TeamCard } from './components/TeamCard/TeamCard';
@@ -16,25 +15,13 @@ function league() {
   const router = useRouter();
   const { leagueId } = router.query;
 
-  const dispatch = useDispatch<AppDispatch>();
-  const leagueInfoFetchStatus: String = useSelector(
-    (state: StoreState) => state.league.leagueFetchStatus,
-  );
+  // const dispatch = useDispatch<AppDispatch>();
+  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
+  const team = useSelector((state: StoreState) => state.league.userTeam);
+  const currentWeek = useSelector((state: StoreState) => state.global.week);
 
-  // TODO we are just using the first team in the league right now
-  // This just gets the latest roster of the first team
-  // Also dont have such a messy if statement
-  let players = [];
-  if (league?.teams?.[0]?.rosters) {
-    players = league.teams[0].rosters.at(-1).players;
-  }
-
-  useEffect(() => {
-    if (leagueInfoFetchStatus === 'idle' && leagueId) {
-      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
-    }
-  }, [leagueInfoFetchStatus, dispatch, leagueId]);
+  const players = team?.rosters.find((roster) => roster.week === currentWeek)?.players;
 
   // static data to be changed
   const proposals: Proposal[] = [
@@ -61,8 +48,8 @@ function league() {
   return (
     <>
       <LeagueNavBar
-        teamName='team name'
-        teamId={2}
+        teamName={team ? team.name : ' '}
+        teamId={team ? team.id : ' '}
         leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='team'
