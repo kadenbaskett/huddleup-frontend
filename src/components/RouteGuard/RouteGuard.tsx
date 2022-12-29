@@ -31,7 +31,16 @@ export default function RouteGuard({ children }) {
     const path = url.split('?')[0];
     const publicPaths = ['/login', '/', '/signup']; // pages that logged out users are able to access
 
-    if (!user && !publicPaths.includes(path)) {
+    // Route a logged in user away from login or signup pages
+    if (user && publicPaths.includes(path)) {
+      void router.replace({
+        pathname: '/home',
+      });
+
+      setAuthorized(true);
+    }
+    // Don't let a logged out user access private pages
+    else if (!user && !publicPaths.includes(path)) {
       setAuthorized(false);
       void router.replace({
         pathname: '/login',
@@ -39,14 +48,6 @@ export default function RouteGuard({ children }) {
     } else {
       setAuthorized(true);
     }
-
-    // if (path === '/logout') {
-    //   dispatch(logoutUser());
-
-    //   void router.push({
-    //     pathname: '/',
-    //   });
-    // }
   }
 
   return authorized && children;
