@@ -42,9 +42,11 @@ const login = async (email, password, rememberMe) => {
 const createAccount = async (username, email, password) => {
   try {
     // add user to DB
-    await addUser(username, email);
+    const addUserResp = await addUser(username, email);
 
-    // TODO: error checking for duplicate email or username
+    if (addUserResp.data == null) {
+      return addUserResp.error.response.data;
+    }
 
     const createResp = await createUserWithEmailAndPassword(auth, email, password);
 
