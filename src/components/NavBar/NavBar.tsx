@@ -20,7 +20,7 @@ export default function Navbar() {
             </Link>
           </div>
           <div className={'lg:flex flex-grow items-center'} id='example-navbar-danger'>
-            <ul className='flex flex-col lg:flex-row list-none lg:ml-auto'>
+            <ul className='flex list-none lg:ml-auto'>
               <li className='nav-item'>
                 <Link
                   className='px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
