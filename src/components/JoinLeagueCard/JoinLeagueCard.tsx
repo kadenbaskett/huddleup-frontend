@@ -3,7 +3,6 @@ import Image from 'next/image';
 import NFL from '../../public/assets/NFL.png';
 import { Button, Grid } from '@mantine/core';
 import styles from './JoinLeagueCard.module.css';
-
 export interface joinleagueProps {
   name: string;
   subText: string;

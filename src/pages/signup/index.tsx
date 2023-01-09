@@ -2,14 +2,11 @@ import { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
 import { createAccount } from '../../firebase/firebase';
 import { useRouter } from 'next/router';
-import { addUserThunk } from '@store/slices/userSlice';
-import { AppDispatch } from '@store/store';
-import { useDispatch } from 'react-redux';
+import Link from 'next/link';
 
 function Signup() {
   const [error, setError] = useState('');
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
 
   const handleCreateAccount = async () => {
     setError('');
@@ -32,10 +29,9 @@ function Signup() {
 
       if (resp === 'success') {
         console.log('Account created succesfully!');
-        dispatch(addUserThunk({ username, email }));
         void router.push('/home');
-      } else if (resp.includes('email-already-in-use')) {
-        setError('Email is already in use');
+      } else {
+        setError(resp);
       }
     }
   };
@@ -61,7 +57,7 @@ function Signup() {
             <FormInput label='Password' inputId='passwordInput'></FormInput>
             <FormInput label='Confirm Password' inputId='confirmPasswordInput'></FormInput>
 
-            <div id='error' className='mt-4 text-red-700 font-md font-bold text-center'>
+            <div id='error' className='mt-4 text-red font-md font-bold text-center'>
               {error}
             </div>
 
@@ -73,9 +69,9 @@ function Signup() {
             </button>
             <div className='flex justify-center space-x-2 mt-2'>
               <p className='text-center text-sm font-medium text-gray-500'>Have an account?</p>
-              <a href='/login' className='text-center text-sm font-medium text-orange'>
+              <Link href='/login' className='text-center text-sm font-medium text-orange'>
                 Login here
-              </a>
+              </Link>
             </div>
           </div>
         </div>

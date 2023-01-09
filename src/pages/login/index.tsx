@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
 import { useRouter } from 'next/router';
 import { login } from '../../firebase/firebase';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@store/store';
-import { fetchUserThunk } from '@store/slices/userSlice';
+// import { useDispatch } from 'react-redux';
+// import { AppDispatch } from '@store/store';
+// import { handleUserInitThunk } from '@store/slices/userSlice';
+import Link from 'next/link';
 
 function Login() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   const handleRememberMe = (e) => {
     setRememberMe((current) => !current);
@@ -32,16 +33,13 @@ function Login() {
     } else {
       const resp = await login(email, password, rememberMe);
 
-      // TODO: add remember me through firebase
-
       if (resp === 'success') {
         console.log('Login successful!');
-        dispatch(fetchUserThunk(email));
         void router.push('/home');
       } else if (resp.includes('wrong-password')) {
         setError('Incorrect password');
       } else if (resp.includes('user-not-found')) {
-        setError('User not found for email');
+        setError('Account not found for email');
       } else {
         // general error
         console.log(resp);
@@ -77,13 +75,13 @@ function Login() {
               </div>
 
               <div className='text-sm'>
-                <a href='/forgotpassword' className='font-medium text-sm text-orange'>
+                <Link href='/forgotpassword' className='font-medium text-sm text-orange'>
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
 
-            <div id='loginError' className='mt-4 text-red-700 font-md font-bold text-center'>
+            <div id='loginError' className='mt-4 text-red font-md font-bold text-center'>
               {error}
             </div>
 
@@ -97,9 +95,9 @@ function Login() {
               <p className='text-center text-sm font-medium text-gray-500'>
                 Don't have an account?
               </p>
-              <a href='/signup' className='text-center text-sm font-medium text-orange'>
+              <Link href='/signup' className='text-center text-sm font-medium text-orange'>
                 Sign up now
-              </a>
+              </Link>
             </div>
           </div>
         </div>

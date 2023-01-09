@@ -1,80 +1,53 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { League } from '@interfaces/league.interface';
 import { User } from '@interfaces/user.interface';
-import { addUser, fetchUser, fetchUserLeagues } from '@services/apiClient';
+import { fetchUser, fetchUserLeagues } from '@services/apiClient';
 
 export interface userSliceState {
   userInfo: User;
   leagues: League[];
-  leagueStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-  userStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  createUserStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: userSliceState = {
   userInfo: null,
-  leagues: [],
-  leagueStatus: 'idle',
-  userStatus: 'idle',
+  leagues: null,
+  createUserStatus: 'idle',
+  status: 'idle',
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    logoutUser: () => initialState,
+  },
   extraReducers(builder) {
     builder
-      .addCase(fetchUserLeaguesThunk.pending, (state, action) => {
-        state.leagueStatus = 'loading';
+      .addCase(handleUserInitThunk.pending, (state, action) => {
+        state.status = 'loading';
       })
-      .addCase(fetchUserLeaguesThunk.fulfilled, (state, action) => {
-        state.leagueStatus = 'succeeded';
-        state.leagues = action.payload;
+      .addCase(handleUserInitThunk.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.userInfo = action.payload.user;
+        state.leagues = action.payload.leagues;
       })
-      .addCase(fetchUserLeaguesThunk.rejected, (state, action) => {
-        state.leagueStatus = 'failed';
-      })
-      .addCase(addUserThunk.pending, (state, action) => {
-        state.userStatus = 'loading';
-      })
-      .addCase(addUserThunk.fulfilled, (state, action) => {
-        state.userStatus = 'succeeded';
-        state.userInfo = action.payload;
-      })
-      .addCase(addUserThunk.rejected, (state, action) => {
-        state.userStatus = 'failed';
-      })
-      .addCase(fetchUserThunk.pending, (state, action) => {
-        state.userStatus = 'loading';
-      })
-      .addCase(fetchUserThunk.fulfilled, (state, action) => {
-        state.userStatus = 'succeeded';
-        state.userInfo = action.payload;
-      })
-      .addCase(fetchUserThunk.rejected, (state, action) => {
-        state.userStatus = 'failed';
+      .addCase(handleUserInitThunk.rejected, (state, action) => {
+        state.status = 'failed';
       });
   },
 });
 
-export const addUserThunk = createAsyncThunk(
-  'user/addUser',
-  async ({ username, email }: { username: string; email: string }) => {
-    const response = await addUser(username, email);
-    return response.data ? response.data : [];
-  },
-);
+export const handleUserInitThunk = createAsyncThunk('user/initUser', async (email: string) => {
+  const userResp = await fetchUser(email);
+  const leaguesResp = userResp.data ? await fetchUserLeagues(userResp.data.id) : null;
 
-export const fetchUserThunk = createAsyncThunk('user/fetchUser', async (email: string) => {
-  const response = await fetchUser(email);
-  return response.data ? response.data : [];
+  return {
+    user: userResp.data ? userResp.data : null,
+    leagues: leaguesResp.data ? leaguesResp.data : null,
+  };
 });
 
-export const fetchUserLeaguesThunk = createAsyncThunk(
-  'user/fetchUserLeagues',
-  async (userId: number) => {
-    const response = await fetchUserLeagues(userId);
-    return response.data ? response.data : [];
-  },
-);
-
 export default userSlice;
+export const { logoutUser } = userSlice.actions;

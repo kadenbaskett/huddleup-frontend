@@ -5,12 +5,12 @@ import NFL from '../../public/assets/NFL.png';
 export interface leagueProps {
   name: string;
   subText: string;
-  id: string;
+  id: number;
 }
 
 export function LeagueCard(league: leagueProps) {
   return (
-    <a href={'/leagues/' + league.id + '/home/overview'}>
+    <a href={'/leagues/' + league.id.toString() + '/home/overview'}>
       <div className='grid grid-cols-5 bg-white rounded-xl h-80 border hover:border-orange border-white'>
         <div
           className='grid col-span-1 items-center'

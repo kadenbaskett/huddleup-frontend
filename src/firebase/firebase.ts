@@ -1,3 +1,4 @@
+import { addUser } from '@services/apiClient';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -8,6 +9,7 @@ import {
   setPersistence,
   browserSessionPersistence,
   browserLocalPersistence,
+  updateProfile,
 } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -20,7 +22,7 @@ const firebaseConfig = {
 };
 
 // eslint-disable-next-line no-unused-vars
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 const auth = getAuth();
 
 const login = async (email, password, rememberMe) => {
@@ -31,7 +33,6 @@ const login = async (email, password, rememberMe) => {
     const user = await signInWithEmailAndPassword(auth, email, password);
     console.log(user);
 
-    // TODO: get any additional information from our DB
     return 'success';
   } catch (err) {
     return err.message;
@@ -40,11 +41,16 @@ const login = async (email, password, rememberMe) => {
 
 const createAccount = async (username, email, password) => {
   try {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
+    // add user to DB
+    const addUserResp = await addUser(username, email);
 
-    // TODO: add user to our database
-    const user = res.user;
-    console.log(user); // here to cancel error on user for not being used(linter)
+    if (addUserResp.data == null) {
+      return addUserResp.error.response.data;
+    }
+
+    const createResp = await createUserWithEmailAndPassword(auth, email, password);
+
+    await updateProfile(createResp.user, { displayName: username });
 
     return 'success';
   } catch (err) {
@@ -53,7 +59,7 @@ const createAccount = async (username, email, password) => {
 };
 
 const logout = async () => {
-  signOut(auth);
+  await signOut(auth);
 };
 
 const sendPasswordReset = async (email) => {

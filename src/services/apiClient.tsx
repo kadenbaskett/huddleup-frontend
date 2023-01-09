@@ -40,6 +40,38 @@ export async function createLeague(leageData: object) {
   return await postRequest(url, leageData);
 }
 
+export async function addPlayer(playerId: number, rosterId: number) {
+  const url = `${BASE_URL}/database/roster/addPlayer`;
+  const data = {
+    playerId,
+    rosterId,
+  };
+  return await postRequest(url, data);
+}
+
+export async function dropPlayer(playerId: number, rosterId: number) {
+  const url = `${BASE_URL}/database/roster/dropPlayer`;
+  const data = {
+    playerId,
+    rosterId,
+  };
+  return await postRequest(url, data);
+}
+
+export async function addDropPlayer(
+  addPlayerId: number,
+  dropPlayerIds: number[],
+  rosterId: number,
+) {
+  const url = `${BASE_URL}/database/roster/addDropPlayer`;
+  const data = {
+    addPlayerId,
+    dropPlayerIds,
+    rosterId,
+  };
+  return await postRequest(url, data);
+}
+
 export async function fetchUser(email: string) {
   const url = `${BASE_URL}/database/user/${email}`;
   return await getRequest(url);
@@ -66,7 +98,6 @@ export async function fetchLeagueInfo(leagueId: number): Promise<respObj> {
 }
 
 export async function fetchUserLeagues(userId: number): Promise<respObj> {
-  userId = 1;
   const url = `${BASE_URL}/database/leagues/user/${userId}`;
   return await getRequest(url);
 }

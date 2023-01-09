@@ -1,8 +1,12 @@
+import { useRouter } from 'next/router';
 import { logout } from '../../firebase/firebase';
 
 function Profile() {
+  const router = useRouter();
+
   const handleLogout = async () => {
     await logout();
+    void router.push('/');
   };
 
   return (

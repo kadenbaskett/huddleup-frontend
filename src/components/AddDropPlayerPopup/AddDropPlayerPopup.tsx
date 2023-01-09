@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useEffect, useState } from 'react';
 import { Button, Group, Modal, Checkbox, Table, Text, Grid, Space } from '@mantine/core';
+import { addDropPlayer } from '@services/apiClient';
 
 export default function AddDropPlayerPopup({ roster, player, opened, onClose }) {
   const [dropPlayers, setDropPlayers] = useState(new Set());
@@ -11,11 +12,15 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose }) 
     setSubmitLoading(false);
   }, [opened]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setSubmitLoading(true);
 
-    // Send network request to change roster
-    console.log('drop', dropPlayers);
+    if (dropPlayers.size) {
+      const dropArr = Array.from(dropPlayers);
+      const dropIds = dropArr.map((player) => player.id);
+      const resp = await addDropPlayer(player.id, dropIds, roster.id);
+      console.log(resp);
+    }
 
     setSubmitLoading(false);
     onClose();
@@ -36,7 +41,7 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose }) 
   const getRoster = () => {
     if (!roster) return <></>;
 
-    const rows = roster.players.map((rosterPlayer) => {
+    const rows = roster.players?.map((rosterPlayer) => {
       return (
         <tr key={rosterPlayer.id}>
           <td>

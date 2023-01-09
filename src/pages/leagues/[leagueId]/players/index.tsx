@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { GrAddCircle, GrDisabledOutline, GrLinkNext } from 'react-icons/gr';
 import { Avatar, TextInput, SegmentedControl, NativeSelect, Group, Grid } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { AppDispatch, StoreState } from '@store/store';
-import { fetchLeagueInfoThunk, fetchLeaguePlayersThunk } from '@store/slices/leagueSlice';
-import { fetchTimeframesThunk } from '@store/slices/globalSlice';
-import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
-import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
+import { StoreState } from '@store/store';
 import { fantasyPoints } from '@services/helpers';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import sortBy from 'lodash/sortBy';
 import CONFIG from '@services/config';
+import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
+import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
 import AddDropPlayerConfirmPopup from '@components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
 
@@ -22,14 +20,9 @@ function League(props) {
   const { leagueId } = router.query;
 
   // Application state
-  const dispatch = useDispatch<AppDispatch>();
-  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
-  const leaguePlayerFetchStatus = useSelector(
-    (state: StoreState) => state.league.playerFetchStatus,
-  );
-  const timeframeFetchStatus = useSelector((state: StoreState) => state.global.timeframeStatus);
   const league = useSelector((state: StoreState) => state.league.league);
+  const team = useSelector((state: StoreState) => state.league.userTeam);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
 
   // Confirm popup
@@ -58,7 +51,7 @@ function League(props) {
 
     const avail = getPlayerAvailability(player);
     const roster = getTeamRoster();
-    const myTeam = 'My team name';
+    const myTeam = team ? team.name : ' ';
 
     if (avail === 'Free Agent') {
       setAddPlayer(player);
@@ -163,29 +156,19 @@ function League(props) {
 
     // Add extra fields for the table sorting
     players = players.map((p) => {
+      // TODO hacked in proj
+      const lastWeek = p.player_game_stats?.find((pgs) => pgs.game?.week === 1);
+      const proj = p.player_game_stats?.find((pgs) => pgs.game?.week === 2);
+
       return {
         ...p,
-        projection: fantasyPoints(p.player_game_stats.at(-1)),
-        lastWeek: fantasyPoints(p.player_game_stats.at(-2)),
+        proj: proj ? fantasyPoints(proj) : 0,
+        lastWeek: lastWeek ? fantasyPoints(lastWeek) : 0,
       };
     });
 
     return players;
   };
-
-  // If the app state has yet to fetch the league, run this
-  useEffect(() => {
-    if (
-      (leagueInfoFetchStatus === 'idle' ||
-        leaguePlayerFetchStatus === 'idle' ||
-        timeframeFetchStatus === 'idle') &&
-      leagueId
-    ) {
-      dispatch(fetchLeaguePlayersThunk(Number(leagueId)));
-      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
-      dispatch(fetchTimeframesThunk());
-    }
-  }, [leagueInfoFetchStatus, leaguePlayerFetchStatus, dispatch, leagueId]);
 
   const getTeamThatOwnsPlayer = (player) => {
     const currentRosterPlayer = player.roster_players.find((rp) => rp.roster.week === currentWeek);
@@ -207,7 +190,7 @@ function League(props) {
 
   const getPlayerAction = (player) => {
     const av = getPlayerAvailability(player);
-    const myTeamName = 'My team';
+    const myTeamName = team ? team.name : ' ';
 
     if (av === 'Free Agent') {
       return (
@@ -241,14 +224,15 @@ function League(props) {
   };
 
   const getTeamRoster = () => {
-    return league?.teams?.at(-1)?.rosters?.at(-1);
+    // TODO maybe get the roster of current week
+    return team ? team.rosters.at(-1) : [];
   };
 
   return (
     <>
       <LeagueNavBar
-        teamName='team name'
-        teamId={2}
+        teamName={team ? team.name : ' '}
+        teamId={team ? team.id : ' '}
         leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='players'

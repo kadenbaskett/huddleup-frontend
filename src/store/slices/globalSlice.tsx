@@ -8,16 +8,14 @@ export interface globalSliceState {
   week: number;
   season: number;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  timeframeStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: globalSliceState = {
   publicLeagues: [],
-  week: null,
   totalWeeks: 18,
+  week: null,
   season: null,
   status: 'idle',
-  timeframeStatus: 'idle',
 };
 
 export const globalSlice = createSlice({
@@ -26,43 +24,31 @@ export const globalSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(fetchPublicLeaguesThunk.pending, (state, action) => {
+      .addCase(handleGlobalInitThunk.pending, (state, action) => {
         state.status = 'loading';
       })
-      .addCase(fetchPublicLeaguesThunk.fulfilled, (state, action) => {
+      .addCase(handleGlobalInitThunk.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.publicLeagues = action.payload;
+        state.publicLeagues = action.payload.leagues;
+        state.week = action.payload.timeframe.current_week;
+        state.season = action.payload.timeframe.current_season;
       })
-      .addCase(fetchPublicLeaguesThunk.rejected, (state, action) => {
+      .addCase(handleGlobalInitThunk.rejected, (state, action) => {
         state.status = 'failed';
-      })
-      .addCase(fetchTimeframesThunk.pending, (state, action) => {
-        state.timeframeStatus = 'loading';
-      })
-      .addCase(fetchTimeframesThunk.fulfilled, (state, action) => {
-        state.timeframeStatus = 'succeeded';
-        state.week = action.payload.current_week;
-        state.season = action.payload.current_season;
-      })
-      .addCase(fetchTimeframesThunk.rejected, (state, action) => {
-        state.timeframeStatus = 'failed';
       });
   },
 });
 
-export const handleAppInitThunk = createAsyncThunk('global/fetchPublicLeagues', async () => {
-  const response = await fetchPublicLeagues();
-  return response.data ? response.data : [];
-});
+export const handleGlobalInitThunk = createAsyncThunk('global/init', async () => {
+  const publicLeaugesResp = await fetchPublicLeagues();
+  const timeframeResp = await fetchTimeframe();
 
-export const fetchPublicLeaguesThunk = createAsyncThunk('global/fetchPublicLeagues', async () => {
-  const response = await fetchPublicLeagues();
-  return response.data ? response.data : [];
-});
+  const payload = {
+    leagues: publicLeaugesResp.data ? publicLeaugesResp.data : [],
+    timeframe: timeframeResp.data ? timeframeResp.data : [],
+  };
 
-export const fetchTimeframesThunk = createAsyncThunk('global/fetchTimeframes', async () => {
-  const response = await fetchTimeframe();
-  return response.data ? response.data : [];
+  return payload;
 });
 
 export default globalSlice;
