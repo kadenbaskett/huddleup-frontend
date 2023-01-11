@@ -60,7 +60,7 @@ export function RecentActivityTable(props: RecentActivityTableProps) {
   ));
   return (
     <div className='bg-white rounded-xl hover:drop-shadow-md'>
-      <div className='p-4 font-varsity justify-left text-3xl bg-darkBlue text-white rounded-t-xl'>
+      <div className='p-4 font-varsity justify-left text-2xl bg-darkBlue text-white rounded-t-xl'>
         Recent Activity
       </div>
       <Table>

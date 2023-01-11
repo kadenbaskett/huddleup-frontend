@@ -23,7 +23,7 @@ export default function Top5StandingTable(props: Top5StandingTableProps) {
   return (
     <div className='bg-white rounded-xl hover:drop-shadow-md'>
       <Anchor href={'/leagues/' + String(leagueId) + '/standings'} variant='text'>
-        <div className='p-4 font-varsity justify-left text-3xl bg-darkBlue text-white rounded-t-xl'>
+        <div className='p-4 font-varsity justify-left text-2xl bg-darkBlue text-white rounded-t-xl'>
           Top 5 in {league ? league.name : ' '}
         </div>
       </Anchor>
