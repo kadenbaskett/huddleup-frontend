@@ -95,18 +95,6 @@ const teams: Team[] = [
   },
 ];
 
-// const renderRecentActivityCards = (activty: recentActivityCardProps[]) => {
-//   return activityData.map((activty) => renderActivity(activty));
-// };
-
-// const renderActivity = (activty: recentActivityCardProps) => {
-//   return (
-//     <div className=''>
-//       <RecentActivityCard {...activty} />
-//     </div>
-//   );
-// };
-
 function index() {
   const router = useRouter();
   const { leagueId } = router.query;
