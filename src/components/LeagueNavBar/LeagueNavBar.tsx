@@ -34,7 +34,7 @@ export default function LeagueNavBar(props: leagueNavbarProps) {
       <div className='bg-darkBlue'>
         <div className='lg:pl-40 lg:pr-40 2xl:pl-80 2xl:pr-80'>
           <div className='grid grid-cols-6 flex'>
-            <Link href={'/leagues/' + props.leagueId.toString() + '/home'}>
+            <Link href={'/leagues/' + props.leagueId.toString() + '/home/overview'}>
               <div
                 className={`${
                   props.page === 'home'
