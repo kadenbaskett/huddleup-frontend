@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import NFL from '../../public/assets/NFL.png';
+import Link from 'next/link';
 
 export interface leagueProps {
   name: string;
@@ -10,7 +11,7 @@ export interface leagueProps {
 
 export function LeagueCard(league: leagueProps) {
   return (
-    <a href={'/leagues/' + league.id.toString() + '/home/overview'}>
+    <Link href={'/leagues/' + league.id.toString() + '/home/overview'}>
       <div className='grid grid-cols-5 bg-white rounded-xl h-80 border hover:border-orange border-white'>
         <div
           className='grid col-span-1 items-center'
@@ -25,6 +26,6 @@ export function LeagueCard(league: leagueProps) {
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }

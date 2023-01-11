@@ -3,6 +3,7 @@ import Image from 'next/image';
 import NFL from '../../public/assets/NFL.png';
 import { Button, Grid } from '@mantine/core';
 import styles from './JoinLeagueCard.module.css';
+import Link from 'next/link';
 export interface joinleagueProps {
   name: string;
   subText: string;
@@ -16,7 +17,7 @@ export interface joinleagueProps {
 
 export function JoinLeagueCard(league: joinleagueProps) {
   return (
-    <a href={'/leagues/' + league.id.toString() + '/home/overview'}>
+    <Link href={'/leagues/' + league.id.toString() + '/home/overview'}>
       <div
         id={styles.card}
         // eslint-disable-next-line no-template-curly-in-string
@@ -60,6 +61,6 @@ export function JoinLeagueCard(league: joinleagueProps) {
           <br />
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
