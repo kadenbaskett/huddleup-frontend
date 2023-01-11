@@ -1,64 +1,117 @@
+import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import LeagueHomeNavigation from '@components/LeagueHomeNavigation/LeagueHomeNavigation';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import RecentActivityCard, {
-  recentActivityCardProps,
-} from '@components/RecentActivityCard/RecentActivityCard';
-import { Anchor, Grid } from '@mantine/core';
-import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
-import { AppDispatch, StoreState } from '@store/store';
-import { DataTable } from 'mantine-datatable';
+import { StoreState } from '@store/store';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import OverviewCard from './components/OverviewCard/OverviewCard';
+import { Activity, Team, TypeActivity, TypeStatus } from './types';
 
-const activityData: recentActivityCardProps[] = [
+const date: Date = new Date();
+
+const activityData: Activity[] = [
   {
-    type: 'drop',
-    fromTeamId: 0,
-    toTeamId: 2,
+    id: 0,
+    teamId: 1,
+    relatedTeamId: 0,
+    status: TypeStatus.Completed,
+    type: TypeActivity.Add,
+    createdDate: date,
+    expirationDate: date,
+    closingDate: date,
+    week: 15,
   },
   {
-    type: 'add',
-    fromTeamId: 0,
-    toTeamId: 1,
+    id: 0,
+    teamId: 1,
+    relatedTeamId: 0,
+    status: TypeStatus.Completed,
+    type: TypeActivity.Drop,
+    createdDate: date,
+    expirationDate: date,
+    closingDate: date,
+    week: 15,
   },
   {
-    type: 'trade',
-    fromTeamId: 2,
-    toTeamId: 1,
+    id: 0,
+    teamId: 1,
+    relatedTeamId: 0,
+    status: TypeStatus.Completed,
+    type: TypeActivity.DropAdd,
+    createdDate: date,
+    expirationDate: date,
+    closingDate: date,
+    week: 15,
   },
   {
-    type: 'add/drop',
-    fromTeamId: 2,
-    toTeamId: 1,
+    id: 0,
+    teamId: 1,
+    relatedTeamId: 0,
+    status: TypeStatus.Completed,
+    type: TypeActivity.Trade,
+    createdDate: date,
+    expirationDate: date,
+    closingDate: date,
+    week: 15,
   },
 ];
 
-// const renderRecentActivityCards = () => {
+const teams: Team[] = [
+  {
+    id: 0,
+    name: 'Justins Team',
+    rank: 1,
+    wins: 10,
+    losses: 0,
+  },
+  {
+    id: 1,
+    name: 'Jakes Team',
+    rank: 2,
+    wins: 9,
+    losses: 1,
+  },
+  {
+    id: 2,
+    name: 'Kadens Team',
+    rank: 3,
+    wins: 8,
+    losses: 2,
+  },
+  {
+    id: 3,
+    name: 'Joes Team',
+    rank: 4,
+    wins: 5,
+    losses: 5,
+  },
+  {
+    id: 4,
+    name: 'Some bums Team',
+    rank: 5,
+    wins: 0,
+    losses: 10,
+  },
+];
+
+// const renderRecentActivityCards = (activty: recentActivityCardProps[]) => {
 //   return activityData.map((activty) => renderActivity(activty));
 // };
 
-const renderActivity = (activty: recentActivityCardProps) => {
-  return (
-    <div className=''>
-      <RecentActivityCard {...activty} />
-    </div>
-  );
-};
+// const renderActivity = (activty: recentActivityCardProps) => {
+//   return (
+//     <div className=''>
+//       <RecentActivityCard {...activty} />
+//     </div>
+//   );
+// };
 
 function index() {
   const router = useRouter();
   const { leagueId } = router.query;
-
-  const dispatch = useDispatch<AppDispatch>();
-  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.leagueFetchStatus);
+  const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
-
-  useEffect(() => {
-    if (leagueInfoFetchStatus === 'idle' && leagueId) {
-      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
-    }
-  }, [leagueInfoFetchStatus, dispatch, leagueId]);
 
   return (
     <div className='bg-lightGrey min-h-screen'>
@@ -69,46 +122,18 @@ function index() {
         leagueId={Number(leagueId)}
         page='home'
       />
-      <LeagueHomeNavigation
-        leagueId={Number(leagueId)}
-        leagueName={league ? league.name : ' '}
-        leagueDescription={'This is an example league description'}
-        page='overview'
-      />
-      <div className='p-5'>
-        <Grid columns={10}>
-          <Grid.Col span={7}>
-            <div className='p-4 font-varsity justify-left text-3xl bg-darkBlue text-white rounded-t-xl'>
-              Recent Activity
-            </div>
-            <Grid>
-              <Grid.Col>
-                <DataTable
-                  withBorder
-                  withColumnBorders
-                  records={activityData}
-                  columns={[
-                    {
-                      accessor: 'type',
-                      title: 'Details',
-                      render: (p) => renderActivity(activityData[0]),
-                    },
-                    { accessor: 'toTeamId' },
-                    { accessor: 'fromTeamId' },
-                  ]}
-                />
-              </Grid.Col>
-            </Grid>
-          </Grid.Col>
-          <Grid.Col span={3}>
-            <Anchor href={'/leagues/' + String(leagueId) + '/standings'} variant='text'>
-              <div className='p-4 font-varsity justify-left text-3xl bg-darkBlue text-white rounded-t-xl'>
-                Top 5 in {league ? league.name : ' '}
-              </div>
-            </Anchor>
-          </Grid.Col>
-        </Grid>
-      </div>
+      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {leagueInfoFetchStatus === 'succeeded' && (
+        <div className='pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40'>
+          <LeagueHomeNavigation
+            leagueId={Number(leagueId)}
+            leagueName={league ? league.name : ' '}
+            leagueDescription={'This is an example league description'}
+            page='overview'
+          />
+          <OverviewCard activities={activityData} teams={teams} />
+        </div>
+      )}
     </div>
   );
 }

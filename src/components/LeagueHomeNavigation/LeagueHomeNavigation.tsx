@@ -12,8 +12,8 @@ export interface leagueHomeNavigationProps {
 export default function LeagueHomeNavigation(props: leagueHomeNavigationProps) {
   if (props.page === 'overview') {
     return (
-      <div className='p-5'>
-        <div className='grid grid-cols-1 bg-white rounded-xl'>
+      <div className='pt-5 pb-5'>
+        <div className='grid grid-cols-1 bg-white rounded-xl hover:drop-shadow-md'>
           <div className='flex font-varsity justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl'>
             League Information
           </div>

@@ -28,6 +28,8 @@ export default function RouteGuard({ children }) {
   }, [user]);
 
   async function authCheck(url) {
+    console.log('this is the url', url);
+    console.log('this is the user', user);
     const path = url.split('?')[0];
     const publicPaths = ['/login', '/', '/signup']; // pages that logged out users are able to access
 
@@ -36,12 +38,14 @@ export default function RouteGuard({ children }) {
       void router.replace({
         pathname: '/home',
       });
+      console.log('in the home if');
 
       setAuthorized(true);
     }
     // Don't let a logged out user access private pages
     else if (!user && !publicPaths.includes(path)) {
       setAuthorized(false);
+      console.log('in the login if');
       void router.replace({
         pathname: '/login',
       });
