@@ -30,8 +30,8 @@ export const globalSlice = createSlice({
       .addCase(handleGlobalInitThunk.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.publicLeagues = action.payload.leagues;
-        state.week = action.payload.timeframe.current_week;
-        state.season = action.payload.timeframe.current_season;
+        state.week = action.payload.timeframe.week;
+        state.season = action.payload.timeframe.season;
       })
       .addCase(handleGlobalInitThunk.rejected, (state, action) => {
         state.status = 'failed';
