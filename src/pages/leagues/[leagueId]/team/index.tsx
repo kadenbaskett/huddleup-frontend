@@ -44,8 +44,6 @@ function league() {
       status: ProposalStatus.approved,
     },
   ];
-
-  console.log('this is league', league);
   return (
     <>
       <LeagueNavBar
@@ -65,8 +63,8 @@ function league() {
             <Grid>
               <Grid.Col span={6}>
                 <TeamBanner
-                  name='Test Team Name'
-                  members={['Jake White', 'Joe Rodman', 'Justin Perez']}
+                  name={team?.name ? team.name : ' '}
+                  managers={team?.managers ? team.managers : ' '}
                 />
               </Grid.Col>
               <Grid.Col span={6}>
