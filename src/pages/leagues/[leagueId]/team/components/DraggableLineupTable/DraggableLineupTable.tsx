@@ -8,56 +8,88 @@ export interface TableData {
   players: any;
 }
 export function DraggableLineupTable(props: TableData) {
-  const BRpositions = ['TE', 'RB', 'WR', 'K'];
-
   const players = props.players;
-  // TODO: don't put roster players in bench positions
-  const benchedQB = props.players
-    .filter(({ player }) => player.position === 'QB')
+  const activeQB = props.players
+    .filter(
+      ({ position, player }) =>
+        player.position === 'QB' && position !== 'BE' && position !== 'FLEX',
+    )
     .map((player) => {
       return player.id;
     });
-  const benchedBR = props.players
-    .filter(({ player }) => BRpositions.includes(player.position))
+  const activeWR = props.players
+    .filter(
+      ({ position, player }) =>
+        player.position === 'WR' && position !== 'BE' && position !== 'FLEX',
+    )
     .map((player) => {
       return player.id;
     });
-  const [QBchildren, setQBchildren] = useState([]);
-  const [QBbench, setQBbench] = useState([...benchedQB]);
-  const [BRchildren, setBRchildren] = useState([]);
-  const [BRbench, setBRbench] = useState([...benchedBR]);
+  const activeRB = props.players
+    .filter(
+      ({ position, player }) =>
+        player.position === 'RB' && position !== 'BE' && position !== 'FLEX',
+    )
+    .map((player) => {
+      return player.id;
+    });
+  const activeTE = props.players
+    .filter(
+      ({ position, player }) =>
+        player.position === 'TE' && position !== 'BE' && position !== 'FLEX',
+    )
+    .map((player) => {
+      return player.id;
+    });
+  const activeFLEX = props.players
+    .filter(({ position }) => position === 'FLEX')
+    .map((player) => {
+      return player.id;
+    });
+  const benched = props.players
+    .filter(({ position, player }) => position === 'BE')
+    .map((player) => {
+      return player.id;
+    });
+  const [QB, setQB] = useState([...activeQB]); // 1 QB
+  const [WR, setWR] = useState([...activeWR]); // 2 WR
+  const [RB, setRB] = useState([...activeRB]); // 2 RB
+  const [TE, setTE] = useState([...activeTE]); // 1 TE
+  const [FLEX, setFLEX] = useState([...activeFLEX]); // 1 FLEX
+  const [bench, setBench] = useState([...benched]);
 
   const addPlayer = (playerId: string, type: string, position: string) => {
-    console.log('position', position);
-    const currentQBchildren = [...QBchildren];
-    const currentQBbench = [...QBbench];
-    const currentBRchildren = [...BRchildren];
-    const currentBRbench = [...BRbench];
+    const currentQB = [...QB];
+    const currentWR = [...WR];
+    const currentRB = [...RB];
+    const currentTE = [...TE];
+    const currentFLEX = [...FLEX];
+    const currentBench = [...bench];
 
-    if (type === 'QB' && !QBchildren.includes(playerId) && position === 'QB') {
-      currentQBchildren.push(playerId);
-      setQBchildren(currentQBchildren);
-      setQBbench(currentQBbench.filter((e) => e !== playerId));
-    } else if (type === 'QB-Bench' && !QBbench.includes(playerId) && position === 'QB') {
-      currentQBbench.push(playerId);
-      setQBbench(currentQBbench);
-      setQBchildren(currentQBchildren.filter((e) => e !== playerId));
-    } else if (
-      type === 'BR' &&
-      !BRchildren.includes(playerId) &&
-      (position === 'TE' || position === 'RB' || position === 'WR' || position === 'K')
-    ) {
-      currentBRchildren.push(playerId);
-      setBRchildren(currentBRchildren);
-      setBRbench(currentBRbench.filter((e) => e !== playerId));
-    } else if (
-      type === 'BR-Bench' &&
-      !BRbench.includes(playerId) &&
-      (position === 'TE' || position === 'RB' || position === 'WR' || position === 'K')
-    ) {
-      currentBRbench.push(playerId);
-      setBRbench(currentBRbench);
-      setBRchildren(currentBRchildren.filter((e) => e !== playerId));
+    if (type === 'QB' && !QB.includes(playerId) && position === 'QB') {
+      currentQB.push(playerId);
+      setQB(currentQB);
+      setBench(bench.filter((e) => e !== playerId));
+    } else if (type === 'WR' && !WR.includes(playerId)) {
+      currentWR.push(playerId);
+      setWR(currentWR);
+      setBench(currentBench.filter((e) => e !== playerId));
+    } else if (type === 'RB' && !RB.includes(playerId)) {
+      currentRB.push(playerId);
+      setRB(currentRB);
+      setBench(bench.filter((e) => e !== playerId));
+    } else if (type === 'TE' && !TE.includes(playerId)) {
+      currentTE.push(playerId);
+      setTE(currentTE);
+      setBench(bench.filter((e) => e !== playerId));
+    } else if (type === 'FLEX' && !FLEX.includes(playerId)) {
+      currentFLEX.push(playerId);
+      setFLEX(currentFLEX);
+      setBench(bench.filter((e) => e !== playerId));
+    } else if (type === 'Bench' && !bench.includes(playerId)) {
+      currentBench.push(playerId);
+      setBench(currentBench);
+      setWR(currentWR.filter((e) => e !== playerId));
     }
   };
 
@@ -80,26 +112,68 @@ export function DraggableLineupTable(props: TableData) {
         <SegmentedControl data={weeks} />
       </div>
       <DndContext onDragEnd={handleDragEnd}>
-        {players.map(({ player, id }) => {
-          if (
-            !QBchildren.includes(id) &&
-            !QBbench.includes(id) &&
-            !BRchildren.includes(id) &&
-            !BRbench.includes(id)
-          ) {
-            return (
-              <Draggable key={id} id={id} player={player}>
-                {player.first_name}
-              </Draggable>
-            );
-          } else return <></>;
-        })}
         {/* QuarterBacks */}
         <Grid>
-          <Grid.Col span={6}>
-            <div className='text-xl font-varsity text-darkBlue'>Quarterbacks:</div>
+          <Grid.Col span={7}>
+            <div className='text-xl font-varsity text-darkBlue'>Quarterback:</div>
             <Droppable key={'QB'} id={'QB'}>
-              {QBchildren.map((child) => {
+              {QB.map((child) => {
+                return (
+                  <Draggable
+                    key={child}
+                    id={child}
+                    player={players.find(({ id }) => id === child).player}
+                  >
+                    {child}
+                  </Draggable>
+                );
+              })}
+            </Droppable>
+            <div className='text-xl font-varsity text-darkBlue'>Wide Recievers:</div>
+            <Droppable key={'WR'} id={'WR'}>
+              {WR.map((child) => {
+                return (
+                  <Draggable
+                    key={child}
+                    id={child}
+                    player={players.find(({ id }) => id === child).player}
+                  >
+                    {child}
+                  </Draggable>
+                );
+              })}
+            </Droppable>
+            <div className='text-xl font-varsity text-darkBlue'>Running Backs:</div>
+            <Droppable key={'RB'} id={'RB'}>
+              {RB.map((child) => {
+                return (
+                  <Draggable
+                    key={child}
+                    id={child}
+                    player={players.find(({ id }) => id === child).player}
+                  >
+                    {child}
+                  </Draggable>
+                );
+              })}
+            </Droppable>
+            <div className='text-xl font-varsity text-darkBlue'>Tight End:</div>
+            <Droppable key={'TE'} id={'TE'}>
+              {TE.map((child) => {
+                return (
+                  <Draggable
+                    key={child}
+                    id={child}
+                    player={players.find(({ id }) => id === child).player}
+                  >
+                    {child}
+                  </Draggable>
+                );
+              })}
+            </Droppable>
+            <div className='text-xl font-varsity text-darkBlue'>Flex:</div>
+            <Droppable key={'FLEX'} id={'FLEX'}>
+              {FLEX.map((child) => {
                 return (
                   <Draggable
                     key={child}
@@ -112,45 +186,10 @@ export function DraggableLineupTable(props: TableData) {
               })}
             </Droppable>
           </Grid.Col>
-          <Grid.Col span={6}>
+          <Grid.Col span={5}>
             <div className='text-xl font-varsity text-darkBlue'>Bench:</div>
-            <Droppable key={'QB-Bench'} id={'QB-Bench'}>
-              {QBbench.map((child) => {
-                return (
-                  <Draggable
-                    key={child}
-                    id={child}
-                    player={players.find(({ id }) => id === child).player}
-                  >
-                    {child}
-                  </Draggable>
-                );
-              })}
-            </Droppable>
-          </Grid.Col>
-        </Grid>
-        {/* Backs and Recievers */}
-        <Grid>
-          <Grid.Col span={6}>
-            <div className='text-xl font-varsity text-darkBlue'>Backs and Recievers:</div>
-            <Droppable key={'BR'} id={'BR'}>
-              {BRchildren.map((child) => {
-                return (
-                  <Draggable
-                    key={child}
-                    id={child}
-                    player={players.find(({ id }) => id === child).player}
-                  >
-                    {child}
-                  </Draggable>
-                );
-              })}
-            </Droppable>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <div className='text-xl font-varsity text-darkBlue'>Bench:</div>
-            <Droppable key={'BR-Bench'} id={'BR-Bench'}>
-              {BRbench.map((child) => {
+            <Droppable key={'Bench'} id={'Bench'}>
+              {bench.map((child) => {
                 return (
                   <Draggable
                     key={child}

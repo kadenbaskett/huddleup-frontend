@@ -57,7 +57,6 @@ export function TeamCard(props: TeamCardProps) {
       {/* content */}
       {lineup && (
         <div className='p-5'>
-          {/* <LineupTable players={props.players} currentWeek={props.currentWeek} /> */}
           <DraggableLineupTable players={props.players} />
         </div>
       )}
