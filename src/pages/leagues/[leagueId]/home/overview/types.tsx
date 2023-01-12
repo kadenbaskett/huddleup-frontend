@@ -27,6 +27,7 @@ export interface Team {
   id: Number;
   rank: Number;
   name: string;
+  managers: string;
   wins: Number;
   losses: Number;
 }
