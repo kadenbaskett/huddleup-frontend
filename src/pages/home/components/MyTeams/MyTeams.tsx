@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import TeamProfilePic from '../../public/assets/huddle-up-logo.png';
+import TeamProfilePic from '../../../../public/assets/huddle-up-logo.png';
 
 interface team {
   team: string;

@@ -1,13 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
-import CNN from '../../public/assets/CNNPhoto.png';
+import CNN from '../../../../public/assets/CNNPhoto.png';
 interface News {
   news: string;
 }
 
 const mynews: News[] = [
-  {news: 'This wil be news about something'},
-  {news: 'This should be some other news about a player or something along those lines.'},
+  { news: 'This wil be news about something' },
+  { news: 'This should be some other news about a player or something along those lines.' },
   {
     news: 'Some more relevant news.',
   },
