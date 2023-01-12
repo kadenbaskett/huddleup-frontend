@@ -4,10 +4,14 @@ import Shield from '../../../../../../public/assets/shield.png';
 
 export interface TeamBannerProps {
   name: string;
-  members: string[];
+  managers: any[];
   rank?: string;
 }
+
 export function TeamBanner(props: TeamBannerProps) {
+  const managers: string[] = props.managers.map((m) => {
+    return m.user.username;
+  });
   return (
     <div className='bg-white rounded-xl hover:drop-shadow-md'>
       <Grid>
@@ -16,7 +20,7 @@ export function TeamBanner(props: TeamBannerProps) {
         </Grid.Col>
         <Grid.Col span={10}>
           <div className='text-6xl font-varsity'>{props.name}</div>
-          <div className='text-xl font-openSans text-orange'>{props.members.join(', ')}</div>
+          <div className='text-xl font-openSans text-orange'>{managers.join(', ')}</div>
         </Grid.Col>
       </Grid>
     </div>

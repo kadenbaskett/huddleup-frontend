@@ -44,7 +44,6 @@ function league() {
       status: ProposalStatus.approved,
     },
   ];
-
   return (
     <>
       <LeagueNavBar
@@ -54,8 +53,8 @@ function league() {
         leagueId={Number(leagueId)}
         page='team'
       />
-      {leagueInfoFetchStatus === 'loading' && <HuddleUpLoader />}
-      {leagueInfoFetchStatus !== 'loading' && (
+      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {leagueInfoFetchStatus === 'succeeded' && (
         <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
           <div className='pt-5'>
             <NotificationCard text='Joe would like to trade Deshaun Watson for Michael Carter' />
@@ -64,8 +63,8 @@ function league() {
             <Grid>
               <Grid.Col span={6}>
                 <TeamBanner
-                  name='Test Team Name'
-                  members={['Jake White', 'Joe Rodman', 'Justin Perez']}
+                  name={team?.name ? team.name : ' '}
+                  managers={team?.managers ? team.managers : ' '}
                 />
               </Grid.Col>
               <Grid.Col span={6}>
