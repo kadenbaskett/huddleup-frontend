@@ -9,6 +9,26 @@ export interface myFriendProps {
   friends: Friend[];
 }
 
+const renderFriend = (friend: Friend) => {
+  return (
+    <Link href={`/friends/${0}/profile`}>
+      <div
+        id={styles.card}
+        className='bg-white rounded-xl border border-white h-[7rem] hover:border-orange'
+      >
+        <Grid>
+          <Grid.Col span='auto'>
+            <Group position='left'>
+              <Image src={ProfilePic} alt={'-image'} height={100} width={100} />
+              <div className='text-4xl font-varsity text-darkBlue pt-1'>{friend.name}</div>
+            </Group>
+          </Grid.Col>
+        </Grid>
+      </div>
+    </Link>
+  );
+};
+
 export default function MyFriends(props: myFriendProps) {
   return (
     <>
@@ -17,21 +37,7 @@ export default function MyFriends(props: myFriendProps) {
           My Friends
         </div>
       </Link>
-      <Link href={`/friends/${0}/profile`}>
-        <div
-          id={styles.card}
-          className='bg-white rounded-xl border border-white h-[7rem] hover:border-orange'
-        >
-          <Grid>
-            <Grid.Col span='auto'>
-              <Group position='left'>
-                <Image src={ProfilePic} alt={'-image'} height={100} width={100} />
-                <div className='text-4xl font-varsity text-darkBlue pt-1'>name</div>
-              </Group>
-            </Grid.Col>
-          </Grid>
-        </div>
-      </Link>
+      {props.friends.map((friend: Friend) => renderFriend(friend))}
     </>
   );
 }

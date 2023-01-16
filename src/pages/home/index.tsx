@@ -2,19 +2,7 @@ import React from 'react';
 import MyFriends from './components/MyFriends/MyFriends';
 import MyNews from './components/MyNews/MyNews';
 import MyTeams from './components/MyTeams/MyTeams';
-import { Friend } from './types';
-
-/*
-*  This will have to be done later. Here we will get the friends of the specific user
-const friendData = publicLeagues.map((league) => {
-  const l: friendProps = {
-    name: league.name,
-    id: league.id,
-    subText: 'This is an example league description',
-  };
-  return l;
-});
-*/
+import { Friend, News, Team } from './types';
 
 const friendData: Friend[] = [
   {
@@ -31,24 +19,61 @@ const friendData: Friend[] = [
   },
 ];
 
-// const renderFriends = () => {
-//   return friendData.map((friend: myFriendProps) => renderFriend(friend));
-// };
+const mynews: News[] = [
+  { news: 'This wil be news about something' },
+  { news: 'This should be some other news about a player or something along those lines.' },
+  {
+    news: 'Some more relevant news.',
+  },
+  {
+    news: 'Finally more news',
+  },
+];
 
-// const renderFriend = (friend: myFriendProps) => {
-//   return (
-//     <div key={friend.id} className='grid col-span-10 p-1'>
-//       <MyFriends {...friend} />
-//     </div>
-//   );
-// };
+const teams: Team[] = [
+  {
+    id: 0,
+    name: 'Justins Team',
+    rank: 1,
+    wins: 10,
+    losses: 0,
+  },
+  {
+    id: 1,
+    name: 'Jakes Team',
+    rank: 2,
+    wins: 9,
+    losses: 1,
+  },
+  {
+    id: 2,
+    name: 'Kadens Team',
+    rank: 3,
+    wins: 8,
+    losses: 2,
+  },
+  {
+    id: 3,
+    name: 'Joes Team',
+    rank: 4,
+    wins: 5,
+    losses: 5,
+  },
+  {
+    id: 4,
+    name: 'Some bums Team',
+    rank: 5,
+    wins: 0,
+    losses: 10,
+  },
+];
 
 export default function Home(props: any) {
   return (
     <div className='grid grid-cols-10 gap-6 bg-lightGrey p-10 min-h-screen'>
       <div className='col-span-3'>
         <div className='bg-white rounded-xl hover:drop-shadow-md'>
-          <MyTeams />
+          <MyTeams teams={teams} />
         </div>
         <div className='pt-5'>
           <div className='grid grid-cols-1 bg-white hover:drop-shadow-md rounded-xl'>
@@ -56,8 +81,8 @@ export default function Home(props: any) {
           </div>
         </div>
       </div>
-      <div className='col-span-7'>
-        <MyNews />
+      <div className='col-span-7 hover:drop-shadow-md rounded-xl'>
+        <MyNews news={mynews} />
       </div>
     </div>
   );
