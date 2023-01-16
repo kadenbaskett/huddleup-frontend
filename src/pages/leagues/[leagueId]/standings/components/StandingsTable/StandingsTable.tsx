@@ -9,13 +9,14 @@ export interface StandingsTableProps {
 export default function StandingsTable(props: StandingsTableProps) {
   const rows = props.teams.map((p: Team) => (
     <tr key={p.id.toString()}>
-      <td>{p.rank.toString()}</td>
-      <td>{p.name}</td> {/* These will ideally link to the specific teams page */}
-      <td>{p.managers}</td>{' '}
+      <td className='font-bold'>{p.rank.toString()}.</td>
+      <td className='font-varsity text-2xl'>{p.name}</td>
+      {/* These will ideally link to the specific teams page */}
+      <td className='text-orange'>{p.managers}</td>
       {/* These will ideally link to the specific persons page (stretch feature) */}
-      <td>{p.wins.toString()}</td>
-      <td>{p.losses.toString()}</td>
-      <td>0</td>
+      <td className='font-bold'>{p.wins.toString()}</td>
+      <td className='font-bold'>{p.losses.toString()}</td>
+      <td className='font-bold'>0</td>
     </tr>
   ));
   return (
