@@ -4,3 +4,15 @@ export interface Friend {
   // subText: string;
   id: number;
 }
+
+export interface News {
+  news: string;
+}
+
+export interface Team {
+  id: Number;
+  rank: Number;
+  name: string;
+  wins: Number;
+  losses: Number;
+}
