@@ -251,6 +251,7 @@ function League(props) {
                       Filters
                     </div>
                     <div className='pr-4 pl-4 pt-2'>
+                      <div className='text-md font-varsity text-darkBlue'>Position:</div>
                       <SegmentedControl
                         color='orange'
                         fullWidth
@@ -268,15 +269,12 @@ function League(props) {
                       />
                     </div>
                     <div className='pr-4 pl-4 pt-2'>
-                      <TextInput
-                        label='Player Name'
-                        placeholder='Justin Jefferson'
-                        {...form.getInputProps('player')}
-                      />
+                      <div className='text-md font-varsity text-darkBlue'>Player Name:</div>
+                      <TextInput placeholder='Justin Jefferson' {...form.getInputProps('player')} />
                     </div>
                     <div className='pr-4 pl-4 pt-2 pb-4'>
+                      <div className='text-md font-varsity text-darkBlue'>Availability:</div>
                       <NativeSelect
-                        label='Availability'
                         data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
                         {...form.getInputProps('availability')}
                       />
