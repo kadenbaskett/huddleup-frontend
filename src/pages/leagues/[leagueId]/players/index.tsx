@@ -12,14 +12,16 @@ import sortBy from 'lodash/sortBy';
 import CONFIG from '@services/config';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
-import AddDropPlayerConfirmPopup from '@components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
+import AddDropPlayerConfirmPopup from './components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
+import AddDropPlayerPopup from './components/AddDropPlayerPopup/AddDropPlayerPopup';
+import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 
 function League(props) {
   const router = useRouter();
   const { leagueId } = router.query;
 
   // Application state
+  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
   const league = useSelector((state: StoreState) => state.league.league);
   const team = useSelector((state: StoreState) => state.league.userTeam);
@@ -237,95 +239,119 @@ function League(props) {
         leagueId={Number(leagueId)}
         page='players'
       />
-      <Grid>
-        <Grid.Col span={10} offset={1}>
-          <Grid.Col span={4}>
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
-              <SegmentedControl
-                data={[
-                  { label: 'All', value: 'All' },
-                  { label: 'QB', value: 'QB' },
-                  { label: 'RB', value: 'RB' },
-                  { label: 'WR', value: 'WR' },
-                  { label: 'TE', value: 'TE' },
-                  { label: 'FLEX', value: 'FLEX' },
-                ]}
-                {...form.getInputProps('position')}
-              />
-              <TextInput
-                label='Player Name'
-                placeholder='Justin Jefferson'
-                {...form.getInputProps('player')}
-              />
-
-              <NativeSelect
-                label='Availability'
-                data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
-                {...form.getInputProps('availability')}
-              />
-            </form>
-          </Grid.Col>
-          <Grid.Col span={12}>
-            <DataTable
-              withBorder
-              withColumnBorders
-              records={records}
-              columns={[
-                {
-                  accessor: 'first_name',
-                  title: 'Player',
-                  render: (p) => (
-                    <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
-                      <Group>
-                        <Avatar src={p.photo_url} alt={'player image'} />
-                        {p.first_name} {p.last_name}
-                        {'\n'}
-                        {p.position}
-                        {'\n'}
-                        {p.current_nfl_team ? p.current_nfl_team.key : ''}
-                      </Group>
-                    </a>
-                  ),
-                },
-                {
-                  accessor: 'status',
-                  title: 'Status',
-                  render: (p) => (
-                    <a href='#' onClick={(evt) => onPlayerActionClick(evt, p)}>
-                      {getPlayerAction(p)}
-                    </a>
-                  ),
-                },
-                {
-                  accessor: 'projection',
-                  title: `Week ${currentWeek}`,
-                  sortable: true,
-                },
-                {
-                  accessor: 'lastWeek',
-                  title: `Week ${currentWeek - 1}`,
-                  sortable: true,
-                },
-              ]}
-              sortStatus={sortStatus}
-              onSortStatusChange={setSortStatus}
+      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {leagueInfoFetchStatus === 'succeeded' && (
+        <div className='bg-lightGrey pt-4 pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
+          <Grid>
+            <Grid.Col span={10} offset={1}>
+              <Grid.Col>
+                <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                  <div className='bg-white rounded-xl hover:drop-shadow-md'>
+                    <div className='p-4 font-varsity justify-left text-2xl bg-darkBlue text-white rounded-t-xl'>
+                      Filters
+                    </div>
+                    <div className='pr-4 pl-4 pt-2'>
+                      <div className='text-md font-varsity text-darkBlue'>Position:</div>
+                      <SegmentedControl
+                        color='orange'
+                        fullWidth
+                        transitionDuration={400}
+                        transitionTimingFunction='linear'
+                        data={[
+                          { label: 'All', value: 'All' },
+                          { label: 'QB', value: 'QB' },
+                          { label: 'RB', value: 'RB' },
+                          { label: 'WR', value: 'WR' },
+                          { label: 'TE', value: 'TE' },
+                          { label: 'FLEX', value: 'FLEX' },
+                        ]}
+                        {...form.getInputProps('position')}
+                      />
+                    </div>
+                    <div className='pr-4 pl-4 pt-2'>
+                      <div className='text-md font-varsity text-darkBlue'>Player Name:</div>
+                      <TextInput placeholder='Justin Jefferson' {...form.getInputProps('player')} />
+                    </div>
+                    <div className='pr-4 pl-4 pt-2 pb-4'>
+                      <div className='text-md font-varsity text-darkBlue'>Availability:</div>
+                      <NativeSelect
+                        data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
+                        {...form.getInputProps('availability')}
+                      />
+                    </div>
+                  </div>
+                </form>
+              </Grid.Col>
+              <Grid.Col span={12}>
+                <DataTable
+                  className='bg-white rounded-xl hover:drop-shadow-md'
+                  withBorder
+                  highlightOnHover
+                  striped
+                  withColumnBorders
+                  records={records}
+                  columns={[
+                    {
+                      accessor: 'first_name',
+                      title: 'Player',
+                      render: (p) => (
+                        <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
+                          <Group>
+                            <Avatar src={p.photo_url} alt={'player image'} />
+                            {p.first_name} {p.last_name}
+                            {'\n'}
+                            {p.position}
+                            {'\n'}
+                            {p.current_nfl_team ? p.current_nfl_team.key : ''}
+                          </Group>
+                        </a>
+                      ),
+                    },
+                    {
+                      accessor: 'status',
+                      title: 'Status',
+                      render: (p) => (
+                        <a href='#' onClick={(evt) => onPlayerActionClick(evt, p)}>
+                          {getPlayerAction(p)}
+                        </a>
+                      ),
+                    },
+                    {
+                      accessor: 'projection',
+                      title: `Week ${currentWeek}`,
+                      sortable: true,
+                    },
+                    {
+                      accessor: 'lastWeek',
+                      title: `Week ${currentWeek - 1}`,
+                      sortable: true,
+                    },
+                  ]}
+                  sortStatus={sortStatus}
+                  onSortStatusChange={setSortStatus}
+                />
+              </Grid.Col>
+            </Grid.Col>
+            <PlayerPopup
+              player={openPlayer}
+              opened={playerPopupOpen}
+              onClose={onPlayerPopupClose}
             />
-          </Grid.Col>
-        </Grid.Col>
-        <PlayerPopup player={openPlayer} opened={playerPopupOpen} onClose={onPlayerPopupClose} />
-        <AddDropPlayerPopup
-          roster={getTeamRoster()}
-          player={addPlayer}
-          opened={addDropPopupOpen}
-          onClose={onAddDropPopupClose}
-        />
-        <AddDropPlayerConfirmPopup
-          isAdd={isAddPlayer}
-          player={addPlayer}
-          opened={addDropConfirmPopupOpen}
-          onClose={onAddDropConfirmClose}
-        />
-      </Grid>
+            <AddDropPlayerPopup
+              roster={getTeamRoster()}
+              player={addPlayer}
+              opened={addDropPopupOpen}
+              onClose={onAddDropPopupClose}
+            />
+            <AddDropPlayerConfirmPopup
+              isAdd={isAddPlayer}
+              player={addPlayer}
+              opened={addDropConfirmPopupOpen}
+              onClose={onAddDropConfirmClose}
+            />
+          </Grid>
+        </div>
+      )}
     </>
   );
 }
