@@ -45,12 +45,12 @@ const renderFriend = (friend: friendProps) => {
 };
 
 function friends() {
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
+  const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
 
   return (
     <>
-      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
-      {leagueInfoFetchStatus === 'succeeded' && (
+      {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {userInfoFetchStatus === 'succeeded' && (
         <div className='pt-10 pb-20 pl-20 pr-20 bg-lightGrey min-h-screen'>
           <div>
             <label className='font-varsity text-6xl'>Friends</label>

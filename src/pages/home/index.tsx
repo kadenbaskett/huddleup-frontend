@@ -72,12 +72,12 @@ const teams: Team[] = [
 ];
 
 export default function Home(props: any) {
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
+  const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
 
   return (
     <>
-      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
-      {leagueInfoFetchStatus === 'succeeded' && (
+      {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {userInfoFetchStatus === 'succeeded' && (
         <div className='grid grid-cols-10 gap-6 bg-lightGrey p-10 min-h-screen'>
           <div className='col-span-3'>
             <div className='bg-white rounded-xl hover:drop-shadow-md'>
