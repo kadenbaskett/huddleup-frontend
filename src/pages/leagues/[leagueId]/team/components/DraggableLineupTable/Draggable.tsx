@@ -21,6 +21,9 @@ export interface DraggableProps {
 export function Draggable(props: DraggableProps) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: props.id,
+    data: {
+      ...props.player,
+    },
   });
   const style = transform
     ? {
@@ -31,7 +34,7 @@ export function Draggable(props: DraggableProps) {
   return (
     <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
       <div className='p-1'>
-        <div className='bg-white rounded-xl p-1 w-60'>
+        <div className='bg-white border-white hover:border-orange border-2 rounded-xl p-1 w-60'>
           <Grid>
             <Grid.Col span={3}>
               <img src={props.player.photo_url} width={30}></img>
