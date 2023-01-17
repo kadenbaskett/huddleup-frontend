@@ -1,7 +1,10 @@
 import { FriendCard, friendProps } from '@components/FriendCard/FriendCard';
+import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Button, Group } from '@mantine/core';
+import { StoreState } from '@store/store';
 import React from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
 
 /*
 *  This will have to be done later. Here we will get the friends of the specific user
@@ -42,27 +45,34 @@ const renderFriend = (friend: friendProps) => {
 };
 
 function friends() {
+  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
+
   return (
-    <div className='pt-10 pb-20 pl-20 pr-20 bg-lightGrey min-h-screen'>
-      <div>
-        <label className='font-varsity text-6xl'>Friends</label>
-      </div>
+    <>
+      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {leagueInfoFetchStatus === 'succeeded' && (
+        <div className='pt-10 pb-20 pl-20 pr-20 bg-lightGrey min-h-screen'>
+          <div>
+            <label className='font-varsity text-6xl'>Friends</label>
+          </div>
 
-      <div className='pt-10'>
-        <Group>
-          <Button
-            leftIcon={<AiOutlinePlus />}
-            className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-            variant='default'
-            size='xl'
-          >
-            Add A Friend
-          </Button>
-        </Group>
-      </div>
+          <div className='pt-10'>
+            <Group>
+              <Button
+                leftIcon={<AiOutlinePlus />}
+                className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                variant='default'
+                size='xl'
+              >
+                Add A Friend
+              </Button>
+            </Group>
+          </div>
 
-      <div className='pt-10'>{renderFriends()}</div>
-    </div>
+          <div className='pt-10'>{renderFriends()}</div>
+        </div>
+      )}
+    </>
   );
 }
 

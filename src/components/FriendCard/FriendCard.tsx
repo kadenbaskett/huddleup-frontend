@@ -2,9 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import NFL from '../../public/assets/jakewhiteprofessionalpic.png';
 import styles from './FriendCard.module.css';
-import { Button, Grid, Group, Anchor } from '@mantine/core';
+import { Button, Grid, Group } from '@mantine/core';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { AiOutlineMinus } from 'react-icons/ai';
+import Link from 'next/link';
 
 export interface friendProps {
   name: string;
@@ -31,7 +32,7 @@ export function FriendCard(friend: friendProps) {
           <Grid.Col span='auto'>
             <Grid justify='flex-end'>
               <Grid.Col className='pt-5 pl-5 pr-5'>
-                <Anchor href={`/friends/${friend.id}/profile`}>
+                <Link href={`/friends/${friend.id}/profile`}>
                   <Button
                     leftIcon={<BsFillPersonFill />}
                     className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
@@ -40,10 +41,10 @@ export function FriendCard(friend: friendProps) {
                   >
                     View Profile
                   </Button>
-                </Anchor>
+                </Link>
               </Grid.Col>
               <Grid.Col className='pb-5 pl-5 pr-5'>
-                <Anchor href='/friends'>
+                <Link href='/friends'>
                   <Button
                     leftIcon={<AiOutlineMinus />}
                     className='hover:bg-red hover:text-white text-xl font-bold hover:border hover:border-red rounded bg-transparent text-red border-red transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
@@ -52,7 +53,7 @@ export function FriendCard(friend: friendProps) {
                   >
                     Remove
                   </Button>
-                </Anchor>
+                </Link>
               </Grid.Col>
             </Grid>
           </Grid.Col>
