@@ -70,26 +70,38 @@ export function DraggableLineupTable(props: TableData) {
       currentQB.push(playerId);
       setQB(currentQB);
       setBench(bench.filter((e) => e !== playerId));
-    } else if (type === 'WR' && !WR.includes(playerId)) {
+      setFLEX(currentFLEX.filter((e) => e !== playerId));
+    } else if (type === 'WR' && !WR.includes(playerId) && position === 'WR') {
       currentWR.push(playerId);
       setWR(currentWR);
       setBench(currentBench.filter((e) => e !== playerId));
-    } else if (type === 'RB' && !RB.includes(playerId)) {
+      setFLEX(currentFLEX.filter((e) => e !== playerId));
+    } else if (type === 'RB' && !RB.includes(playerId) && position === 'RB') {
       currentRB.push(playerId);
       setRB(currentRB);
       setBench(bench.filter((e) => e !== playerId));
-    } else if (type === 'TE' && !TE.includes(playerId)) {
+      setFLEX(currentFLEX.filter((e) => e !== playerId));
+    } else if (type === 'TE' && !TE.includes(playerId) && position === 'TE') {
       currentTE.push(playerId);
       setTE(currentTE);
       setBench(bench.filter((e) => e !== playerId));
+      setFLEX(currentFLEX.filter((e) => e !== playerId));
     } else if (type === 'FLEX' && !FLEX.includes(playerId)) {
       currentFLEX.push(playerId);
       setFLEX(currentFLEX);
+      setQB(currentQB.filter((e) => e !== playerId));
+      setWR(currentWR.filter((e) => e !== playerId));
+      setRB(currentRB.filter((e) => e !== playerId));
+      setTE(currentTE.filter((e) => e !== playerId));
       setBench(bench.filter((e) => e !== playerId));
     } else if (type === 'Bench' && !bench.includes(playerId)) {
       currentBench.push(playerId);
       setBench(currentBench);
+      setQB(currentQB.filter((e) => e !== playerId));
       setWR(currentWR.filter((e) => e !== playerId));
+      setRB(currentRB.filter((e) => e !== playerId));
+      setTE(currentTE.filter((e) => e !== playerId));
+      setFLEX(currentFLEX.filter((e) => e !== playerId));
     }
   };
 

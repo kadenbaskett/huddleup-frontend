@@ -69,7 +69,7 @@ function league() {
       />
       {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
       {leagueInfoFetchStatus === 'succeeded' && (
-        <div className='pt-5 pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40'>
+        <div className='pt-5 pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 bg-lightGrey min-h-screen'>
           <StandingsTable teams={teams} />
         </div>
       )}
