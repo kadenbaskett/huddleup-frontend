@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import OverviewCard from './components/OverviewCard/OverviewCard';
-import { Activity, Team, TypeActivity, TypeStatus } from './types';
+import { Activity, TypeActivity, TypeStatus } from './types';
 
 const date: Date = new Date();
 
@@ -57,49 +57,6 @@ const activityData: Activity[] = [
   },
 ];
 
-const teams: Team[] = [
-  {
-    id: 0,
-    name: 'Justins Team',
-    managers: 'Justin, Scotty, Eddie',
-    rank: 1,
-    wins: 10,
-    losses: 0,
-  },
-  {
-    id: 1,
-    name: 'Jakes Team',
-    managers: 'Jake, Garrett, Brooke',
-    rank: 2,
-    wins: 9,
-    losses: 1,
-  },
-  {
-    id: 2,
-    name: 'Kadens Team',
-    managers: 'Kaden, Trent, MattMarsh',
-    rank: 3,
-    wins: 8,
-    losses: 2,
-  },
-  {
-    id: 3,
-    name: 'Joes Team',
-    managers: 'Joe, Isaac, Kyle',
-    rank: 4,
-    wins: 5,
-    losses: 5,
-  },
-  {
-    id: 4,
-    name: 'Some bums Team',
-    managers: 'Bum1, Bum2, Bum3',
-    rank: 5,
-    wins: 0,
-    losses: 10,
-  },
-];
-
 function index() {
   const router = useRouter();
   const { leagueId } = router.query;
@@ -124,7 +81,7 @@ function index() {
             leagueDescription={'This is an example league description'}
             page='overview'
           />
-          <OverviewCard activities={activityData} teams={teams} />
+          <OverviewCard activities={activityData} teams={league.teams} />
         </div>
       )}
     </div>

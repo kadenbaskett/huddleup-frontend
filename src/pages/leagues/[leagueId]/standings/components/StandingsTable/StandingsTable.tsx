@@ -1,21 +1,22 @@
 import { Table } from '@mantine/core';
-import { Team } from '@pages/leagues/[leagueId]/home/overview/types';
 import React from 'react';
 
-export interface StandingsTableProps {
-  teams: Team[]; // this is the same teams that is in my overview page. Should we have a global types folder for this kind of thing?
-}
-
-export default function StandingsTable(props: StandingsTableProps) {
-  const rows = props.teams.map((p: Team) => (
-    <tr key={p.id.toString()}>
-      <td className='font-bold'>{p.rank.toString()}.</td>
-      <td className='font-varsity text-2xl'>{p.name}</td>
+export default function StandingsTable(props) {
+  const rows = props.teams.map(({ id, name, managers }) => (
+    <tr key={id.toString()}>
+      <td className='font-bold'>{1}.</td>
+      <td className='font-varsity text-2xl'>{name}</td>
       {/* These will ideally link to the specific teams page */}
-      <td className='text-orange'>{p.managers}</td>
+      <td className='text-orange'>
+        {managers
+          .map((m) => {
+            return m.user.username;
+          })
+          .join(', ')}
+      </td>
       {/* These will ideally link to the specific persons page (stretch feature) */}
-      <td className='font-bold'>{p.wins.toString()}</td>
-      <td className='font-bold'>{p.losses.toString()}</td>
+      <td className='font-bold'>{0}</td>
+      <td className='font-bold'>{0}</td>
       <td className='font-bold'>0</td>
     </tr>
   ));

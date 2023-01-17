@@ -1,32 +1,32 @@
-import { Anchor, Table } from '@mantine/core';
+import { Table } from '@mantine/core';
 import { StoreState } from '@store/store';
+import Link from 'next/link';
 import router from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Team } from '../../types';
 
 export interface Top5StandingTableProps {
-  teams: Team[];
+  teams: any[];
 }
 
 export default function Top5StandingTable(props: Top5StandingTableProps) {
   const { leagueId } = router.query;
   const league = useSelector((state: StoreState) => state.league.league);
-  const rows = props.teams.map((p: Team) => (
-    <tr key={p.id.toString()}>
-      <td>{p.rank.toString()}</td>
-      <td>{p.name}</td>
-      <td>{p.wins.toString()}</td>
-      <td>{p.losses.toString()}</td>
+  const rows = props.teams.map(({ id, name }) => (
+    <tr key={id.toString()}>
+      <td>{0}</td>
+      <td>{name}</td>
+      <td>{0}</td>
+      <td>{0}</td>
     </tr>
   ));
   return (
     <div className='bg-white rounded-xl hover:drop-shadow-md'>
-      <Anchor href={'/leagues/' + String(leagueId) + '/standings'} variant='text'>
+      <Link href={'/leagues/' + String(leagueId) + '/standings'}>
         <div className='p-4 font-varsity justify-left text-2xl bg-darkBlue text-white rounded-t-xl'>
           Top 5 in {league ? league.name : ' '}
         </div>
-      </Anchor>
+      </Link>
       <Table>
         <thead>
           <tr>
