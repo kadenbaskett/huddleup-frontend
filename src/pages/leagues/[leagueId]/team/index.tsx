@@ -21,7 +21,7 @@ function league() {
   const team = useSelector((state: StoreState) => state.league.userTeam);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
 
-  const players = team?.rosters.find((roster) => roster.week === currentWeek)?.players;
+  // const players = team?.rosters.find((roster) => roster.week === currentWeek)?.players;
 
   // static data to be changed
   const proposals: Proposal[] = [
@@ -79,7 +79,7 @@ function league() {
             </Grid>
           </div>
           <div className='pt-5'>
-            <TeamCard currentWeek={4} players={players} proposals={proposals} />
+            <TeamCard currentWeek={currentWeek} rosters={team.rosters} proposals={proposals} />
           </div>
         </div>
       )}

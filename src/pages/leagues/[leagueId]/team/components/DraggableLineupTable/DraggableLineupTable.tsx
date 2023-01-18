@@ -1,62 +1,75 @@
 import { DndContext } from '@dnd-kit/core';
 import { Grid, SegmentedControl } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { numWeeks } from 'static';
 import { Draggable } from './Draggable';
 import { Droppable } from './Droppable';
 
 export interface TableData {
-  players: any;
+  rosters: any;
+  currentWeek: string;
 }
-export function DraggableLineupTable(props: TableData) {
-  const players = props.players;
-  const activeQB = props.players
-    .filter(
-      ({ position, player }) =>
-        player.position === 'QB' && position !== 'BE' && position !== 'FLEX',
-    )
-    .map((player) => {
-      return player.id;
-    });
-  const activeWR = props.players
-    .filter(
-      ({ position, player }) =>
-        player.position === 'WR' && position !== 'BE' && position !== 'FLEX',
-    )
-    .map((player) => {
-      return player.id;
-    });
-  const activeRB = props.players
-    .filter(
-      ({ position, player }) =>
-        player.position === 'RB' && position !== 'BE' && position !== 'FLEX',
-    )
-    .map((player) => {
-      return player.id;
-    });
-  const activeTE = props.players
-    .filter(
-      ({ position, player }) =>
-        player.position === 'TE' && position !== 'BE' && position !== 'FLEX',
-    )
-    .map((player) => {
-      return player.id;
-    });
-  const activeFLEX = props.players
-    .filter(({ position }) => position === 'FLEX')
-    .map((player) => {
-      return player.id;
-    });
-  const benched = props.players
-    .filter(({ position, player }) => position === 'BE')
-    .map((player) => {
-      return player.id;
-    });
-  const [QB, setQB] = useState([...activeQB]); // 1 QB
-  const [WR, setWR] = useState([...activeWR]); // 2 WR
-  const [RB, setRB] = useState([...activeRB]); // 2 RB
-  const [TE, setTE] = useState([...activeTE]); // 1 TE
-  const [FLEX, setFLEX] = useState([...activeFLEX]); // 1 FLEX
-  const [bench, setBench] = useState([...benched]);
+export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
+  const [players, setPlayers] = useState([]);
+  const [week, setWeek] = useState(currentWeek);
+  const [QB, setQB] = useState([]); // 1 QB
+  const [WR, setWR] = useState([]); // 2 WR
+  const [RB, setRB] = useState([]); // 2 RB
+  const [TE, setTE] = useState([]); // 1 TE
+  const [FLEX, setFLEX] = useState([]); // 1 FLEX
+  const [bench, setBench] = useState([]);
+  useEffect(() => {
+    const players = rosters.find((roster) => roster.week.toString() === week)?.players;
+    setPlayers(players);
+    const activeQB = players
+      .filter(
+        ({ position, player }) =>
+          player.position === 'QB' && position !== 'BE' && position !== 'FLEX',
+      )
+      .map((player) => {
+        return player.id;
+      });
+    setQB(activeQB);
+    const activeWR = players
+      .filter(
+        ({ position, player }) =>
+          player.position === 'WR' && position !== 'BE' && position !== 'FLEX',
+      )
+      .map((player) => {
+        return player.id;
+      });
+    setWR(activeWR);
+    const activeRB = players
+      .filter(
+        ({ position, player }) =>
+          player.position === 'RB' && position !== 'BE' && position !== 'FLEX',
+      )
+      .map((player) => {
+        return player.id;
+      });
+    setRB(activeRB);
+    const activeTE = players
+      .filter(
+        ({ position, player }) =>
+          player.position === 'TE' && position !== 'BE' && position !== 'FLEX',
+      )
+      .map((player) => {
+        return player.id;
+      });
+    setTE(activeTE);
+    const activeFLEX = players
+      .filter(({ position }) => position === 'FLEX')
+      .map((player) => {
+        return player.id;
+      });
+    setFLEX(activeFLEX);
+    const benched = players
+      .filter(({ position }) => position === 'BE')
+      .map((player) => {
+        return player.id;
+      });
+    setBench(benched);
+  }, [week]);
 
   const addPlayer = (playerId: string, type: string, position: string) => {
     const currentQB = [...QB];
@@ -104,24 +117,23 @@ export function DraggableLineupTable(props: TableData) {
       setFLEX(currentFLEX.filter((e) => e !== playerId));
     }
   };
-
+  // drop player over container logic
   function handleDragEnd(event) {
     const { over, active } = event;
     if (!over) return;
     const { position } = players.find(({ id }) => id === active.id).player;
     addPlayer(active.id, over.id, position);
   }
-
-  const weeks = new Array(18);
-  for (let i = 1; i <= 18; i++) {
+  // generate the weeks for the segmneted control
+  const weeks = new Array(numWeeks);
+  for (let i = 1; i <= numWeeks; i++) {
     weeks[i - 1] = { label: i.toString(), value: i.toString() };
   }
-
   return (
     <>
       <div className='text-xl font-varsity'>Week:</div>
       <div className='p-3'>
-        <SegmentedControl data={weeks} />
+        <SegmentedControl value={week} data={weeks} onChange={(e) => setWeek(e)} />
       </div>
       <DndContext onDragEnd={handleDragEnd}>
         {/* QuarterBacks */}
