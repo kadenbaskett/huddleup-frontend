@@ -8,6 +8,7 @@ export interface globalSliceState {
   week: number;
   season: number;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  seasonComplete: Boolean;
 }
 
 const initialState: globalSliceState = {
@@ -16,6 +17,7 @@ const initialState: globalSliceState = {
   week: null,
   season: null,
   status: 'idle',
+  seasonComplete: false,
 };
 
 export const globalSlice = createSlice({
@@ -32,6 +34,8 @@ export const globalSlice = createSlice({
         state.publicLeagues = action.payload.leagues;
         state.week = action.payload.timeframe.week;
         state.season = action.payload.timeframe.season;
+        state.seasonComplete =
+          action.payload.timeframe.has_ended && action.payload.timeframe.week === 18;
       })
       .addCase(handleGlobalInitThunk.rejected, (state, action) => {
         state.status = 'failed';

@@ -5,13 +5,11 @@ import { ManagementTable } from '../ManagementTable/ManagementTable';
 
 export interface TeamCardProps {
   currentWeek: Number;
-  players: any;
+  rosters: any;
   proposals: Proposal[];
 }
 
 export function TeamCard(props: TeamCardProps) {
-  // static data for droppableLineupTable
-
   const [lineup, setLineup] = useState(true);
   const [management, setManagement] = useState(false);
 
@@ -57,7 +55,10 @@ export function TeamCard(props: TeamCardProps) {
       {/* content */}
       {lineup && (
         <div className='p-5'>
-          <DraggableLineupTable players={props.players} />
+          <DraggableLineupTable
+            rosters={props.rosters}
+            currentWeek={props.currentWeek.toString()}
+          />
         </div>
       )}
       {management && (
