@@ -8,6 +8,7 @@ export interface userSliceState {
   leagues: League[];
   createUserStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  pollStatus: 'idle' | 'polling';
 }
 
 const initialState: userSliceState = {
@@ -15,6 +16,7 @@ const initialState: userSliceState = {
   leagues: null,
   createUserStatus: 'idle',
   status: 'idle',
+  pollStatus: 'idle',
 };
 
 export const userSlice = createSlice({
@@ -33,6 +35,11 @@ export const userSlice = createSlice({
         state.userInfo = action.payload.user;
         state.leagues = action.payload.leagues;
       })
+      .addCase(userPollThunk.fulfilled, (state, action) => {
+        state.pollStatus = 'polling';
+        state.userInfo = action.payload.user;
+        state.leagues = action.payload.leagues;
+      })
       .addCase(handleUserInitThunk.rejected, (state, action) => {
         state.status = 'failed';
       });
@@ -40,6 +47,16 @@ export const userSlice = createSlice({
 });
 
 export const handleUserInitThunk = createAsyncThunk('user/initUser', async (email: string) => {
+  const userResp = await fetchUser(email);
+  const leaguesResp = userResp.data ? await fetchUserLeagues(userResp.data.id) : null;
+
+  return {
+    user: userResp.data ? userResp.data : null,
+    leagues: leaguesResp.data ? leaguesResp.data : null,
+  };
+});
+
+export const userPollThunk = createAsyncThunk('user/poll', async (email: string) => {
   const userResp = await fetchUser(email);
   const leaguesResp = userResp.data ? await fetchUserLeagues(userResp.data.id) : null;
 
