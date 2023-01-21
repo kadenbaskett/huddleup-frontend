@@ -104,8 +104,10 @@ function League(props) {
   const [records, setRecords] = useState(sortBy(allPlayers, 'projection'));
 
   useEffect(() => {
-    const data = sortBy(filterPlayers(), sortStatus.columnAccessor);
-    setRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
+    if (allPlayers) {
+      const data = sortBy(filterPlayers(), sortStatus.columnAccessor);
+      setRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
+    }
   }, [sortStatus, allPlayers, form.values]);
 
   const filterPlayers = () => {
@@ -159,13 +161,17 @@ function League(props) {
     // Add extra fields for the table sorting
     players = players.map((p) => {
       // TODO hacked in proj
-      const lastWeek = p.player_game_stats?.find((pgs) => pgs.game?.week === 1);
-      const proj = p.player_game_stats?.find((pgs) => pgs.game?.week === 2);
+      const lastWeekStats = p.player_game_stats?.find((pgs) => pgs.game?.week === currentWeek - 1);
+      const currentWeekStats = p.player_game_stats?.find((pgs) => pgs.game?.week === currentWeek);
+      const currentWeekProjStats = p.player_game_stats?.find(
+        (pgs) => pgs.game?.week === currentWeek,
+      );
 
       return {
         ...p,
-        proj: proj ? fantasyPoints(proj) : 0,
-        lastWeek: lastWeek ? fantasyPoints(lastWeek) : 0,
+        currentWeek: currentWeekStats ? fantasyPoints(currentWeekStats) : 0,
+        currentWeekProj: currentWeekProjStats ? fantasyPoints(currentWeekProjStats) : 0,
+        lastWeek: lastWeekStats ? fantasyPoints(lastWeekStats) : 0,
       };
     });
 
@@ -317,8 +323,13 @@ function League(props) {
                       ),
                     },
                     {
-                      accessor: 'projection',
-                      title: `Week ${currentWeek}`,
+                      accessor: 'currentWeek',
+                      title: `Week ${currentWeek} (actual)`,
+                      sortable: true,
+                    },
+                    {
+                      accessor: 'currentWeekProj',
+                      title: `Week ${currentWeek} (projection)`,
                       sortable: true,
                     },
                     {
