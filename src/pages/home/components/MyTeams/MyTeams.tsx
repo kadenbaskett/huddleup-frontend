@@ -24,7 +24,7 @@ const renderRow = (team: Team) => {
 };
 
 export interface MyTeamsProps {
-  teams: Team[];
+  teams: any[];
 }
 
 export default function MyTeams(props: MyTeamsProps) {
@@ -33,7 +33,7 @@ export default function MyTeams(props: MyTeamsProps) {
       <div className='flex font-varsity justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl'>
         My Teams
       </div>
-      {props.teams.map((team: Team) => renderRow(team))}
+      {props.teams.map((team: any) => renderRow(team))}
     </div>
   );
 }

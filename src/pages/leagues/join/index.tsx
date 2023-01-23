@@ -1,8 +1,7 @@
 import { Button, TextInput } from '@mantine/core';
-import { fetchPublicLeaguesThunk } from '@store/slices/globalSlice';
-import { AppDispatch, StoreState } from '@store/store';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { StoreState } from '@store/store';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { JoinLeagueCard, joinleagueProps } from '../../../components/JoinLeagueCard/JoinLeagueCard';
 
 function leagues() {
@@ -19,16 +18,9 @@ function leagues() {
   /*
    * Pulling data from backend
    */
-  const dispatch = useDispatch<AppDispatch>();
   // const userLeaguesFetchStatus = useSelector((state: StoreState) => state.user.status);
-  const globalFetchStatus = useSelector((state: StoreState) => state.global.status);
   const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
-
-  useEffect(() => {
-    if (globalFetchStatus === 'idle') {
-      dispatch(fetchPublicLeaguesThunk());
-    }
-  }, [globalFetchStatus, dispatch]);
+  console.log('publicLeagues', publicLeagues);
 
   const leagueData = publicLeagues.map((league) => {
     const l: joinleagueProps = {

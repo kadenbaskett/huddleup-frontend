@@ -73,7 +73,6 @@ const teams: Team[] = [
 
 export default function Home(props: any) {
   const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
-
   return (
     <>
       {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}

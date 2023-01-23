@@ -187,5 +187,5 @@ export function calculateStandings(league, currentWeek) {
     teams[loserIndex].losses++;
   }
 
-  return teams;
+  return teams.sort((teamOne, teamTwo) => teamTwo.wins - teamOne.wins);
 }
