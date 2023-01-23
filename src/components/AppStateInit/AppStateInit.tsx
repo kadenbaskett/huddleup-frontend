@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, StoreState } from '@store/store';
 import { handleGlobalInitThunk } from '@store/slices/globalSlice';
-import { handleUserInitThunk } from '@store/slices/userSlice';
-import { handleLeagueInitThunk } from '@store/slices/leagueSlice';
+import { handleUserInitThunk, userPollThunk } from '@store/slices/userSlice';
+import { handleLeagueInitThunk, pollForUpdates } from '@store/slices/leagueSlice';
 
 export default function AppStateInit({ children }) {
   const router = useRouter();
@@ -38,6 +38,10 @@ export default function AppStateInit({ children }) {
     if (state.user.createUserStatus === 'succeeded') {
       const email = state.user.userInfo.email;
       dispatch(handleUserInitThunk(String(email)));
+
+      if (state.user.pollStatus !== 'polling') {
+        setInterval(() => dispatch(userPollThunk(String(email))), 5000);
+      }
     }
 
     // Once the user is logged in
@@ -45,6 +49,10 @@ export default function AppStateInit({ children }) {
       // Once the URL has a league id in it, fetch it
       if (state.league.status === 'idle' && leagueId) {
         dispatch(handleLeagueInitThunk(Number(leagueId)));
+
+        if (state.league.pollStatus !== 'polling') {
+          setInterval(() => dispatch(pollForUpdates(Number(leagueId))), 5000);
+        }
       }
 
       // Add any other things that need to be initialized after a login
