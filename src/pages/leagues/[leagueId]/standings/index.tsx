@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { StoreState } from '@store/store';
 import { useSelector } from 'react-redux';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import StandingsTable from './components/StandingsTable/StandingsTable';
 import { Team } from '../home/overview/types';
+import { calculateStandings } from '@services/helpers';
 
 const teams: Team[] = [
   {
@@ -55,8 +56,17 @@ function league() {
   const { leagueId } = router.query;
 
   const league = useSelector((state: StoreState) => state.league.league);
+  const week = useSelector((state: StoreState) => state.global.week);
   const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.status);
   const team = useSelector((state: StoreState) => state.league.userTeam);
+
+  useEffect(() => {
+    if (leagueInfoFetchStatus === 'succeeded') {
+      const standings = calculateStandings(league, week);
+      const sorted = standings.sort((teamOne, teamTwo) => teamTwo.wins - teamOne.wins);
+      console.log(sorted);
+    }
+  }, [leagueInfoFetchStatus]);
 
   return (
     <>

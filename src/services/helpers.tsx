@@ -129,3 +129,63 @@ export function fantasyPoints(s, pprValue = 1) {
 
   return 0;
 }
+
+export function calculateMatchupResults(league, currentWeek) {
+  const results = [];
+
+  for (let m of league.matchups) {
+    if (m.week <= currentWeek) {
+      const homeTeam = league.teams.find((t) => t.id === m.home_team_id);
+      const awayTeam = league.teams.find((t) => t.id === m.away_team_id);
+
+      const homeRoster = homeTeam.rosters.find((r) => r.week === m.week);
+      const awayRoster = awayTeam.rosters.find((r) => r.week === m.week);
+
+      let homeScore = 0;
+      for (const p of homeRoster.players) {
+        const pgs = p.player.player_game_stats.find((pgs) => pgs.game.week === m.week);
+        homeScore += Number(fantasyPoints(pgs));
+      }
+
+      let awayScore = 0;
+      for (const p of awayRoster.players) {
+        const pgs = p.player.player_game_stats.find((pgs) => pgs.game.week === m.week);
+        awayScore += Number(fantasyPoints(pgs));
+      }
+
+      m = {
+        ...m,
+        homeScore,
+        awayScore,
+      };
+
+      results.push(m);
+    }
+  }
+
+  return results;
+}
+
+export function calculateStandings(league, currentWeek) {
+  const matchupResults = calculateMatchupResults(league, currentWeek);
+
+  const teams = league.teams.map((t) => {
+    return {
+      ...t,
+      wins: 0,
+      losses: 0,
+    };
+  });
+
+  for (const m of matchupResults) {
+    const winnerId = m.homeScore > m.awayScore ? m.home_team_id : m.away_team_id;
+    const loserId = m.homeScore > m.awayScore ? m.away_team_id : m.home_team_id;
+    const winnerIndex = teams.findIndex((t) => t.id === winnerId);
+    const loserIndex = teams.findIndex((t) => t.id === loserId);
+
+    teams[winnerIndex].wins++;
+    teams[loserIndex].losses++;
+  }
+
+  return teams;
+}
