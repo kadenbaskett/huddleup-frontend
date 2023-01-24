@@ -10,14 +10,14 @@ import {
 } from '@mantine/core';
 import Link from 'next/link';
 import { createLeague } from '@services/apiClient';
+import { useSelector } from 'react-redux';
+import { StoreState } from '@store/store';
+import { userSliceState } from '@store/slices/userSlice';
 interface teamSlider {
   value: number;
   label: string;
 }
 const numTeams: teamSlider[] = [
-  { value: 2, label: '2' },
-  { value: 4, label: '4' },
-  { value: 6, label: '6' },
   { value: 8, label: '8' },
   { value: 10, label: '10' },
   { value: 12, label: '12' },
@@ -40,6 +40,7 @@ const numPlayers: numPlayersSlider[] = [
 ];
 
 export default function index() {
+  const user: userSliceState = useSelector((state: StoreState) => state.user);
   const [teams, setTeamValue] = useState(10);
   const [minPlayerRange, setMinPlayerRange] = useState(2);
   const [maxPlayerRange, setMaxPlayerRange] = useState(4);
@@ -55,12 +56,13 @@ export default function index() {
   async function handleSubmit(event: { preventDefault: () => void }) {
     const scoring = document.querySelector('input[name="hosting"]:checked').getAttribute('value');
     const league = {
+      commissionerId: user.userInfo.id,
       leagueName,
-      teams,
-      minPlayerRange,
-      maxPlayerRange,
+      numTeams: teams,
+      minPlayers: minPlayerRange,
+      maxPlayers: maxPlayerRange,
       leagueDescription,
-      publicOrPrivate,
+      publicJoin: publicOrPrivate === 'Public',
       scoring,
       // need to add a parameter for the current user because this would be the commisioner of this league
     };
@@ -98,7 +100,7 @@ export default function index() {
             labelTransition='skew-down'
             labelTransitionDuration={150}
             labelTransitionTimingFunction='ease'
-            min={2}
+            min={8}
             max={20}
             value={teams}
             defaultValue={10}
