@@ -12,12 +12,13 @@ export interface Top5StandingTableProps {
 export default function Top5StandingTable(props: Top5StandingTableProps) {
   const { leagueId } = router.query;
   const league = useSelector((state: StoreState) => state.league.league);
-  const rows = props.teams.map((p: Team) => (
-    <tr key={p.id.toString()}>
-      <td>{p.rank.toString()}</td>
-      <td>{p.name}</td>
-      <td>{p.wins.toString()}</td>
-      <td>{p.losses.toString()}</td>
+  let i = 0;
+  const rows = props.teams.map(({ id, name, wins, losses }) => (
+    <tr key={id.toString()}>
+      <td>{++i}</td>
+      <td>{name}</td>
+      <td>{wins.toString()}</td>
+      <td>{losses.toString()}</td>
     </tr>
   ));
   return (
