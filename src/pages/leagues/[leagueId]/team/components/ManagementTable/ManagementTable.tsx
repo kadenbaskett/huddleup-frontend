@@ -1,16 +1,18 @@
 import { Button, Group, Table } from '@mantine/core';
+import { proposalToString } from '@services/ProposalHelpers';
 import { Proposal, ProposalStatus } from '../../types';
 
 export interface ManagementTableProps {
   proposals: Proposal[];
 }
-export function ManagementTable(props: ManagementTableProps) {
-  const rows = props.proposals.map((p: Proposal) => (
+export function ManagementTable({ proposals }: ManagementTableProps) {
+  const rows = proposals.map((p: Proposal) => (
     <tr key={p.id.toString()}>
-      <td>{p.name}</td>
-      <td>{p.proposal}</td>
+      <td>{Date.parse(p.creation_date.toString()).toLocaleString('en-US')}</td>
+      <td>{p.user.username}</td>
+      <td>{proposalToString(p)}</td>
       <td>
-        {p.status === ProposalStatus.approved && (
+        {p.status === ProposalStatus.complete && (
           <div className='text-xl font-openSans text-green'>Approved</div>
         )}
         {p.status === ProposalStatus.rejected && (
@@ -48,6 +50,7 @@ export function ManagementTable(props: ManagementTableProps) {
       <Table>
         <thead>
           <tr>
+            <th>Date</th>
             <th>Teammate</th>
             <th>Proposal</th>
             <th>Status</th>

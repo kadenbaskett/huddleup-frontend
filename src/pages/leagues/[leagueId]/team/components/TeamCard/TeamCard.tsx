@@ -1,3 +1,4 @@
+import { compareProposals } from '@services/ProposalHelpers';
 import { useState } from 'react';
 import { Proposal } from '../../types';
 import { DraggableLineupTable } from '../DraggableLineupTable/DraggableLineupTable';
@@ -63,7 +64,7 @@ export function TeamCard(props: TeamCardProps) {
       )}
       {management && (
         <div className='p-5'>
-          <ManagementTable proposals={props.proposals} />
+          <ManagementTable proposals={[...props.proposals].sort(compareProposals)} />
         </div>
       )}
     </div>

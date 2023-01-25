@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 export interface NotificationCardProps {
+  headline: string;
   text: string;
 }
 
@@ -26,6 +27,9 @@ export function NotificationCard(props: NotificationCardProps) {
             onClick={() => setCollapsed(true)}
             style={{ cursor: 'pointer', color: 'black' }}
           />
+          <div className='text-xl font-OpenSans font-bold text-darkBlue pl-10 pr-10'>
+            {props.headline}
+          </div>
           <div className='text-xl font-OpenSans text-darkBlue pl-10 pr-10'>{props.text}</div>
           <Group className='pl-10 pb-4 pt-2'>
             <Button
