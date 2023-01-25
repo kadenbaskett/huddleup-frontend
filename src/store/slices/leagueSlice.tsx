@@ -5,6 +5,7 @@ export interface leagueSliceState {
   league: any;
   playerList: any[];
   userTeam: any;
+  transactions: any[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   pollStatus: 'idle' | 'polling';
 }
@@ -13,6 +14,7 @@ const initialState: leagueSliceState = {
   league: null,
   playerList: null,
   userTeam: null,
+  transactions: null,
   status: 'idle',
   pollStatus: 'idle',
 };
@@ -32,6 +34,7 @@ export const leagueSlice = createSlice({
         state.status = 'succeeded';
         state.playerList = action.payload.players;
         state.league = action.payload.league;
+        state.transactions = action.payload.transactions;
         state.userTeam = action.payload.userTeam;
       })
       .addCase(handleLeagueInitThunk.rejected, (state, action) => {
@@ -62,6 +65,7 @@ export const handleLeagueInitThunk = createAsyncThunk(
     return {
       players: playersResp.data ? playersResp.data : null,
       league: leagueResp.data ? leagueResp.data : null,
+      transactions: null,
       userTeam: team,
     };
   },
