@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import { Button, Group, Modal, Text } from '@mantine/core';
+import { addPlayer } from '@services/apiClient';
 
-export default function AddDropPlayerConfirmPopup({ player, isAdd, opened, onClose }) {
+export default function AddDropPlayerConfirmPopup({
+  roster,
+  player,
+  isAdd,
+  opened,
+  onClose,
+  userId,
+}) {
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setSubmitLoading(true);
 
-    // Send network request to Add/Drop player
+    await addPlayer(player.id, player.external_id, roster.id, roster.team_id, userId, roster.week);
 
     setSubmitLoading(false);
     onClose();
@@ -27,11 +35,24 @@ export default function AddDropPlayerConfirmPopup({ player, isAdd, opened, onClo
         size={'75%'}
       >
         <Group>
-          <Button color='red' onClick={onClose}>
+          <Button
+            className={`${'bg-transparent hover:bg-red text-red hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+            variant='default'
+            size='sm'
+            color='red'
+            onClick={onClose}
+          >
             Cancel
           </Button>
-          <Button loading={submitLoading} onClick={onSubmit}>
-            Confirm
+          <Button
+            className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
+            variant='default'
+            size='sm'
+            color='red'
+            loading={submitLoading}
+            onClick={onSubmit}
+          >
+            Submit
           </Button>
         </Group>
       </Modal>

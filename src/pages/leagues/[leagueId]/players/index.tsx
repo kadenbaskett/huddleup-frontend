@@ -26,6 +26,7 @@ function League(props) {
   const league = useSelector((state: StoreState) => state.league.league);
   const team = useSelector((state: StoreState) => state.league.userTeam);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
+  const user = useSelector((state: StoreState) => state.user.userInfo);
 
   // Confirm popup
   const [addDropConfirmPopupOpen, setAddDropConfirmPopupOpen] = useState(false);
@@ -353,12 +354,15 @@ function League(props) {
               player={addPlayer}
               opened={addDropPopupOpen}
               onClose={onAddDropPopupClose}
+              userId={user.id}
             />
             <AddDropPlayerConfirmPopup
+              roster={getTeamRoster()}
               isAdd={isAddPlayer}
               player={addPlayer}
               opened={addDropConfirmPopupOpen}
               onClose={onAddDropConfirmClose}
+              userId={user.id}
             />
           </Grid>
         </div>

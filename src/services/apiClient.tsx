@@ -40,11 +40,22 @@ export async function createLeague(leageData: object) {
   return await postRequest(url, leageData);
 }
 
-export async function addPlayer(playerId: number, rosterId: number) {
+export async function addPlayer(
+  addPlayerId: number,
+  addPlayerExternalId: number,
+  rosterId: number,
+  teamId: number,
+  userId: number,
+  week: number,
+) {
   const url = `${BASE_URL}/database/roster/addPlayer`;
   const data = {
-    playerId,
+    addPlayerId,
+    addPlayerExternalId,
     rosterId,
+    teamId,
+    userId,
+    week,
   };
   return await postRequest(url, data);
 }
@@ -60,14 +71,22 @@ export async function dropPlayer(playerId: number, rosterId: number) {
 
 export async function addDropPlayer(
   addPlayerId: number,
+  addPlayerExternalId: number,
   dropPlayerIds: number[],
   rosterId: number,
+  teamId: number,
+  userId: number,
+  week: number,
 ) {
   const url = `${BASE_URL}/database/roster/addDropPlayer`;
   const data = {
     addPlayerId,
+    addPlayerExternalId,
     dropPlayerIds,
     rosterId,
+    teamId,
+    userId,
+    week,
   };
   return await postRequest(url, data);
 }

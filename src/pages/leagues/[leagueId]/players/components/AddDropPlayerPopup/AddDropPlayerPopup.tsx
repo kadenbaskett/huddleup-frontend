@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Group, Modal, Checkbox, Table, Text, Grid, Space } from '@mantine/core';
 import { addDropPlayer } from '@services/apiClient';
 
-export default function AddDropPlayerPopup({ roster, player, opened, onClose }) {
+export default function AddDropPlayerPopup({ roster, player, opened, onClose, userId }) {
   const [dropPlayers, setDropPlayers] = useState(new Set());
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -16,10 +16,16 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose }) 
     setSubmitLoading(true);
 
     if (dropPlayers.size) {
-      const dropArr = Array.from(dropPlayers);
-      const dropIds = dropArr.map((player) => player.id);
-      const resp = await addDropPlayer(player.id, dropIds, roster.id);
-      console.log(resp);
+      const dropIds = Array.from(dropPlayers);
+      await addDropPlayer(
+        player.id,
+        player.external_id,
+        dropIds,
+        roster.id,
+        roster.team_id,
+        userId,
+        roster.week,
+      );
     }
 
     setSubmitLoading(false);
@@ -106,10 +112,23 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose }) 
       >
         {getRoster()}
         <Group>
-          <Button color='red' onClick={onClose}>
+          <Button
+            className={`${'bg-transparent hover:bg-red text-red hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+            variant='default'
+            size='sm'
+            color='red'
+            onClick={onClose}
+          >
             Cancel
           </Button>
-          <Button loading={submitLoading} onClick={onSubmit}>
+          <Button
+            className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
+            variant='default'
+            size='sm'
+            color='red'
+            loading={submitLoading}
+            onClick={onSubmit}
+          >
             Submit
           </Button>
         </Group>
