@@ -20,6 +20,7 @@ export interface Scoring {
 export interface Team {
   id: number;
   name: string;
+  league: League;
   rosters: Roster[];
 }
 
