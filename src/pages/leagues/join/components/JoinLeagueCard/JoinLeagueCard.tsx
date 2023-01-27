@@ -7,6 +7,10 @@ import Link from 'next/link';
 import { League } from '@interfaces/league.interface';
 
 export function JoinLeagueCard(league: League) {
+  const currNumTeams = league.settings.num_teams - league.teams.length;
+
+  // Don't display cards for public leagues that have all their teams.
+  // if (currNumTeams === 0) return;
   return (
     <Link href={'/leagues/' + league.id.toString() + '/home/overview'}>
       <div
@@ -41,7 +45,7 @@ export function JoinLeagueCard(league: League) {
                 </Button>
               </Grid.Col>
               <Grid.Col className='text-2xl text-orange'>
-                {league.settings.num_teams} of {league.settings.num_teams} teams
+                {currNumTeams} of {league.settings.num_teams} teams
               </Grid.Col>
             </Grid>
           </Grid.Col>
