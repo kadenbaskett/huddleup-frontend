@@ -1,7 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import TeamProfilePic from '../../../../public/assets/huddle-up-logo.png';
-import { Team } from '@pages/home/types';
+import { Team } from '@interfaces/league.interface';
+import Link from 'next/link';
 
 const renderRow = (team: Team) => {
   return (
@@ -13,18 +14,25 @@ const renderRow = (team: Team) => {
         width={92}
         height={92}
       />
-      <div className='justify-center col-span-3 text-2xl break-words align-middle'>
+      <Link
+        href={'/leagues/' + team.league.id.toString() + '/team'}
+        className='justify-center col-span-3 text-2xl break-words align-middle'
+      >
         {team.name}
-        <div className='justify-right col-span-3 text-lg text-orange break-words align-middle'>
-          league 1
-        </div>
-      </div>
+        <br />
+        <Link
+          href={'/leagues/' + team.league.id.toString() + '/home/overview'}
+          className='justify-right col-span-3 text-lg text-orange break-words align-middle'
+        >
+          {team.league.name}
+        </Link>
+      </Link>
     </div>
   );
 };
 
 export interface MyTeamsProps {
-  teams: any[];
+  teams: Team[];
 }
 
 export default function MyTeams(props: MyTeamsProps) {
@@ -33,7 +41,7 @@ export default function MyTeams(props: MyTeamsProps) {
       <div className='flex font-varsity justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl'>
         My Teams
       </div>
-      {props.teams.map((team: any) => renderRow(team))}
+      {props.teams.map((team) => renderRow(team))}
     </div>
   );
 }
