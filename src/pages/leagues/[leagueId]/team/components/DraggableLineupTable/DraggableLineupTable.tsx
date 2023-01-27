@@ -1,7 +1,6 @@
 import { DndContext } from '@dnd-kit/core';
 import { Grid, SegmentedControl } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { numWeeks } from 'static';
 import { Draggable } from './Draggable';
 import { Droppable } from './Droppable';
 
@@ -125,15 +124,15 @@ export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
     addPlayer(active.id, over.id, position);
   }
   // generate the weeks for the segmneted control
-  const weeks = new Array(numWeeks);
-  for (let i = 1; i <= numWeeks; i++) {
+  const weeks = new Array(Number(currentWeek) - 1);
+  for (let i = 1; i <= Number(currentWeek); i++) {
     weeks[i - 1] = { label: i.toString(), value: i.toString() };
   }
   return (
     <>
       <div className='text-xl font-varsity'>Week:</div>
       <div className='p-3'>
-        <SegmentedControl value={week} data={weeks} onChange={(e) => setWeek(e)} />
+        <SegmentedControl fullWidth value={week} data={weeks} onChange={(e) => setWeek(e)} />
       </div>
       <DndContext onDragEnd={handleDragEnd}>
         {/* QuarterBacks */}
