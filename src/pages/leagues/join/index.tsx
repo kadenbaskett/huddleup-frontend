@@ -1,36 +1,32 @@
+import { League } from '@interfaces/league.interface';
 import { Button, TextInput } from '@mantine/core';
 import { StoreState } from '@store/store';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { JoinLeagueCard } from './components/JoinLeagueCard/JoinLeagueCard';
 
 function leagues() {
-  let publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
+  const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
   const [searchTerm, setSearchTerm] = useState('');
+  const [results, setResults] = useState([]);
 
-  const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
-    setSearchTerm(event.target.value);
-    if (event.target.value !== '') {
-      const words = event.target.value.toString().split(' ');
-      publicLeagues = publicLeagues.filter((league) => {
+  useEffect(() => {
+    setResults(
+      publicLeagues.filter((league) => {
         const leagueName = `${league.name}`;
-
-        for (const word of words) {
+        for (const word of searchTerm.toString().split(' ')) {
           if (leagueName.toLowerCase().includes(word.toLowerCase())) return true;
         }
         return false;
-      });
-    }
-    renderLeagues();
-    // console.log('publicLeagues', publicLeagues);
-  };
+      }),
+    );
+  }, [searchTerm]);
 
   const renderLeagues = () => {
-    // console.log('publicLeagues', publicLeagues);
-    return publicLeagues.map((league) => renderLeague(league));
+    return results.map((league) => renderLeague(league));
   };
 
-  const renderLeague = (league) => {
+  const renderLeague = (league: League) => {
     return (
       <div className='grid col-span-10 pb-2'>
         <JoinLeagueCard {...league} />
@@ -62,7 +58,7 @@ function leagues() {
             placeholder='Search Public Leagues'
             size='xl'
             value={searchTerm}
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
             required
             autoFocus
             autoComplete='off'

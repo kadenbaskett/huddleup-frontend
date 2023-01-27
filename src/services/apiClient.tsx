@@ -101,3 +101,8 @@ export async function fetchUserLeagues(userId: number): Promise<respObj> {
   const url = `${BASE_URL}/database/leagues/user/${userId}`;
   return await getRequest(url);
 }
+
+export async function fetchUserTeams(userId: number): Promise<respObj> {
+  const url = `${BASE_URL}/database/teams/user/${userId}`;
+  return await getRequest(url);
+}

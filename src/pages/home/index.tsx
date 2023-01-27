@@ -1,5 +1,4 @@
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
-import { League } from '@interfaces/league.interface';
 import { StoreState } from '@store/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -36,8 +35,7 @@ const mynews: News[] = [
 
 export default function Home(props: any) {
   const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
-  const userLeagues: League[] = useSelector((state: StoreState) => state.user.leagues);
-
+  const userTeams: any[] = useSelector((state: StoreState) => state.user.teams);
   return (
     <>
       {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
@@ -45,7 +43,7 @@ export default function Home(props: any) {
         <div className='grid grid-cols-10 gap-6 bg-lightGrey p-10 min-h-screen'>
           <div className='col-span-3'>
             <div className='bg-white rounded-xl hover:drop-shadow-md'>
-              <MyTeams leagues={userLeagues} />
+              <MyTeams teams={userTeams} />
             </div>
             <div className='pt-5'>
               <div className='grid grid-cols-1 bg-white hover:drop-shadow-md rounded-xl'>
