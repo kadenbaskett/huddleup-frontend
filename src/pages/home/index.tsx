@@ -1,11 +1,12 @@
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
+import { League } from '@interfaces/league.interface';
 import { StoreState } from '@store/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import MyFriends from './components/MyFriends/MyFriends';
 import MyNews from './components/MyNews/MyNews';
 import MyTeams from './components/MyTeams/MyTeams';
-import { Friend, News, Team } from './types';
+import { Friend, News } from './types';
 
 const friendData: Friend[] = [
   {
@@ -33,46 +34,10 @@ const mynews: News[] = [
   },
 ];
 
-const teams: Team[] = [
-  {
-    id: 0,
-    name: 'Justins Team',
-    rank: 1,
-    wins: 10,
-    losses: 0,
-  },
-  {
-    id: 1,
-    name: 'Jakes Team',
-    rank: 2,
-    wins: 9,
-    losses: 1,
-  },
-  {
-    id: 2,
-    name: 'Kadens Team',
-    rank: 3,
-    wins: 8,
-    losses: 2,
-  },
-  {
-    id: 3,
-    name: 'Joes Team',
-    rank: 4,
-    wins: 5,
-    losses: 5,
-  },
-  {
-    id: 4,
-    name: 'Some bums Team',
-    rank: 5,
-    wins: 0,
-    losses: 10,
-  },
-];
-
 export default function Home(props: any) {
   const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
+  const userLeagues: League[] = useSelector((state: StoreState) => state.user.leagues);
+
   return (
     <>
       {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
@@ -80,7 +45,7 @@ export default function Home(props: any) {
         <div className='grid grid-cols-10 gap-6 bg-lightGrey p-10 min-h-screen'>
           <div className='col-span-3'>
             <div className='bg-white rounded-xl hover:drop-shadow-md'>
-              <MyTeams teams={teams} />
+              <MyTeams leagues={userLeagues} />
             </div>
             <div className='pt-5'>
               <div className='grid grid-cols-1 bg-white hover:drop-shadow-md rounded-xl'>

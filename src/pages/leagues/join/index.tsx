@@ -2,45 +2,35 @@ import { Button, TextInput } from '@mantine/core';
 import { StoreState } from '@store/store';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { JoinLeagueCard, joinleagueProps } from '../../../components/JoinLeagueCard/JoinLeagueCard';
+import { JoinLeagueCard } from './components/JoinLeagueCard/JoinLeagueCard';
 
 function leagues() {
-  /*
-   * Use this later to search for leagues that have the 'searchTerm' in it and populate the page with those leagues
-   */
+  let publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setSearchTerm(event.target.value);
-    //  when this changes I can searchs the database here for public leagues that have a name similar to this.
+    if (event.target.value !== '') {
+      const words = event.target.value.toString().split(' ');
+      publicLeagues = publicLeagues.filter((league) => {
+        const leagueName = `${league.name}`;
+
+        for (const word of words) {
+          if (leagueName.toLowerCase().includes(word.toLowerCase())) return true;
+        }
+        return false;
+      });
+    }
+    renderLeagues();
+    // console.log('publicLeagues', publicLeagues);
   };
-
-  /*
-   * Pulling data from backend
-   */
-  // const userLeaguesFetchStatus = useSelector((state: StoreState) => state.user.status);
-  const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
-  console.log('publicLeagues', publicLeagues);
-
-  const leagueData = publicLeagues.map((league) => {
-    const l: joinleagueProps = {
-      name: league.name,
-      id: league.id,
-      subText: 'This is an example league description',
-      numMaxPlayers: 6,
-      numMinPlayers: 2,
-      scoring: 'Points Per Reception',
-      totalTeams: 15,
-      numTeams: 10,
-    };
-    return l;
-  });
 
   const renderLeagues = () => {
-    return leagueData.map((league) => renderLeague(league));
+    // console.log('publicLeagues', publicLeagues);
+    return publicLeagues.map((league) => renderLeague(league));
   };
 
-  const renderLeague = (league: joinleagueProps) => {
+  const renderLeague = (league) => {
     return (
       <div className='grid col-span-10 pb-2'>
         <JoinLeagueCard {...league} />
