@@ -1,21 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
-import NFL from '../../public/assets/NFL.png';
+import NFL from '../../../../../public/assets/NFL.png';
 import { Button, Grid } from '@mantine/core';
 import styles from './JoinLeagueCard.module.css';
 import Link from 'next/link';
-export interface joinleagueProps {
-  name: string;
-  subText: string;
-  id: number;
-  numMinPlayers: number;
-  numMaxPlayers: number;
-  scoring: string;
-  totalTeams: number;
-  numTeams: number;
-}
+import { League } from '@interfaces/league.interface';
 
-export function JoinLeagueCard(league: joinleagueProps) {
+export function JoinLeagueCard(league: League) {
   return (
     <Link href={'/leagues/' + league.id.toString() + '/home/overview'}>
       <div
@@ -32,12 +23,11 @@ export function JoinLeagueCard(league: joinleagueProps) {
             {league.name}
           </Grid.Col>
           <Grid.Col span={2} className='text-2xl text-darkBlue'>
-            {league.numMinPlayers} - {league.numMaxPlayers} Teammates
+            {league.settings.min_players} - {league.settings.max_players} Teammates
           </Grid.Col>
           <Grid.Col span={2} className='text-2xl text-darkBlue'>
-            {league.scoring}
+            {league.settings.scoring_settings.points_per_reception === 1 ? 'PPR' : 'NPPR'}
           </Grid.Col>
-
           <Grid.Col span={2} className='text-2xl text-darkBlue pt-6 pb-5 pl-5 pr-8'>
             <Grid justify='flex-end'>
               <Grid.Col>
@@ -51,13 +41,13 @@ export function JoinLeagueCard(league: joinleagueProps) {
                 </Button>
               </Grid.Col>
               <Grid.Col className='text-2xl text-orange'>
-                {league.numTeams} of {league.totalTeams} teams
+                {league.settings.num_teams} of {league.settings.num_teams} teams
               </Grid.Col>
             </Grid>
           </Grid.Col>
         </Grid>
         <div className={`${styles.descriptionDiv} text-xl text-darkBlue pl-5 pr-5`}>
-          {league.subText}
+          {league.description}
           <br />
         </div>
       </div>
