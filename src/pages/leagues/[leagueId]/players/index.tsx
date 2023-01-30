@@ -99,10 +99,10 @@ function League(props) {
   });
 
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
-    columnAccessor: 'projection',
+    columnAccessor: 'currentWeekProj',
     direction: 'desc',
   });
-  const [records, setRecords] = useState(sortBy(allPlayers, 'projection'));
+  const [records, setRecords] = useState(sortBy(allPlayers, 'currentWeekProj'));
 
   useEffect(() => {
     if (allPlayers) {
@@ -164,8 +164,8 @@ function League(props) {
       // TODO hacked in proj
       const lastWeekStats = p.player_game_stats?.find((pgs) => pgs.game?.week === currentWeek - 1);
       const currentWeekStats = p.player_game_stats?.find((pgs) => pgs.game?.week === currentWeek);
-      const currentWeekProjStats = p.player_game_stats?.find(
-        (pgs) => pgs.game?.week === currentWeek,
+      const currentWeekProjStats = p.player_projections?.find(
+        (proj) => proj.game?.week === currentWeek,
       );
 
       return {

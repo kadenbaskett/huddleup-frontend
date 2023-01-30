@@ -124,7 +124,7 @@ export function fantasyPoints(s, pprValue = 1) {
     points += 2 * s.two_point_conversion_receptions;
     points += 2 * s.two_point_conversion_runs;
 
-    return points.toFixed(1);
+    return Number(points.toFixed(1));
   }
 
   return 0;
