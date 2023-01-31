@@ -1,5 +1,6 @@
 import { Anchor, Table } from '@mantine/core';
 import { StoreState } from '@store/store';
+import Link from 'next/link';
 import router from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -16,7 +17,9 @@ export default function Top5StandingTable(props: Top5StandingTableProps) {
   const rows = props.teams.map(({ id, name, wins, losses }) => (
     <tr key={id.toString()}>
       <td>{++i}</td>
-      <td>{name}</td>
+      <td>
+        <Link href={'/leagues/' + leagueId.toString() + '/team/' + id.toString()}>{name}</Link>
+      </td>
       <td>{wins.toString()}</td>
       <td>{losses.toString()}</td>
     </tr>

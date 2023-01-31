@@ -1,4 +1,5 @@
 import { Table } from '@mantine/core';
+import Link from 'next/link';
 
 export function mapPositionToTable(player, gameLogs) {
   if (!player) return <></>;
@@ -172,6 +173,7 @@ export function calculateStandings(league, currentWeek) {
   const teams = league.teams.map((t) => {
     return {
       ...t,
+      league,
       wins: 0,
       losses: 0,
     };
@@ -188,4 +190,19 @@ export function calculateStandings(league, currentWeek) {
   }
 
   return teams.sort((teamOne, teamTwo) => teamTwo.wins - teamOne.wins);
+}
+
+export function createManagerString(managers) {
+  let i = 0;
+  const tempManagerString = managers.map((m) => {
+    i++;
+    const id: number = m.user.id;
+    return (
+      <>
+        {<Link href={`/user/${id}/profile`}>{m.user.username}</Link>}
+        {i !== managers.length ? ', ' : ''}
+      </>
+    );
+  });
+  return tempManagerString;
 }
