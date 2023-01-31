@@ -10,6 +10,7 @@ export interface userSliceState {
   createUserStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   pollStatus: 'idle' | 'polling';
+  firebaseStatus: 'idle' | 'succeeded';
 }
 
 const initialState: userSliceState = {
@@ -19,13 +20,19 @@ const initialState: userSliceState = {
   createUserStatus: 'idle',
   status: 'idle',
   pollStatus: 'idle',
+  firebaseStatus: 'idle',
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    logoutUser: () => initialState,
+    logoutUser: (state, actio) => {
+      return {
+        ...initialState,
+        firebaseStatus: 'succeeded',
+      };
+    },
   },
   extraReducers(builder) {
     builder
@@ -34,6 +41,7 @@ export const userSlice = createSlice({
       })
       .addCase(handleUserInitThunk.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        state.firebaseStatus = 'succeeded';
         state.userInfo = action.payload.user;
         state.leagues = action.payload.leagues;
         state.teams = action.payload.teams;

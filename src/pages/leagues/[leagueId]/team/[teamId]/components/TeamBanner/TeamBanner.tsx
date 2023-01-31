@@ -1,6 +1,6 @@
 import { Grid } from '@mantine/core';
 import Image from 'next/image';
-import Shield from '../../../../../../public/assets/shield.png';
+import Shield from '@public/assets/shield.png';
 
 export interface TeamBannerProps {
   name: string;

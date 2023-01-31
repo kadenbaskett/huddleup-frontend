@@ -10,17 +10,16 @@ export default function Authorization({ children }) {
 
   useEffect(() => {
     // bug causing useEffect and then onAuthStateChanged to happen twice
-    console.log('Use effect changing');
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('Auth change: Logged in');
         dispatch(handleUserInitThunk(user.email));
       } else {
         console.log('Auth change: Logged out');
-        dispatch(logoutUser());
+        dispatch(logoutUser({}));
       }
     });
-  }, []);
+  }, [auth]);
 
   return children;
 }

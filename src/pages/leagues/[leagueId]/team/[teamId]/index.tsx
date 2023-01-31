@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { NotificationCard } from './components/NotificationCard/NotificationCard';
-import { TeamBanner } from '@pages/leagues/[leagueId]/team/components/TeamBanner/TeamBanner';
+import { TeamBanner } from '@pages/leagues/[leagueId]/team/[teamId]/components/TeamBanner/TeamBanner';
 import { TeamCard } from './components/TeamCard/TeamCard';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Grid } from '@mantine/core';
@@ -16,6 +16,7 @@ function league() {
   const [proposalNotification, setProposalNotification] = useState(undefined);
   const router = useRouter();
   const { leagueId } = router.query;
+  // const { teamId } = router.query;
 
   // const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);

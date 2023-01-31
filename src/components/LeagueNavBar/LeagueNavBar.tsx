@@ -86,7 +86,9 @@ export default function LeagueNavBar(props: leagueNavbarProps) {
                 </div>
               </div>
             </Link>
-            <Link href={'/leagues/' + props.leagueId.toString() + '/team'}>
+            <Link
+              href={'/leagues/' + props.leagueId.toString() + '/team/' + props.teamId.toString()}
+            >
               <div
                 className={`${
                   props.page === 'team'
