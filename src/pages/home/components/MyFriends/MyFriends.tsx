@@ -11,7 +11,7 @@ export interface myFriendProps {
 
 const renderFriend = (friend: Friend) => {
   return (
-    <Link href={`/friends/${0}/profile`}>
+    <Link href={`/user/${friend.id}/profile`}>
       <div
         id={styles.card}
         className='bg-white rounded-xl border border-white h-[7rem] hover:border-orange'

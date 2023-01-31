@@ -32,7 +32,7 @@ export function FriendCard(friend: friendProps) {
           <Grid.Col span='auto'>
             <Grid justify='flex-end'>
               <Grid.Col className='pt-5 pl-5 pr-5'>
-                <Link href={`/friends/${friend.id}/profile`}>
+                <Link href={`/user/${friend.id}/profile`}>
                   <Button
                     leftIcon={<BsFillPersonFill />}
                     className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'

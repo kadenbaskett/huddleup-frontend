@@ -15,7 +15,7 @@ const renderRow = (team: Team) => {
         height={92}
       />
       <Link
-        href={'/leagues/' + team.league.id.toString() + '/team'}
+        href={'/leagues/' + team.league.id.toString() + '/team/' + team.id.toString()}
         className='justify-center col-span-3 text-2xl break-words align-middle'
       >
         {team.name}
