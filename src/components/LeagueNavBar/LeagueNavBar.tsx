@@ -16,6 +16,7 @@ export interface leagueNavbarProps {
 }
 
 export default function LeagueNavBar(props: leagueNavbarProps) {
+  if (!props.teamId || !props.leagueId) return <></>;
   return (
     <>
       <div className='bg-slate-300 h-40"'>

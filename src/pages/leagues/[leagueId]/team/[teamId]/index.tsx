@@ -16,36 +16,42 @@ function league() {
   const [proposalNotification, setProposalNotification] = useState(undefined);
   const router = useRouter();
   const { leagueId } = router.query;
-  // const { teamId } = router.query;
+  const { teamId } = router.query;
 
-  // const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
-  const team = useSelector((state: StoreState) => state.league.userTeam);
+  const userTeam = useSelector((state: StoreState) => state.league.userTeam);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
 
+  const [team, setTeam] = useState(null);
+
   useEffect(() => {
+    const t = league?.teams.find((t) => t.id === Number(teamId));
+    setTeam(t);
+
     setProposalNotification(
       team?.proposed_transactions.find((e) => e.status === ProposalStatus.pending),
     );
-  }, [team]);
+  }, [league]);
 
-  // const players = team?.rosters.find((roster) => roster.week === currentWeek)?.players;
+  if (!team) {
+    return <HuddleUpLoader />;
+  }
   return (
     <>
       {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
       {leagueInfoFetchStatus === 'succeeded' && (
         <>
           <LeagueNavBar
-            teamName={team.name}
-            teamId={team ? team.id : ' '}
-            leagueName={league ? league.name : ' '}
+            teamName={team?.name}
+            teamId={team?.id}
+            leagueName={league?.name}
             leagueId={Number(leagueId)}
             page='team'
           />
           <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
             <div className='pt-5'>
-              {proposalNotification && (
+              {proposalNotification && Number(userTeam.id) === Number(teamId) && (
                 <NotificationCard
                   headline={getProposalHeadlineString(proposalNotification)}
                   text={proposalToString(proposalNotification)}
@@ -57,7 +63,7 @@ function league() {
                 <Grid.Col span={6}>
                   <TeamBanner
                     name={team?.name ? team.name : ' '}
-                    managers={team?.managers ? team.managers : ' '}
+                    managers={team?.managers ? team.managers : []}
                   />
                 </Grid.Col>
                 <Grid.Col span={6}>
@@ -74,8 +80,9 @@ function league() {
             <div className='pt-5'>
               <TeamCard
                 currentWeek={currentWeek}
-                rosters={team.rosters}
-                proposals={team.proposed_transactions}
+                rosters={team?.rosters}
+                proposals={team?.proposed_transactions}
+                isMyTeam={Number(teamId) === Number(userTeam.id)}
               />
             </div>
           </div>
