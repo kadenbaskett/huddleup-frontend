@@ -61,10 +61,7 @@ function league() {
             <div className='pt-5'>
               <Grid>
                 <Grid.Col span={6}>
-                  <TeamBanner
-                    name={team?.name ? team.name : ' '}
-                    managers={team?.managers ? team.managers : []}
-                  />
+                  <TeamBanner name={team?.name ? team.name : ' '} team={team} />
                 </Grid.Col>
                 <Grid.Col span={6}>
                   <TeamInfoBanner
