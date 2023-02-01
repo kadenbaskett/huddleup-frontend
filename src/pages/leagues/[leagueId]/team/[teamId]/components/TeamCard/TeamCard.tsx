@@ -60,7 +60,7 @@ export function TeamCard(props: TeamCardProps) {
           <DraggableLineupTable
             rosters={props.rosters}
             currentWeek={props.currentWeek.toString()}
-            disabled={props.isMyTeam}
+            disabled={!props.isMyTeam}
           />
         </div>
       )}

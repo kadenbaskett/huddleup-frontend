@@ -147,6 +147,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -161,6 +162,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -175,6 +177,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -189,6 +192,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -203,6 +207,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -219,6 +224,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
