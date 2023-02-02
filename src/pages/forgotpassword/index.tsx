@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
 import { sendPasswordReset } from '../../firebase/firebase';
-// import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 function ForgotPassword() {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(true);
-  // const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleReset = async () => {
+    setLoading(true);
     const email = (document.getElementById('emailInput') as HTMLInputElement).value;
 
     // check that the input is a valid email
@@ -21,7 +24,10 @@ function ForgotPassword() {
 
       if (resp === 'success') {
         setIsError(false);
-        setMessage('Password reset link sent');
+        setMessage('Password reset link sent. Redirecting to login page in 5 seconds');
+        setTimeout(() => {
+          void router.push('/login');
+        }, 5000);
       } else if (resp.includes('user-not-found')) {
         setIsError(true);
         setMessage('User not found for email');
@@ -40,6 +46,8 @@ function ForgotPassword() {
       setIsError(true);
       setMessage('Entered email is not valid');
     }
+
+    setLoading(false);
   };
 
   return (
@@ -69,9 +77,13 @@ function ForgotPassword() {
 
             <button
               onClick={handleReset}
-              className='mt-12 text-sm w-full h-full py-2.5 px-20 font-bold bg-orange text-white rounded-md'
+              disabled={loading}
+              className={
+                (loading ? 'bg-gray-500 ' : 'bg-orange ') +
+                'mt-12 text-sm w-full h-full py-2.5 px-20 font-bold bg-orange text-white rounded-md'
+              }
             >
-              Reset my password
+              {loading ? 'Sending reset email...' : 'Reset my password'}
             </button>
           </div>
         </div>

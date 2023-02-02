@@ -68,6 +68,7 @@ function Signup() {
             </div>
 
             <button
+              disabled={loading}
               onClick={handleCreateAccount}
               className={
                 (loading ? 'bg-gray-500 ' : 'bg-orange ') +
