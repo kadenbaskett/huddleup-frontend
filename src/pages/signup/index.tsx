@@ -6,9 +6,12 @@ import Link from 'next/link';
 
 function Signup() {
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
   const handleCreateAccount = async () => {
+    setLoading(true);
     setError('');
 
     const username = (document.getElementById('usernameInput') as HTMLInputElement).value;
@@ -21,8 +24,10 @@ function Signup() {
       /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (password !== confirmPassword) {
+      setLoading(false);
       setError('Passwords didnt match try again');
     } else if (!re.test(email)) {
+      setLoading(false);
       setError('Invalid email entered');
     } else {
       const resp = await createAccount(username, email, password);
@@ -31,6 +36,7 @@ function Signup() {
         console.log('Account created succesfully!');
         void router.push('/home');
       } else {
+        setLoading(false);
         setError(resp);
       }
     }
@@ -63,9 +69,12 @@ function Signup() {
 
             <button
               onClick={handleCreateAccount}
-              className='mt-6 text-sm w-full h-full py-2.5 px-20 font-bold bg-orange text-white rounded-md'
+              className={
+                (loading ? 'bg-gray-500 ' : 'bg-orange ') +
+                'mt-6 text-sm w-full h-full py-2.5 px-20 font-bold text-white rounded-md'
+              }
             >
-              Sign up
+              {loading ? 'Creating account...' : 'Sign up'}
             </button>
             <div className='flex justify-center space-x-2 mt-2'>
               <p className='text-center text-sm font-medium text-gray-500'>Have an account?</p>
