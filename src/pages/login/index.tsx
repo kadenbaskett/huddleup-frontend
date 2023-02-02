@@ -11,7 +11,7 @@ function Login() {
 
   const router = useRouter();
 
-  const handleRememberMe = (e) => {
+  const handleRememberMe = () => {
     setRememberMe((current) => !current);
   };
 
