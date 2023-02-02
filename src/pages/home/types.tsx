@@ -4,7 +4,3 @@ export interface Friend {
   // subText: string;
   id: number;
 }
-
-export interface News {
-  news: string;
-}
