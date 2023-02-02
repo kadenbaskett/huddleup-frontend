@@ -45,7 +45,7 @@ export default function LeagueHomeNavigation(props: leagueHomeNavigationProps) {
     );
   } else {
     return (
-      <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40'>
+      <div className='bg-lightGrey pt-3 pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40'>
         <Link href={'/leagues/' + props.leagueId.toString() + '/home/overview'}>
           <Button
             className={`${'bg-transparent hover:bg-orange text-orange hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-orange rounded border-orange transition ease-in duration-200`}

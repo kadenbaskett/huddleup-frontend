@@ -64,11 +64,11 @@ function index() {
   const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
   const week = useSelector((state: StoreState) => state.global.week);
-
+  const team = useSelector((state: StoreState) => state.league.userTeam);
   return (
     <div className='bg-lightGrey min-h-screen'>
       <LeagueNavBar
-        teamName='team name'
+        teamName={team ? team.name : ' '}
         teamId={2}
         leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
@@ -80,7 +80,7 @@ function index() {
           <LeagueHomeNavigation
             leagueId={Number(leagueId)}
             leagueName={league ? league.name : ' '}
-            leagueDescription={'This is an example league description'}
+            leagueDescription={league ? league.description : ' '}
             page='overview'
           />
           <OverviewCard

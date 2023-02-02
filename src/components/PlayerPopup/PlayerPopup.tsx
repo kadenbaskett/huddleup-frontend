@@ -36,9 +36,8 @@ export default function PlayerPopup({ player, opened, onClose }) {
   };
 
   const getPlayerOwner = (player) => {
-    const currentRoster = player.roster_players.find((rp) => rp.roster.week === currentWeek);
-
-    return currentRoster ? currentRoster.team.name : 'FA';
+    const currentRosterPlayer = player.roster_players.find((rp) => rp.roster.week === currentWeek);
+    return currentRosterPlayer ? currentRosterPlayer.roster.team.name : 'FA';
   };
 
   const playerContent = (player) => {
