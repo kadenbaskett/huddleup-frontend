@@ -6,14 +6,15 @@ import { GrAddCircle, GrDisabledOutline, GrLinkNext } from 'react-icons/gr';
 import { Avatar, TextInput, SegmentedControl, NativeSelect, Group, Grid } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { StoreState } from '@store/store';
-import { fantasyPoints } from '@services/helpers';
+import { fantasyPoints, getPlayerAvailability, getTeamThatOwnsPlayer } from '@services/helpers';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import sortBy from 'lodash/sortBy';
 import CONFIG from '@services/config';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import AddDropPlayerConfirmPopup from './components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
-import AddDropPlayerPopup from './components/AddDropPlayerPopup/AddDropPlayerPopup';
+import AddDropPlayerConfirmPopup from '@components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
+import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
+import TradePlayerPopup from '@components/TradePlayerPopup/TradePlayerPopup';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 
 function League(props) {
@@ -24,69 +25,94 @@ function League(props) {
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
   const league = useSelector((state: StoreState) => state.league.league);
-  const team = useSelector((state: StoreState) => state.league.userTeam);
+  const myTeam = useSelector((state: StoreState) => state.league.userTeam);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
   const user = useSelector((state: StoreState) => state.user.userInfo);
 
+  // Trade popup
+  const [tradePopupOpen, setTradePopupOpen] = useState(false);
+  const [tradeRoster, setTradeRoster] = useState(null);
+
+  // Are we adding or dropping the player?
+  const [addingPlayer, setAddingPlayer] = useState(false);
+
   // Confirm popup
   const [addDropConfirmPopupOpen, setAddDropConfirmPopupOpen] = useState(false);
-  const [isAddPlayer, setIsAddPlayer] = useState(false);
 
   // Add Drop popup
   const [addDropPopupOpen, setAddDropPopupOpen] = useState(false);
 
-  // Used for both popups
-  const [addPlayer, setAddPlayer] = useState(null);
+  // Player popup
+  const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
+
+  // Used for all popups
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+
+  // On close methods of popups
+  const onTradePopupClose = () => {
+    setTradePopupOpen(false);
+    setSelectedPlayer(null);
+  };
 
   const onAddDropPopupClose = () => {
     setAddDropPopupOpen(false);
-    setAddPlayer(null);
+    setSelectedPlayer(null);
   };
 
   const onAddDropConfirmClose = () => {
     setAddDropConfirmPopupOpen(false);
-    setAddPlayer(null);
+    setSelectedPlayer(null);
   };
 
-  // Generic add drop popup
+  const onPlayerPopupClose = () => {
+    setPlayerPopupOpen(false);
+  };
+
+  // When a player is clicked
+  const onPlayerClick = (event, p) => {
+    event.preventDefault();
+    setSelectedPlayer(p);
+    setPlayerPopupOpen(true);
+  };
+
+  // When the icon to add/drop/trade a player is clicked
   const onPlayerActionClick = (event, player) => {
     event.preventDefault();
+    takePlayerAction(player);
+  };
 
-    const avail = getPlayerAvailability(player);
-    const roster = getTeamRoster();
-    const myTeam = team ? team.name : ' ';
+  // Takes the necessary action to add/drop/trade for player
+  const takePlayerAction = (player) => {
+    setSelectedPlayer(player);
 
-    if (avail === 'Free Agent') {
-      setAddPlayer(player);
+    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek);
+    const myRoster = getMyRoster();
+    const isMyPlayer = playerTeam.id === myTeam.id;
 
-      if (roster.players.length < CONFIG.maxRosterSize) {
-        setIsAddPlayer(true);
+    // Nobody owns the player -> they are a free agent
+    if (!playerTeam) {
+      // TODO use league settings instead of CONFIG
+      // No need to drop a player as part of the transaction if your roster isn't full
+      if (myRoster.players.length < CONFIG.maxRosterSize) {
+        setAddingPlayer(true);
         setAddDropConfirmPopupOpen(true);
       } else {
         setAddDropPopupOpen(true);
       }
-    } else if (avail === 'Waivers') {
-      // waivers
-    } else if (avail === myTeam) {
-      // drop
-    } else {
-      // trade
     }
-  };
+    // I own the player - so drop them
+    else if (isMyPlayer) {
+      setAddingPlayer(false);
+      setAddDropConfirmPopupOpen(true);
+    }
+    // Another team owns this player - so propose a trade
+    else {
+      const tradeTeam = league.teams.find((t) => t.id === playerTeam.id);
+      const tradeRoster = tradeTeam.rosters.find((r) => r.week === currentWeek);
 
-  // Player popup
-  const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
-  const [openPlayer, setOpenPlayer] = useState(null);
-
-  const onPlayerPopupClose = () => {
-    setPlayerPopupOpen(false);
-    setOpenPlayer(null);
-  };
-
-  const onPlayerClick = (event, p) => {
-    event.preventDefault();
-    setOpenPlayer(p);
-    setPlayerPopupOpen(true);
+      setTradeRoster(tradeRoster);
+      setTradePopupOpen(true);
+    }
   };
 
   // Player filtering
@@ -126,18 +152,19 @@ function League(props) {
 
     if (availability === 'Available') {
       players = players.filter((player) => {
-        return !getTeamThatOwnsPlayer(player);
+        return !getTeamThatOwnsPlayer(player, currentWeek);
       });
     } else if (availability === 'Waivers') {
       // TODO implement waivers
     } else if (availability === 'Free Agents') {
       // TODO also filter out waivers
       players = players.filter((player) => {
-        return !getTeamThatOwnsPlayer(player);
+        return !getTeamThatOwnsPlayer(player, currentWeek);
       });
     } else if (availability === 'On Rosters') {
       players = players.filter((player) => {
-        return getTeamThatOwnsPlayer(player);
+        const team = getTeamThatOwnsPlayer(player, currentWeek);
+        return team ? team.name : '';
       });
     }
 
@@ -161,7 +188,6 @@ function League(props) {
 
     // Add extra fields for the table sorting
     players = players.map((p) => {
-      // TODO hacked in proj
       const lastWeekStats = p.player_game_stats?.find((pgs) => pgs.game?.week === currentWeek - 1);
       const currentWeekStats = p.player_game_stats?.find((pgs) => pgs.game?.week === currentWeek);
       const currentWeekProjStats = p.player_projections?.find(
@@ -179,27 +205,9 @@ function League(props) {
     return players;
   };
 
-  const getTeamThatOwnsPlayer = (player) => {
-    const currentRosterPlayer = player.roster_players.find((rp) => rp.roster.week === currentWeek);
-    return currentRosterPlayer ? currentRosterPlayer.roster.team.name : null;
-  };
-
-  const getPlayerAvailability = (player) => {
-    const teamName = getTeamThatOwnsPlayer(player);
-    const onWaivers = false;
-
-    if (teamName) {
-      return teamName;
-    } else if (onWaivers) {
-      return 'Waivers';
-    } else {
-      return 'Free Agent';
-    }
-  };
-
   const getPlayerAction = (player) => {
-    const av = getPlayerAvailability(player);
-    const myTeamName = team ? team.name : ' ';
+    const av = getPlayerAvailability(player, currentWeek);
+    const myTeamName = myTeam?.name;
 
     if (av === 'Free Agent') {
       return (
@@ -232,17 +240,16 @@ function League(props) {
     }
   };
 
-  const getTeamRoster = () => {
-    // TODO maybe get the roster of current week
-    return team ? team.rosters.at(-1) : [];
+  const getMyRoster = () => {
+    return myTeam ? myTeam.rosters.find((r) => r.week === currentWeek) : [];
   };
 
   return (
     <>
       <LeagueNavBar
-        teamName={team ? team.name : ' '}
-        teamId={team ? team.id : ' '}
-        leagueName={league ? league.name : ' '}
+        teamName={myTeam?.name}
+        teamId={myTeam?.id}
+        leagueName={league?.name}
         leagueId={Number(leagueId)}
         page='players'
       />
@@ -345,21 +352,31 @@ function League(props) {
               </Grid.Col>
             </Grid.Col>
             <PlayerPopup
-              player={openPlayer}
+              player={selectedPlayer}
               opened={playerPopupOpen}
               onClose={onPlayerPopupClose}
+              onPlayerAction={takePlayerAction}
             />
             <AddDropPlayerPopup
-              roster={getTeamRoster()}
-              player={addPlayer}
+              roster={getMyRoster()}
+              player={selectedPlayer}
               opened={addDropPopupOpen}
               onClose={onAddDropPopupClose}
               userId={user.id}
             />
+            <TradePlayerPopup
+              otherRoster={tradeRoster}
+              myRoster={getMyRoster()}
+              player={selectedPlayer}
+              opened={tradePopupOpen}
+              onClose={onTradePopupClose}
+              userId={user.id}
+              week={currentWeek}
+            />
             <AddDropPlayerConfirmPopup
-              roster={getTeamRoster()}
-              isAdd={isAddPlayer}
-              player={addPlayer}
+              roster={getMyRoster()}
+              isAdd={addingPlayer}
+              player={selectedPlayer}
               opened={addDropConfirmPopupOpen}
               onClose={onAddDropConfirmClose}
               userId={user.id}

@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React from 'react';
-import { Avatar, Button, List, Modal } from '@mantine/core';
-import { mapPositionToTable } from '@services/helpers';
+import { Avatar, Button, Text, Modal, Grid } from '@mantine/core';
+import { getTeamThatOwnsPlayer, mapPositionToTable } from '@services/helpers';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@store/store';
 
-export default function PlayerPopup({ player, opened, onClose }) {
+export default function PlayerPopup({ player, opened, onClose, onPlayerAction }) {
   const currentWeek = useSelector((state: StoreState) => state.global.week);
-  // const totalWeeks = useSelector((state: StoreState) => state.global.totalWeeks);
+  const userTeam = useSelector((state: StoreState) => state.league.userTeam);
 
   const getPlayerOutlook = (player) => {
     if (!player) return <div></div>;
-    const game = player.player_game_stats.length ? player.player_game_stats.slice(0, 1) : [];
-    const projection = mapPositionToTable(player, game);
-    const outlook = <div> Player outlook and news </div>;
+    const game = player.player_projections.length
+      ? player.player_projections.find((pgs) => pgs.game.week === currentWeek)
+      : [];
+    const projection = mapPositionToTable(player, [game]);
 
     return (
       <div>
-        {'Outlook'}
+        {`Week ${currentWeek} projection`}
         {projection}
-        {outlook}
       </div>
     );
   };
@@ -35,34 +35,70 @@ export default function PlayerPopup({ player, opened, onClose }) {
     );
   };
 
-  const getPlayerOwner = (player) => {
-    const currentRoster = player.roster_players.find((rp) => rp.roster.week === currentWeek);
+  const playerButtonClicked = () => {
+    onPlayerAction(player);
+    onClose();
+  };
 
-    return currentRoster ? currentRoster.team.name : 'FA';
+  const getActionButton = () => {
+    const team = getTeamThatOwnsPlayer(player, currentWeek);
+
+    if (!team) {
+      return (
+        <Button
+          onClick={playerButtonClicked}
+          className={`${'bg-red text-white hover:text-we'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+        >
+          {'Add'}
+        </Button>
+      );
+    } else if (team.id === userTeam.id) {
+      return (
+        <Button
+          onClick={playerButtonClicked}
+          className={`${'bg-red text-white hover:text-we'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+        >
+          {'Drop'}
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          onClick={playerButtonClicked}
+          className={`${'bg-red text-white hover:text-we'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+        >
+          {'Trade'}
+        </Button>
+      );
+    }
   };
 
   const playerContent = (player) => {
     if (!player) return <></>;
 
+    const team = getTeamThatOwnsPlayer(player, currentWeek);
+
     return (
       <div>
-        <List>
-          <List.Item>
-            <Avatar src={player.photo_url} alt={'player image'} />
-          </List.Item>
-          <List.Item>{`${player.first_name} ${player.last_name}`}</List.Item>
-          <List.Item>{`${player.current_nfl_team.city} ${player.current_nfl_team.name}`}</List.Item>
-          <List.Item>{player.position}</List.Item>
-          <List.Item>{getPlayerOwner(player)}</List.Item>
-          <List.Item>{player.status}</List.Item>
-        </List>
-        <Button>{getButtonAction(player)}</Button>
+        <Text>
+          {player.current_nfl_team.city} | {player.current_nfl_team.name} | {player.position} |{' '}
+          {player.status}
+        </Text>
+        <Text>{`Owner: ${team ? team.name : 'Free Agent'}`}</Text>
+        {getActionButton()}
       </div>
     );
   };
 
-  const getButtonAction = (player) => {
-    return 'Add Player';
+  const renderTitle = () => {
+    return (
+      <Grid>
+        <Avatar src={player?.photo_url} alt={'player image'} size={'md'} />
+        <Text>
+          {player?.first_name} {player?.last_name}
+        </Text>
+      </Grid>
+    );
   };
 
   return (
@@ -70,8 +106,8 @@ export default function PlayerPopup({ player, opened, onClose }) {
       <Modal
         opened={opened}
         onClose={() => onClose()}
-        // title={playerTitle(player)}
-        withCloseButton={false}
+        title={renderTitle()}
+        withCloseButton={true}
         size={'75%'}
       >
         {playerContent(player)}
