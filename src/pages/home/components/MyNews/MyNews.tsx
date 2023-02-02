@@ -1,13 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
+import { News } from '@interfaces/news.interface';
 import CNN from '../../../../public/assets/CNNPhoto.png';
-import { News } from '@pages/home/types';
 
-export interface MyNewsProps {
-  news: News[];
-}
-
-const renderRow = (mynews: News) => {
+const renderRow = (news: News) => {
   return (
     <div className='grid grid-cols-8 p-3'>
       <Image
@@ -17,10 +13,14 @@ const renderRow = (mynews: News) => {
         width={92}
         height={92}
       />
-      <p className='justify-left col-span-7 text-2xl break-words align-middle'>{mynews.news}</p>
+      <p className='justify-left col-span-7 text-2xl break-words align-middle'>{news.title}</p>
     </div>
   );
 };
+
+export interface MyNewsProps {
+  news: News[];
+}
 
 export default function MyNews(props: MyNewsProps) {
   return (
@@ -28,7 +28,7 @@ export default function MyNews(props: MyNewsProps) {
       <div className='flex font-varsity justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl'>
         News
       </div>
-      {props.news.map((news: News) => renderRow(news))}
+      {props.news.map((article) => renderRow(article))}
     </div>
   );
 }
