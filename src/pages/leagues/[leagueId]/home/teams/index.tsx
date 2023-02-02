@@ -19,7 +19,7 @@ export function index() {
     <div>
       <LeagueNavBar
         teamName={team ? team.name : ' '}
-        teamId={2}
+        teamId={team ? team.id : ' '}
         leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='home'

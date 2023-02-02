@@ -2,22 +2,21 @@ import React, { useState } from 'react';
 import FormInput from '../../components/FormInput/FormInput';
 import { useRouter } from 'next/router';
 import { login } from '../../firebase/firebase';
-// import { useDispatch } from 'react-redux';
-// import { AppDispatch } from '@store/store';
-// import { handleUserInitThunk } from '@store/slices/userSlice';
 import Link from 'next/link';
 
 function Login() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const router = useRouter();
-  // const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = useState(false);
 
-  const handleRememberMe = (e) => {
+  const router = useRouter();
+
+  const handleRememberMe = () => {
     setRememberMe((current) => !current);
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     setError('');
 
     const email = (document.getElementById('emailInput') as HTMLInputElement).value;
@@ -27,8 +26,10 @@ function Login() {
       /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (!re.test(email)) {
+      setLoading(false);
       setError('Invalid email entered');
     } else if (password === '') {
+      setLoading(false);
       setError('Enter a password');
     } else {
       const resp = await login(email, password, rememberMe);
@@ -37,12 +38,15 @@ function Login() {
         console.log('Login successful!');
         void router.push('/home');
       } else if (resp.includes('wrong-password')) {
+        setLoading(false);
         setError('Incorrect password');
       } else if (resp.includes('user-not-found')) {
+        setLoading(false);
         setError('Account not found for email');
       } else {
         // general error
         console.log(resp);
+        setLoading(false);
         setError('Error logging in. Please try again');
       }
     }
@@ -86,10 +90,14 @@ function Login() {
             </div>
 
             <button
+              disabled={loading}
               onClick={handleLogin}
-              className='mt-12 text-sm w-full h-full py-2.5 px-20 font-bold bg-orange text-white rounded-md'
+              className={
+                (loading ? 'bg-gray-500 ' : 'bg-orange ') +
+                'mt-12 text-sm w-full h-full py-2.5 px-20 font-bold text-white rounded-md'
+              }
             >
-              Login
+              {loading ? 'Logging in...' : 'Login'}
             </button>
             <div className='flex justify-center space-x-2 mt-2'>
               <p className='text-center text-sm font-medium text-gray-500'>

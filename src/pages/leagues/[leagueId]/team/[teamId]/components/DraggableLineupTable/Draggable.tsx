@@ -16,6 +16,7 @@ export interface DraggableProps {
   key: string;
   children: any;
   player: Player;
+  disabled: boolean;
 }
 
 export function Draggable(props: DraggableProps) {
@@ -24,6 +25,7 @@ export function Draggable(props: DraggableProps) {
     data: {
       ...props.player,
     },
+    disabled: props.disabled,
   });
   const style = transform
     ? {

@@ -7,6 +7,7 @@ import { wrapper } from '@store/store';
 import AppStateInit from '@components/AppStateInit/AppStateInit';
 import Authorization from '@components/Authorization/Authorization';
 import RouteGuard from '@components/RouteGuard/RouteGuard';
+import Footer from '@components/Footer/Footer';
 
 const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -20,6 +21,7 @@ const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
             <Component {...props.pageProps} />
           </RouteGuard>
         </AppStateInit>
+        <Footer />
       </Authorization>
     </Provider>
   );

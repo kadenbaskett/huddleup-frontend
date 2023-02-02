@@ -65,11 +65,12 @@ function index() {
   const league = useSelector((state: StoreState) => state.league.league);
   const week = useSelector((state: StoreState) => state.global.week);
   const team = useSelector((state: StoreState) => state.league.userTeam);
+
   return (
     <div className='bg-lightGrey min-h-screen'>
       <LeagueNavBar
         teamName={team ? team.name : ' '}
-        teamId={2}
+        teamId={team ? team.id : ' '}
         leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='home'

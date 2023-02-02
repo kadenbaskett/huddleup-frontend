@@ -8,6 +8,7 @@ export interface TeamCardProps {
   currentWeek: Number;
   rosters: any;
   proposals: Proposal[];
+  isMyTeam: boolean;
 }
 
 export function TeamCard(props: TeamCardProps) {
@@ -59,6 +60,7 @@ export function TeamCard(props: TeamCardProps) {
           <DraggableLineupTable
             rosters={props.rosters}
             currentWeek={props.currentWeek.toString()}
+            disabled={!props.isMyTeam}
           />
         </div>
       )}

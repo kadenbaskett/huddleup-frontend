@@ -7,8 +7,9 @@ import { Droppable } from './Droppable';
 export interface TableData {
   rosters: any;
   currentWeek: string;
+  disabled: boolean;
 }
-export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
+export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableData) {
   const [players, setPlayers] = useState([]);
   const [week, setWeek] = useState(currentWeek);
   const [QB, setQB] = useState([]); // 1 QB
@@ -146,6 +147,7 @@ export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -160,6 +162,7 @@ export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -174,6 +177,7 @@ export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -188,6 +192,7 @@ export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -202,6 +207,7 @@ export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>
@@ -218,6 +224,7 @@ export function DraggableLineupTable({ rosters, currentWeek }: TableData) {
                     key={child}
                     id={child}
                     player={players.find(({ id }) => id === child).player}
+                    disabled={disabled}
                   >
                     {child}
                   </Draggable>

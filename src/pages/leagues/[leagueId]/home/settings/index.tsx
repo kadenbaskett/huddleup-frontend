@@ -12,12 +12,13 @@ function index() {
 
   const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
+  const team = useSelector((state: StoreState) => state.league.userTeam);
 
   return (
     <div>
       <LeagueNavBar
-        teamName='team name'
-        teamId={2}
+        teamName={team ? team.name : ' '}
+        teamId={team ? team.id : ' '}
         leagueName={league ? league.name : ' '}
         leagueId={Number(leagueId)}
         page='home'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Group, Modal, Text } from '@mantine/core';
-import { addPlayer } from '@services/apiClient';
+import { addPlayer, dropPlayer } from '@services/apiClient';
 
 export default function AddDropPlayerConfirmPopup({
   roster,
@@ -15,7 +15,18 @@ export default function AddDropPlayerConfirmPopup({
   const onSubmit = async () => {
     setSubmitLoading(true);
 
-    await addPlayer(player.id, player.external_id, roster.id, roster.team_id, userId, roster.week);
+    if (isAdd) {
+      await addPlayer(
+        player.id,
+        player.external_id,
+        roster.id,
+        roster.team_id,
+        userId,
+        roster.week,
+      );
+    } else {
+      await dropPlayer(player.id, roster.id, roster.team_id, userId, roster.week);
+    }
 
     setSubmitLoading(false);
     onClose();
