@@ -1,6 +1,25 @@
 import { Table } from '@mantine/core';
 import Link from 'next/link';
 
+export const getTeamThatOwnsPlayer = (player, currentWeek) => {
+  const currentRosterPlayer = player.roster_players?.find((rp) => rp.roster.week === currentWeek);
+  return currentRosterPlayer ? currentRosterPlayer.roster.team : null;
+};
+
+export const getPlayerAvailability = (player, currentWeek) => {
+  const team = getTeamThatOwnsPlayer(player, currentWeek);
+  const teamName = team ? team.name : '';
+  const onWaivers = false;
+
+  if (teamName) {
+    return teamName;
+  } else if (onWaivers) {
+    return 'Waivers';
+  } else {
+    return 'Free Agent';
+  }
+};
+
 export function mapPositionToTable(player, gameLogs) {
   if (!player) return <></>;
 
