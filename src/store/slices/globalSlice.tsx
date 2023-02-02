@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { League } from '@interfaces/league.interface';
-import { fetchPublicLeagues, fetchTimeframe } from '@services/apiClient';
+import { News } from '@interfaces/news.interface';
+import { fetchNews, fetchPublicLeagues, fetchTimeframe } from '@services/apiClient';
 
 export interface globalSliceState {
   publicLeagues: League[];
@@ -9,6 +10,7 @@ export interface globalSliceState {
   season: number;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   seasonComplete: Boolean;
+  news: News[];
 }
 
 const initialState: globalSliceState = {
@@ -18,6 +20,7 @@ const initialState: globalSliceState = {
   season: null,
   status: 'idle',
   seasonComplete: false,
+  news: [],
 };
 
 export const globalSlice = createSlice({
@@ -36,6 +39,7 @@ export const globalSlice = createSlice({
         state.season = action.payload.timeframe.season;
         state.seasonComplete =
           action.payload.timeframe.has_ended && action.payload.timeframe.week === 18;
+        state.news = action.payload.news;
       })
       .addCase(handleGlobalInitThunk.rejected, (state, action) => {
         state.status = 'failed';
@@ -46,10 +50,12 @@ export const globalSlice = createSlice({
 export const handleGlobalInitThunk = createAsyncThunk('global/init', async () => {
   const publicLeaugesResp = await fetchPublicLeagues();
   const timeframeResp = await fetchTimeframe();
+  const news = await fetchNews(5);
 
   const payload = {
     leagues: publicLeaugesResp.data ? publicLeaugesResp.data : [],
     timeframe: timeframeResp.data ? timeframeResp.data : [],
+    news: news.data ? news.data : [],
   };
 
   return payload;

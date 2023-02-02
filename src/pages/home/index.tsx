@@ -1,11 +1,12 @@
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
+import { News } from '@interfaces/news.interface';
 import { StoreState } from '@store/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import MyFriends from './components/MyFriends/MyFriends';
 import MyNews from './components/MyNews/MyNews';
 import MyTeams from './components/MyTeams/MyTeams';
-import { Friend, News } from './types';
+import { Friend } from './types';
 
 const friendData: Friend[] = [
   {
@@ -22,20 +23,21 @@ const friendData: Friend[] = [
   },
 ];
 
-const mynews: News[] = [
-  { news: 'This wil be news about something' },
-  { news: 'This should be some other news about a player or something along those lines.' },
-  {
-    news: 'Some more relevant news.',
-  },
-  {
-    news: 'Finally more news',
-  },
-];
+// const mynews: News[] = [
+//   { news: 'This wil be news about something' },
+//   { news: 'This should be some other news about a player or something along those lines.' },
+//   {
+//     news: 'Some more relevant news.',
+//   },
+//   {
+//     news: 'Finally more news',
+//   },
+// ];
 
 export default function Home(props: any) {
   const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
   const userTeams: any[] = useSelector((state: StoreState) => state.user.teams);
+  const news: News[] = useSelector((state: StoreState) => state.global.news);
   return (
     <>
       {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
@@ -52,7 +54,7 @@ export default function Home(props: any) {
             </div>
           </div>
           <div className='col-span-7 hover:drop-shadow-md rounded-xl'>
-            <MyNews news={mynews} />
+            <MyNews news={news} />
           </div>
         </div>
       )}
