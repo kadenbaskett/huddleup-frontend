@@ -35,14 +35,15 @@ export function JoinLeagueCard(league: League) {
           <Grid.Col span={2} className='text-2xl text-darkBlue pt-6 pb-5 pl-5 pr-8'>
             <Grid justify='flex-end'>
               <Grid.Col>
-                <Button
-                  className='hover:bg-transparent hover:text-orange  text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform active:translate-y-0'
-                  variant='default'
-                  size='md'
-                  type='submit'
-                >
-                  Register
-                </Button>
+                <Link href={`/leagues/${league.id}/join/team/create`}>
+                  <Button
+                    className='hover:bg-transparent hover:text-orange  text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform active:translate-y-0'
+                    variant='default'
+                    size='md'
+                  >
+                    Register
+                  </Button>
+                </Link>
               </Grid.Col>
               <Grid.Col className='text-2xl text-orange'>
                 {currNumTeams} of {league.settings.num_teams} teams
