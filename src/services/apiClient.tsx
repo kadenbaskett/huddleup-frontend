@@ -117,6 +117,20 @@ export async function transactionAction(
   return await postRequest(url, data);
 }
 
+export async function transactionAction(
+  action: ProposalAction,
+  transactionId: Number,
+  userId: Number,
+) {
+  const url = `${BASE_URL}/database/transaction/action`;
+  const data = {
+    action,
+    transactionId,
+    userId,
+  };
+  return await postRequest(url, data);
+}
+
 export async function addDropPlayer(
   addPlayerId: number,
   addPlayerExternalId: number,

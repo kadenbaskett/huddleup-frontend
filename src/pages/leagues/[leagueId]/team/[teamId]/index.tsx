@@ -10,7 +10,6 @@ import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Grid } from '@mantine/core';
 import { TeamInfoBanner } from './components/TeamInfoBanner/TeamInfoBanner';
 import { ProposalStatus } from './types';
-import { getProposalHeadlineString, proposalToString } from '@services/ProposalHelpers';
 
 function league() {
   const [proposalNotification, setProposalNotification] = useState(undefined);
@@ -22,6 +21,7 @@ function league() {
   const league = useSelector((state: StoreState) => state.league.league);
   const team = useSelector((state: StoreState) => state.league.userTeam);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
+  const user = useSelector((state: StoreState) => state.user.userInfo);
 
   useEffect(() => {
     setProposalNotification(
@@ -45,10 +45,7 @@ function league() {
           <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
             <div className='pt-5'>
               {proposalNotification && (
-                <NotificationCard
-                  headline={getProposalHeadlineString(proposalNotification)}
-                  text={proposalToString(proposalNotification)}
-                />
+                <NotificationCard proposal={proposalNotification} userId={user.id} />
               )}
             </div>
             <div className='pt-5'>
@@ -75,6 +72,7 @@ function league() {
                 currentWeek={currentWeek}
                 rosters={team.rosters}
                 proposals={team.proposed_transactions}
+                userId={user.id}
               />
             </div>
           </div>
