@@ -32,6 +32,11 @@ export function proposalToString(proposal: Proposal): string {
         ? 'd'
         : ''
     } ${offeredPlayers.join(', ')} for ${recievedPlayers.join(', ')}`;
+    sentence = `Trade${
+      proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
+        ? 'd'
+        : ''
+    } ${offeredPlayers.join(', ')} for ${recievedPlayers.join(', ')}`;
   } else if (proposal.type === ProposalType.add) {
     // add
     sentence = `Add ${proposal.players[0].player.first_name} ${proposal.players[0].player.last_name}`;
