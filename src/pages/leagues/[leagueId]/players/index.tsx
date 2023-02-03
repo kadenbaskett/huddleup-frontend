@@ -87,7 +87,7 @@ function League(props) {
 
     const playerTeam = getTeamThatOwnsPlayer(player, currentWeek);
     const myRoster = getMyRoster();
-    const isMyPlayer = playerTeam.id === myTeam.id;
+    const isMyPlayer = playerTeam?.id === myTeam.id;
 
     // Nobody owns the player -> they are a free agent
     if (!playerTeam) {
