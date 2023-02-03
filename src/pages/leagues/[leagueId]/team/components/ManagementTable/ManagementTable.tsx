@@ -1,14 +1,19 @@
 import { Button, Group, Table } from '@mantine/core';
-import { proposalToString } from '@services/ProposalHelpers';
-import { Proposal, ProposalStatus } from '../../types';
+import { transactionAction } from '@services/apiClient';
+import { proposalExecutionerString, proposalToString } from '@services/ProposalHelpers';
+import { Proposal, ProposalAction, ProposalStatus } from '../../types';
+import { showNotification } from '@mantine/notifications';
 
 export interface ManagementTableProps {
   proposals: Proposal[];
+  userId: Number;
 }
-export function ManagementTable({ proposals }: ManagementTableProps) {
+
+export function ManagementTable({ proposals, userId }: ManagementTableProps) {
+  console.log('proposals', proposals);
   const rows = proposals.map((p: Proposal) => (
     <tr key={p.id.toString()}>
-      <td>{Date.parse(p.creation_date.toString()).toLocaleString('en-US')}</td>
+      <td>{p.week.toString()}</td>
       <td>{p.user.username}</td>
       <td>{proposalToString(p)}</td>
       <td>
@@ -23,24 +28,38 @@ export function ManagementTable({ proposals }: ManagementTableProps) {
         )}
       </td>
       <td>
-        <Group>
-          <Button
-            className='hover:bg-transparent hover:text-green text-xl hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-            variant='default'
-            size='sm'
-            disabled={p.status !== ProposalStatus.pending}
-          >
-            Approve
-          </Button>
-          <Button
-            className='hover:bg-transparent hover:text-red text-xl hover:border hover:border-red rounded bg-red text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-            variant='default'
-            size='sm'
-            disabled={p.status !== ProposalStatus.pending}
-          >
-            Reject
-          </Button>
-        </Group>
+        {p.status === ProposalStatus.pending ? (
+          <Group>
+            <Button
+              className='hover:bg-transparent hover:text-green text-xl hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+              variant='default'
+              size='sm'
+              onClick={async () => {
+                showNotification({
+                  message: 'Proposal Approved',
+                });
+                await transactionAction(ProposalAction.approve, p.id, userId);
+              }}
+            >
+              Approve
+            </Button>
+            <Button
+              className='hover:bg-transparent hover:text-red text-xl hover:border hover:border-red rounded bg-red text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+              variant='default'
+              size='sm'
+              onClick={async () => {
+                showNotification({
+                  message: 'Proposal Rejected',
+                });
+                await transactionAction(ProposalAction.reject, p.id, userId);
+              }}
+            >
+              Reject
+            </Button>
+          </Group>
+        ) : (
+          <>{proposalExecutionerString(p)}</>
+        )}
       </td>
     </tr>
   ));
@@ -50,7 +69,7 @@ export function ManagementTable({ proposals }: ManagementTableProps) {
       <Table>
         <thead>
           <tr>
-            <th>Date</th>
+            <th>Week</th>
             <th>Teammate</th>
             <th>Proposal</th>
             <th>Status</th>

@@ -8,6 +8,7 @@ export interface TeamCardProps {
   currentWeek: Number;
   rosters: any;
   proposals: Proposal[];
+  userId: Number;
 }
 
 export function TeamCard(props: TeamCardProps) {
@@ -64,7 +65,10 @@ export function TeamCard(props: TeamCardProps) {
       )}
       {management && (
         <div className='p-5'>
-          <ManagementTable proposals={[...props.proposals].sort(compareProposals)} />
+          <ManagementTable
+            userId={props.userId}
+            proposals={[...props.proposals].sort(compareProposals)}
+          />
         </div>
       )}
     </div>
