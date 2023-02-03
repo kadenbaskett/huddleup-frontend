@@ -6,7 +6,7 @@ import React from 'react';
 
 export interface StandingsTableProps {
   teams: Team[];
-  week: number; // this is the same teams that is in my overview page. Should we have a global types folder for this kind of thing?
+  week: number;
 }
 
 export default function StandingsTable(props: StandingsTableProps) {
@@ -30,7 +30,7 @@ export default function StandingsTable(props: StandingsTableProps) {
       <div className='p-4 font-varsity justify-left text-2xl bg-darkBlue text-white rounded-t-xl'>
         Standings
       </div>
-      <Table>
+      <Table highlightOnHover withBorder withColumnBorders striped>
         <thead>
           <tr>
             <th>Rank</th>

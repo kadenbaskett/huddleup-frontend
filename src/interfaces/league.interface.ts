@@ -38,4 +38,5 @@ export interface RosterPlayer {
   id: number;
   external_id: number;
   position: string;
+  player: any;
 }

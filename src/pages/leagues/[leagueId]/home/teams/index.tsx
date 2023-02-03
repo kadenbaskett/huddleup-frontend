@@ -1,42 +1,20 @@
+import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import LeagueHomeNavigation from '@components/LeagueHomeNavigation/LeagueHomeNavigation';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import { Table } from '@mantine/core';
-import { fetchLeagueInfoThunk } from '@store/slices/leagueSlice';
-import { AppDispatch, StoreState } from '@store/store';
+import { StoreState } from '@store/store';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import RosterGrid from './components/RosterGrid/RosterGrid';
 
-function index() {
+export function index() {
   const router = useRouter();
   const { leagueId } = router.query;
 
-  const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
+  const week = useSelector((state: StoreState) => state.global.week);
   const team = useSelector((state: StoreState) => state.league.userTeam);
-
-  useEffect(() => {
-    if (leagueInfoFetchStatus === 'idle' && leagueId) {
-      dispatch(fetchLeagueInfoThunk(Number(leagueId)));
-    }
-  }, [leagueInfoFetchStatus, dispatch, leagueId]);
-
-  const teams = league ? league.teams : [];
-
-  const rows = teams.map((t) => (
-    <tr key={t.id}>
-      <td>{t.id}</td>
-      <td>{t.name}</td>
-      <td>
-        <ul>
-          {t.managers.map((manager) => (
-            <li key={manager.id}>{manager.user.username}</li>
-          ))}
-        </ul>
-      </td>
-    </tr>
-  ));
   return (
     <div>
       <LeagueNavBar
@@ -46,23 +24,22 @@ function index() {
         leagueId={Number(leagueId)}
         page='home'
       />
-      <LeagueHomeNavigation
-        leagueId={Number(leagueId)}
-        leagueName={league ? league.name : ' '}
-        leagueDescription={'This is an example league description'}
-        page='teams'
-      />
-      <div>This is the teams page for a league</div>
-      <Table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Managers</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
+      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {leagueInfoFetchStatus === 'succeeded' && (
+        <>
+          <LeagueHomeNavigation
+            leagueId={Number(leagueId)}
+            leagueName={league ? league.name : ' '}
+            leagueDescription={league ? league.description : ' '}
+            page='teams'
+          />
+          <div className='bg-lightGrey pt-2 pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
+            <div className='content-center'>
+              <RosterGrid league={league} week={week} leagueId={leagueId} />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

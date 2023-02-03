@@ -81,7 +81,7 @@ function index() {
           <LeagueHomeNavigation
             leagueId={Number(leagueId)}
             leagueName={league ? league.name : ' '}
-            leagueDescription={'This is an example league description'}
+            leagueDescription={league ? league.description : ' '}
             page='overview'
           />
           <OverviewCard
