@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import { NotificationCard } from './components/NotificationCard/NotificationCard';
-import { TeamBanner } from '@pages/leagues/[leagueId]/team/components/TeamBanner/TeamBanner';
 import { TeamCard } from './components/TeamCard/TeamCard';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Grid } from '@mantine/core';
 import { TeamInfoBanner } from './components/TeamInfoBanner/TeamInfoBanner';
 import { ProposalStatus } from './types';
+import { TeamBanner } from './components/TeamBanner/TeamBanner';
 
 function league() {
   const [proposalNotification, setProposalNotification] = useState(undefined);
@@ -20,6 +20,7 @@ function league() {
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
   const team = useSelector((state: StoreState) => state.league.userTeam);
+  const userTeam = useSelector((state: StoreState) => state.league.userTeam);
   const currentWeek = useSelector((state: StoreState) => state.global.week);
   const user = useSelector((state: StoreState) => state.user.userInfo);
 
@@ -51,10 +52,7 @@ function league() {
             <div className='pt-5'>
               <Grid>
                 <Grid.Col span={6}>
-                  <TeamBanner
-                    name={team?.name ? team.name : ' '}
-                    managers={team?.managers ? team.managers : ' '}
-                  />
+                  <TeamBanner name={team?.name ? team.name : ' '} team={team} />
                 </Grid.Col>
                 <Grid.Col span={6}>
                   <TeamInfoBanner
@@ -73,6 +71,7 @@ function league() {
                 rosters={team.rosters}
                 proposals={team.proposed_transactions}
                 userId={user.id}
+                isMyTeam={Number(team.id) === Number(userTeam.id)}
               />
             </div>
           </div>
