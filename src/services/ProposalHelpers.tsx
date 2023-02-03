@@ -34,10 +34,10 @@ export function proposalToString(proposal: Proposal): string {
     } ${offeredPlayers.join(', ')} for ${recievedPlayers.join(', ')}`;
   } else if (proposal.type === ProposalType.add) {
     // add
-    sentence = `Add ${proposal.players.join(', ')}`;
+    sentence = `Add ${proposal.players[0].player.first_name} ${proposal.players[0].player.last_name}`;
   } else if (proposal.type === ProposalType.drop) {
     // drop
-    sentence = `Drop ${proposal.players.join(', ')}`;
+    sentence = `Drop ${proposal.players[0].player.first_name} ${proposal.players[0].player.last_name}`;
   } else if (proposal.type === ProposalType.addDrop) {
     // add drop
     const droppingPlayers = proposal.players
