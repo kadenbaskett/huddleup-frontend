@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React from 'react';
-import { Avatar, Button, Text, Modal, Grid } from '@mantine/core';
+import { Avatar, Button, Text, Modal, Grid, Space, Group } from '@mantine/core';
 import { getTeamThatOwnsPlayer, mapPositionToTable } from '@services/helpers';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@store/store';
@@ -41,13 +41,15 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction })
   };
 
   const getActionButton = () => {
+    if (!player) return <></>;
+
     const team = getTeamThatOwnsPlayer(player, currentWeek);
 
     if (!team) {
       return (
         <Button
           onClick={playerButtonClicked}
-          className={`${'bg-red text-white hover:text-we'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+          className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
         >
           {'Add'}
         </Button>
@@ -56,7 +58,7 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction })
       return (
         <Button
           onClick={playerButtonClicked}
-          className={`${'bg-red text-white hover:text-we'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+          className={`${'bg-transparent hover:bg-red text-red hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
         >
           {'Drop'}
         </Button>
@@ -65,7 +67,7 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction })
       return (
         <Button
           onClick={playerButtonClicked}
-          className={`${'bg-red text-white hover:text-we'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+          className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
         >
           {'Trade'}
         </Button>
@@ -73,30 +75,22 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction })
     }
   };
 
-  const playerContent = (player) => {
+  const renderTitle = () => {
     if (!player) return <></>;
 
     const team = getTeamThatOwnsPlayer(player, currentWeek);
 
     return (
-      <div>
-        <Text>
-          {player.current_nfl_team.city} | {player.current_nfl_team.name} | {player.position} |{' '}
-          {player.status}
-        </Text>
-        <Text>{`Owner: ${team ? team.name : 'Free Agent'}`}</Text>
-        {getActionButton()}
-      </div>
-    );
-  };
-
-  const renderTitle = () => {
-    return (
       <Grid>
-        <Avatar src={player?.photo_url} alt={'player image'} size={'md'} />
-        <Text>
-          {player?.first_name} {player?.last_name}
-        </Text>
+        <Group>
+          <Avatar src={player?.photo_url} alt={'player image'} size={'lg'} />
+
+          <Text>
+            {player.first_name} {player.last_name} | {player.current_nfl_team.city}{' '}
+            {player.current_nfl_team.name} | {player.position} | {player.status} |{' '}
+            {team ? `Owned by: ${team.name}` : 'Free Agent'}
+          </Text>
+        </Group>
       </Grid>
     );
   };
@@ -110,9 +104,13 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction })
         withCloseButton={true}
         size={'75%'}
       >
-        {playerContent(player)}
+        <Space h='md' />
+        {getActionButton()}
+        <Space h='md' />
         {getPlayerOutlook(player)}
+        <Space h='md' />
         {getPlayerGameLogs(player)}
+        <Space h='md' />
       </Modal>
     </>
   );
