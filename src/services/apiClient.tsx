@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { respObj } from '@interfaces/respobj.interface';
-import { ProposalAction } from '@pages/leagues/[leagueId]/team/types';
+import { ProposalAction } from '@pages/leagues/[leagueId]/team/[teamId]/types';
 
 const CONFIG = {
   // TODO how to setup https
