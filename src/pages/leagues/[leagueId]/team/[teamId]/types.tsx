@@ -11,6 +11,10 @@ export enum ProposalType {
   drop = 'Drop',
   addDrop = 'AddDrop',
 }
+export enum ProposalAction {
+  approve = 'Approve',
+  reject = 'Reject',
+}
 export interface TransactionPlayer {
   id: Number;
   joins_proposing_team: Boolean;
@@ -30,4 +34,5 @@ export interface Proposal {
   week: Number;
   players: TransactionPlayer[];
   user: any;
+  transaction_actions: any;
 }

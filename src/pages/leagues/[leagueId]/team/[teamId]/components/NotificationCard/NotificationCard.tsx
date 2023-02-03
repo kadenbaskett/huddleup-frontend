@@ -1,22 +1,18 @@
 import { Button, Group } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
+import { transactionAction } from '@services/apiClient';
+import { getProposalHeadlineString, proposalToString } from '@services/ProposalHelpers';
 import { useState } from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { Proposal, ProposalAction } from '../../types';
 
 export interface NotificationCardProps {
-  headline: string;
-  text: string;
+  proposal: Proposal;
+  userId: number;
 }
 
-export function NotificationCard(props: NotificationCardProps) {
+export function NotificationCard({ proposal, userId }: NotificationCardProps) {
   const [collapsed, setCollapsed] = useState(false);
-  const accept = () => {
-    setCollapsed(true);
-    // TODO: Send acceptance to backend
-  };
-  const reject = () => {
-    setCollapsed(true);
-    // TODO: Send rejection to backend
-  };
 
   return (
     <>
@@ -28,15 +24,24 @@ export function NotificationCard(props: NotificationCardProps) {
             style={{ cursor: 'pointer', color: 'black' }}
           />
           <div className='text-xl font-OpenSans font-bold text-darkBlue pl-10 pr-10'>
-            {props.headline}
+            {getProposalHeadlineString(proposal)}
           </div>
-          <div className='text-xl font-OpenSans text-darkBlue pl-10 pr-10'>{props.text}</div>
+          <div className='text-xl font-OpenSans text-darkBlue pl-10 pr-10'>
+            {proposalToString(proposal)}
+          </div>
           <Group className='pl-10 pb-4 pt-2'>
             <Button
               className='hover:bg-transparent hover:text-green text-xl hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
               variant='default'
               size='sm'
-              onClick={accept}
+              onClick={async () => {
+                showNotification({
+                  title: 'ayo',
+                  message: 'Proposal Approved',
+                });
+                setCollapsed(true);
+                await transactionAction(ProposalAction.approve, proposal.id, userId);
+              }}
             >
               Accept
             </Button>
@@ -44,7 +49,13 @@ export function NotificationCard(props: NotificationCardProps) {
               className='hover:bg-transparent hover:text-red text-xl hover:border hover:border-red rounded bg-red text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
               variant='default'
               size='sm'
-              onClick={reject}
+              onClick={async () => {
+                // setCollapsed(true);
+                showNotification({
+                  message: 'Proposal Rejected',
+                });
+                // await transactionAction(ProposalAction.reject, proposal.id, userId);
+              }}
             >
               Reject
             </Button>
