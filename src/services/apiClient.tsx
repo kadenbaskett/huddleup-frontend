@@ -43,7 +43,7 @@ export async function createLeague(leageData: object) {
 
 export async function createTeam(teamData: object) {
   const url = `${BASE_URL}/database/team`;
-  return await postRequest(url, leageData);
+  return await postRequest(url, teamData);
 }
 
 export async function proposeTrade(
