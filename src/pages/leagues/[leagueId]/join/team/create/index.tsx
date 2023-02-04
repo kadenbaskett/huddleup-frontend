@@ -13,6 +13,7 @@ export default function index() {
   const user: userSliceState = useSelector((state: StoreState) => state.user);
 
   const [teamName, setTeamName] = useState<string>('');
+
   async function handleSubmit(event: { preventDefault: () => void }) {
     const team = {
       leagueId: league.id,
@@ -73,17 +74,15 @@ export default function index() {
                   Cancel
                 </Button>
               </Link>
-              <Link href={`/leagues/${Number(league.id)}/join/team/view`}>
-                <Button
-                  className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-                  variant='default'
-                  size='xl'
-                  formMethod='POST'
-                  type='submit'
-                >
-                  Create Team
-                </Button>
-              </Link>
+              <Button
+                className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                variant='default'
+                size='xl'
+                formMethod='POST'
+                type='submit'
+              >
+                Create Team
+              </Button>
             </Group>
           </div>
         )}

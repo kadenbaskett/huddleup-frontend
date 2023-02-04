@@ -6,13 +6,14 @@ import styles from './JoinLeagueCard.module.css';
 import Link from 'next/link';
 import { League } from '@interfaces/league.interface';
 
-export function JoinLeagueCard(league: League) {
-  const currNumTeams = league.settings.num_teams - league.teams.length;
+export interface JoinLeagueCardProps {
+  league: League;
+  userId: number;
+}
 
-  // Don't display cards for public leagues that have all their teams.
-  // if (currNumTeams === 0) return;
+export function JoinLeagueCard(props: JoinLeagueCardProps) {
   return (
-    <Link href={'/leagues/' + league.id.toString() + '/home/overview'}>
+    <Link href={'/leagues/' + props.league.id.toString() + '/home/overview'}>
       <div
         id={styles.card}
         // eslint-disable-next-line no-template-curly-in-string
@@ -20,22 +21,22 @@ export function JoinLeagueCard(league: League) {
       >
         <Grid grow align='center' justify='flex-start' className='pl-5'>
           <Grid.Col span={1}>
-            <Image src={NFL} alt={league.name + '-image'} height={55} width={55} />
+            <Image src={NFL} alt={props.league.name + '-image'} height={55} width={55} />
           </Grid.Col>
 
           <Grid.Col span={4} className='text-5xl font-varsity text-darkBlue pt-1'>
-            {league.name}
+            {props.league.name}
           </Grid.Col>
           <Grid.Col span={2} className='text-2xl text-darkBlue'>
-            {league.settings.min_players} - {league.settings.max_players} Teammates
+            {props.league.settings.min_players} - {props.league.settings.max_players} Teammates
           </Grid.Col>
           <Grid.Col span={2} className='text-2xl text-darkBlue'>
-            {league.settings.scoring_settings.points_per_reception === 1 ? 'PPR' : 'NPPR'}
+            {props.league.settings.scoring_settings.points_per_reception === 1 ? 'PPR' : 'NPPR'}
           </Grid.Col>
           <Grid.Col span={2} className='text-2xl text-darkBlue pt-6 pb-5 pl-5 pr-8'>
             <Grid justify='flex-end'>
               <Grid.Col>
-                <Link href={`/leagues/${league.id}/join/team/create`}>
+                <Link href={`/leagues/${props.league.id}/join/team/create`}>
                   <Button
                     className='hover:bg-transparent hover:text-orange  text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform active:translate-y-0'
                     variant='default'
@@ -46,13 +47,13 @@ export function JoinLeagueCard(league: League) {
                 </Link>
               </Grid.Col>
               <Grid.Col className='text-2xl text-orange'>
-                {currNumTeams} of {league.settings.num_teams} teams
+                {props.league.teams.length} of {props.league.settings.num_teams} teams
               </Grid.Col>
             </Grid>
           </Grid.Col>
         </Grid>
         <div className={`${styles.descriptionDiv} text-xl text-darkBlue pl-5 pr-5`}>
-          {league.description}
+          {props.league.description}
           <br />
         </div>
       </div>
