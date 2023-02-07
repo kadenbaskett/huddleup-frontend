@@ -4,6 +4,7 @@ import { createTeam } from '@services/apiClient';
 import { userSliceState } from '@store/slices/userSlice';
 import { StoreState } from '@store/store';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -14,14 +15,26 @@ export default function index() {
 
   const [teamName, setTeamName] = useState<string>('');
 
-  async function handleSubmit(event: { preventDefault: () => void }) {
+  const router = useRouter();
+
+  const preventDefault = (f) => (e) => {
+    e.preventDefault();
+    f(e);
+  };
+
+  const handleSubmit = preventDefault(async () => {
     const team = {
       leagueId: league.id,
       teamOwnerId: user.userInfo.id,
       teamName,
     };
-    await createTeam(team);
-  }
+    const newTeam = await createTeam(team);
+    console.log('newTeam', newTeam);
+    await router.push({
+      pathname: `/leagues/${Number(league.id)}/view/team/0`,
+      // fix this right here
+    });
+  });
 
   return (
     <form onSubmit={handleSubmit}>
