@@ -22,10 +22,10 @@ export function proposalToString(proposal: Proposal): string {
   let sentence;
   if (proposal.type === ProposalType.trade) {
     const recievedPlayers = proposal.players
-      .filter((p) => p.joins_proposing_team === false)
+      .filter((p) => p.joins_proposing_team === true)
       .map((p) => `${p.player.first_name} ${p.player.last_name}`);
     const offeredPlayers = proposal.players
-      .filter((p) => p.joins_proposing_team === true)
+      .filter((p) => p.joins_proposing_team === false)
       .map((p) => `${p.player.first_name} ${p.player.last_name}`);
     sentence = `Trade${
       proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
