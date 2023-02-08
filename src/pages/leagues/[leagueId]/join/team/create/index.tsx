@@ -31,8 +31,7 @@ export default function index() {
     const newTeam = await createTeam(team);
     console.log('newTeam', newTeam);
     await router.push({
-      pathname: `/leagues/${Number(league.id)}/view/team/0`,
-      // fix this right here
+      pathname: `/leagues/${Number(league.id)}/join/team/${Number(newTeam.data.id)}`,
     });
   });
 
