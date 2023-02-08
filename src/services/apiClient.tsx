@@ -41,6 +41,12 @@ export async function createLeague(leageData: object) {
   return await postRequest(url, leageData);
 }
 
+export async function editLineup(rosterPlayerId: number, newPosition: string) {
+  const data = { rosterPlayerId, newPosition };
+  const url = `${BASE_URL}/database/roster/editLineup`;
+  return await postRequest(url, data);
+}
+
 export async function proposeTrade(
   sendPlayerIds: number[],
   recPlayerIds: number[],
