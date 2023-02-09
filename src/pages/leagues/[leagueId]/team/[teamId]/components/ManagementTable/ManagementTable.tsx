@@ -10,7 +10,6 @@ export interface ManagementTableProps {
 }
 
 export function ManagementTable({ proposals, userId }: ManagementTableProps) {
-  console.log('proposals', proposals);
   const rows = proposals.map((p: Proposal) => (
     <tr key={p.id.toString()}>
       <td>{p.week.toString()}</td>
