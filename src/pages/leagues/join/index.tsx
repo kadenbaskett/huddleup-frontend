@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { JoinLeagueCard } from './components/JoinLeagueCard/JoinLeagueCard';
 
 function leagues() {
+  const globalStatus = useSelector((state: StoreState) => state.global.status);
   const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
   const userInfoFetchStatus = useSelector((state: StoreState) => state.user.status);
   const user: userSliceState = useSelector((state: StoreState) => state.user);
@@ -39,10 +40,6 @@ function leagues() {
     }
   }, [searchTerm]);
 
-  const renderLeagues = () => {
-    return results.map((league) => renderLeague(league));
-  };
-
   const renderLeague = (league: League) => {
     return (
       <div className='grid col-span-10 pb-2'>
@@ -56,8 +53,8 @@ function leagues() {
    */
   return (
     <>
-      {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
-      {userInfoFetchStatus === 'succeeded' && (
+      {userInfoFetchStatus !== 'succeeded' && globalStatus !== 'succeeded' && <HuddleUpLoader />}
+      {userInfoFetchStatus === 'succeeded' && globalStatus === 'succeeded' && (
         <div className='bg-lightGrey min-h-screen'>
           <div>
             <div className='pt-10 pb-2 pl-10'>
@@ -90,7 +87,7 @@ function leagues() {
                   },
                 })}
               />
-              <div className='pt-5'>{renderLeagues()}</div>
+              <div className='pt-5'>{results.map((league) => renderLeague(league))}</div>
             </div>
           </div>
         </div>

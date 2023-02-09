@@ -12,6 +12,7 @@ export interface JoinLeagueCardProps {
 }
 
 export function JoinLeagueCard(props: JoinLeagueCardProps) {
+  console.log('creating a join league card');
   return (
     <Link href={'/leagues/' + props.league.id.toString() + '/home/overview'}>
       <div
@@ -36,7 +37,7 @@ export function JoinLeagueCard(props: JoinLeagueCardProps) {
           <Grid.Col span={2} className='text-2xl text-darkBlue pt-6 pb-5 pl-5 pr-8'>
             <Grid justify='flex-end'>
               <Grid.Col>
-                <Link href={`/leagues/${props.league.id}/join/team/create`}>
+                <Link href={`/leagues/${props.league.id}/join/${props.league.token}`}>
                   <Button
                     className='hover:bg-transparent hover:text-orange  text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform active:translate-y-0'
                     variant='default'

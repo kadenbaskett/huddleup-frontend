@@ -1,10 +1,11 @@
+import { Team } from '@interfaces/league.interface';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchLeagueInfo, fetchLeaguePlayers } from '@services/apiClient';
 
 export interface leagueSliceState {
   league: any;
   playerList: any[];
-  userTeam: any;
+  userTeam: Team;
   transactions: any[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   pollStatus: 'idle' | 'polling';

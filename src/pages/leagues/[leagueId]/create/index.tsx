@@ -29,9 +29,9 @@ export default function index() {
       teamName,
     };
     const newTeam = await createTeam(team);
-    console.log('newTeam', newTeam);
+    console.log(newTeam);
     await router.push({
-      pathname: `/leagues/${Number(league.id)}/join/team/${Number(newTeam.data.id)}`,
+      pathname: `/leagues/${Number(league.id)}/create/${String(newTeam.data.token)}`,
     });
   });
 
@@ -42,7 +42,7 @@ export default function index() {
         {leagueInfoFetchStatus === 'succeeded' && (
           <div className='bg-lightGrey p-10 min-h-screen gap-10'>
             <div className='pt-4 pb-4'>
-              <label className='font-varsity text-6xl'>Create Your Team</label>
+              <label className='font-varsity text-6xl'>Create Your Team for {league.name}</label>
             </div>
             <div className='pt-4 pb-4'>
               <label className='font-OpenSans font-bold text-2xl'>Team Name:</label>
