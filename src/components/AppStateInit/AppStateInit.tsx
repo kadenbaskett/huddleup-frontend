@@ -5,7 +5,7 @@ import { AppDispatch, StoreState } from '@store/store';
 import { handleGlobalInitThunk } from '@store/slices/globalSlice';
 import { handleUserInitThunk, userPollThunk } from '@store/slices/userSlice';
 import { handleLeagueInitThunk, pollForUpdates } from '@store/slices/leagueSlice';
-import SLICE_STATUS from '@store/slices/common';
+import { SLICE_STATUS } from '@store/slices/common';
 
 export default function AppStateInit({ children }) {
   const router = useRouter();

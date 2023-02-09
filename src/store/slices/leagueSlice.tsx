@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchLeagueInfo, fetchLeaguePlayers } from '@services/apiClient';
-import { SLICE_STATUS } from './common';
+import { SLICE_STATUS } from '@store/slices/common';
 
 export interface leagueSliceState {
   league: any;
