@@ -7,56 +7,6 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import OverviewCard from './components/OverviewCard/OverviewCard';
-import { Activity, TypeActivity, TypeStatus } from './types';
-
-const date: Date = new Date();
-
-const activityData: Activity[] = [
-  {
-    id: 0,
-    teamId: 1,
-    relatedTeamId: 0,
-    status: TypeStatus.Completed,
-    type: TypeActivity.Add,
-    createdDate: date,
-    expirationDate: date,
-    closingDate: date,
-    week: 15,
-  },
-  {
-    id: 0,
-    teamId: 1,
-    relatedTeamId: 0,
-    status: TypeStatus.Completed,
-    type: TypeActivity.Drop,
-    createdDate: date,
-    expirationDate: date,
-    closingDate: date,
-    week: 15,
-  },
-  {
-    id: 0,
-    teamId: 1,
-    relatedTeamId: 0,
-    status: TypeStatus.Completed,
-    type: TypeActivity.DropAdd,
-    createdDate: date,
-    expirationDate: date,
-    closingDate: date,
-    week: 15,
-  },
-  {
-    id: 0,
-    teamId: 1,
-    relatedTeamId: 0,
-    status: TypeStatus.Completed,
-    type: TypeActivity.Trade,
-    createdDate: date,
-    expirationDate: date,
-    closingDate: date,
-    week: 15,
-  },
-];
 
 function index() {
   const router = useRouter();
@@ -65,6 +15,20 @@ function index() {
   const league = useSelector((state: StoreState) => state.league.league);
   const week = useSelector((state: StoreState) => state.global.week);
   const team = useSelector((state: StoreState) => state.league.userTeam);
+
+  let allTransactions = [];
+
+  const teams = league ? league.teams : [];
+
+  for (const t of teams) {
+    allTransactions = allTransactions.concat(t.proposed_transactions);
+  }
+
+  const completed = allTransactions.filter((t) => t.status === 'Complete');
+  const sorted = completed.sort(
+    (a, b) => new Date(a.execution_date).getTime() - new Date(b.execution_date).getTime(),
+  );
+  const activityData = sorted.slice(0, 10);
 
   return (
     <div className='bg-lightGrey min-h-screen'>
@@ -85,7 +49,7 @@ function index() {
             page='overview'
           />
           <OverviewCard
-            activities={activityData}
+            activities={activityData || []}
             teams={calculateStandings(league, week).slice(0, 5)}
           />
         </div>

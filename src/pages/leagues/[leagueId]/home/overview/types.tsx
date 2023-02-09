@@ -1,22 +1,22 @@
-export enum TypeActivity {
-  Add,
-  Drop,
-  DropAdd,
-  Trade,
-}
+export const TypeActivity = {
+  Add: 'Add',
+  Drop: 'Drop',
+  DropAdd: 'AddDrop',
+  Trade: 'Trade',
+};
 
-export enum TypeStatus {
-  Pending,
-  Completed,
-  Rejected,
-}
+export const TypeStatus = {
+  Pending: 'Pending',
+  Completed: 'Complete',
+  Rejected: 'Rejected',
+};
 
 export interface Activity {
   id: Number;
   teamId: Number;
   relatedTeamId: Number;
-  status: TypeStatus;
-  type: TypeActivity;
+  status: string;
+  type: string;
   createdDate: Date;
   expirationDate: Date;
   closingDate: Date;

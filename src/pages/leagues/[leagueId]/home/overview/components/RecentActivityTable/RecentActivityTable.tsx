@@ -6,13 +6,13 @@ import { IoMdAddCircle } from 'react-icons/io';
 import { FaExchangeAlt } from 'react-icons/fa';
 
 export interface RecentActivityTableProps {
-  activities: Activity[];
+  activities: any[];
 }
 
 export function RecentActivityTable(props: RecentActivityTableProps) {
   const rows = props.activities.map((p: Activity) => (
     <tr key={p.id.toString()}>
-      <td>{p.closingDate.toDateString()}</td>
+      <td>{new Date(p.execution_date).toDateString()}</td>
       <td>
         {p.type === TypeActivity.Add && (
           <IoMdAddCircle
