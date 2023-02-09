@@ -121,27 +121,62 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
     const currentFLEX = [...FLEX];
     const currentBench = [...bench];
 
-    if (type === 'QB' && !QB.includes(playerId) && position === 'QB') {
+    const starterLimits = {
+      QB: 1,
+      RB: 2,
+      WR: 2,
+      TE: 1,
+      FLEX: 1,
+    };
+
+    const flexPositions = ['RB', 'WR', 'TE'];
+
+    if (
+      type === 'QB' &&
+      !QB.includes(playerId) &&
+      position === 'QB' &&
+      QB.length < starterLimits.QB
+    ) {
       currentQB.push(playerId);
       setQB(currentQB);
       setBench(bench.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
-    } else if (type === 'WR' && !WR.includes(playerId) && position === 'WR') {
+    } else if (
+      type === 'WR' &&
+      !WR.includes(playerId) &&
+      position === 'WR' &&
+      WR.length < starterLimits.WR
+    ) {
       currentWR.push(playerId);
       setWR(currentWR);
       setBench(currentBench.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
-    } else if (type === 'RB' && !RB.includes(playerId) && position === 'RB') {
+    } else if (
+      type === 'RB' &&
+      !RB.includes(playerId) &&
+      position === 'RB' &&
+      RB.length < starterLimits.RB
+    ) {
       currentRB.push(playerId);
       setRB(currentRB);
       setBench(bench.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
-    } else if (type === 'TE' && !TE.includes(playerId) && position === 'TE') {
+    } else if (
+      type === 'TE' &&
+      !TE.includes(playerId) &&
+      position === 'TE' &&
+      TE.length < starterLimits.TE
+    ) {
       currentTE.push(playerId);
       setTE(currentTE);
       setBench(bench.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
-    } else if (type === 'FLEX' && !FLEX.includes(playerId)) {
+    } else if (
+      type === 'FLEX' &&
+      !FLEX.includes(playerId) &&
+      flexPositions.includes(position) &&
+      FLEX.length < starterLimits.FLEX
+    ) {
       currentFLEX.push(playerId);
       setFLEX(currentFLEX);
       setQB(currentQB.filter((e) => e !== playerId));
