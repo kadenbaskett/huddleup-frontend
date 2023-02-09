@@ -9,6 +9,7 @@ export function Droppable({ id, children }) {
 
   // determine if the active player is allowed to be dropped in this container
   let canDrop = false;
+  // TODO no QB in FLEX
   if (active?.data.current.position === id || id === 'FLEX' || id === 'Bench') canDrop = true;
 
   // does the container have the correcet number of children?
