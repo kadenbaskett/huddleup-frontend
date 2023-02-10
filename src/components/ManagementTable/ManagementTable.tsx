@@ -1,7 +1,7 @@
 import { Button, Group, Table } from '@mantine/core';
 import { transactionAction } from '@services/apiClient';
 import { proposalExecutionerString, proposalToString } from '@services/ProposalHelpers';
-import { Proposal, ProposalAction, ProposalStatus } from '../../types';
+import { Proposal, ProposalAction, ProposalStatus } from '@interfaces/types';
 import { showNotification } from '@mantine/notifications';
 import { AppDispatch } from '@store/store';
 import { useDispatch } from 'react-redux';

@@ -6,7 +6,7 @@ import { StoreState } from '@store/store';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import OverviewCard from './components/OverviewCard/OverviewCard';
+import OverviewCard from '@components/OverviewCard/OverviewCard';
 
 function index() {
   const router = useRouter();
