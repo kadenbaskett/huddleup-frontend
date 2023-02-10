@@ -16,15 +16,24 @@ export default function AppStateInit({ children }) {
 
   const [pollingLeagueId, setPollingLeagueId] = useState(null);
 
-  const initLeague = (id: number) => {
+  const initLeagueData = (id: number) => {
     dispatch(handleLeagueInitThunk(Number(id)));
     clearTimeout(pollingLeagueId);
     const pollId = setInterval(() => dispatch(pollForUpdates(Number(id))), 5000);
     setPollingLeagueId(pollId);
   };
 
+  const updateLeagueData = (id: number) => {
+    dispatch(pollForUpdates(Number(id)));
+    clearTimeout(pollingLeagueId);
+    const pollId = setInterval(() => dispatch(pollForUpdates(Number(id))), 5000);
+    setPollingLeagueId(pollId);
+  };
+
   useEffect(() => {
-    console.log(state.league.status);
+    if (leagueId && state.league.pollStatus === SLICE_STATUS.NEEDS_UPDATE) {
+      updateLeagueData(Number(leagueId));
+    }
 
     // on initial load - init app state
     if (state.global.status === SLICE_STATUS.IDLE) {
@@ -64,14 +73,14 @@ export default function AppStateInit({ children }) {
       if (leagueId) {
         // If the league hasn't been initialized yet, do that
         if (state.league.status === SLICE_STATUS.IDLE) {
-          initLeague(Number(leagueId));
+          initLeagueData(Number(leagueId));
         }
         // A league has previously been viewed by the user and put into the store, but the user has now changed the league they are viewing
         else if (
           state.league.status === SLICE_STATUS.SUCCEEDED &&
           state.league.league.id !== Number(leagueId)
         ) {
-          initLeague(Number(leagueId));
+          initLeagueData(Number(leagueId));
         }
       }
     }
@@ -80,6 +89,7 @@ export default function AppStateInit({ children }) {
     state.user.status,
     state.global.status,
     state.league.status,
+    state.league.pollStatus,
     leagueId,
   ]);
 

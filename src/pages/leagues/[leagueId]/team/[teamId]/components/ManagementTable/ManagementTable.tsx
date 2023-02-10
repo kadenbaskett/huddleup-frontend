@@ -3,6 +3,10 @@ import { transactionAction } from '@services/apiClient';
 import { proposalExecutionerString, proposalToString } from '@services/ProposalHelpers';
 import { Proposal, ProposalAction, ProposalStatus } from '../../types';
 import { showNotification } from '@mantine/notifications';
+import { AppDispatch } from '@store/store';
+import { useDispatch } from 'react-redux';
+import { setPollStatus } from '@store/slices/leagueSlice';
+import { SLICE_STATUS } from '@store/slices/common';
 
 export interface ManagementTableProps {
   proposals: Proposal[];
@@ -10,6 +14,12 @@ export interface ManagementTableProps {
 }
 
 export function ManagementTable({ proposals, userId }: ManagementTableProps) {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const update = () => {
+    dispatch(setPollStatus(SLICE_STATUS.NEEDS_UPDATE));
+  };
+
   const rows = proposals.map((p: Proposal) => (
     <tr key={p.id.toString()}>
       <td>{p.week.toString()}</td>
@@ -38,6 +48,7 @@ export function ManagementTable({ proposals, userId }: ManagementTableProps) {
                   message: 'Proposal Approved',
                 });
                 await transactionAction(ProposalAction.approve, p.id, userId);
+                update();
               }}
             >
               Approve
@@ -51,6 +62,7 @@ export function ManagementTable({ proposals, userId }: ManagementTableProps) {
                   message: 'Proposal Rejected',
                 });
                 await transactionAction(ProposalAction.reject, p.id, userId);
+                update();
               }}
             >
               Reject

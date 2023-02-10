@@ -28,6 +28,9 @@ export const leagueSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(setPollStatus.fulfilled, (state, action) => {
+        state.pollStatus = SLICE_STATUS.NEEDS_UPDATE;
+      })
       .addCase(handleLeagueInitThunk.pending, (state, action) => {
         state.status = SLICE_STATUS.LOADING;
       })
@@ -90,6 +93,13 @@ export const pollForUpdates = createAsyncThunk(
       league: leagueResp.data ? leagueResp.data : null,
       userTeam: team,
     };
+  },
+);
+
+export const setPollStatus = createAsyncThunk(
+  'league/setPollStatus',
+  async (pollStatus: SLICE_STATUS) => {
+    return { pollStatus };
   },
 );
 
