@@ -1,5 +1,5 @@
 import React from 'react';
-import { LeagueCard } from './components/LeagueCard/LeagueCard';
+import { UserLeagueCard } from './components/UserLeagueCard/UserLeagueCard';
 import { HiUserGroup } from 'react-icons/hi';
 import { BsPlusLg } from 'react-icons/bs';
 import { Button, Group } from '@mantine/core';
@@ -16,7 +16,7 @@ function Leagues() {
   const renderLeague = (league: League) => {
     return (
       <div className='grid col-span-10'>
-        <LeagueCard league={league} />
+        <UserLeagueCard league={league} />
       </div>
     );
   };

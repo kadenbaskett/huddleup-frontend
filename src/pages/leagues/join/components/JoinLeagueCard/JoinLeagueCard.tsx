@@ -12,12 +12,8 @@ export interface JoinLeagueCardProps {
 }
 
 export function JoinLeagueCard(props: JoinLeagueCardProps) {
-  const link =
-    props.league.teams.length < 8
-      ? `/leagues/${Number(props.league.id)}/join/${props.league.token}`
-      : `/leagues/${Number(props.league.id)}/home/overview`;
   return (
-    <Link href={link}>
+    <Link href={'/leagues/' + props.league.id.toString() + '/home/overview'}>
       <div
         id={styles.card}
         // eslint-disable-next-line no-template-curly-in-string

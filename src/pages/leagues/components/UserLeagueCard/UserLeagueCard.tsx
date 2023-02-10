@@ -4,13 +4,17 @@ import NFL from '../../../../public/assets/NFL.png';
 import Link from 'next/link';
 import { League } from '@interfaces/league.interface';
 
-export interface LeagueCardProps {
+export interface UserLeagueCardProps {
   league: League;
 }
 
-export function LeagueCard(props: LeagueCardProps) {
+export function UserLeagueCard(props: UserLeagueCardProps) {
+  const link =
+    props.league.teams.length < 8
+      ? `/leagues/${Number(props.league.id)}/join/${props.league.token}`
+      : `/leagues/${Number(props.league.id)}/home/overview`;
   return (
-    <Link href={'/leagues/' + props.league.id.toString() + '/home/overview'}>
+    <Link href={link}>
       <div className='grid grid-cols-5 bg-white rounded-xl h-80 border hover:border-orange border-white'>
         <div
           className='grid col-span-1 items-center'
