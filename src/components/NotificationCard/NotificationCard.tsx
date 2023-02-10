@@ -4,7 +4,7 @@ import { transactionAction } from '@services/apiClient';
 import { getProposalHeadlineString, proposalToString } from '@services/ProposalHelpers';
 import { useState } from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
-import { Proposal, ProposalAction } from '../../types';
+import { Proposal, ProposalAction } from '@interfaces/types.interface';
 
 export interface NotificationCardProps {
   proposal: Proposal;

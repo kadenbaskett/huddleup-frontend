@@ -1,18 +1,30 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Table } from '@mantine/core';
 import React from 'react';
-import { Activity, TypeActivity } from '../../types';
+import { TypeActivity } from '@interfaces/types.interface';
 import { AiFillMinusCircle } from 'react-icons/ai';
 import { IoMdAddCircle } from 'react-icons/io';
 import { FaExchangeAlt } from 'react-icons/fa';
+import { proposalToString } from '@services/ProposalHelpers';
 
 export interface RecentActivityTableProps {
-  activities: Activity[];
+  activities: any[];
 }
 
 export function RecentActivityTable(props: RecentActivityTableProps) {
-  const rows = props.activities.map((p: Activity) => (
+  const getActivityDetail = (p) => {
+    if (p.type === TypeActivity.Trade) {
+      const s = `${p.proposing_team.name} ${proposalToString(p)} from ${p.related_team.name}`;
+      return s.replace('Traded', 'traded');
+    } else {
+      const s = `${p.proposing_team.name} ${proposalToString(p)}`;
+      return s.replace('Add', 'added').replace('Drop', 'dropped');
+    }
+  };
+
+  const rows = props.activities.map((p) => (
     <tr key={p.id.toString()}>
-      <td>{p.closingDate.toDateString()}</td>
+      <td>{new Date(p.execution_date).toDateString()}</td>
       <td>
         {p.type === TypeActivity.Add && (
           <IoMdAddCircle
@@ -55,7 +67,7 @@ export function RecentActivityTable(props: RecentActivityTableProps) {
           />
         )}
       </td>
-      <td></td>
+      <td>{getActivityDetail(p)}</td>
     </tr>
   ));
   return (

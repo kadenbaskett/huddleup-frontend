@@ -4,7 +4,7 @@ import Link from 'next/link';
 import router from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Team } from '../../types';
+import { Team } from '@interfaces/types.interface';
 
 export interface Top5StandingTableProps {
   teams: Team[];

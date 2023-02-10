@@ -1,6 +1,6 @@
 import { compareProposals } from '@services/ProposalHelpers';
 import { useState } from 'react';
-import { Proposal } from '../../types';
+import { Proposal } from '@interfaces/types.interface';
 import { DraggableLineupTable } from '../DraggableLineupTable/DraggableLineupTable';
 import { ManagementTable } from '../ManagementTable/ManagementTable';
 
