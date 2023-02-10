@@ -10,9 +10,9 @@ export interface TeamInfoBannerProps {
 export function TeamInfoBanner(props: TeamInfoBannerProps) {
   return (
     <div className='bg-white rounded-xl hover:drop-shadow-md'>
-      <div className='p-3'>
+      <div className='px-3'>
         <Grid>
-          <Grid.Col span={6}>
+          <Grid.Col span={6} className='px-3'>
             <div className='text-xl font-openSans font-bold'>Previous Matchup</div>
             <div className='text-xl font-openSans'>
               {props.teamName} - {props.lastMatchupPersonalScore}

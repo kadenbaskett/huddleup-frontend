@@ -5,7 +5,7 @@ import { userSliceState } from '@store/slices/userSlice';
 import { StoreState } from '@store/store';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { JoinLeagueCard } from './components/JoinLeagueCard/JoinLeagueCard';
+import { JoinLeagueCard } from '@components/JoinLeagueCard/JoinLeagueCard';
 
 function leagues() {
   const globalStatus = useSelector((state: StoreState) => state.global.status);

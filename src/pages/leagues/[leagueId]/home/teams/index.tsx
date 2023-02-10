@@ -5,7 +5,7 @@ import { StoreState } from '@store/store';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import RosterGrid from './components/RosterGrid/RosterGrid';
+import RosterGrid from '@components/RosterGrid/RosterGrid';
 
 export function index() {
   const router = useRouter();

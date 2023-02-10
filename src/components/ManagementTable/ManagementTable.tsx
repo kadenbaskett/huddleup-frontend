@@ -1,8 +1,12 @@
 import { Button, Group, Table } from '@mantine/core';
 import { transactionAction } from '@services/apiClient';
 import { proposalExecutionerString, proposalToString } from '@services/ProposalHelpers';
-import { Proposal, ProposalAction, ProposalStatus } from '../../types';
+import { Proposal, ProposalAction, ProposalStatus } from '@interfaces/types.interface';
 import { showNotification } from '@mantine/notifications';
+import { AppDispatch } from '@store/store';
+import { useDispatch } from 'react-redux';
+import { setPollStatus } from '@store/slices/leagueSlice';
+import { SLICE_STATUS } from '@store/slices/common';
 
 export interface ManagementTableProps {
   proposals: Proposal[];
@@ -10,7 +14,12 @@ export interface ManagementTableProps {
 }
 
 export function ManagementTable({ proposals, userId }: ManagementTableProps) {
-  console.log('proposals', proposals);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const update = () => {
+    dispatch(setPollStatus(SLICE_STATUS.NEEDS_UPDATE));
+  };
+
   const rows = proposals.map((p: Proposal) => (
     <tr key={p.id.toString()}>
       <td>{p.week.toString()}</td>
@@ -28,7 +37,7 @@ export function ManagementTable({ proposals, userId }: ManagementTableProps) {
         )}
       </td>
       <td>
-        {p.status === ProposalStatus.pending ? (
+        {p.status === ProposalStatus.pending && p.user_id !== userId ? (
           <Group>
             <Button
               className='hover:bg-transparent hover:text-green text-xl hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
@@ -39,6 +48,7 @@ export function ManagementTable({ proposals, userId }: ManagementTableProps) {
                   message: 'Proposal Approved',
                 });
                 await transactionAction(ProposalAction.approve, p.id, userId);
+                update();
               }}
             >
               Approve
@@ -52,6 +62,7 @@ export function ManagementTable({ proposals, userId }: ManagementTableProps) {
                   message: 'Proposal Rejected',
                 });
                 await transactionAction(ProposalAction.reject, p.id, userId);
+                update();
               }}
             >
               Reject
