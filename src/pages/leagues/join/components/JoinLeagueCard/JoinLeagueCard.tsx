@@ -12,9 +12,12 @@ export interface JoinLeagueCardProps {
 }
 
 export function JoinLeagueCard(props: JoinLeagueCardProps) {
-  console.log('creating a join league card');
+  const link =
+    props.league.teams.length < 8
+      ? `/leagues/${Number(props.league.id)}/join/${props.league.token}`
+      : `/leagues/${Number(props.league.id)}/home/overview`;
   return (
-    <Link href={'/leagues/' + props.league.id.toString() + '/home/overview'}>
+    <Link href={link}>
       <div
         id={styles.card}
         // eslint-disable-next-line no-template-curly-in-string
@@ -22,7 +25,7 @@ export function JoinLeagueCard(props: JoinLeagueCardProps) {
       >
         <Grid grow align='center' justify='flex-start' className='pl-5'>
           <Grid.Col span={1}>
-            <Image src={NFL} alt={props.league.name + '-image'} height={55} width={55} />
+            <Image src={NFL} alt={props.league.name + '-image'} height={45} width={45} />
           </Grid.Col>
 
           <Grid.Col span={4} className='text-5xl font-varsity text-darkBlue pt-1'>
@@ -39,9 +42,10 @@ export function JoinLeagueCard(props: JoinLeagueCardProps) {
               <Grid.Col>
                 <Link href={`/leagues/${props.league.id}/join/${props.league.token}`}>
                   <Button
-                    className='hover:bg-transparent hover:text-orange  text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform active:translate-y-0'
+                    className='hover:bg-transparent hover:text-orange  text-xl font-bold hover:border hover:border-orange bg-orange text-white border-transparent transition ease-in duration-200 transform active:translate-y-0'
                     variant='default'
                     size='md'
+                    radius='lg'
                   >
                     Register
                   </Button>
