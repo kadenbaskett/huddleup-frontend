@@ -18,10 +18,14 @@ const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
         <NavBar />
         <AppStateInit>
           <RouteGuard>
-            <Component {...props.pageProps} />
+            <div id='page-container'>
+              <div id='content-wrap'>
+                <Component {...props.pageProps} />
+              </div>
+              <Footer />
+            </div>
           </RouteGuard>
         </AppStateInit>
-        <Footer />
       </Authorization>
     </Provider>
   );

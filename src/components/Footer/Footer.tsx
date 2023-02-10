@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className='text-center bg-darkBlue text-white'>
+    <footer className='text-center bg-darkBlue text-white absolute bottom-0 w-full h-24'>
       <div className='px-6 pt-6'>
         <div className='flex justify-center mb-6'>
           <a

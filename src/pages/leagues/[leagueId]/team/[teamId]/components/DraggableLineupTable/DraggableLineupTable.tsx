@@ -1,5 +1,6 @@
 import { DndContext } from '@dnd-kit/core';
 import { Grid, SegmentedControl } from '@mantine/core';
+import { editLineup } from '@services/apiClient';
 import { useEffect, useState } from 'react';
 import { Draggable } from './Draggable';
 import { Droppable } from './Droppable';
@@ -18,6 +19,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
   const [TE, setTE] = useState([]); // 1 TE
   const [FLEX, setFLEX] = useState([]); // 1 FLEX
   const [bench, setBench] = useState([]);
+  const [lineupChange, setLineupChange] = useState(false);
   useEffect(() => {
     const players = rosters.find((roster) => roster.week.toString() === week)?.players;
     setPlayers(players);
@@ -71,6 +73,46 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
     setBench(benched);
   }, [week]);
 
+  useEffect(() => {
+    void updateLineup();
+  }, [lineupChange]);
+
+  const updateLineup = async () => {
+    const positions = ['TE', 'RB', 'WR', 'QB', 'BE', 'FLEX'];
+
+    for (const position of positions) {
+      let playersInPosition = [];
+
+      switch (position) {
+        case 'TE':
+          playersInPosition = TE;
+          break;
+        case 'RB':
+          playersInPosition = RB;
+          break;
+        case 'WR':
+          playersInPosition = WR;
+          break;
+        case 'QB':
+          playersInPosition = QB;
+          break;
+        case 'FLEX':
+          playersInPosition = FLEX;
+          break;
+        case 'BE':
+          playersInPosition = bench;
+          break;
+      }
+
+      // For every player in the UI, make sure their roster player obj has the correct position
+      const outOfPosition = playersInPosition.filter((p) => p.position !== position);
+
+      for (const rosterPlayerId of outOfPosition) {
+        await editLineup(rosterPlayerId, position);
+      }
+    }
+  };
+
   const addPlayer = (playerId: string, type: string, position: string) => {
     const currentQB = [...QB];
     const currentWR = [...WR];
@@ -79,27 +121,62 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
     const currentFLEX = [...FLEX];
     const currentBench = [...bench];
 
-    if (type === 'QB' && !QB.includes(playerId) && position === 'QB') {
+    const starterLimits = {
+      QB: 1,
+      RB: 2,
+      WR: 2,
+      TE: 1,
+      FLEX: 1,
+    };
+
+    const flexPositions = ['RB', 'WR', 'TE'];
+
+    if (
+      type === 'QB' &&
+      !QB.includes(playerId) &&
+      position === 'QB' &&
+      QB.length < starterLimits.QB
+    ) {
       currentQB.push(playerId);
       setQB(currentQB);
       setBench(bench.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
-    } else if (type === 'WR' && !WR.includes(playerId) && position === 'WR') {
+    } else if (
+      type === 'WR' &&
+      !WR.includes(playerId) &&
+      position === 'WR' &&
+      WR.length < starterLimits.WR
+    ) {
       currentWR.push(playerId);
       setWR(currentWR);
       setBench(currentBench.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
-    } else if (type === 'RB' && !RB.includes(playerId) && position === 'RB') {
+    } else if (
+      type === 'RB' &&
+      !RB.includes(playerId) &&
+      position === 'RB' &&
+      RB.length < starterLimits.RB
+    ) {
       currentRB.push(playerId);
       setRB(currentRB);
       setBench(bench.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
-    } else if (type === 'TE' && !TE.includes(playerId) && position === 'TE') {
+    } else if (
+      type === 'TE' &&
+      !TE.includes(playerId) &&
+      position === 'TE' &&
+      TE.length < starterLimits.TE
+    ) {
       currentTE.push(playerId);
       setTE(currentTE);
       setBench(bench.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
-    } else if (type === 'FLEX' && !FLEX.includes(playerId)) {
+    } else if (
+      type === 'FLEX' &&
+      !FLEX.includes(playerId) &&
+      flexPositions.includes(position) &&
+      FLEX.length < starterLimits.FLEX
+    ) {
       currentFLEX.push(playerId);
       setFLEX(currentFLEX);
       setQB(currentQB.filter((e) => e !== playerId));
@@ -116,6 +193,8 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
       setTE(currentTE.filter((e) => e !== playerId));
       setFLEX(currentFLEX.filter((e) => e !== playerId));
     }
+
+    setLineupChange(!lineupChange);
   };
   // drop player over container logic
   function handleDragEnd(event) {

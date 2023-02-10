@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, StoreState } from '@store/store';
@@ -12,6 +12,15 @@ export default function AppStateInit({ children }) {
 
   const state = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
+
+  const [pollingLeagueId, setPollingLeagueId] = useState(null);
+
+  const initLeague = (id: number) => {
+    dispatch(handleLeagueInitThunk(Number(id)));
+    clearTimeout(pollingLeagueId);
+    const pollId = setInterval(() => dispatch(pollForUpdates(Number(id))), 5000);
+    setPollingLeagueId(pollId);
+  };
 
   useEffect(() => {
     // on initial load - init app state
@@ -34,6 +43,8 @@ export default function AppStateInit({ children }) {
       }
     }
 
+    // TODO check behavior of login/logout on user store
+
     // Once the user creates an account, fetch their full acount info from the DB
     if (state.user.createUserStatus === 'succeeded') {
       const email = state.user.userInfo.email;
@@ -46,16 +57,20 @@ export default function AppStateInit({ children }) {
 
     // Once the user is logged in
     if (state.user.status === 'succeeded') {
-      // Once the URL has a league id in it, fetch it
-      if (state.league.status === 'idle' && leagueId) {
-        dispatch(handleLeagueInitThunk(Number(leagueId)));
-
-        if (state.league.pollStatus !== 'polling') {
-          setInterval(() => dispatch(pollForUpdates(Number(leagueId))), 5000);
+      // The user is requesting to view a league now (leagueId is in the URL)
+      if (leagueId) {
+        // If the league hasn't been initialized yet, do that
+        if (state.league.status === 'idle') {
+          initLeague(Number(leagueId));
+        }
+        // A league has previously been viewed by the user and put into the store, but the user has now changed the league they are viewing
+        else if (
+          state.league.status === 'succeeded' &&
+          state.league.league.id !== Number(leagueId)
+        ) {
+          initLeague(Number(leagueId));
         }
       }
-
-      // Add any other things that need to be initialized after a login
     }
   }, [
     state.user.createUserStatus,
