@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { respObj } from '@interfaces/respobj.interface';
-import { ProposalAction } from '@interfaces/types';
+import { ProposalAction } from '@interfaces/types..interface';
 
 const CONFIG = {
   // TODO how to setup https

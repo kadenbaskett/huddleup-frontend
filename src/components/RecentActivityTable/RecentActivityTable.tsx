@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Table } from '@mantine/core';
 import React from 'react';
-import { TypeActivity } from '@interfaces/types';
+import { TypeActivity } from '@interfaces/types..interface';
 import { AiFillMinusCircle } from 'react-icons/ai';
 import { IoMdAddCircle } from 'react-icons/io';
 import { FaExchangeAlt } from 'react-icons/fa';
