@@ -34,6 +34,7 @@ export interface Proposal {
   week: Number;
   players: TransactionPlayer[];
   user: any;
+  user_id: number;
   transaction_actions: any;
 }
 

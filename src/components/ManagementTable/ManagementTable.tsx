@@ -37,7 +37,7 @@ export function ManagementTable({ proposals, userId }: ManagementTableProps) {
         )}
       </td>
       <td>
-        {p.status === ProposalStatus.pending ? (
+        {p.status === ProposalStatus.pending && p.user_id !== userId ? (
           <Group>
             <Button
               className='hover:bg-transparent hover:text-green text-xl hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'

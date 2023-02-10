@@ -25,9 +25,10 @@ function league() {
   const user = useSelector((state: StoreState) => state.user.userInfo);
 
   useEffect(() => {
-    setProposalNotification(
-      team?.proposed_transactions.find((e) => e.status === ProposalStatus.pending),
+    const notification = team?.proposed_transactions.find(
+      (e) => e.status === ProposalStatus.pending && user.id !== e.user_id,
     );
+    setProposalNotification(notification);
   }, [team]);
 
   // const players = team?.rosters.find((roster) => roster.week === currentWeek)?.players;
