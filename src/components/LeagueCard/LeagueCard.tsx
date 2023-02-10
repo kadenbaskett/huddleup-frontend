@@ -2,7 +2,7 @@ import { League } from '@interfaces/league.interface';
 import { Grid } from '@mantine/core';
 import React from 'react';
 import Image from 'next/image';
-import NFL from '../../../../../../../public/assets/NFL.png';
+import NFL from '../../public/assets/NFL.png';
 
 export interface LeagueCardProps {
   league: League;

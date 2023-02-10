@@ -3,8 +3,8 @@ import { Button, Group } from '@mantine/core';
 import { StoreState } from '@store/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import InviteCard from './InviteCard/InviteCard';
-import TeamMemberCard from './TeamMemberCard/TeamMemberCard';
+import InviteCard from '../../../../../components/InviteCard/InviteCard';
+import TeamMemberCard from '../../../../../components/TeamMemberCard/TeamMemberCard';
 
 const createTeamMemberCard = (manager, isCaptain: boolean) => {
   return (

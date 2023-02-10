@@ -1,16 +1,16 @@
 import { League, Team } from '@interfaces/league.interface';
 import React from 'react';
 import Image from 'next/image';
-import NFL from '../../../../../../../public/assets/NFL.png';
+import NFL from '../../public/assets/NFL.png';
 import { Grid } from '@mantine/core';
 import { createManagerString } from '@services/helpers';
 
-export interface TeamCardProps {
+export interface LeagueTeamCardProps {
   team: Team;
   league: League;
 }
 
-export default function TeamCard(props: TeamCardProps) {
+export default function LeagueTeamCard(props: LeagueTeamCardProps) {
   const color = props.team.managers.length >= props.league.settings.min_players ? 'green' : 'red';
   return (
     <>

@@ -4,8 +4,8 @@ import { StoreState } from '@store/store';
 import Link from 'next/link';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import LeagueCard from './components/LeagueCard/LeagueCard';
-import TeamCard from './components/TeamCard/TeamCard';
+import LeagueCard from '../../../../../components/LeagueCard/LeagueCard';
+import LeagueTeamCard from '../../../../../components/LeagueTeamCard/LeagueTeamCard';
 
 export default function index() {
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
@@ -49,7 +49,7 @@ export default function index() {
             {league.teams.map((team) => {
               return (
                 <>
-                  <TeamCard team={team} league={league} />
+                  <LeagueTeamCard team={team} league={league} />
                 </>
               );
             })}

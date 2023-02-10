@@ -3,9 +3,9 @@ import { News } from '@interfaces/news.interface';
 import { StoreState } from '@store/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import MyFriends from './components/MyFriends/MyFriends';
-import MyNews from './components/MyNews/MyNews';
-import MyTeams from './components/MyTeams/MyTeams';
+import MyFriends from '../../components/MyFriends/MyFriends';
+import MyNews from '../../components/MyNews/MyNews';
+import MyTeams from '../../components/MyTeams/MyTeams';
 import { Friend } from './types';
 
 const friendData: Friend[] = [

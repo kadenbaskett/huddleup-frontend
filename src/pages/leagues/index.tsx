@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserLeagueCard } from './components/UserLeagueCard/UserLeagueCard';
+import { UserLeagueCard } from '../../components/UserLeagueCard/UserLeagueCard';
 import { HiUserGroup } from 'react-icons/hi';
 import { BsPlusLg } from 'react-icons/bs';
 import { Button, Group } from '@mantine/core';

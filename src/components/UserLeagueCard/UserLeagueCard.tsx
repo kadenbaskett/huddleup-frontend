@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import NFL from '../../../../public/assets/NFL.png';
+import NFL from '../../public/assets/NFL.png';
 import Link from 'next/link';
 import { League } from '@interfaces/league.interface';
 
