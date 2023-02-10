@@ -1,4 +1,4 @@
-import { Proposal, ProposalStatus, ProposalType } from '@interfaces/types..interface';
+import { Proposal, ProposalStatus, ProposalType } from '@interfaces/types.interface';
 
 // comparator to sort proposals by creation date
 export function compareProposals(a, b) {

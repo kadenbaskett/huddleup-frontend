@@ -8,7 +8,7 @@ import { TeamCard } from '@components/TeamCard/TeamCard';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Grid } from '@mantine/core';
 import { TeamInfoBanner } from '@components/TeamInfoBanner/TeamInfoBanner';
-import { ProposalStatus } from '@interfaces/types..interface';
+import { ProposalStatus } from '@interfaces/types.interface';
 import { TeamBanner } from '@components/TeamBanner/TeamBanner';
 
 function league() {
