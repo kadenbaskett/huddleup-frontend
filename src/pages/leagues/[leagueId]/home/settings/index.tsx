@@ -70,7 +70,8 @@ function index() {
       </tr>
       <tr>
         <td>Draft Order</td>
-        <td>{league.settings.draft_settings.order}</td>
+        {/* <td>{league.settings.draft_settings.order}</td> */}
+        <td>{'No order generated'}</td>
       </tr>
     </tbody>
   ) : (
