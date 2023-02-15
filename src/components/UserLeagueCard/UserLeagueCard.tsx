@@ -16,11 +16,8 @@ export function UserLeagueCard(props: UserLeagueCardProps) {
   return (
     <Link href={link}>
       <div className='grid grid-cols-5 bg-white rounded-xl h-80 border hover:border-orange border-white'>
-        <div
-          className='grid col-span-1 items-center'
-          style={{ width: 'auto', height: '17rem', position: 'relative' }}
-        >
-          <Image src={NFL} alt={props.league.name + '-image'} />
+        <div className='grid col-span-1 items-center'>
+          <Image src={NFL} alt={props.league.name + '-image'} width={225} height={225} />
         </div>
         <div className='grid col-span-4 items-center'>
           <div className='grid grid-rows-2'>

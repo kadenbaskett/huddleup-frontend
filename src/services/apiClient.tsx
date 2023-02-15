@@ -46,6 +46,11 @@ export async function createTeam(teamData: object) {
   return await postRequest(url, teamData);
 }
 
+export async function userToTeam(userToTeamData: object) {
+  const url = `${BASE_URL}/database/userToTeam`;
+  return await postRequest(url, userToTeamData);
+}
+
 export async function editLineup(rosterPlayerId: number, newPosition: string) {
   const data = { rosterPlayerId, newPosition };
   const url = `${BASE_URL}/database/roster/editLineup`;

@@ -20,7 +20,7 @@ export interface Scoring {
 
 export interface Team {
   id: number;
-  token: number;
+  token: string;
   name: string;
   wins: number;
   losses: number;

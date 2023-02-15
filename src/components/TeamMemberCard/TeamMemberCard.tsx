@@ -1,7 +1,7 @@
 import { Button, Grid } from '@mantine/core';
 import Image from 'next/image';
 import React from 'react';
-import NFL from '../../../../../../public/assets/NFL.png';
+import NFL from '../../public/assets/NFL.png';
 
 export interface TeamMemberCardProps {
   manager: any;

@@ -229,3 +229,7 @@ export function createManagerString(managers) {
   });
   return tempManagerString;
 }
+
+export function findTeamByToken(league, token: string) {
+  return league.teams.find((team) => team.token === token);
+}

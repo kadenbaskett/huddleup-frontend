@@ -38,22 +38,25 @@ export default function index() {
   const user = useSelector((state: StoreState) => state.user);
   const captainID = userTeam?.managers.find((manager) => manager.is_captain).user_id;
   const isUserManager = user.userInfo?.id === captainID;
+  const teamManagers = userTeam?.managers;
   return (
     <>
       {leagueInfoFetchStatus !== 'succeeded' && userStatus !== 'succeeded' && <HuddleUpLoader />}
-      {leagueInfoFetchStatus === 'succeeded' && userStatus === 'succeeded' && (
+      {leagueInfoFetchStatus === 'succeeded' && (
         <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
           <div className='pt-4 pb-4'>
             <label className='font-varsity text-6xl'>{league.name}</label>
             <div>
-              <label className='font-varsity text-orange text-3xl'>{userTeam.name}</label>
+              <label className='font-varsity text-orange text-3xl'>
+                {userTeam ? userTeam.name : ''}
+              </label>
             </div>
           </div>
 
           <div className='pt-4 pb-4'>
             <label className='font-OpenSans font-bold text-2xl'>Team Members:</label>
             <>
-              {userTeam.managers.map((manager) => {
+              {teamManagers?.map((manager) => {
                 return createTeamMemberCard(manager, isUserManager);
               })}
             </>
@@ -62,7 +65,7 @@ export default function index() {
           <div>{isUserManager ? showDeleteButton() : ''}</div>
 
           <div className='pt-4'>
-            <InviteCard userTeam={userTeam} />
+            <InviteCard userTeam={userTeam} league={league} />
           </div>
         </div>
       )}
