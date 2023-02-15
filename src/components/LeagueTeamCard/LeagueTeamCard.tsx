@@ -39,7 +39,6 @@ export default function LeagueTeamCard(props: LeagueTeamCardProps) {
   const user: userSliceState = useSelector((state: StoreState) => state.user);
   const color = props.team.managers.length >= props.league.settings.min_players ? 'green' : 'red';
   const managerIDs: number[] = [];
-  console.log('props.team.mangers', props.team.managers);
   props.team.managers.forEach((manager) => {
     managerIDs.push(manager.id);
   });
