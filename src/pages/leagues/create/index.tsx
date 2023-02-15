@@ -13,6 +13,7 @@ import { createLeague } from '@services/apiClient';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@store/store';
 import { userSliceState } from '@store/slices/userSlice';
+import router from 'next/router';
 interface teamSlider {
   value: number;
   label: string;
@@ -53,7 +54,12 @@ export default function index() {
     setMaxPlayerRange(value[1]);
   }
 
-  async function handleSubmit(event: { preventDefault: () => void }) {
+  const preventDefault = (f) => (e) => {
+    e.preventDefault();
+    f(e);
+  };
+
+  const handleSubmit = preventDefault(async () => {
     const scoring = document.querySelector('input[name="hosting"]:checked').getAttribute('value');
     const league = {
       commissionerId: user.userInfo.id,
@@ -66,8 +72,11 @@ export default function index() {
       scoring,
       // need to add a parameter for the current user because this would be the commisioner of this league
     };
-    await createLeague(league);
-  }
+    const newLeague = await createLeague(league);
+    await router.push({
+      pathname: `/leagues/${Number(newLeague.data.id)}/create`,
+    });
+  });
 
   return (
     <form onSubmit={handleSubmit}>

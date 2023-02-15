@@ -1,6 +1,7 @@
 export interface League {
   id: number;
   name: string;
+  token: number;
   description: string;
   settings: Settings;
   teams: Team[];
@@ -19,6 +20,7 @@ export interface Scoring {
 
 export interface Team {
   id: number;
+  token: string;
   name: string;
   wins: number;
   losses: number;

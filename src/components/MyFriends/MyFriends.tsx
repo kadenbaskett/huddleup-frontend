@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import ProfilePic from '../../../../public/assets/jakewhiteprofessionalpic.png';
+import ProfilePic from '../../public/assets/jakewhiteprofessionalpic.png';
 import styles from './MyFriends.module.css';
 import { Grid, Group } from '@mantine/core';
 import { Friend } from '@pages/home/types';
@@ -11,7 +11,7 @@ export interface myFriendProps {
 
 const renderFriend = (friend: Friend) => {
   return (
-    <Link href={`/user/${friend.id}/profile`}>
+    <Link href={`/user/${Number(friend.id)}/profile`}>
       <div
         id={styles.card}
         className='bg-white rounded-xl border border-white h-[7rem] hover:border-orange'
