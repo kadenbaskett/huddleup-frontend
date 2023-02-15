@@ -1,6 +1,10 @@
 import { Table } from '@mantine/core';
 import Link from 'next/link';
 
+export const HuddleUpDate = (date: Date) => {
+  return date.toUTCString();
+};
+
 export const getTeamThatOwnsPlayer = (player, currentWeek) => {
   const currentRosterPlayer = player.roster_players?.find((rp) => rp.roster.week === currentWeek);
   return currentRosterPlayer ? currentRosterPlayer.roster.team : null;

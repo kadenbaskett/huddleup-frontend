@@ -27,3 +27,7 @@
 #content-wrap {
   padding-bottom: 6rem;    /* Footer height */
 }
+
+.settings-table tr td{
+  width: 50%;
+}
