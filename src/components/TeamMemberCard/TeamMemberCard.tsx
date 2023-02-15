@@ -1,28 +1,51 @@
 import { Button, Grid } from '@mantine/core';
+import { removeUserFromTeam } from '@services/apiClient';
+import { StoreState } from '@store/store';
 import Image from 'next/image';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import NFL from '../../public/assets/NFL.png';
 
 export interface TeamMemberCardProps {
   manager: any;
   isCaptain: boolean;
+  team: any;
 }
 
-const showRemove = () => {
-  return (
-    <>
-      <Button
-        className={`${'bg-transparent hover:bg-red text-red hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
-        variant='default'
-        size='sm'
-      >
-        Remove
-      </Button>
-    </>
-  );
-};
-
 export default function TeamMemberCard(props: TeamMemberCardProps) {
+  const userTeam = useSelector((state: StoreState) => state.league.userTeam);
+
+  const preventDefault = (f) => (e) => {
+    e.preventDefault();
+    f(e);
+  };
+
+  const handleSubmit = preventDefault(async () => {
+    const userToRemove = {
+      user: props.manager,
+      userTeam,
+    };
+    await removeUserFromTeam(userToRemove);
+  });
+
+  const showRemove = () => {
+    return (
+      <>
+        <form onSubmit={handleSubmit}>
+          <Button
+            className={`${'bg-transparent hover:bg-red text-red hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+            variant='default'
+            size='sm'
+            formMethod='POST'
+            type='submit'
+          >
+            Remove
+          </Button>
+        </form>
+      </>
+    );
+  };
+
   return (
     <>
       <div className='bg-white rounded-xl border border-white h-[4.5rem] transition-all ease-in duration-100 hover:drop-shadow-md'>

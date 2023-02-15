@@ -9,11 +9,18 @@ import LeagueCard from '../../../../../components/LeagueCard/LeagueCard';
 import LeagueTeamCard from '../../../../../components/LeagueTeamCard/LeagueTeamCard';
 
 export default function index() {
+  const user = useSelector((state: StoreState) => state.user);
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
   const [JoinTeamByTokenPopUp, setJoinTeamByTokenPopUp] = useState(false);
 
-  console.log('league', league);
+  const managerIDs: number[] = [];
+  league?.teams.forEach((team) => {
+    team.managers.forEach((manager) => {
+      managerIDs.push(manager.id);
+    });
+  });
+
   const leagueTokens: string[] = [];
   league?.teams?.forEach((team) => {
     if (team.managers.length < league.settings.max_players) {
@@ -29,6 +36,11 @@ export default function index() {
   const onJoinTeamByTokenClose = () => {
     setJoinTeamByTokenPopUp(false);
   };
+
+  const onTeam = () => {
+    return !managerIDs.includes(user.userInfo.id);
+  };
+
   return (
     <>
       {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
@@ -46,8 +58,9 @@ export default function index() {
                   variant='default'
                   size='xl'
                   radius='lg'
+                  disabled={onTeam()}
                 >
-                  Create Team
+                  {onTeam() ? '' : 'Create Team'}
                 </Button>
               </Link>
               <Button
@@ -56,8 +69,9 @@ export default function index() {
                 size='xl'
                 radius='lg'
                 onClick={(evt) => onJoinTeamByTokenClick(evt)}
+                disabled={onTeam()}
               >
-                Join Team By Token
+                {onTeam() ? '' : 'Join Team by Token'}
               </Button>
             </Group>
           </div>
