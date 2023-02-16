@@ -175,6 +175,11 @@ export async function fetchPublicLeagues(): Promise<respObj> {
   return await getRequest(url);
 }
 
+export async function fetchPrivateLeagues(): Promise<respObj> {
+  const url = `${BASE_URL}/database/leagues/private`;
+  return await getRequest(url);
+}
+
 export async function fetchTimeframe(): Promise<respObj> {
   const url = `${BASE_URL}/database/timeframe`;
   return await getRequest(url);

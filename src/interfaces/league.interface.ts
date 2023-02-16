@@ -1,7 +1,7 @@
 export interface League {
   id: number;
   name: string;
-  token: number;
+  token: string;
   description: string;
   settings: Settings;
   teams: Team[];
