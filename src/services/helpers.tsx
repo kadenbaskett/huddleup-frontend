@@ -1,3 +1,4 @@
+import { League } from '@interfaces/league.interface';
 import { Table } from '@mantine/core';
 import Link from 'next/link';
 
@@ -232,4 +233,9 @@ export function createManagerString(managers) {
 
 export function findTeamByToken(league, token: string) {
   return league.teams.find((team) => team.token === token);
+}
+
+export async function findLeagueByToken(privateleagues, token: string) {
+  const league: League = privateleagues.find((league) => league.token === token);
+  return league.id;
 }

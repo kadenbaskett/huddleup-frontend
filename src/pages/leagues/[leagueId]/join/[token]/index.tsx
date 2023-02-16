@@ -21,10 +21,10 @@ export default function index() {
     });
   });
 
-  const leagueTokens: string[] = [];
+  const teamTokens: string[] = [];
   league?.teams?.forEach((team) => {
     if (team.managers.length < league.settings.max_players) {
-      return leagueTokens.push(team.token);
+      return teamTokens.push(team.token);
     }
   });
 
@@ -89,7 +89,7 @@ export default function index() {
           <JoinTeamByToken
             opened={JoinTeamByTokenPopUp}
             closed={onJoinTeamByTokenClose}
-            tokens={leagueTokens}
+            tokens={teamTokens}
           />
         </div>
       )}

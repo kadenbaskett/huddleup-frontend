@@ -6,14 +6,32 @@ import { StoreState } from '@store/store';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { JoinLeagueCard } from '@components/JoinLeagueCard/JoinLeagueCard';
+import JoinLeagueByToken from '@components/JoinLeagueByToken/JoinLeagueByToken';
 
 function leagues() {
   const globalStatus = useSelector((state: StoreState) => state.global.status);
   const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
+  const privateLeagues = useSelector((state: StoreState) => state.global.privateLeagues);
   const userInfoFetchStatus = useSelector((state: StoreState) => state.user.status);
   const user: userSliceState = useSelector((state: StoreState) => state.user);
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
+  const [JoinLeagueByTokenPopUp, setJoinLeagueByTokenPopUp] = useState(false);
+
+  const leagueTokens: string[] = [];
+  privateLeagues?.forEach((league) => leagueTokens.push(league.token));
+  results.forEach((league) => {
+    leagueTokens.push(league.token);
+  });
+
+  const onJoinLeagueByTokenClick = (event) => {
+    event.preventDefault();
+    setJoinLeagueByTokenPopUp(true);
+  };
+
+  const onJoinLeagueByTokenClose = () => {
+    setJoinLeagueByTokenPopUp(false);
+  };
 
   useEffect(() => {
     if (userInfoFetchStatus === 'succeeded') {
@@ -65,9 +83,9 @@ function leagues() {
                 className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
                 variant='default'
                 size='xl'
-                type='submit'
+                onClick={(evt) => onJoinLeagueByTokenClick(evt)}
               >
-                Find By League Token
+                Find Private League By Token
               </Button>
             </div>
             <div className='pr-10 pl-10 pb-10 pt-5 '>
@@ -90,6 +108,12 @@ function leagues() {
               <div className='pt-5'>{results.map((league) => renderLeague(league))}</div>
             </div>
           </div>
+
+          <JoinLeagueByToken
+            opened={JoinLeagueByTokenPopUp}
+            closed={onJoinLeagueByTokenClose}
+            tokens={leagueTokens}
+          />
         </div>
       )}
     </>

@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux';
 import InviteCard from '../../../../../components/InviteCard/InviteCard';
 import TeamMemberCard from '../../../../../components/TeamMemberCard/TeamMemberCard';
 
-const createTeamMemberCard = (manager, isCaptain: boolean) => {
+const createTeamMemberCard = (manager, isCaptain: boolean, team) => {
   return (
     <div className='pt-1 pb-1'>
-      <TeamMemberCard manager={manager} isCaptain={isCaptain} />
+      <TeamMemberCard manager={manager} isCaptain={isCaptain} team={team} />
     </div>
   );
 };
@@ -57,7 +57,7 @@ export default function index() {
             <label className='font-OpenSans font-bold text-2xl'>Team Members:</label>
             <>
               {teamManagers?.map((manager) => {
-                return createTeamMemberCard(manager, isUserManager);
+                return createTeamMemberCard(manager, isUserManager, userTeam);
               })}
             </>
           </div>
