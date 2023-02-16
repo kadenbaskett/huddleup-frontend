@@ -15,7 +15,7 @@ export interface LeagueTeamCardProps {
 }
 
 const onTeam = (user, managerIDs: number[]) => {
-  return !managerIDs.includes(user.id);
+  return managerIDs.includes(user.userInfo.id);
 };
 
 const viewTeamButton = (league: League, team: Team) => {
@@ -40,37 +40,46 @@ export default function LeagueTeamCard(props: LeagueTeamCardProps) {
   const color = props.team.managers.length >= props.league.settings.min_players ? 'green' : 'red';
   const managerIDs: number[] = [];
   props.team.managers.forEach((manager) => {
-    managerIDs.push(manager.id);
+    managerIDs.push(manager.user_id);
   });
   return (
     <>
-      <div className='bg-white rounded-xl border border-white h-[7rem] transition-all ease-in duration-200 hover:drop-shadow'>
-        <Grid columns={24} grow align='flex-start' justify='flex-start' className='pl-5'>
-          <Grid.Col className='pt-7' span={1}>
-            <Image src={NFL} alt={props.team.name + '-image'} height={45} width={45} />
-          </Grid.Col>
-          <Grid.Col span={14}>
-            <div className='text-5xl font-varsity text-orange inline-block'>
-              {props.team.name}{' '}
-              {onTeam(user, managerIDs) ? viewTeamButton(props.league, props.team) : ''}
+      <div className='bg-white rounded-xl border border-white p-2 transition-all ease-in duration-200 hover:drop-shadow'>
+        <Grid grow align='flex-start' justify='flex-start' className='pl-5'>
+          <Grid.Col className='pt-7' span={5}>
+            <div className='flex'>
+              <div className='pl-2 pr-5'>
+                <Image src={NFL} alt={props.team.name + '-image'} height={55} width={55} />
+              </div>
+              <div>
+                <div className='lg:text-3xl sm:text-xl font-varsity text-orange inline-block'>
+                  {props.team.name}{' '}
+                </div>
+                <div className='lg:text-xl sm:text-md font-OpenSans font-bold text-darkBlue'>
+                  Team Members:
+                </div>
+                <div className='lg:text-md sm:text-sm font-OpenSans font-bold text-darkBlue'>
+                  {createManagerString(props.team.managers)}
+                </div>
+              </div>
             </div>
-            <div className='text-xl font-OpenSans font-bold text-darkBlue'>Team Members:</div>
-            <div className='font-OpenSans font-bold text-darkBlue'>
-              {createManagerString(props.team.managers)}
-            </div>
           </Grid.Col>
-          <Grid.Col span={7} className='text-2xl text-darkBlue pt-6 pb-5 pl-5 pr-8'>
+          <Grid.Col span={3} className='text-2xl text-darkBlue pt-6 pb-5 pl-5 pr-8'>
             <Grid justify='flex-end'>
-              <Grid.Col span='content'>
-                <div className='grid place-items-center'>
-                  <div className={`text-5xl font-varsity text-${color}`}>
-                    {props.team.managers.length}/{props.league.settings.max_players}
-                  </div>
-                  <div className={`text-xl font-varsity inline-flex text-${color}`}>
-                    Spots Filled
+              <div className='flex'>
+                <div className='text-5xl font-varsity text-orange inline-block'></div>
+                <div className='grid place-item-end'>
+                  <div className='grid place-items-center'>
+                    <div className={`text-5xl font-varsity text-${color} `}>
+                      {props.team.managers.length}/{props.league.settings.max_players}
+                    </div>
+                    <div className={`text-xl font-varsity inline-flex text-${color} text-center`}>
+                      Spots Filled
+                    </div>
+                    {onTeam(user, managerIDs) ? viewTeamButton(props.league, props.team) : ''}
                   </div>
                 </div>
-              </Grid.Col>
+              </div>
             </Grid>
           </Grid.Col>
         </Grid>

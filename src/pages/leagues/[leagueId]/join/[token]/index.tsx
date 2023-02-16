@@ -17,7 +17,7 @@ export default function index() {
   const managerIDs: number[] = [];
   league?.teams.forEach((team) => {
     team.managers.forEach((manager) => {
-      managerIDs.push(manager.id);
+      managerIDs.push(manager.user_id);
     });
   });
 
@@ -37,10 +37,6 @@ export default function index() {
     setJoinTeamByTokenPopUp(false);
   };
 
-  const onTeam = () => {
-    return !managerIDs.includes(user.userInfo.id);
-  };
-
   return (
     <>
       {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
@@ -51,36 +47,40 @@ export default function index() {
           </div>
 
           <div className='pt-3'>
-            <Group position='left'>
-              <Link href={`/leagues/${Number(league.id)}/create`}>
-                <Button
-                  className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange bg-orange text-white border-transparent transition ease-in duration-200'
-                  variant='default'
-                  size='xl'
-                  radius='lg'
-                  disabled={onTeam()}
-                >
-                  {onTeam() ? '' : 'Create Team'}
-                </Button>
-              </Link>
-              <Button
-                className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200'
-                variant='default'
-                size='xl'
-                radius='lg'
-                onClick={(evt) => onJoinTeamByTokenClick(evt)}
-                disabled={onTeam()}
-              >
-                {onTeam() ? '' : 'Join Team by Token'}
-              </Button>
-            </Group>
+            {!managerIDs.includes(user.userInfo.id) && (
+              <>
+                <Group position='left'>
+                  <Link href={`/leagues/${Number(league.id)}/create`}>
+                    <Button
+                      className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange bg-orange text-white border-transparent transition ease-in duration-200'
+                      variant='default'
+                      size='xl'
+                      radius='lg'
+                    >
+                      Create Team
+                    </Button>
+                  </Link>
+                  <Button
+                    className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200'
+                    variant='default'
+                    size='xl'
+                    radius='lg'
+                    onClick={(evt) => onJoinTeamByTokenClick(evt)}
+                  >
+                    Join Team by Token
+                  </Button>
+                </Group>
+              </>
+            )}
           </div>
 
           <div className='pt-5'>
             {league.teams.map((team) => {
               return (
                 <>
-                  <LeagueTeamCard team={team} league={league} />
+                  <div className='pb-5'>
+                    <LeagueTeamCard team={team} league={league} />
+                  </div>
                 </>
               );
             })}
