@@ -37,6 +37,7 @@ const friendData: Friend[] = [
 export default function Home(props: any) {
   const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
   const userTeams: any[] = useSelector((state: StoreState) => state.user.teams);
+  const userLeagues: any[] = useSelector((state: StoreState) => state.user.leagues);
   const news: News[] = useSelector((state: StoreState) => state.global.news);
   return (
     <>
@@ -45,7 +46,7 @@ export default function Home(props: any) {
         <div className='grid grid-cols-10 gap-6 bg-lightGrey p-10 min-h-screen'>
           <div className='col-span-3'>
             <div className='bg-white rounded-xl hover:drop-shadow-md'>
-              <MyTeams teams={userTeams} />
+              <MyTeams teams={userTeams} leagues={userLeagues} />
             </div>
             <div className='pt-5'>
               <div className='grid grid-cols-1 bg-white hover:drop-shadow-md rounded-xl'>
