@@ -37,7 +37,7 @@ export default function LeagueCard(props: LeagueCardProps) {
           <Grid.Col span={2} className='text-2xl text-darkBlue pt-6 pb-5 pl-5 pr-8'>
             <div className='grid place-items-end'>
               <div className='grid place-items-center'>
-                <div className='text-5xl font-varsity text-darkBlue text-align-center '>
+                <div className='text-5xl font-varsity text-darkBlue'>
                   {props.league.teams.length}/{props.league.settings.num_teams}
                 </div>
                 <div className='text-xl font-varsity text-darkBlue'>teams</div>
