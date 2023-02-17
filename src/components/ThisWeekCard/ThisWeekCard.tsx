@@ -4,8 +4,8 @@ import { Grid, SegmentedControl } from '@mantine/core';
 import { getTeamScore } from '@services/helpers';
 import { useEffect, useState } from 'react';
 import { GiAmericanFootballHelmet } from 'react-icons/gi';
-import { OtherMatchups } from './OtherMatchups';
-import { PlayerCard } from './PlayerCard';
+import { OtherMatchups } from '../MatchupsOtherMatchups/OtherMatchups';
+import { PlayerCard } from '../MatchupsPlayerCard/PlayerCard';
 
 export interface ThisWeekCardProps {
   league: League;
