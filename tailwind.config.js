@@ -20,6 +20,7 @@ module.exports = {
         darkBlue: '#0C0729',
         darkerBlue: '#050217',
         lightGrey: '#ECECEC',
+        darkGrey: '#CECECE',
         red: '#FF0000',
         yellow: '#FFBA01',
       },
