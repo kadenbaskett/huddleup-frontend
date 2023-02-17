@@ -4,6 +4,7 @@ export interface League {
   token: string;
   description: string;
   settings: Settings;
+  matchups: any[];
   teams: Team[];
 }
 
