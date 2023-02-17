@@ -3,6 +3,7 @@ export interface League {
   name: string;
   description: string;
   settings: Settings;
+  matchups: any[];
   teams: Team[];
 }
 

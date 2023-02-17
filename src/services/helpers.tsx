@@ -105,16 +105,16 @@ export function mapPositionToTable(player, gameLogs) {
     );
 
     const rows = gameLogs.map((game) => (
-      <tr key={game.id}>
-        <td>{game.game.week}</td>
-        <td>{game.rush_attempts}</td>
-        <td>{game.rush_yards}</td>
-        <td>{game.rush_td}</td>
-        <td>{game.targets}</td>
-        <td>{game.receptions}</td>
-        <td>{game.rec_yards}</td>
-        <td>{game.rec_td ? 1 : ''}</td>
-        <td>{game.fumbles ? 1 : ''}</td>
+      <tr key={game?.id}>
+        <td>{game?.game?.week}</td>
+        <td>{game?.rush_attempts}</td>
+        <td>{game?.rush_yards}</td>
+        <td>{game?.rush_td}</td>
+        <td>{game?.targets}</td>
+        <td>{game?.receptions}</td>
+        <td>{game?.rec_yards}</td>
+        <td>{game?.rec_td ? 1 : ''}</td>
+        <td>{game?.fumbles ? 1 : ''}</td>
         <td>{fantasyPoints(game)}</td>
       </tr>
     ));
@@ -128,7 +128,7 @@ export function mapPositionToTable(player, gameLogs) {
   }
 }
 
-export function fantasyPoints(s, pprValue = 1) {
+export function fantasyPoints(s, pprValue = 1): number {
   // console.log('s', s);
   if (s) {
     let points = 0;
@@ -215,13 +215,23 @@ export function createManagerString(managers) {
   let i = 0;
   const tempManagerString = managers.map((m) => {
     i++;
-    const id: number = m.user.id;
+    const id: number = m.user?.id;
     return (
       <>
-        {<Link href={`/user/${id}/profile`}>{m.user.username}</Link>}
+        {<Link href={`/user/${id}/profile`}>{m.user?.username}</Link>}
         {i !== managers.length ? ', ' : ''}
       </>
     );
   });
   return tempManagerString;
+}
+
+export function getTeamScore(roster, week) {
+  let score = 0;
+  roster.players.forEach((player) => {
+    if (player.position === 'BE') return;
+    const stats = player.player.player_game_stats.find((stat) => stat.game.week === week);
+    score += fantasyPoints(stats);
+  });
+  return Math.round(score * 100) / 100;
 }
