@@ -1,7 +1,7 @@
 import { Team } from '@interfaces/league.interface';
 import { Grid } from '@mantine/core';
-import { calculateStandings } from '@services/helpers';
-import React, { useEffect, useState } from 'react';
+import { calculateStandings, useWindowResize } from '@services/helpers';
+import React from 'react';
 import { RosterCard } from '../RosterCard/RosterCard';
 
 export interface RosterGridProps {
@@ -10,36 +10,22 @@ export interface RosterGridProps {
   leagueId: any;
 }
 
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-}
-
 const createRosterCard = (team: Team, leagueID: any, week: number) => {
   return <RosterCard team={team} leagueID={leagueID} week={week} />;
 };
 
 export default function RosterGrid(props: RosterGridProps) {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-
-  useEffect(() => {
-    function handleResize() {
-      console.log('windowDimensions', windowDimensions);
-      setWindowDimensions(getWindowDimensions());
-    }
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+  const windowSize: number[] = useWindowResize();
+  let span;
+  if (windowSize[0] > 1000 || windowSize[0] === 0) span = 4;
+  else if (windowSize[0] > 700) span = 6;
+  else span = 8;
   return (
     <Grid>
       {calculateStandings(props.league, props.week).map((team) => {
         return (
           <>
-            <Grid.Col span={4}>{createRosterCard(team, props.leagueId, props.week)}</Grid.Col>
+            <Grid.Col span={span}>{createRosterCard(team, props.leagueId, props.week)}</Grid.Col>
           </>
         );
       })}

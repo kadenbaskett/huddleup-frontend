@@ -20,7 +20,7 @@ const renderFriend = (friend: Friend) => {
           <Grid.Col span='auto'>
             <Group position='left'>
               <Image src={ProfilePic} alt={'-image'} height={100} width={100} />
-              <div className='text-4xl font-varsity text-darkBlue pt-1'>{friend.name}</div>
+              <div className='text-xl font-varsity text-darkBlue pt-1'>{friend.name}</div>
             </Group>
           </Grid.Col>
         </Grid>

@@ -1,6 +1,7 @@
 import { League } from '@interfaces/league.interface';
 import { Table } from '@mantine/core';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 export const HuddleUpDate = (date: Date) => {
   return date.toUTCString();
@@ -238,4 +239,21 @@ export function findTeamByToken(league, token: string) {
 export async function findLeagueByToken(privateleagues, token: string) {
   const league: League = privateleagues.find((league) => league.token === token);
   return league.id;
+}
+
+export function useWindowResize() {
+  const [dimension, setDimension] = useState([0, 0]);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      setDimension([window.innerWidth, window.innerHeight]);
+    });
+    return () => {
+      window.removeEventListener('resize', () => {
+        setDimension([window.innerWidth, window.innerHeight]);
+      });
+    };
+  }, []);
+
+  return dimension;
 }

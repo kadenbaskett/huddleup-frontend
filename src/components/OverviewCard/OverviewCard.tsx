@@ -1,4 +1,5 @@
 import { Grid } from '@mantine/core';
+import { useWindowResize } from '@services/helpers';
 import React from 'react';
 import { Activity, Team } from '../../types';
 import { RecentActivityTable } from '../RecentActivityTable/RecentActivityTable';
@@ -10,13 +11,24 @@ export interface OverviewCardProps {
 }
 
 export default function OverviewCard(props: OverviewCardProps) {
+  const windowSize = useWindowResize();
+  let top5Span;
+  let recentActivityTableSpan;
+  if (windowSize[0] > 800) {
+    recentActivityTableSpan = 7;
+    top5Span = 3;
+  } else {
+    recentActivityTableSpan = 10;
+    top5Span = 10;
+  }
+
   return (
     <div>
       <Grid columns={10}>
-        <Grid.Col span={7}>
+        <Grid.Col span={recentActivityTableSpan}>
           <RecentActivityTable activities={props.activities} />
         </Grid.Col>
-        <Grid.Col span={3}>
+        <Grid.Col span={top5Span}>
           <Top5StandingTable teams={props.teams} />
         </Grid.Col>
       </Grid>
