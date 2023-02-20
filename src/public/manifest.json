@@ -1,0 +1,17 @@
+{
+  "name": "HuddleUp Fantasy App",
+  "short_name": "HuddleUp App",
+  "theme_color": "#FF6B00",
+  "background_color": "#0C0729",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
