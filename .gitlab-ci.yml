@@ -19,6 +19,7 @@ stages:
 deploy:
   stage: deploy
   script:
+    - touch key.pem
     - echo "$EC2_KEY"
     - echo "$EC2_KEY" | tr -d '\r' > key.pem
     - cat key.pem | echo
