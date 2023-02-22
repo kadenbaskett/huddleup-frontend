@@ -1,10 +1,11 @@
 stages:
+  - install npm
   - build
   # - test
   - deploy
 
 before_script:
-  stage: before_script
+  stage: install npm
   script:
     - npm install
   tags:
