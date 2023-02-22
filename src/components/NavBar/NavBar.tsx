@@ -16,7 +16,7 @@ export default function Navbar() {
               className='text-3xl font-varsity leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white'
               href='/'
             >
-              Huddle Up
+              Not Huddle Up
             </Link>
           </div>
           <div className={'lg:flex flex-grow items-center'} id='example-navbar-danger'>
