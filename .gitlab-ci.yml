@@ -1,15 +1,15 @@
 stages:
-  - build
+  # - build
   # - test
   - deploy
 
-build:
-  stage: build
-  script:
-    - sudo apt-get install npm=8.19.2
-    - npm run build
-  tags:
-    - deploy main
+# build:
+#   stage: build
+#   script:
+#     - sudo apt-get install npm=8.19.2
+#     - npm run build
+#   tags:
+#     - deploy main
 
 # test:
 #   stage: test
