@@ -20,6 +20,7 @@ deploy:
   stage: deploy
   script:
     - touch key.pem
+    - ls -la key.pem
     - echo "$EC2_KEY"
     - echo "$EC2_KEY" > key.pem
     - echo "key written"
