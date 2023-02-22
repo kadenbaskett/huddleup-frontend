@@ -1,19 +1,13 @@
 stages:
-  - install npm
   - build
   # - test
   - deploy
 
-install npm:
-  stage: install npm
-  script:
-    - npm install
-  tags:
-    - deploy main
-
 build:
   stage: build
   script:
+    - cd huddlup
+    - cd webapp
     - npm run build
   tags:
     - deploy main
@@ -26,7 +20,11 @@ build:
 deploy:
   stage: deploy
   script:
-    - ssh -i "HuddleUpKeyPair.pem" ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com 'cd /huddleup/webapp && git checkout main && git pull && npm install && npm run build && pm2 start npm --name "webapp" -- start'
+    - git checkout main
+    - git pull
+    - npm install
+    - npm run build
+    - pm2 start npm --name "webapp" -- start'
   only:
     - main
   tags:
