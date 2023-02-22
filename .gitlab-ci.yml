@@ -19,9 +19,11 @@ stages:
 deploy:
   stage: deploy
   script:
-    - ssh -i <(echo "$EC2_KEY") ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com "cd /huddleup/webapp && git checkout main && git pull && npm install && npm run build && pm2 start npm --name "webapp" -- start"
+    - ssh -i <(echo "$EC2_KEY") ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
   tags:
     - deploy main
+
+    #  "cd /huddleup/webapp && git checkout main && git pull && npm install && npm run build && pm2 start npm --name "webapp" -- start"
 # deploy:
 #   stage: deploy
 #   script:
