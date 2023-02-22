@@ -1,9 +1,14 @@
+import AddDropPlayerConfirmPopup from '@components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
+import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
+import TradePlayerPopup from '@components/TradePlayerPopup/TradePlayerPopup';
 import { League, Team } from '@interfaces/league.interface';
 import { Grid, SegmentedControl } from '@mantine/core';
-import { getTeamScore } from '@services/helpers';
+import { getTeamScore, getTeamThatOwnsPlayer } from '@services/helpers';
+import { StoreState } from '@store/store';
 import { useEffect, useState } from 'react';
 import { GiAmericanFootballHelmet } from 'react-icons/gi';
+import { useSelector } from 'react-redux';
 import { OtherMatchups } from '../MatchupsOtherMatchups/OtherMatchups';
 import { PlayerCard } from '../MatchupsPlayerCard/PlayerCard';
 
@@ -14,14 +19,33 @@ export interface ThisWeekCardProps {
 }
 
 export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
+  const user = useSelector((state: StoreState) => state.user.userInfo);
+
   const [week, setWeek] = useState(currentWeek);
-  const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [userRoster, setUserRoster] = useState(undefined);
   const [otherTeam, setOtherTeam] = useState(undefined);
   const [otherRoster, setOtherRoster] = useState(undefined);
   const [homeScore, setHomeScore] = useState(0);
   const [otherScore, setOtherScore] = useState(0);
+
+  // Trade popup
+  const [tradePopupOpen, setTradePopupOpen] = useState(false);
+  const [tradeRoster, setTradeRoster] = useState(null);
+
+  // Are we adding or dropping the player?
+  const [addingPlayer, setAddingPlayer] = useState(false);
+
+  // Confirm popup
+  const [addDropConfirmPopupOpen, setAddDropConfirmPopupOpen] = useState(false);
+
+  // Add Drop popup
+  const [addDropPopupOpen, setAddDropPopupOpen] = useState(false);
+
+  // Player popup
+  const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
+
+  // Used for all popups
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   useEffect(() => {
     const newMatchup = league?.matchups.find((matchup) => {
@@ -55,16 +79,70 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
     return manager.user.username;
   });
 
-  // When a player is clicked
-  const onPlayerClick = (event, p) => {
-    event.preventDefault();
-    setPlayerPopupOpen(true);
-    setSelectedPlayer(p);
+  // On close methods of popups
+  const onTradePopupClose = () => {
+    setTradePopupOpen(false);
+    setSelectedPlayer(null);
   };
+
+  const onAddDropPopupClose = () => {
+    setAddDropPopupOpen(false);
+    setSelectedPlayer(null);
+  };
+
+  const onAddDropConfirmClose = () => {
+    setAddDropConfirmPopupOpen(false);
+    setSelectedPlayer(null);
+  };
+
   const onPlayerPopupClose = () => {
     setPlayerPopupOpen(false);
   };
 
+  // When a player is clicked
+  const onPlayerClick = (event, p) => {
+    event.preventDefault();
+    setSelectedPlayer(p);
+    setPlayerPopupOpen(true);
+  };
+
+  // Takes the necessary action to add/drop/trade for player
+  const takePlayerAction = (player) => {
+    setSelectedPlayer(player);
+
+    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek);
+    const myRoster = getMyRoster();
+    const isMyPlayer = playerTeam?.id === team.id;
+
+    // Nobody owns the player -> they are a free agent
+    if (!playerTeam) {
+      // TODO use league settings instead of CONFIG
+      // No need to drop a player as part of the transaction if your roster isn't full
+      if (myRoster.players.length < CONFIG.maxRosterSize) {
+        setAddingPlayer(true);
+        setAddDropConfirmPopupOpen(true);
+      } else {
+        setAddDropPopupOpen(true);
+      }
+    }
+    // I own the player - so drop them
+    else if (isMyPlayer) {
+      setAddingPlayer(false);
+      setAddDropConfirmPopupOpen(true);
+    }
+    // Another team owns this player - so propose a trade
+    else {
+      const tradeTeam = league.teams.find((t) => t.id === playerTeam.id);
+      const tradeRoster = tradeTeam.rosters.find((r) => r.week === currentWeek);
+
+      setTradeRoster(tradeRoster);
+      setTradePopupOpen(true);
+    }
+  };
+
+  const getMyRoster = () => {
+    return team ? team.rosters.find((r) => r.week === currentWeek) : [];
+  };
   const weeks = new Array(Number(currentWeek) - 1);
   for (let i = 1; i <= Number(currentWeek); i++) {
     weeks[i - 1] = { label: i.toString(), value: i.toString() };
@@ -75,8 +153,35 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
         player={selectedPlayer}
         opened={playerPopupOpen}
         onClose={onPlayerPopupClose}
-        onPlayerAction={() => {}}
+        onPlayerAction={takePlayerAction}
       />
+
+      <AddDropPlayerPopup
+        roster={getMyRoster()}
+        player={selectedPlayer}
+        opened={addDropPopupOpen}
+        onClose={onAddDropPopupClose}
+        userId={user.id}
+      />
+
+      <TradePlayerPopup
+        otherRoster={tradeRoster}
+        myRoster={getMyRoster()}
+        player={selectedPlayer}
+        opened={tradePopupOpen}
+        onClose={onTradePopupClose}
+        userId={user.id}
+        week={currentWeek}
+      />
+      <AddDropPlayerConfirmPopup
+        roster={getMyRoster()}
+        isAdd={addingPlayer}
+        player={selectedPlayer}
+        opened={addDropConfirmPopupOpen}
+        onClose={onAddDropConfirmClose}
+        userId={user.id}
+      />
+
       <div className='bg-white rounded-xl hover:drop-shadow-md'>
         <div className='p-3'>
           <div className='font-varsity text-darkBlue text-2xl'>Week:</div>

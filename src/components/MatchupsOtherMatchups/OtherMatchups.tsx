@@ -8,7 +8,6 @@ export interface OtherMatchupsProps {
 }
 export function OtherMatchups({ league, userTeamId, week }: OtherMatchupsProps) {
   const thisWeekMatchups = league.matchups.filter((matchup) => matchup.week === week);
-  console.log('league', league);
   return (
     <>
       <div className='text-2xl font-varsity text-darkBlue'>Other Matchups</div>
