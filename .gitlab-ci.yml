@@ -19,7 +19,10 @@ stages:
 deploy:
   stage: deploy
   script:
-    - ssh -i <(echo "$EC2_KEY") ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
+    # Write the contents of the secret to a temporary file
+    - echo "$EC2_KEY" > /tmp/key.pem
+    - chmod 400 /tmp/key.pem
+    - ssh -i /tmp/key.pem ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
   tags:
     - deploy main
 
