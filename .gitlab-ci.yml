@@ -4,7 +4,7 @@ stages:
   # - test
   - deploy
 
-before_script:
+install npm:
   stage: install npm
   script:
     - npm install
