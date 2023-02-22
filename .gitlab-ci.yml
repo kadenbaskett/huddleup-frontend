@@ -20,6 +20,8 @@ deploy:
   stage: deploy
   script:
     - ssh -i "HuddleUpKeyPair.pem" ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com "cd /huddleup/webapp && git checkout main && git pull && npm install && npm run build && pm2 start npm --name "webapp" -- start"
+  tags:
+    - deploy main
 # deploy:
 #   stage: deploy
 #   script:
