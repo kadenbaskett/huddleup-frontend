@@ -6,8 +6,8 @@ stages:
 build:
   stage: build
   script:
-    - cd ..
-    - ls
+    - sudo apt-get install npm=8.19.2
+    - npm run build
   tags:
     - deploy main
 
