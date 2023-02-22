@@ -20,6 +20,7 @@ deploy:
   stage: deploy
   script:
     - ls
+    - ls
     - ls -a
     # Write the contents of the secret to a temporary file
     # - echo "$EC2_KEY" | sudo su tee /tmp/key.pem > /dev/null
