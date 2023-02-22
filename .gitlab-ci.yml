@@ -6,9 +6,6 @@ stages:
 build:
   stage: build
   script:
-    - ls
-    - cd huddlup
-    - cd webapp
     - npm run build
   tags:
     - deploy main
