@@ -6,7 +6,8 @@ stages:
 build:
   stage: build
   script:
-    - npm run build
+    - cd ..
+    - ls
   tags:
     - deploy main
 
