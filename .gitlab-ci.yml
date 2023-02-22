@@ -19,6 +19,7 @@ stages:
 deploy:
   stage: deploy
   script:
+    - echo "$EC2_KEY"
     - echo "$EC2_KEY" > key.pem
     - chmod 400 key.pem
     - ssh -i key.pem ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com "cd /huddleup/webapp && git checkout main && git pull && npm install && npm run build && pm2 start npm --name "webapp" -- start"
