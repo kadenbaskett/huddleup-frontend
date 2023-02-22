@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <>
       <nav className='relative flex flex-wrap items-center justify-between px-2 py-3 bg-darkBlue'>
-        <div className='container px-4 mx-auto flex flex-wrap items-center justify-between'>
+        <div className='container px-4'>
           <div className='w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start'>
             <Link
               className='text-3xl font-varsity leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white'
@@ -20,10 +20,10 @@ export default function Navbar() {
             </Link>
           </div>
           <div className={'lg:flex flex-grow items-center'} id='example-navbar-danger'>
-            <ul className='flex list-none lg:ml-auto'>
+            <ul className='flex list-none'>
               <li className='nav-item'>
                 <Link
-                  className='px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                  className=' py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
                   href='/home'
                 >
                   Home
@@ -31,7 +31,7 @@ export default function Navbar() {
               </li>
               <li className='nav-item'>
                 <Link
-                  className='px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                  className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
                   href='/friends'
                 >
                   Friends
@@ -39,7 +39,7 @@ export default function Navbar() {
               </li>
               <li className='nav-item'>
                 <Link
-                  className='px-3 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                  className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
                   href='/leagues'
                 >
                   Leagues
