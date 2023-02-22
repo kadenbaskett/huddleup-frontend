@@ -19,14 +19,16 @@ stages:
 deploy:
   stage: deploy
   script:
+    - cd ~
+    - ls
     # Write the contents of the secret to a temporary file
-    - echo "$EC2_KEY" | sudo su tee /tmp/key.pem > /dev/null
-    - sudo su chmod 400 /tmp/key.pem
-    # Add the EC2 instance's host key to the known_hosts file
-    - ssh-keyscan -H ec2-54-173-216-235.compute-1.amazonaws.com >> ~/.ssh/known_hosts
+    # - echo "$EC2_KEY" | sudo su tee /tmp/key.pem > /dev/null
+    # - sudo su chmod 400 /tmp/key.pem
+    # # Add the EC2 instance's host key to the known_hosts file
+    # - ssh-keyscan -H ec2-54-173-216-235.compute-1.amazonaws.com >> ~/.ssh/known_hosts
 
-    # Connect to the EC2 instance using the temporary file as the identity file
-    - ssh -i /tmp/key.pem ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
+    # # Connect to the EC2 instance using the temporary file as the identity file
+    # - ssh -i /tmp/key.pem ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
   tags:
     - deploy main
 
