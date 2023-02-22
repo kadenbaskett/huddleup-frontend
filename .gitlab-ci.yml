@@ -4,7 +4,11 @@ stages:
   - deploy
 
 before_script:
-  - npm install
+  stage: before_script
+  script:
+    - npm install
+  tags:
+    - deploy main
 
 build:
   stage: build
