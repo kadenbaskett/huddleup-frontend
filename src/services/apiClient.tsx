@@ -2,14 +2,15 @@ import axios from 'axios';
 import { respObj } from '@interfaces/respobj.interface';
 import { ProposalAction } from '@interfaces/types.interface';
 
-const CONFIG = {
-  // TODO how to setup https
-  scheme: 'http',
-  backendHost: 'localhost',
-  backendPort: 8000,
-};
+// const CONFIG = {
+//   // TODO how to setup https
+//   scheme: 'http',
+//   backendHost: 'localhost',
+//   backendPort: 8000,
+// };
 
-const BASE_URL: string = `${CONFIG.scheme}://${CONFIG.backendHost}:${CONFIG.backendPort}`;
+const BASE_URL: string = process.env.NEXT_PUBLIC_API_URI;
+console.log(BASE_URL);
 
 async function getRequest(url: string): Promise<respObj> {
   try {
@@ -43,6 +44,11 @@ export async function createLeague(leageData: object) {
 
 export async function createTeam(teamData: object) {
   const url = `${BASE_URL}/database/team`;
+  return await postRequest(url, teamData);
+}
+
+export async function deleteTeam(teamData: object) {
+  const url = `${BASE_URL}/database/deleteTeam`;
   return await postRequest(url, teamData);
 }
 

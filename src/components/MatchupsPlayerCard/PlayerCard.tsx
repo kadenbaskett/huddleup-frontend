@@ -1,6 +1,6 @@
+import { Player } from '@components/DraggableLineupTable/Draggable';
 import { Grid } from '@mantine/core';
 import { fantasyPoints } from '@services/helpers';
-import { Player } from '../../team/[teamId]/components/DraggableLineupTable/Draggable';
 
 export interface PlayerCardProps {
   player: Player;

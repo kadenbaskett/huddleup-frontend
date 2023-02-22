@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import { ThisWeekCard } from './components/ThisWeekCard';
+import { ThisWeekCard } from '../../../../components/ThisWeekCard/ThisWeekCard';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 
 function matchups() {
@@ -21,7 +21,7 @@ function matchups() {
         <>
           <LeagueNavBar
             teamName={team ? team.name : ' '}
-            teamId={team ? team.id : ' '}
+            teamId={team ? team.id : 0}
             leagueName={league ? league.name : ' '}
             leagueId={Number(leagueId)}
             page='matchups'

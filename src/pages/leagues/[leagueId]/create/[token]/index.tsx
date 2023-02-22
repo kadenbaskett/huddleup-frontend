@@ -1,7 +1,8 @@
+import DeleteATeamPopUp from '@components/DeleteATeamPopUp/DeleteATeamPopUp';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Button, Group } from '@mantine/core';
 import { StoreState } from '@store/store';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import InviteCard from '../../../../../components/InviteCard/InviteCard';
 import TeamMemberCard from '../../../../../components/TeamMemberCard/TeamMemberCard';
@@ -14,22 +15,6 @@ const createTeamMemberCard = (manager, isCaptain: boolean, team) => {
   );
 };
 
-const showDeleteButton = () => {
-  return (
-    <>
-      <Group position='right'>
-        <Button
-          className='hover:bg-transparent hover:text-red text-xl font-bold hover:border hover:border-red rounded bg-red text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-          variant='default'
-          size='md'
-        >
-          Delete Team
-        </Button>
-      </Group>
-    </>
-  );
-};
-
 export default function index() {
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const userStatus: String = useSelector((state: StoreState) => state.user.status);
@@ -39,6 +24,36 @@ export default function index() {
   const captainID = userTeam?.managers.find((manager) => manager.is_captain).user_id;
   const isUserManager = user.userInfo?.id === captainID;
   const teamManagers = userTeam?.managers;
+
+  const [DeleteTeamPopUp, setDeleteTeamPopUp] = useState(false);
+
+  const onDeleteTeamClick = (event) => {
+    event.preventDefault();
+    setDeleteTeamPopUp(true);
+  };
+
+  const onDeleteTeamClose = () => {
+    setDeleteTeamPopUp(false);
+  };
+
+  const showDeleteButton = () => {
+    return (
+      <>
+        <Group position='right'>
+          <Button
+            className='hover:bg-transparent hover:text-red text-xl font-bold hover:border hover:border-red rounded bg-red text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+            variant='default'
+            size='md'
+            onClick={(evt) => onDeleteTeamClick(evt)}
+          >
+            Delete Team
+          </Button>
+
+          <DeleteATeamPopUp opened={DeleteTeamPopUp} closed={onDeleteTeamClose} team={userTeam} />
+        </Group>
+      </>
+    );
+  };
   return (
     <>
       {leagueInfoFetchStatus !== 'succeeded' && userStatus !== 'succeeded' && <HuddleUpLoader />}
