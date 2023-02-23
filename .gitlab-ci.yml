@@ -3,10 +3,10 @@ stages:
 
 build:
   stage: build
-  image: node:19.0.0 # Use Node.js version 14
+  image: ubuntu:latest # Use Node.js version 14
   script:
-    - cd
-    - npm install
-    - npm run build
+    - echo "$EC2_KEY"
+    - echo "$EC2_KEY" > key.pem
+    - ssh -i "key.pem" ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
   tags:
     - deploy main
