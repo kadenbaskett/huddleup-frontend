@@ -56,13 +56,7 @@ function league() {
                   <TeamBanner name={team?.name ? team.name : ' '} team={team} />
                 </Grid.Col>
                 <Grid.Col span={6}>
-                  <TeamInfoBanner
-                    teamName={team?.name}
-                    lastMatchupOpponentName={'opponent name'}
-                    lastMatchupOpponentScore={10}
-                    lastMatchupPersonalScore={20}
-                    nextMatchupOpponentName={'next opponent name'}
-                  />
+                  <TeamInfoBanner league={league} week={currentWeek} team={userTeam} />
                 </Grid.Col>
               </Grid>
             </div>
