@@ -10,8 +10,6 @@ export interface DeleteATeamPopUpProps {
 }
 
 export default function DeleteATeamPopUp(props: DeleteATeamPopUpProps) {
-  console.log('props.team', props.team);
-
   const preventDefault = (f) => (e) => {
     e.preventDefault();
     f(e);
