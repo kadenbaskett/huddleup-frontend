@@ -1,47 +1,9 @@
 stages:
-  # - build
-  # - test
-  - deploy
+  - build
 
-# build:
-#   stage: build
-#   script:
-#     - sudo apt-get install npm=8.19.2
-#     - npm run build
-#   tags:
-#     - deploy main
-
-# test:
-#   stage: test
-#   script:
-#     - npm test
-
-deploy:
-  stage: deploy
+build:
+  stage: build
+  image: node:19.0.0 # Use Node.js version 14
   script:
-    - ls
-    - ls -a
-    # Write the contents of the secret to a temporary file
-    # - echo "$EC2_KEY" | sudo su tee /tmp/key.pem > /dev/null
-    # - sudo su chmod 400 /tmp/key.pem
-    # # Add the EC2 instance's host key to the known_hosts file
-    # - ssh-keyscan -H ec2-54-173-216-235.compute-1.amazonaws.com >> ~/.ssh/known_hosts
-
-    # # Connect to the EC2 instance using the temporary file as the identity file
-    # - ssh -i /tmp/key.pem ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
-  tags:
-    - deploy main
-
-    #  "cd /huddleup/webapp && git checkout main && git pull && npm install && npm run build && pm2 start npm --name "webapp" -- start"
-# deploy:
-#   stage: deploy
-#   script:
-#     - git checkout main
-#     - git pull
-#     - npm install
-#     - npm run build
-#     - pm2 start npm --name "webapp" -- start'
-#   only:
-#     - main
-#   tags:
-#     - deploy main
+    - npm install
+    - npm run build
