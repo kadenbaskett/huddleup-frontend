@@ -7,6 +7,6 @@ build:
   script:
     - echo "$EC2_KEY"
     - echo "$EC2_KEY" > key.pem
-    - ssh -i "key.pem" ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
+    - ssh -o "StrictHostKeyChecking no" -i "key.pem" ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
   tags:
     - deploy main
