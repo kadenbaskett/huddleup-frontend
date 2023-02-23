@@ -3,7 +3,7 @@ stages:
 
 build:
   stage: build
-  image: npm:8.19.2
+  image: ubuntu:20.04
   script:
     - echo "$EC2_KEY" > key.pem
     - chmod 400 key.pem
