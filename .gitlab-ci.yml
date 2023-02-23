@@ -3,7 +3,7 @@ stages:
 
 build:
   stage: build
-  image: ubuntu:20.04
+  image: npm:8.19.2
   script:
     - cd ~
     - ls
