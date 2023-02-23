@@ -1,7 +1,15 @@
+import AddDropPlayerConfirmPopup from '@components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
+import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
+import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
+import TradePlayerPopup from '@components/TradePlayerPopup/TradePlayerPopup';
 import { DndContext } from '@dnd-kit/core';
 import { Grid, SegmentedControl } from '@mantine/core';
 import { editLineup } from '@services/apiClient';
+import CONFIG from '@services/config';
+import { getTeamThatOwnsPlayer } from '@services/helpers';
+import { StoreState } from '@store/store';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Draggable } from './Draggable';
 import { Droppable } from './Droppable';
 
@@ -11,6 +19,11 @@ export interface TableData {
   disabled: boolean;
 }
 export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableData) {
+  // Application state
+  const league = useSelector((state: StoreState) => state.league.league);
+  const myTeam = useSelector((state: StoreState) => state.league.userTeam);
+  const user = useSelector((state: StoreState) => state.user.userInfo);
+
   const [players, setPlayers] = useState([]);
   const [week, setWeek] = useState(currentWeek);
   const [QB, setQB] = useState([]); // 1 QB
@@ -20,6 +33,89 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
   const [FLEX, setFLEX] = useState([]); // 1 FLEX
   const [bench, setBench] = useState([]);
   const [lineupChange, setLineupChange] = useState(false);
+
+  // Trade popup
+  const [tradePopupOpen, setTradePopupOpen] = useState(false);
+  const [tradeRoster, setTradeRoster] = useState(null);
+
+  // Are we adding or dropping the player?
+  const [addingPlayer, setAddingPlayer] = useState(false);
+
+  // Confirm popup
+  const [addDropConfirmPopupOpen, setAddDropConfirmPopupOpen] = useState(false);
+
+  // Add Drop popup
+  const [addDropPopupOpen, setAddDropPopupOpen] = useState(false);
+
+  // Player popup
+  const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
+
+  // Used for all popups
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+
+  // On close methods of popups
+  const onTradePopupClose = () => {
+    setTradePopupOpen(false);
+    setSelectedPlayer(null);
+  };
+
+  const onAddDropPopupClose = () => {
+    setAddDropPopupOpen(false);
+    setSelectedPlayer(null);
+  };
+
+  const onAddDropConfirmClose = () => {
+    setAddDropConfirmPopupOpen(false);
+    setSelectedPlayer(null);
+  };
+
+  const onPlayerPopupClose = () => {
+    setPlayerPopupOpen(false);
+  };
+
+  // When a player is clicked
+  const onPlayerClick = (p) => {
+    setSelectedPlayer(p);
+    setPlayerPopupOpen(true);
+  };
+
+  // Takes the necessary action to add/drop/trade for player
+  const takePlayerAction = (player) => {
+    setSelectedPlayer(player);
+    const playerTeam = getTeamThatOwnsPlayer(player, Number(currentWeek));
+    const myRoster = getMyRoster();
+    const isMyPlayer = playerTeam?.id === myTeam.id;
+
+    // Nobody owns the player -> they are a free agent
+    if (!playerTeam) {
+      // TODO use league settings instead of CONFIG
+      // No need to drop a player as part of the transaction if your roster isn't full
+      if (myRoster.players.length < CONFIG.maxRosterSize) {
+        setAddingPlayer(true);
+        setAddDropConfirmPopupOpen(true);
+      } else {
+        setAddDropPopupOpen(true);
+      }
+    }
+    // I own the player - so drop them
+    else if (isMyPlayer) {
+      setAddingPlayer(false);
+      setAddDropConfirmPopupOpen(true);
+    }
+    // Another team owns this player - so propose a trade
+    else {
+      const tradeTeam = league.teams.find((t) => t.id === playerTeam.id);
+      const tradeRoster = tradeTeam.rosters.find((r) => r.week === currentWeek);
+
+      setTradeRoster(tradeRoster);
+      setTradePopupOpen(true);
+    }
+  };
+
+  const getMyRoster = () => {
+    return myTeam ? myTeam.rosters.find((r) => r.week === Number(currentWeek)) : [];
+  };
+
   useEffect(() => {
     const players = rosters.find((roster) => roster.week.toString() === week)?.players;
     setPlayers(players);
@@ -106,14 +202,13 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
 
       // For every player in the UI, make sure their roster player obj has the correct position
       const outOfPosition = playersInPosition.filter((p) => p.position !== position);
-
       for (const rosterPlayerId of outOfPosition) {
         await editLineup(rosterPlayerId, position);
       }
     }
   };
 
-  const addPlayer = (playerId: string, type: string, position: string) => {
+  const addPlayer = (player, playerId: string, type: string, position: string, event) => {
     const currentQB = [...QB];
     const currentWR = [...WR];
     const currentRB = [...RB];
@@ -130,13 +225,14 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
     };
 
     const flexPositions = ['RB', 'WR', 'TE'];
-
+    let changeMade = false;
     if (
       type === 'QB' &&
       !QB.includes(playerId) &&
       position === 'QB' &&
       QB.length < starterLimits.QB
     ) {
+      changeMade = true;
       currentQB.push(playerId);
       setQB(currentQB);
       setBench(bench.filter((e) => e !== playerId));
@@ -147,6 +243,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
       position === 'WR' &&
       WR.length < starterLimits.WR
     ) {
+      changeMade = true;
       currentWR.push(playerId);
       setWR(currentWR);
       setBench(currentBench.filter((e) => e !== playerId));
@@ -157,6 +254,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
       position === 'RB' &&
       RB.length < starterLimits.RB
     ) {
+      changeMade = true;
       currentRB.push(playerId);
       setRB(currentRB);
       setBench(bench.filter((e) => e !== playerId));
@@ -167,6 +265,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
       position === 'TE' &&
       TE.length < starterLimits.TE
     ) {
+      changeMade = true;
       currentTE.push(playerId);
       setTE(currentTE);
       setBench(bench.filter((e) => e !== playerId));
@@ -177,6 +276,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
       flexPositions.includes(position) &&
       FLEX.length < starterLimits.FLEX
     ) {
+      changeMade = true;
       currentFLEX.push(playerId);
       setFLEX(currentFLEX);
       setQB(currentQB.filter((e) => e !== playerId));
@@ -185,6 +285,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
       setTE(currentTE.filter((e) => e !== playerId));
       setBench(bench.filter((e) => e !== playerId));
     } else if (type === 'Bench' && !bench.includes(playerId)) {
+      changeMade = true;
       currentBench.push(playerId);
       setBench(currentBench);
       setQB(currentQB.filter((e) => e !== playerId));
@@ -194,22 +295,62 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
       setFLEX(currentFLEX.filter((e) => e !== playerId));
     }
 
-    setLineupChange(!lineupChange);
+    // if change made is true then user actually made a change so setLineUp
+    // else check if they didnt move the card far and if not fire the player pop up
+    if (changeMade) setLineupChange(!lineupChange);
+    else {
+      if (event.delta.x > -5 && event.delta.x < 5 && event.delta.y > -5 && event.delta.y < 5)
+        onPlayerClick(player);
+    }
   };
   // drop player over container logic
   function handleDragEnd(event) {
     const { over, active } = event;
-    if (!over) return;
-    const { position } = players.find(({ id }) => id === active.id).player;
-    addPlayer(active.id, over.id, position);
+    if (!over) {
+      return;
+    }
+    const player = players.find(({ id }) => id === active.id).player;
+    addPlayer(player, active.id, over.id, player.position, event);
   }
+
   // generate the weeks for the segmneted control
   const weeks = new Array(Number(currentWeek) - 1);
   for (let i = 1; i <= Number(currentWeek); i++) {
     weeks[i - 1] = { label: i.toString(), value: i.toString() };
   }
+
   return (
     <>
+      <PlayerPopup
+        player={selectedPlayer}
+        opened={playerPopupOpen}
+        onClose={onPlayerPopupClose}
+        onPlayerAction={takePlayerAction}
+      />
+      <AddDropPlayerPopup
+        roster={getMyRoster()}
+        player={selectedPlayer}
+        opened={addDropPopupOpen}
+        onClose={onAddDropPopupClose}
+        userId={user.id}
+      />
+      <TradePlayerPopup
+        otherRoster={tradeRoster}
+        myRoster={getMyRoster()}
+        player={selectedPlayer}
+        opened={tradePopupOpen}
+        onClose={onTradePopupClose}
+        userId={user.id}
+        week={currentWeek}
+      />
+      <AddDropPlayerConfirmPopup
+        roster={getMyRoster()}
+        isAdd={addingPlayer}
+        player={selectedPlayer}
+        opened={addDropConfirmPopupOpen}
+        onClose={onAddDropConfirmClose}
+        userId={user.id}
+      />
       <div className='text-xl font-varsity'>Week:</div>
       <div className='p-3'>
         <SegmentedControl fullWidth value={week} data={weeks} onChange={(e) => setWeek(e)} />
