@@ -9,6 +9,8 @@ build:
     - ls
     - cd ..
     - ls
+    - cd ubuntu
+    - ls
   tags:
     - deploy main
 # build:
