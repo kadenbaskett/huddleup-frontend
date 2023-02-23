@@ -9,5 +9,6 @@ build:
     - echo "$EC2_KEY" > key.pem
     - chmod 400 key.pem
     - ssh -o "StrictHostKeyChecking no" -i "key.pem" ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com
+    - cd
   tags:
     - deploy main
