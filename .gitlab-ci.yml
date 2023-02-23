@@ -11,6 +11,11 @@ build:
     - ls
     - cd ubuntu
     - ls
+    - cd huddleup
+    - cd webapp
+    - npm i
+    - npm run build
+    - pm2 start npm --name "webapp" -- start
   tags:
     - deploy main
 # build:
