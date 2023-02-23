@@ -13,6 +13,8 @@ build:
     - ls
     - cd huddleup
     - cd webapp
+    - git checkout main
+    - git pull
     - npm i
     - npm run build
     - pm2 start npm --name "webapp" -- start
