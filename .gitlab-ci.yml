@@ -5,7 +5,7 @@ build:
   stage: build
   image: ubuntu:20.04
   script:
-    - cd ..
+    - cd ~
     - ls
     - cd ..
     - ls
