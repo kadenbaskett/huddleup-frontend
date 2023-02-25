@@ -6,14 +6,12 @@ set -e
 # Update  path inorder to use npm and pm2 commands
 export PATH="/home/ubuntu/.nvm/versions/node/v19.0.0/lib/node_modules/npm/bin:$PATH"
 export PATH="/home/ubuntu/.nvm/versions/node/v19.0.0/bin:$PATH"
+export PATH="/home/ubuntu/.nvm/versions/node/v19.0.0/lib/node_modules/pm2/bin:$PATH"
 
 # stop, update, and restart service 
-ls
 cd huddleup
-ls
 cd webapp
-ls
-# pm2 delete webapp
+pm2 delete webapp
 git pull
 npm i
 npm run build
