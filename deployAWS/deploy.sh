@@ -3,6 +3,9 @@
 # any future command that fails will exit the script
 set -e
 
+# Update  path inorder to use npm and pm2 commands
+export PATH="$PATH:/usr/local/bin"
+
 # Lets write the public key of our aws instance
 eval $(ssh-agent -s)
 echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
