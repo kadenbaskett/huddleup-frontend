@@ -9,7 +9,7 @@ cd huddleup
 ls
 cd webapp
 ls
-pm2 delete webapp
+# pm2 delete webapp
 git pull
 npm i
 npm run build
