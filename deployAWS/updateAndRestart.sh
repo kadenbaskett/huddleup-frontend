@@ -5,7 +5,10 @@ set -e
 
 # stop, update, and restart service 
 ls
-cd /huddleup/webapp
+cd huddleup
+ls
+cd webapp
+ls
 pm2 delete webapp
 git pull
 npm i
