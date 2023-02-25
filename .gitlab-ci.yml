@@ -1,29 +1,14 @@
-stages:
-  - build
+before_script:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
 
-build:
-  stage: build
-  image: npm:8.19.2
+stages:
+  - deploy
+deployToAWS:
+  # only:
+  #   - main
+  stage: deploy
   script:
-    - cd ~
-    - ls
-    - cd ..
-    - ls
-    - cd ubuntu
-    - ls
-    - cd huddleup
-    - cd webapp
-    - npm i
-    - npm run build
-    - pm2 start npm --name "webapp" -- start
+    - bash deployAWS/deploy.sh
   tags:
     - deploy main
-# build:
-#   stage: build
-#   image: ubuntu:20.04
-#   script:
-#     - echo "$EC2_KEY" > key.pem
-#     - chmod 400 key.pem
-#     - ssh -o "StrictHostKeyChecking no" -i "key.pem" ubuntu@ec2-54-173-216-235.compute-1.amazonaws.com 'ls && cd huddleup && ls && cd webapp && ls && git checkout main && git pull && sudo npm install && sudo npm run build && sudo pm2 start npm --name "webapp" -- start'
-#   tags:
-#     - deploy main
