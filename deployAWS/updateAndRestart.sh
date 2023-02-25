@@ -12,6 +12,7 @@ export PATH="/home/ubuntu/.nvm/versions/node/v19.0.0/lib/node_modules/pm2/bin:$P
 cd huddleup
 cd webapp
 pm2 delete webapp
+git checkout ci-deployment
 git pull
 npm i
 npm run build
