@@ -2,15 +2,7 @@ import axios from 'axios';
 import { respObj } from '@interfaces/respobj.interface';
 import { ProposalAction } from '@interfaces/types.interface';
 
-// const CONFIG = {
-//   // TODO how to setup https
-//   scheme: 'http',
-//   backendHost: 'localhost',
-//   backendPort: 8000,
-// };
-
 const BASE_URL: string = process.env.NEXT_PUBLIC_API_URI;
-console.log(BASE_URL);
 
 async function getRequest(url: string): Promise<respObj> {
   try {
