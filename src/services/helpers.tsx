@@ -1,6 +1,7 @@
 import { League } from '@interfaces/league.interface';
 import { Table } from '@mantine/core';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 export const HuddleUpDate = (date: Date) => {
   return date.toUTCString();
@@ -248,4 +249,21 @@ export function getTeamScore(roster, week) {
     score += fantasyPoints(stats);
   });
   return Math.round(score * 100) / 100;
+}
+
+export function useWindowResize() {
+  const [dimension, setDimension] = useState([0, 0]);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      setDimension([window.innerWidth, window.innerHeight]);
+    });
+    return () => {
+      window.removeEventListener('resize', () => {
+        setDimension([window.innerWidth, window.innerHeight]);
+      });
+    };
+  }, []);
+
+  return dimension;
 }
