@@ -10,7 +10,7 @@ export default function Navbar() {
   const windowSize: number[] = useWindowResize();
 
   let flexWrap = '';
-  if (windowSize[0] < 600 || windowSize[0] === 0) {
+  if (windowSize[0] < 600 && windowSize[0] !== 0) {
     flexWrap = 'flex-wrap';
   }
 
