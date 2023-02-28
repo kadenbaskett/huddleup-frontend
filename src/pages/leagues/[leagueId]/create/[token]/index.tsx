@@ -2,6 +2,7 @@ import DeleteATeamPopUp from '@components/DeleteATeamPopUp/DeleteATeamPopUp';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Button, Group } from '@mantine/core';
 import { StoreState } from '@store/store';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import InviteCard from '../../../../../components/InviteCard/InviteCard';
@@ -59,6 +60,18 @@ export default function index() {
       {leagueInfoFetchStatus !== 'succeeded' && userStatus !== 'succeeded' && <HuddleUpLoader />}
       {leagueInfoFetchStatus === 'succeeded' && (
         <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
+          <div className='pt-5'>
+            <Link href={`/leagues/${Number(league.id)}/join/${String(league.token)}`}>
+              <Button
+                className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                variant='default'
+                radius='lg'
+                size='md'
+              >
+                Back To League
+              </Button>
+            </Link>
+          </div>
           <div className='pt-4 pb-4'>
             <label className='font-varsity text-6xl'>{league.name}</label>
             <div>

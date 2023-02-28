@@ -58,6 +58,7 @@ export default function AppStateInit({ children }) {
     // TODO check behavior of login/logout on user store
 
     // Once the user creates an account, fetch their full acount info from the DB
+    console.log('state.user.createUserStatus', state.user.createUserStatus);
     if (state.user.createUserStatus === SLICE_STATUS.SUCCEEDED) {
       const email = state.user.userInfo.email;
       dispatch(handleUserInitThunk(String(email)));
@@ -69,6 +70,7 @@ export default function AppStateInit({ children }) {
 
     // Once the user is logged in
     if (state.user.status === SLICE_STATUS.SUCCEEDED) {
+      const email = state.user.userInfo.email;
       // The user is requesting to view a league now (leagueId is in the URL)
       if (leagueId) {
         // If the league hasn't been initialized yet, do that
@@ -82,6 +84,9 @@ export default function AppStateInit({ children }) {
         ) {
           initLeagueData(Number(leagueId));
         }
+      }
+      if (state.user.pollStatus !== SLICE_STATUS.POLLING) {
+        setInterval(() => dispatch(userPollThunk(String(email))), 5000);
       }
     }
   }, [
