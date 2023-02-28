@@ -10,6 +10,7 @@ import LeagueTeamCard from '../../../../../components/LeagueTeamCard/LeagueTeamC
 
 export default function index() {
   const user = useSelector((state: StoreState) => state.user);
+  const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
   const [JoinTeamByTokenPopUp, setJoinTeamByTokenPopUp] = useState(false);
@@ -39,59 +40,75 @@ export default function index() {
 
   return (
     <>
-      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
-      {leagueInfoFetchStatus === 'succeeded' && (
-        <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
-          <div className='pt-5'>
-            <LeagueCard league={league} />
-          </div>
+      {leagueInfoFetchStatus !== 'succeeded' && userInfoFetchStatus !== 'succeeded' && (
+        <HuddleUpLoader />
+      )}
+      {leagueInfoFetchStatus === 'succeeded' && userInfoFetchStatus === 'succeeded' && (
+        <>
+          <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
+            <div className='pt-5'>
+              <Link href='/leagues'>
+                <Button
+                  className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                  variant='default'
+                  radius='lg'
+                  size='lg'
+                >
+                  Back To Your Leagues
+                </Button>
+              </Link>
+            </div>
+            <div className='pt-5'>
+              <LeagueCard league={league} />
+            </div>
 
-          <div className='pt-3'>
-            {!managerIDs.includes(user.userInfo.id) && (
-              <>
-                <Group position='left'>
-                  <Link href={`/leagues/${Number(league.id)}/create`}>
+            <div className='pt-3'>
+              {!managerIDs.includes(user.userInfo.id) && (
+                <>
+                  <Group position='left'>
+                    <Link href={`/leagues/${Number(league.id)}/create`}>
+                      <Button
+                        className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange bg-orange text-white border-transparent transition ease-in duration-200'
+                        variant='default'
+                        size='xl'
+                        radius='lg'
+                      >
+                        Create Team
+                      </Button>
+                    </Link>
                     <Button
-                      className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange bg-orange text-white border-transparent transition ease-in duration-200'
+                      className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200'
                       variant='default'
                       size='xl'
                       radius='lg'
+                      onClick={(evt) => onJoinTeamByTokenClick(evt)}
                     >
-                      Create Team
+                      Join Team by Token
                     </Button>
-                  </Link>
-                  <Button
-                    className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200'
-                    variant='default'
-                    size='xl'
-                    radius='lg'
-                    onClick={(evt) => onJoinTeamByTokenClick(evt)}
-                  >
-                    Join Team by Token
-                  </Button>
-                </Group>
-              </>
-            )}
-          </div>
-
-          <div className='pt-5'>
-            {league.teams.map((team) => {
-              return (
-                <>
-                  <div className='pb-5'>
-                    <LeagueTeamCard team={team} league={league} />
-                  </div>
+                  </Group>
                 </>
-              );
-            })}
-          </div>
+              )}
+            </div>
 
-          <JoinTeamByToken
-            opened={JoinTeamByTokenPopUp}
-            closed={onJoinTeamByTokenClose}
-            tokens={teamTokens}
-          />
-        </div>
+            <div className='pt-5'>
+              {league.teams.map((team) => {
+                return (
+                  <>
+                    <div className='pb-5'>
+                      <LeagueTeamCard team={team} league={league} />
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+
+            <JoinTeamByToken
+              opened={JoinTeamByTokenPopUp}
+              closed={onJoinTeamByTokenClose}
+              tokens={teamTokens}
+            />
+          </div>
+        </>
       )}
     </>
   );
