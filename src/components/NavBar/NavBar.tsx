@@ -7,6 +7,7 @@ import { useWindowResize } from '@services/helpers';
 
 export default function Navbar() {
   const user = useSelector((store: StoreState) => store.user.userInfo);
+  console.log('user', user);
   const windowSize: number[] = useWindowResize();
 
   let flexWrap = '';
@@ -31,30 +32,34 @@ export default function Navbar() {
         </div>
         <div className={'lg:flex flex-grow items-center px-4'} id='example-navbar-danger'>
           <ul className='flex list-none'>
-            <li className='nav-item'>
-              <Link
-                className=' py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                href='/home'
-              >
-                Home
-              </Link>
-            </li>
-            <li className='nav-item'>
-              <Link
-                className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                href='/friends'
-              >
-                Friends
-              </Link>
-            </li>
-            <li className='nav-item'>
-              <Link
-                className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                href='/leagues'
-              >
-                Leagues
-              </Link>
-            </li>
+            {user !== null && (
+              <>
+                <li className='nav-item'>
+                  <Link
+                    className=' py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                    href='/home'
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li className='nav-item'>
+                  <Link
+                    className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                    href='/friends'
+                  >
+                    Friends
+                  </Link>
+                </li>
+                <li className='nav-item'>
+                  <Link
+                    className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                    href='/leagues'
+                  >
+                    Leagues
+                  </Link>
+                </li>
+              </>
+            )}
             <li className='nav-item'>
               {user == null ? (
                 <Link

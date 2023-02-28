@@ -21,31 +21,32 @@ export default function Home() {
         </Head>
         <main className={styles.main}>
           <Image src={logo} alt='huddle logo' width={700} height={700} />
-          <p className='landingText'>
-            Huddle up is a group fantasy football app intended to recreate the comradery of team
-            sports.
-          </p>
+          <p className='landingText'>It's in the game</p>
           {user ? (
             <></>
           ) : (
             <Group>
               <Link href='/signup'>
-                <Button
-                  className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-                  variant='default'
-                  size='xl'
-                >
-                  Sign Up
-                </Button>
+                <div className='pt-5'>
+                  <Button
+                    className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                    variant='default'
+                    size='xl'
+                  >
+                    Sign Up
+                  </Button>
+                </div>
               </Link>
               <Link href={'/login'}>
-                <Button
-                  className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-                  variant='default'
-                  size='xl'
-                >
-                  Login
-                </Button>
+                <div className='pt-5'>
+                  <Button
+                    className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                    variant='default'
+                    size='xl'
+                  >
+                    Login
+                  </Button>
+                </div>
               </Link>
             </Group>
           )}
