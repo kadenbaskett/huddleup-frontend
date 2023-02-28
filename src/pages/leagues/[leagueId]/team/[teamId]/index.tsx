@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
-import { NotificationCard } from './components/NotificationCard/NotificationCard';
-import { TeamCard } from './components/TeamCard/TeamCard';
+import { NotificationCard } from '@components/NotificationCard/NotificationCard';
+import { TeamCard } from '@components/TeamCard/TeamCard';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Grid } from '@mantine/core';
-import { TeamInfoBanner } from './components/TeamInfoBanner/TeamInfoBanner';
-import { ProposalStatus } from './types';
-import { TeamBanner } from './components/TeamBanner/TeamBanner';
+import { TeamInfoBanner } from '@components/TeamInfoBanner/TeamInfoBanner';
+import { ProposalStatus } from '@interfaces/types.interface';
+import { TeamBanner } from '@components/TeamBanner/TeamBanner';
 
 function league() {
   const [proposalNotification, setProposalNotification] = useState(undefined);
@@ -25,9 +25,10 @@ function league() {
   const user = useSelector((state: StoreState) => state.user.userInfo);
 
   useEffect(() => {
-    setProposalNotification(
-      team?.proposed_transactions.find((e) => e.status === ProposalStatus.pending),
+    const notification = team?.proposed_transactions.find(
+      (e) => e.status === ProposalStatus.pending && user.id !== e.user_id,
     );
+    setProposalNotification(notification);
   }, [team]);
 
   // const players = team?.rosters.find((roster) => roster.week === currentWeek)?.players;
@@ -55,13 +56,7 @@ function league() {
                   <TeamBanner name={team?.name ? team.name : ' '} team={team} />
                 </Grid.Col>
                 <Grid.Col span={6}>
-                  <TeamInfoBanner
-                    teamName={team?.name}
-                    lastMatchupOpponentName={'opponent name'}
-                    lastMatchupOpponentScore={10}
-                    lastMatchupPersonalScore={20}
-                    nextMatchupOpponentName={'next opponent name'}
-                  />
+                  <TeamInfoBanner league={league} week={currentWeek} team={userTeam} />
                 </Grid.Col>
               </Grid>
             </div>

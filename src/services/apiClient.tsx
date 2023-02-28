@@ -1,15 +1,8 @@
 import axios from 'axios';
 import { respObj } from '@interfaces/respobj.interface';
-import { ProposalAction } from '@pages/leagues/[leagueId]/team/[teamId]/types';
+import { ProposalAction } from '@interfaces/types.interface';
 
-const CONFIG = {
-  // TODO how to setup https
-  scheme: 'http',
-  backendHost: 'localhost',
-  backendPort: 8000,
-};
-
-const BASE_URL: string = `${CONFIG.scheme}://${CONFIG.backendHost}:${CONFIG.backendPort}`;
+const BASE_URL: string = process.env.NEXT_PUBLIC_API_URI;
 
 async function getRequest(url: string): Promise<respObj> {
   try {
@@ -39,6 +32,32 @@ export async function addUser(username: string, email: string) {
 export async function createLeague(leageData: object) {
   const url = `${BASE_URL}/database/league`;
   return await postRequest(url, leageData);
+}
+
+export async function createTeam(teamData: object) {
+  const url = `${BASE_URL}/database/team`;
+  return await postRequest(url, teamData);
+}
+
+export async function deleteTeam(teamData: object) {
+  const url = `${BASE_URL}/database/deleteTeam`;
+  return await postRequest(url, teamData);
+}
+
+export async function userToTeam(userToTeamData: object) {
+  const url = `${BASE_URL}/database/userToTeam`;
+  return await postRequest(url, userToTeamData);
+}
+
+export async function removeUserFromTeam(removeUserFromTeamData: object) {
+  const url = `${BASE_URL}/database/removeUserFromTeam`;
+  return await postRequest(url, removeUserFromTeamData);
+}
+
+export async function editLineup(rosterPlayerId: number, newPosition: string) {
+  const data = { rosterPlayerId, newPosition };
+  const url = `${BASE_URL}/database/roster/editLineup`;
+  return await postRequest(url, data);
 }
 
 export async function proposeTrade(
@@ -151,6 +170,11 @@ export async function fetchLeaguePlayers(leagueId: number): Promise<respObj> {
 
 export async function fetchPublicLeagues(): Promise<respObj> {
   const url = `${BASE_URL}/database/leagues/public`;
+  return await getRequest(url);
+}
+
+export async function fetchPrivateLeagues(): Promise<respObj> {
+  const url = `${BASE_URL}/database/leagues/private`;
   return await getRequest(url);
 }
 

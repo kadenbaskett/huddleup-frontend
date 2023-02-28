@@ -1,31 +1,51 @@
+import { League } from '@interfaces/league.interface';
+import { Grid } from '@mantine/core';
 import React from 'react';
 import Image from 'next/image';
 import NFL from '../../public/assets/NFL.png';
-import Link from 'next/link';
 
-export interface leagueProps {
-  name: string;
-  subText: string;
-  id: number;
+export interface LeagueCardProps {
+  league: League;
 }
 
-export function LeagueCard(league: leagueProps) {
+export default function LeagueCard(props: LeagueCardProps) {
   return (
-    <Link href={'/leagues/' + league.id.toString() + '/home/overview'}>
-      <div className='grid grid-cols-5 bg-white rounded-xl h-80 border hover:border-orange border-white'>
-        <div
-          className='grid col-span-1 items-center'
-          style={{ width: 'auto', height: '17rem', position: 'relative' }}
-        >
-          <Image src={NFL} alt={league.name + '-image'} layout='fill' objectFit='contain' />
-        </div>
-        <div className='grid col-span-4 items-center'>
-          <div className='grid grid-rows-2'>
-            <div className='text-8xl font-varsity text-darkBlue'>{league.name}</div>
-            <div className='text-3xl font-OpenSans text-orange'>{league.subText}</div>
-          </div>
-        </div>
+    <>
+      <div className='bg-white rounded-xl border border-white p-2 transition-all ease-in duration-200 hover:drop-shadow'>
+        <Grid grow align='center' justify='start' className='pt-5 pl-5'>
+          <Grid.Col span={8}>
+            <div className='flex'>
+              <div className='pl-2 pr-5'>
+                <Image src={NFL} alt={props.league.name + '-image'} height={80} width={80} />
+              </div>
+              <div>
+                <div className='lg:text-5xl sm:text-3xl font-varsity text-darkBlue pt-1'>
+                  {props.league.name}
+                </div>
+                <div className='text-xl text-orange'>
+                  {props.league.settings.min_players} - {props.league.settings.max_players}{' '}
+                  Teammates
+                  <div>
+                    {props.league.settings.scoring_settings.points_per_reception === 1
+                      ? 'Scoring: PPR'
+                      : 'Scoring: NPPR'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Grid.Col>
+          <Grid.Col span={2} className='text-2xl text-darkBlue pt-6 pb-5 pl-5 pr-8'>
+            <div className='grid place-items-end'>
+              <div className='grid place-items-center'>
+                <div className='text-5xl font-varsity text-darkBlue'>
+                  {props.league.teams.length}/{props.league.settings.num_teams}
+                </div>
+                <div className='text-xl font-varsity text-darkBlue'>teams</div>
+              </div>
+            </div>
+          </Grid.Col>
+        </Grid>
       </div>
-    </Link>
+    </>
   );
 }

@@ -1,11 +1,13 @@
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { News } from '@interfaces/news.interface';
+import { Grid } from '@mantine/core';
+import { useWindowResize } from '@services/helpers';
 import { StoreState } from '@store/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import MyFriends from './components/MyFriends/MyFriends';
-import MyNews from './components/MyNews/MyNews';
-import MyTeams from './components/MyTeams/MyTeams';
+import MyFriends from '../../components/MyFriends/MyFriends';
+import MyNews from '../../components/MyNews/MyNews';
+import MyTeams from '../../components/MyTeams/MyTeams';
 import { Friend } from './types';
 
 const friendData: Friend[] = [
@@ -37,25 +39,40 @@ const friendData: Friend[] = [
 export default function Home(props: any) {
   const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
   const userTeams: any[] = useSelector((state: StoreState) => state.user.teams);
+  const userLeagues: any[] = useSelector((state: StoreState) => state.user.leagues);
   const news: News[] = useSelector((state: StoreState) => state.global.news);
+
+  const windowSize = useWindowResize();
+  let teamAndFriendSpan;
+  let newsSpan;
+  if (windowSize[0] === 0 || windowSize[0] > 1050) {
+    teamAndFriendSpan = 6;
+    newsSpan = 14;
+  } else {
+    teamAndFriendSpan = 20;
+    newsSpan = 20;
+  }
   return (
     <>
       {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
       {userInfoFetchStatus === 'succeeded' && (
-        <div className='grid grid-cols-10 gap-6 bg-lightGrey p-10 min-h-screen'>
-          <div className='col-span-3'>
-            <div className='bg-white rounded-xl hover:drop-shadow-md'>
-              <MyTeams teams={userTeams} />
-            </div>
-            <div className='pt-5'>
-              <div className='grid grid-cols-1 bg-white hover:drop-shadow-md rounded-xl'>
+        <div className='gap-6 bg-lightGrey p-10 min-h-screen'>
+          <Grid columns={20}>
+            <Grid.Col span={teamAndFriendSpan}>
+              <div className='bg-white rounded-xl hover:drop-shadow-md'>
+                <MyTeams teams={userTeams} leagues={userLeagues} />
+              </div>
+              <br></br>
+              <div className='bg-white hover:drop-shadow-md rounded-xl'>
                 <MyFriends friends={friendData} />
               </div>
-            </div>
-          </div>
-          <div className='col-span-7 hover:drop-shadow-md rounded-xl'>
-            <MyNews news={news} />
-          </div>
+            </Grid.Col>
+            <Grid.Col span={newsSpan}>
+              <div className='hover:drop-shadow-md rounded-xl'>
+                <MyNews news={news} />
+              </div>
+            </Grid.Col>
+          </Grid>
         </div>
       )}
     </>

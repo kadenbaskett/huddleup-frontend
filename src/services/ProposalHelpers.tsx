@@ -1,8 +1,4 @@
-import {
-  Proposal,
-  ProposalStatus,
-  ProposalType,
-} from '@pages/leagues/[leagueId]/team/[teamId]/types';
+import { Proposal, ProposalStatus, ProposalType } from '@interfaces/types.interface';
 
 // comparator to sort proposals by creation date
 export function compareProposals(a, b) {
