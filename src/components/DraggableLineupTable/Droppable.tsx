@@ -39,7 +39,7 @@ export function Droppable({ id, children }) {
       <div
         className={`${isOver && canDrop ? 'bg-green' : 'bg-lightGrey'} ${
           neededPlayers !== children.length && id !== 'Bench' ? 'border-red' : ''
-        } border-2 p-5 rounded-xl hover:drop-shadow-md z-0`}
+        } border-2 p-2 rounded-xl hover:drop-shadow-md z-0`}
         ref={setNodeRef}
       >
         {children}

@@ -14,7 +14,7 @@ export default function OverviewCard(props: OverviewCardProps) {
   const windowSize = useWindowResize();
   let top5Span;
   let recentActivityTableSpan;
-  if (windowSize[0] > 800) {
+  if (windowSize[0] > 800 || windowSize[0] === 0) {
     recentActivityTableSpan = 7;
     top5Span = 3;
   } else {
