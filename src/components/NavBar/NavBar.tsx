@@ -7,7 +7,6 @@ import { useWindowResize } from '@services/helpers';
 
 export default function Navbar() {
   const user = useSelector((store: StoreState) => store.user.userInfo);
-  console.log('user', user);
   const windowSize: number[] = useWindowResize();
 
   let flexWrap = '';

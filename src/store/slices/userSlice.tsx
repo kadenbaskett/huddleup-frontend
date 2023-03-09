@@ -28,7 +28,8 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    logoutUser: (state, actio) => {
+    logoutUser: (state, action) => {
+      console.log('logout user');
       return {
         ...initialState,
         firebaseStatus: SLICE_STATUS.SUCCEEDED,
@@ -40,6 +41,13 @@ export const userSlice = createSlice({
       .addCase(handleUserInitThunk.pending, (state, action) => {
         state.status = SLICE_STATUS.LOADING;
       })
+      .addCase(handleUserInitThunk.rejected, (state, action) => {
+        // Logout the user if the init user failed (which means the user is not in our DB)
+        state = {
+          ...initialState,
+          status: SLICE_STATUS.FAILED,
+        };
+      })
       .addCase(handleUserInitThunk.fulfilled, (state, action) => {
         state.status = SLICE_STATUS.SUCCEEDED;
         state.firebaseStatus = SLICE_STATUS.SUCCEEDED;
@@ -48,19 +56,18 @@ export const userSlice = createSlice({
         state.teams = action.payload.teams;
       })
       .addCase(userPollThunk.fulfilled, (state, action) => {
+        console.log(action.payload.leagues);
         state.pollStatus = SLICE_STATUS.POLLING;
         state.userInfo = action.payload.user;
         state.leagues = action.payload.leagues;
         state.teams = action.payload.teams;
-      })
-      .addCase(handleUserInitThunk.rejected, (state, action) => {
-        state.status = SLICE_STATUS.FAILED;
       });
   },
 });
 
 export const handleUserInitThunk = createAsyncThunk('user/initUser', async (email: string) => {
   const userResp = await fetchUser(email);
+
   const leaguesResp = userResp.data ? await fetchUserLeagues(userResp.data.id) : null;
   const teamsResp = userResp.data ? await fetchUserTeams(userResp.data.id) : null;
   return {
