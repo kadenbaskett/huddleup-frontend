@@ -3,6 +3,7 @@ import { League, Team } from '@interfaces/league.interface';
 import { User } from '@interfaces/user.interface';
 import { fetchUser, fetchUserLeagues, fetchUserTeams } from '@services/apiClient';
 import { SLICE_STATUS } from '@store/slices/common';
+import { logout } from '../../firebase/firebase';
 
 export interface userSliceState {
   userInfo: User;
@@ -45,8 +46,12 @@ export const userSlice = createSlice({
         // Logout the user if the init user failed (which means the user is not in our DB)
         state = {
           ...initialState,
-          status: SLICE_STATUS.FAILED,
+          firebaseStatus: SLICE_STATUS.SUCCEEDED,
+          status: SLICE_STATUS.IDLE,
         };
+
+        console.log(state);
+        void logout();
       })
       .addCase(handleUserInitThunk.fulfilled, (state, action) => {
         state.status = SLICE_STATUS.SUCCEEDED;
