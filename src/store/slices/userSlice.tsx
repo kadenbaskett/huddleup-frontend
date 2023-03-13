@@ -30,7 +30,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: (state, action) => {
-      console.log('logout user');
       return {
         ...initialState,
         firebaseStatus: SLICE_STATUS.SUCCEEDED,
@@ -50,7 +49,6 @@ export const userSlice = createSlice({
           status: SLICE_STATUS.IDLE,
         };
 
-        console.log(state);
         void logout();
       })
       .addCase(handleUserInitThunk.fulfilled, (state, action) => {
@@ -61,7 +59,6 @@ export const userSlice = createSlice({
         state.teams = action.payload.teams;
       })
       .addCase(userPollThunk.fulfilled, (state, action) => {
-        console.log(action.payload.leagues);
         state.pollStatus = SLICE_STATUS.POLLING;
         state.userInfo = action.payload.user;
         state.leagues = action.payload.leagues;

@@ -29,7 +29,6 @@ export default function index() {
       teamName,
     };
     const newTeam = await createTeam(team);
-    console.log(newTeam);
     await router.push({
       pathname: `/leagues/${Number(league.id)}/create/${String(newTeam.data.token)}`,
     });
