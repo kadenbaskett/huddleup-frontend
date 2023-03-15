@@ -3,15 +3,13 @@ import { League, Team } from '@interfaces/league.interface';
 import { User } from '@interfaces/user.interface';
 import { fetchUser, fetchUserLeagues, fetchUserTeams } from '@services/apiClient';
 import { SLICE_STATUS } from '@store/slices/common';
-import { logout } from '../../firebase/firebase';
+import { logout, auth } from '../../firebase/firebase';
 
 export interface userSliceState {
   userInfo: User;
   leagues: League[];
   teams: Team[];
-  createUserStatus: SLICE_STATUS;
   status: SLICE_STATUS;
-  pollStatus: SLICE_STATUS;
   firebaseStatus: SLICE_STATUS;
 }
 
@@ -19,9 +17,7 @@ const initialState: userSliceState = {
   userInfo: null,
   leagues: null,
   teams: null,
-  createUserStatus: SLICE_STATUS.IDLE,
   status: SLICE_STATUS.IDLE,
-  pollStatus: SLICE_STATUS.IDLE,
   firebaseStatus: SLICE_STATUS.IDLE,
 };
 
@@ -38,48 +34,29 @@ export const userSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(handleUserInitThunk.pending, (state, action) => {
-        state.status = SLICE_STATUS.LOADING;
-      })
       .addCase(handleUserInitThunk.rejected, (state, action) => {
         // Logout the user if the init user failed (which means the user is not in our DB)
         state = {
           ...initialState,
-          firebaseStatus: SLICE_STATUS.SUCCEEDED,
-          status: SLICE_STATUS.IDLE,
         };
 
         void logout();
       })
       .addCase(handleUserInitThunk.fulfilled, (state, action) => {
-        state.status = SLICE_STATUS.SUCCEEDED;
-        state.firebaseStatus = SLICE_STATUS.SUCCEEDED;
-        state.userInfo = action.payload.user;
-        state.leagues = action.payload.leagues;
-        state.teams = action.payload.teams;
-      })
-      .addCase(userPollThunk.fulfilled, (state, action) => {
-        state.pollStatus = SLICE_STATUS.POLLING;
-        state.userInfo = action.payload.user;
-        state.leagues = action.payload.leagues;
-        state.teams = action.payload.teams;
+        if (auth.currentUser) {
+          state.status = SLICE_STATUS.SUCCEEDED;
+          state.firebaseStatus = SLICE_STATUS.SUCCEEDED;
+          state.userInfo = action.payload.user;
+          state.leagues = action.payload.leagues;
+          state.teams = action.payload.teams;
+        } else {
+          state = { ...initialState };
+        }
       });
   },
 });
 
 export const handleUserInitThunk = createAsyncThunk('user/initUser', async (email: string) => {
-  const userResp = await fetchUser(email);
-
-  const leaguesResp = userResp.data ? await fetchUserLeagues(userResp.data.id) : null;
-  const teamsResp = userResp.data ? await fetchUserTeams(userResp.data.id) : null;
-  return {
-    user: userResp.data ? userResp.data : null,
-    leagues: leaguesResp.data ? leaguesResp.data : null,
-    teams: teamsResp.data ? teamsResp.data : null,
-  };
-});
-
-export const userPollThunk = createAsyncThunk('user/poll', async (email: string) => {
   const userResp = await fetchUser(email);
   const leaguesResp = userResp.data ? await fetchUserLeagues(userResp.data.id) : null;
   const teamsResp = userResp.data ? await fetchUserTeams(userResp.data.id) : null;
