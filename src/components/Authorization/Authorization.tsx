@@ -10,9 +10,9 @@ export default function Authorization({ children }) {
 
   useEffect(() => {
     // bug causing useEffect and then onAuthStateChanged to happen twice
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log('Auth change: Logged in');
+        console.log('Auth change: Logged in with firebase');
         dispatch(handleUserInitThunk(user.email));
       } else {
         console.log('Auth change: Logged out');

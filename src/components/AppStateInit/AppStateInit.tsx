@@ -58,7 +58,6 @@ export default function AppStateInit({ children }) {
     // TODO check behavior of login/logout on user store
 
     // Once the user creates an account, fetch their full acount info from the DB
-    console.log('state.user.createUserStatus', state.user.createUserStatus);
     if (state.user.createUserStatus === SLICE_STATUS.SUCCEEDED) {
       const email = state.user.userInfo.email;
       dispatch(handleUserInitThunk(String(email)));

@@ -135,7 +135,6 @@ export function mapPositionToTable(player, gameLogs) {
 }
 
 export function fantasyPoints(s, pprValue = 1): number {
-  // console.log('s', s);
   if (s) {
     let points = 0;
     points += -2 * s.interceptions_thrown;

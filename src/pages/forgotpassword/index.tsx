@@ -20,8 +20,6 @@ function ForgotPassword() {
     if (re.test(email)) {
       const resp = await sendPasswordReset(email);
 
-      console.log('Response: ', resp);
-
       if (resp === 'success') {
         setIsError(false);
         setMessage('Password reset link sent. Redirecting to login page in 5 seconds');
