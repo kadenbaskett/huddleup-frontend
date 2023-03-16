@@ -37,9 +37,6 @@ export const globalSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(handleGlobalInitThunk.pending, (state, action) => {
-        state.status = SLICE_STATUS.LOADING;
-      })
       .addCase(handleGlobalInitThunk.fulfilled, (state, action) => {
         state.status = SLICE_STATUS.SUCCEEDED;
         state.publicLeagues = action.payload.publicLeagues;
@@ -59,6 +56,8 @@ export const globalSlice = createSlice({
 export const handleGlobalInitThunk = createAsyncThunk('global/init', async () => {
   const publicLeaugesResp = await fetchPublicLeagues();
   const privateLeaugesResp = await fetchPrivateLeagues();
+
+  console.log('Global update');
 
   const timeframeResp = await fetchTimeframe();
   const news = await fetchNews(5);
