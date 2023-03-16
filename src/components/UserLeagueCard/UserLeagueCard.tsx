@@ -2,17 +2,18 @@ import React from 'react';
 import Image from 'next/image';
 import NFL from '../../public/assets/NFL.png';
 import Link from 'next/link';
-import { League } from '@interfaces/league.interface';
+import { League, Team } from '@interfaces/league.interface';
 
 export interface UserLeagueCardProps {
   league: League;
+  userTeam: Team;
 }
 
 export function UserLeagueCard(props: UserLeagueCardProps) {
   const link =
     props.league.teams.length < 8
       ? `/leagues/${Number(props.league.id)}/join/${props.league.token}`
-      : `/leagues/${Number(props.league.id)}/home/overview`;
+      : `/leagues/${Number(props.league.id)}/team/${props.userTeam?.id}`;
   return (
     <Link href={link}>
       <div className='grid grid-cols-5 bg-white rounded-xl border hover:border-orange border-white'>

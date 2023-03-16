@@ -171,7 +171,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
 
   useEffect(() => {
     void updateLineup();
-  }, [lineupChange]);
+  }, [lineupChange, rosters]);
 
   const updateLineup = async () => {
     const positions = ['TE', 'RB', 'WR', 'QB', 'BE', 'FLEX'];
