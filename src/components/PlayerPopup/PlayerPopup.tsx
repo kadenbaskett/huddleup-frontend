@@ -5,7 +5,7 @@ import { getTeamThatOwnsPlayer, mapPositionToTable } from '@services/helpers';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@store/store';
 
-export default function PlayerPopup({ player, opened, onClose, onPlayerAction }) {
+export default function PlayerPopup({ player, opened, onClose, onPlayerAction, leagueId }) {
   const currentWeek = useSelector((state: StoreState) => state.global.week);
   const userTeam = useSelector((state: StoreState) => state.league.userTeam);
 
@@ -41,9 +41,7 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction })
   };
 
   const getActionButton = () => {
-    if (!player) return <></>;
-
-    const team = getTeamThatOwnsPlayer(player, currentWeek);
+    const team = getTeamThatOwnsPlayer(player, currentWeek, leagueId);
 
     if (!team) {
       return (
@@ -78,7 +76,7 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction })
   const renderTitle = () => {
     if (!player) return <></>;
 
-    const team = getTeamThatOwnsPlayer(player, currentWeek);
+    const team = getTeamThatOwnsPlayer(player, currentWeek, leagueId);
 
     return (
       <Grid>

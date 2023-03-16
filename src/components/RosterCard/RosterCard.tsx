@@ -80,7 +80,7 @@ export function RosterCard(props: RosterCardProps) {
   const takePlayerAction = (player) => {
     setSelectedPlayer(player);
 
-    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek);
+    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek, league.id);
     const myRoster = getMyRoster();
     const isMyPlayer = playerTeam?.id === myTeam.id;
 
@@ -158,6 +158,7 @@ export function RosterCard(props: RosterCardProps) {
         opened={playerPopupOpen}
         onClose={onPlayerPopupClose}
         onPlayerAction={takePlayerAction}
+        leagueId={props.leagueID}
       />
       <AddDropPlayerPopup
         roster={getMyRoster()}
