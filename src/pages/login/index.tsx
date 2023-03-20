@@ -45,7 +45,6 @@ function Login() {
         setError('Account not found for email');
       } else {
         // general error
-        console.log(resp);
         setLoading(false);
         setError('Error logging in. Please try again');
       }

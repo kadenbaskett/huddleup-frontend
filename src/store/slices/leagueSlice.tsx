@@ -52,8 +52,6 @@ export const handleLeagueInitThunk = createAsyncThunk(
         )
       : null;
 
-    console.log('League update');
-
     return {
       players: playersResp.data ? playersResp.data : null,
       league: leagueResp.data ? leagueResp.data : null,
