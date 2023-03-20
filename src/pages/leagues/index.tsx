@@ -12,11 +12,15 @@ import { League } from '@interfaces/league.interface';
 function Leagues() {
   const userInfoFetchStatus = useSelector((state: StoreState) => state.user.status);
   const userLeagues = useSelector((state: StoreState) => state.user.leagues);
+  const userTeams = useSelector((state: StoreState) => state.user.teams);
 
   const renderLeague = (league: League) => {
     return (
       <div className='grid col-span-10'>
-        <UserLeagueCard league={league} />
+        <UserLeagueCard
+          league={league}
+          userTeam={userTeams.find((t) => t.league_id === league.id)}
+        />
       </div>
     );
   };

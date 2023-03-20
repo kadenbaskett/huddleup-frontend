@@ -85,7 +85,7 @@ function League(props) {
   const takePlayerAction = (player) => {
     setSelectedPlayer(player);
 
-    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek);
+    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek, Number(leagueId));
     const myRoster = getMyRoster();
     const isMyPlayer = playerTeam?.id === myTeam.id;
 
@@ -152,18 +152,18 @@ function League(props) {
 
     if (availability === 'Available') {
       players = players.filter((player) => {
-        return !getTeamThatOwnsPlayer(player, currentWeek);
+        return !getTeamThatOwnsPlayer(player, currentWeek, Number(leagueId));
       });
     } else if (availability === 'Waivers') {
       // TODO implement waivers
     } else if (availability === 'Free Agents') {
       // TODO also filter out waivers
       players = players.filter((player) => {
-        return !getTeamThatOwnsPlayer(player, currentWeek);
+        return !getTeamThatOwnsPlayer(player, currentWeek, Number(leagueId));
       });
     } else if (availability === 'On Rosters') {
       players = players.filter((player) => {
-        const team = getTeamThatOwnsPlayer(player, currentWeek);
+        const team = getTeamThatOwnsPlayer(player, currentWeek, Number(leagueId));
         return team ? team.name : '';
       });
     }
@@ -206,7 +206,7 @@ function League(props) {
   };
 
   const getPlayerAction = (player) => {
-    const av = getPlayerAvailability(player, currentWeek);
+    const av = getPlayerAvailability(player, currentWeek, Number(leagueId));
     const myTeamName = myTeam?.name;
 
     if (av === 'Free Agent') {
@@ -356,6 +356,7 @@ function League(props) {
               opened={playerPopupOpen}
               onClose={onPlayerPopupClose}
               onPlayerAction={takePlayerAction}
+              leagueId={league.id}
             />
             <AddDropPlayerPopup
               roster={getMyRoster()}
