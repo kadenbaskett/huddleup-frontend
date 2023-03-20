@@ -66,6 +66,7 @@ export function TeamCard(props: TeamCardProps) {
             rosters={props.rosters}
             currentWeek={props.currentWeek.toString()}
             disabled={!props.isMyTeam}
+            proposals={[...props.proposals].sort(compareProposals)}
           />
         </div>
       ) : (

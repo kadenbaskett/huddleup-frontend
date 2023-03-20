@@ -17,7 +17,7 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose, us
 
     if (dropPlayers.size) {
       const dropIds = Array.from(dropPlayers);
-      await addDropPlayer(
+      const returnRoster = await addDropPlayer(
         player.id,
         player.external_id,
         dropIds,
@@ -26,6 +26,7 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose, us
         userId,
         roster.week,
       );
+      console.log('returnRoster', returnRoster);
     }
 
     setSubmitLoading(false);
