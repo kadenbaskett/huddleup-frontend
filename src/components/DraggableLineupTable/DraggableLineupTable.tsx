@@ -3,6 +3,7 @@ import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopu
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import TradePlayerPopup from '@components/TradePlayerPopup/TradePlayerPopup';
 import { DndContext } from '@dnd-kit/core';
+import { Proposal } from '@interfaces/types.interface';
 import { Grid, SegmentedControl } from '@mantine/core';
 import { editLineup } from '@services/apiClient';
 import CONFIG from '@services/config';
@@ -17,8 +18,9 @@ export interface TableData {
   rosters: any;
   currentWeek: string;
   disabled: boolean;
+  proposals: Proposal[];
 }
-export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableData) {
+export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals }: TableData) {
   // Application state
   const league = useSelector((state: StoreState) => state.league.league);
   const myTeam = useSelector((state: StoreState) => state.league.userTeam);
