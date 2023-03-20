@@ -57,8 +57,6 @@ export const handleGlobalInitThunk = createAsyncThunk('global/init', async () =>
   const publicLeaugesResp = await fetchPublicLeagues();
   const privateLeaugesResp = await fetchPrivateLeagues();
 
-  console.log('Global update');
-
   const timeframeResp = await fetchTimeframe();
   const news = await fetchNews(5);
 

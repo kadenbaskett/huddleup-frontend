@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import FormInput from '../../components/FormInput/FormInput';
 import { useRouter } from 'next/router';
 import { login } from '../../firebase/firebase';
 import Link from 'next/link';
+import { PasswordInput, TextInput } from '@mantine/core';
 
 function Login() {
   const [error, setError] = useState('');
@@ -45,7 +45,6 @@ function Login() {
         setError('Account not found for email');
       } else {
         // general error
-        console.log(resp);
         setLoading(false);
         setError('Error logging in. Please try again');
       }
@@ -60,12 +59,25 @@ function Login() {
             LOGIN
           </h1>
           <div className='mb-10 mx-auto w-3/4'>
-            <FormInput
-              label='Email'
-              inputId='emailInput'
+            <TextInput
+              id='emailInput'
               placeholder='johnnyfootball@huddleup.com'
-            ></FormInput>
-            <FormInput label='Password' inputId='passwordInput'></FormInput>
+              label='Email'
+              withAsterisk
+              variant='filled'
+              radius='md'
+              className='py-2.5'
+            />
+
+            <PasswordInput
+              id='passwordInput'
+              placeholder='Password'
+              label='Password'
+              withAsterisk
+              variant='filled'
+              radius='md'
+              className='py-2.5'
+            />
 
             <div className=' mt-2 flex items-center justify-between'>
               <div className='flex items-center'>
