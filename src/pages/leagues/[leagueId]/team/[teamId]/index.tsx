@@ -24,7 +24,7 @@ function league() {
   const user = useSelector((state: StoreState) => state.user.userInfo);
 
   const team = league?.teams?.find((t) => t.id === Number(teamId));
-
+  console.log('team', team);
   const isMyTeam = team && userTeam ? Number(team.id) === Number(userTeam.id) : false;
 
   const rosters = team?.rosters;
@@ -80,7 +80,11 @@ function league() {
               <TeamCard
                 currentWeek={currentWeek}
                 rosters={rosters}
-                proposals={team.proposed_transactions}
+                proposals={[
+                  ...team.proposed_transactions,
+                  ...team.related_transactions.filter((p) => p.type === 'Trade'),
+                ]}
+                teamId={Number(teamId)}
                 userId={user.id}
                 isMyTeam={isMyTeam}
               />
