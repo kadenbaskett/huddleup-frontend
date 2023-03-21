@@ -10,6 +10,7 @@ export interface TeamCardProps {
   proposals: Proposal[];
   isMyTeam: boolean;
   userId: Number;
+  teamId: Number;
 }
 
 export function TeamCard(props: TeamCardProps) {
@@ -76,6 +77,7 @@ export function TeamCard(props: TeamCardProps) {
           <ManagementTable
             userId={props.userId}
             proposals={[...props.proposals].sort(compareProposals)}
+            teamId={props.teamId}
           />
         </div>
       )}
