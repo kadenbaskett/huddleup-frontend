@@ -27,12 +27,16 @@ export function proposalToString(proposal: Proposal): string {
       proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
         ? 'd'
         : ''
-    } ${offeredPlayers.join(', ')} for ${recievedPlayers.join(', ')}`;
+    } ${offeredPlayers.join(', ')} to ${proposal.related_team.name} for ${recievedPlayers.join(
+      ', ',
+    )}`;
     sentence = `Trade${
       proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
         ? 'd'
         : ''
-    } ${offeredPlayers.join(', ')} for ${recievedPlayers.join(', ')}`;
+    } ${offeredPlayers.join(', ')} to ${proposal.related_team.name} for ${recievedPlayers.join(
+      ', ',
+    )}`;
   } else if (proposal.type === ProposalType.add) {
     // add
     sentence = `Add ${proposal.players[0].player.first_name} ${proposal.players[0].player.last_name}`;
@@ -52,12 +56,41 @@ export function proposalToString(proposal: Proposal): string {
   return sentence;
 }
 
+export function relatedTeamTradeString(proposal: Proposal): string {
+  let sentence;
+  const offeredPlayers = proposal.players
+    .filter((p) => p.joins_proposing_team === true)
+    .map((p) => `${p.player.first_name} ${p.player.last_name}`);
+  const recievedPlayers = proposal.players
+    .filter((p) => p.joins_proposing_team === false)
+    .map((p) => `${p.player.first_name} ${p.player.last_name}`);
+  sentence = `Trade${
+    proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
+      ? 'd'
+      : ''
+  } ${offeredPlayers.join(', ')} to ${proposal.proposing_team.name} for ${recievedPlayers.join(
+    ', ',
+  )}`;
+  sentence = `Trade${
+    proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
+      ? 'd'
+      : ''
+  } ${offeredPlayers.join(', ')} to ${proposal.proposing_team.name} for ${recievedPlayers.join(
+    ', ',
+  )}`;
+  return sentence;
+}
+
 export function proposalExecutionerString(proposal: Proposal): string {
   if (proposal?.transaction_actions?.length > 0) {
     const transactionUser: string = proposal?.transaction_actions[0].user.username;
-    return `${
-      proposal.status === ProposalStatus.complete ? 'Approved' : 'Rejected'
+    let s = `${
+      proposal.status === ProposalStatus.complete || ProposalStatus.sent ? 'Approved' : 'Rejected'
     } by ${transactionUser}`;
+    if (proposal?.status === 'SentToRelatedTeam') {
+      s += `, offer sent to ${proposal?.related_team.name}`;
+    }
+    return s;
   }
   return '';
 }
