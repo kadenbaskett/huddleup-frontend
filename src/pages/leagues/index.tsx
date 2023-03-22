@@ -58,7 +58,6 @@ function Leagues() {
           {userLeagues.map((league) => renderLeague(league))}
         </div>
       )}
-      ;
     </>
   );
 }
