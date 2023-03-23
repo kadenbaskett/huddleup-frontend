@@ -1,3 +1,4 @@
+import DraftPlayerTable from '@components/DraftPlayerTable/DraftPlayerTable';
 import React from 'react';
 import SockJS from 'sockjs-client';
 
@@ -28,5 +29,9 @@ export default function index() {
     sock.send(JSON.stringify(message));
   }
 
-  return <div>index</div>;
+  return (
+    <>
+      <DraftPlayerTable />
+    </>
+  );
 }
