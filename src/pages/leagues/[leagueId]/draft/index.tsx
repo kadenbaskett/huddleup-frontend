@@ -1,32 +1,25 @@
-import React from 'react';
-import SockJS from 'sockjs-client';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { draftActions } from '@store/slices/draftSlice';
+import { StoreState } from '@store/store';
 
 export default function index() {
-  const sock = new SockJS('http://localhost:9999/echo');
+  const dispatch = useDispatch();
 
-  sock.onopen = function () {
-    console.log('open');
+  const websocketConnected = useSelector((state: StoreState) => state.draft.isConnected);
+  const websocketTryingToConnect = useSelector((state: StoreState) => state.draft.isConnected);
 
-    const send = {
-      message: 'my message',
-      username: 'my username',
-    };
+  // const sendMessage = (msg: Object) => {
+  //   const content: string = JSON.stringify(msg);
+  //   dispatch(draftActions.sendMessage({content}));
+  // };
 
-    sendMessage(send);
-  };
-
-  sock.onclose = function () {
-    console.log('close');
-  };
-
-  sock.onmessage = function (e) {
-    const content = JSON.parse(e.data);
-    console.log(content);
-  };
-
-  function sendMessage(message) {
-    sock.send(JSON.stringify(message));
-  }
+  useEffect(() => {
+    if (!websocketConnected && !websocketTryingToConnect) {
+      console.log('Use effect: trying to establish connection');
+      dispatch(draftActions.startConnecting());
+    }
+  }, []);
 
   return <div>index</div>;
 }
