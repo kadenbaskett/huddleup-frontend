@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { draftActions } from '@store/slices/draftSlice';
 import { StoreState } from '@store/store';
+import DraftPlayerTable from '@components/DraftPlayerTable/DraftPlayerTable';
 
 export default function index() {
   const dispatch = useDispatch();
@@ -21,5 +22,9 @@ export default function index() {
     }
   }, []);
 
-  return <div>index</div>;
+  return (
+    <>
+      <DraftPlayerTable />
+    </>
+  );
 }
