@@ -3,7 +3,7 @@ import { draftActions } from '@store/slices/draftSlice';
 import SockJS from 'sockjs-client';
 
 const draftMiddleware: Middleware = (store) => {
-  const url = 'http://localhost:9999/echo';
+  const url = 'http://c367-155-98-131-7.ngrok.io/echo';
   let socket;
 
   return (next) => (action) => {
@@ -23,7 +23,13 @@ const draftMiddleware: Middleware = (store) => {
       socket.onclose = function () {
         socket = null;
         store.dispatch(draftActions.connectionClosed());
-        store.dispatch(draftActions.startConnecting());
+        // store.dispatch(draftActions.startConnecting());
+      };
+
+      socket.close = function () {
+        console.log('Telling server to close connection');
+        socket = null;
+        store.dispatch(draftActions.connectionClosed());
       };
     }
 

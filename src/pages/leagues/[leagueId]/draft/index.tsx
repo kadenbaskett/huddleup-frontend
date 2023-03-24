@@ -39,6 +39,12 @@ export default function index() {
     }
   }, [websocketTryingToConnect]);
 
+  useEffect(() => {
+    return () => {
+      console.log('Connection should be killed now!');
+    };
+  }, []);
+
   // Player filtering
   const form = useForm({
     initialValues: {
