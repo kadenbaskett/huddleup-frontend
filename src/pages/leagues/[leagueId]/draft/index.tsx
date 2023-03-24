@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { draftActions } from '@store/slices/draftSlice';
 import { StoreState } from '@store/store';
 import DraftPlayerTable from '@components/DraftPlayerTable/DraftPlayerTable';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
-import { Grid, NativeSelect, SegmentedControl, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Grid } from '@mantine/core';
+import DraftBelt from '@components/DraftBelt/DraftBelt';
+import DraftRosterAndQueueCard from '@components/DraftRosterAndQueueCard/DraftRosterAndQueueCard';
+import DraftHistory from '@components/DraftHistory/DraftHistory';
 
 export default function index() {
   const dispatch = useDispatch();
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const websocketConnected = useSelector((state: StoreState) => state.draft.isConnected);
   const websocketTryingToConnect = useSelector((state: StoreState) => state.draft.isConnected);
-  const league = useSelector((state: StoreState) => state.league);
+  const league = useSelector((state: StoreState) => state.league.league);
+  const user = useSelector((state: StoreState) => state.user.userInfo);
   const draftTime = useSelector(
     (state: StoreState) => state.league.league?.settings.draft_settings.date,
   );
@@ -24,6 +27,12 @@ export default function index() {
     dispatch(draftActions.sendMessage({ content }));
   };
 
+  const playersChosen: any[] = [];
+
+  function removePlayerFromList(player) {
+    playersChosen.push(player);
+  }
+
   const print = false;
 
   if (print) {
@@ -31,6 +40,32 @@ export default function index() {
     console.log(draftInProgress);
     console.log(league);
   }
+  const [time, setTime] = useState(5);
+  const [teams, setTeams] = useState([]);
+
+  useEffect(() => {
+    if (league !== null) {
+      setTeams(league.teams);
+    }
+  }, [leagueInfoFetchStatus]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (time > 0) {
+        setTime(time - 1);
+      }
+      if (time < 1) {
+        setTime(5);
+        const tempTeam = teams[0];
+        const tempTeams = [...teams];
+        tempTeams.shift();
+        tempTeams.push(tempTeam);
+        setTeams(tempTeams);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [time]);
 
   useEffect(() => {
     if (!websocketConnected && !websocketTryingToConnect) {
@@ -38,15 +73,6 @@ export default function index() {
       dispatch(draftActions.startConnecting());
     }
   }, [websocketTryingToConnect]);
-
-  // Player filtering
-  const form = useForm({
-    initialValues: {
-      player: '',
-      position: 'All',
-      availability: 'Available',
-    },
-  });
 
   const content = (
     <>
@@ -58,55 +84,26 @@ export default function index() {
           <HuddleUpLoader />
         </>
       )}
-      {leagueInfoFetchStatus === 'succeeded' && (
+      {teams.length > 0 && leagueInfoFetchStatus === 'succeeded' && (
         <>
           <div className='bg-lightGrey min-h-screen'>
+            <div className='p-3'>
+              <DraftBelt teams={teams !== undefined ? teams : league.teams} time={time} />
+            </div>
             <Grid>
-              <Grid.Col span={10} offset={1}>
-                <Grid.Col>
-                  <form onSubmit={form.onSubmit((values) => console.log(values))}>
-                    <div className='bg-white rounded-xl hover:drop-shadow-md'>
-                      <div className='p-4 font-varsity justify-left text-2xl bg-darkBlue text-white rounded-t-xl'>
-                        Filters
-                      </div>
-                      <div className='pr-4 pl-4 pt-2'>
-                        <div className='text-md font-varsity text-darkBlue'>Position:</div>
-                        <SegmentedControl
-                          color='orange'
-                          fullWidth
-                          transitionDuration={400}
-                          transitionTimingFunction='linear'
-                          data={[
-                            { label: 'All', value: 'All' },
-                            { label: 'QB', value: 'QB' },
-                            { label: 'RB', value: 'RB' },
-                            { label: 'WR', value: 'WR' },
-                            { label: 'TE', value: 'TE' },
-                            { label: 'FLEX', value: 'FLEX' },
-                          ]}
-                          {...form.getInputProps('position')}
-                        />
-                      </div>
-                      <div className='pr-4 pl-4 pt-2'>
-                        <div className='text-md font-varsity text-darkBlue'>Player Name:</div>
-                        <TextInput
-                          placeholder='Justin Jefferson'
-                          {...form.getInputProps('player')}
-                        />
-                      </div>
-                      <div className='pr-4 pl-4 pt-2 pb-4'>
-                        <div className='text-md font-varsity text-darkBlue'>Availability:</div>
-                        <NativeSelect
-                          data={['All', 'Available', 'Waivers', 'Free Agents', 'On Rosters']}
-                          {...form.getInputProps('availability')}
-                        />
-                      </div>
-                    </div>
-                  </form>
-                </Grid.Col>
+              <Grid.Col span={3} className='pl-4'>
+                <DraftRosterAndQueueCard currUser={user} teams={league.teams} />
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <DraftPlayerTable
+                  playersChosen={playersChosen}
+                  removePlayerFromList={removePlayerFromList}
+                />
+              </Grid.Col>
+              <Grid.Col span={3} className='pr-4'>
+                <DraftHistory players={[]} />
               </Grid.Col>
             </Grid>
-            <DraftPlayerTable></DraftPlayerTable>
           </div>
         </>
       )}
