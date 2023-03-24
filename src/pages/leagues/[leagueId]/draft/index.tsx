@@ -21,15 +21,16 @@ export default function index() {
   const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
   const draftInProgress = new Date(draftTime).getTime() < new Date().getTime() && !draftCompleted;
 
-  const sendMessage = (msg: Object) => {
+  const sendMessage = (msg: Object, msgType: string) => {
     const content: string = JSON.stringify(msg);
-    dispatch(draftActions.sendMessage({ content }));
+    const type: string = JSON.stringify(msgType);
+    dispatch(draftActions.sendMessage({ content, type }));
   };
 
   const print = false;
 
   if (print) {
-    sendMessage({});
+    sendMessage({ draftObject: 'testObject' }, 'testType');
     console.log(draftInProgress);
     console.log(league);
   }

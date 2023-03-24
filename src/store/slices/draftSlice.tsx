@@ -53,16 +53,18 @@ export const draftSlice = createSlice({
     ) => {
       // console.log('Websocket: recieved message');
       const message = JSON.parse(action.payload.socketMessage.data);
-      console.log(message);
+      console.log('Message', message);
     },
     sendMessage: (
       state,
       action: PayloadAction<{
         content: string;
+        type: string;
       }>,
     ) => {
       // console.log('Websocket: send message');
-      console.log(action.payload.content);
+      console.log('Content: ', action.payload.content);
+      console.log('Type: ', action.payload.type);
     },
   },
 });

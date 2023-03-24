@@ -1,6 +1,6 @@
 import { Middleware } from 'redux';
-import { draftActions } from '@store/slices/draftSlice';
 import SockJS from 'sockjs-client';
+import { draftActions } from '@store/slices/draftSlice';
 
 const draftMiddleware: Middleware = (store) => {
   // const url = 'http://localhost:9999/echo';
@@ -8,6 +8,10 @@ const draftMiddleware: Middleware = (store) => {
   let socket;
 
   return (next) => (action) => {
+    if (!action.type.startsWith('draft')) {
+      next(action);
+    }
+
     const isConnectionEstablished = socket && store.getState().draft.isConnected;
 
     if (draftActions.killConnection.match(action)) {
@@ -24,6 +28,9 @@ const draftMiddleware: Middleware = (store) => {
 
       socket.onmessage = function (socketMessage) {
         store.dispatch(draftActions.receiveMessage({ socketMessage }));
+        store.dispatch(
+          draftActions.sendMessage({ content: 'this is a test response', type: 'testType' }),
+        );
       };
 
       socket.onclose = function () {
@@ -37,7 +44,8 @@ const draftMiddleware: Middleware = (store) => {
     }
 
     if (draftActions.sendMessage.match(action) && isConnectionEstablished) {
-      socket?.send(action.payload.content);
+      console.log(action.payload);
+      socket?.send(JSON.stringify(action.payload));
     }
 
     next(action);
