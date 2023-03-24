@@ -1,9 +1,11 @@
 import DeleteATeamPopUp from '@components/DeleteATeamPopUp/DeleteATeamPopUp';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Button, Group } from '@mantine/core';
+import { removeUserFromTeam } from '@services/apiClient';
 import { StoreState } from '@store/store';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import router from 'next/router';
 import { useSelector } from 'react-redux';
 import InviteCard from '../../../../../components/InviteCard/InviteCard';
 import TeamMemberCard from '../../../../../components/TeamMemberCard/TeamMemberCard';
@@ -21,9 +23,9 @@ export default function index() {
   const userStatus: String = useSelector((state: StoreState) => state.user.status);
   const league = useSelector((state: StoreState) => state.league.league);
   const userTeam = useSelector((state: StoreState) => state.league.userTeam);
-  const user = useSelector((state: StoreState) => state.user);
+  const currUser = useSelector((state: StoreState) => state.user);
   const captainID = userTeam?.managers.find((manager) => manager.is_captain).user_id;
-  const isUserManager = user.userInfo?.id === captainID;
+  const isUserManager = currUser.userInfo?.id === captainID;
   const teamManagers = userTeam?.managers;
 
   const [DeleteTeamPopUp, setDeleteTeamPopUp] = useState(false);
@@ -55,6 +57,44 @@ export default function index() {
       </>
     );
   };
+
+  const preventDefault = (f) => (e) => {
+    e.preventDefault();
+    f(e);
+  };
+
+  const handleSubmit = preventDefault(async () => {
+    const user = userTeam.managers.find((tempUser) => currUser.userInfo.id === tempUser.user_id);
+    const userToRemove = {
+      user,
+      userTeam,
+    };
+    await removeUserFromTeam(userToRemove);
+    await router.push({
+      pathname: '/leagues',
+    });
+  });
+
+  const showLeaveButton = () => {
+    return (
+      <>
+        <form onSubmit={handleSubmit}>
+          <Group position='right'>
+            <Button
+              className='hover:bg-transparent hover:text-red text-xl font-bold hover:border hover:border-red rounded bg-red text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+              variant='default'
+              size='sm'
+              formMethod='POST'
+              type='submit'
+            >
+              Leave Team
+            </Button>
+          </Group>
+        </form>
+      </>
+    );
+  };
+
   return (
     <>
       {leagueInfoFetchStatus !== 'succeeded' && userStatus !== 'succeeded' && <HuddleUpLoader />}
@@ -90,7 +130,7 @@ export default function index() {
             </>
           </div>
 
-          <div>{isUserManager ? showDeleteButton() : ''}</div>
+          <div>{isUserManager ? showDeleteButton() : showLeaveButton()}</div>
 
           <div className='pt-4'>
             <InviteCard userTeam={userTeam} league={league} />
