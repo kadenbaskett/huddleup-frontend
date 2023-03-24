@@ -4,12 +4,14 @@ export interface draftSliceState {
   isEstablishingConnection: boolean;
   isConnected: boolean;
   lostConnection: boolean;
+  isKilled: boolean;
 }
 
 const initialState: draftSliceState = {
   isEstablishingConnection: false,
   isConnected: false,
   lostConnection: false,
+  isKilled: false,
 };
 
 export const draftSlice = createSlice({
@@ -32,24 +34,37 @@ export const draftSlice = createSlice({
       state.isEstablishingConnection = false;
       state.lostConnection = true;
     },
+    killConnection: (state) => {
+      console.log('Websocket: connection killed');
+      state.isConnected = false;
+      state.isEstablishingConnection = false;
+      state.lostConnection = false;
+      state.isKilled = true;
+    },
+    leaveDraft: (state) => {
+      console.log('Websocket: leaving deaft');
+      state.isKilled = false;
+    },
     receiveMessage: (
       state,
       action: PayloadAction<{
         socketMessage;
       }>,
     ) => {
-      console.log('Websocket: recieved message');
+      // console.log('Websocket: recieved message');
       const message = JSON.parse(action.payload.socketMessage.data);
-      console.log(message);
+      console.log('Message', message);
     },
     sendMessage: (
       state,
       action: PayloadAction<{
         content: string;
+        type: string;
       }>,
     ) => {
-      console.log('Websocket: send message');
-      console.log(action.payload.content);
+      // console.log('Websocket: send message');
+      console.log('Content: ', action.payload.content);
+      console.log('Type: ', action.payload.type);
     },
   },
 });

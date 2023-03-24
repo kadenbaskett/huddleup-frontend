@@ -13,7 +13,9 @@ export default function index() {
   const dispatch = useDispatch();
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const websocketConnected = useSelector((state: StoreState) => state.draft.isConnected);
-  const websocketTryingToConnect = useSelector((state: StoreState) => state.draft.isConnected);
+  const websocketTryingToConnect = useSelector(
+    (state: StoreState) => state.draft.isEstablishingConnection,
+  );
   const league = useSelector((state: StoreState) => state.league.league);
   const user = useSelector((state: StoreState) => state.user.userInfo);
   const draftTime = useSelector(
@@ -22,15 +24,16 @@ export default function index() {
   const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
   const draftInProgress = new Date(draftTime).getTime() < new Date().getTime() && !draftCompleted;
 
-  const sendMessage = (msg: Object) => {
+  const sendMessage = (msg: Object, msgType: string) => {
     const content: string = JSON.stringify(msg);
-    dispatch(draftActions.sendMessage({ content }));
+    const type: string = JSON.stringify(msgType);
+    dispatch(draftActions.sendMessage({ content, type }));
   };
 
   const print = false;
 
   if (print) {
-    sendMessage({});
+    sendMessage({ draftObject: 'testObject' }, 'testType');
     console.log(draftInProgress);
     console.log(league);
   }
@@ -63,10 +66,14 @@ export default function index() {
 
   useEffect(() => {
     if (!websocketConnected && !websocketTryingToConnect) {
-      console.log('Use effect: trying to establish connection');
       dispatch(draftActions.startConnecting());
     }
-  }, [websocketTryingToConnect]);
+
+    return () => {
+      console.log('Connection should be killed now!');
+      dispatch(draftActions.killConnection());
+    };
+  }, []);
 
   const content = (
     <>
