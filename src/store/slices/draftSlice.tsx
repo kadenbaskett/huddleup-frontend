@@ -1,4 +1,4 @@
-import { DraftPlayer, DraftQueue } from '@interfaces/draft.interface';
+import { DraftPlayer, QueuePlayer } from '@interfaces/draft.interface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface draftSliceState {
@@ -7,7 +7,7 @@ export interface draftSliceState {
   lostConnection: boolean;
   isKilled: boolean;
   draftPlayers: DraftPlayer[];
-  draftQueue: DraftQueue[];
+  draftQueue: QueuePlayer[];
 }
 
 const initialState: draftSliceState = {

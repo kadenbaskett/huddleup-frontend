@@ -46,6 +46,7 @@ export default function index() {
       player_id: player.id,
       team_id: user.teams.find((team) => team.league.id === league.id).id,
       league_id: league.id,
+      order: 1,
     };
     console.log('queuePlayer', queuePlayer);
   };
