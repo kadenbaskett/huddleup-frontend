@@ -110,7 +110,7 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
   const takePlayerAction = (player) => {
     setSelectedPlayer(player);
 
-    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek);
+    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek, league.id);
     const myRoster = getMyRoster();
     const isMyPlayer = playerTeam?.id === team.id;
 
@@ -118,7 +118,7 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
     if (!playerTeam) {
       // TODO use league settings instead of CONFIG
       // No need to drop a player as part of the transaction if your roster isn't full
-      if (myRoster.players.length < CONFIG.maxRosterSize) {
+      if (myRoster.players.length < league.settings.roster_settings.roster_size_limit) {
         setAddingPlayer(true);
         setAddDropConfirmPopupOpen(true);
       } else {
@@ -154,6 +154,7 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
         opened={playerPopupOpen}
         onClose={onPlayerPopupClose}
         onPlayerAction={takePlayerAction}
+        leagueId={league.id}
       />
 
       <AddDropPlayerPopup
