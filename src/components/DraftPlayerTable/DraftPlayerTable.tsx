@@ -7,7 +7,7 @@ import { useForm } from '@mantine/form';
 import { sortBy } from 'lodash';
 import { useSelector } from 'react-redux';
 
-export default function DraftPlayerTable({ playersChosen }) {
+export default function DraftPlayerTable({ playersChosen, draftCallback, queueCallback }) {
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
 
   // Player filtering
@@ -44,7 +44,6 @@ export default function DraftPlayerTable({ playersChosen }) {
 
     if (playersChosen) {
       players.filter((player) => !playersChosen.includes(player));
-      console.log('playersChosen', playersChosen);
     }
     const playerSearchName = form.values.player;
 
@@ -124,15 +123,17 @@ export default function DraftPlayerTable({ playersChosen }) {
             {
               accessor: 'external_id',
               title: 'Draft or Queue',
-              render: () => (
+              render: (p) => (
                 <Group>
                   <Button
                     className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
+                    onClick={() => draftCallback(p)}
                   >
                     {'Draft'}
                   </Button>
                   <Button
                     className={`${'bg-transparent hover:bg-orange text-orange hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-orange rounded border-orange transition ease-in duration-200`}
+                    onClick={() => queueCallback(p)}
                   >
                     {'Queue'}
                   </Button>

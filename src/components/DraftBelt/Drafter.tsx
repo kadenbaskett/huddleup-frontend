@@ -4,18 +4,19 @@ import { GiAmericanFootballHelmet } from 'react-icons/gi';
 export interface DrafterProps {
   team: Team;
   auto: Boolean;
+  time: number;
+  nextUp: Boolean;
 }
-export default function Drafter({ team, auto }: DrafterProps) {
+export default function Drafter({ team, auto, time, nextUp }: DrafterProps) {
+  const colors = auto ? 'text-darkGrey' : nextUp ? 'text-orange' : 'text-darkBlue';
   return (
-    <div className='bg-white rounded-xl h-full w-36 hover:drop-shadow-md grid place-items-center'>
+    <div
+      className={`bg-white rounded-xl h-full w-36 hover:drop-shadow-md grid place-items-center ${
+        nextUp && !auto ? 'border-4 border-orange' : ''
+      }`}
+    >
       <div>
-        <div
-          className={`text-2xl ${
-            auto ? 'text-darkGrey' : 'text-darkBlue'
-          } font-varsity text-center`}
-        >
-          {team.name}
-        </div>
+        <div className={`text-2xl ${colors} font-varsity text-center`}>{team.name}</div>
       </div>
 
       {auto ? (
@@ -26,7 +27,7 @@ export default function Drafter({ team, auto }: DrafterProps) {
         </>
       ) : (
         <>
-          <div className={`text-6xl ${auto ? 'text-darkGrey' : 'text-darkBlue'}`}>
+          <div className={`text-6xl ${colors}`}>
             <GiAmericanFootballHelmet />
           </div>
         </>

@@ -6,7 +6,7 @@ function Timer({ time }: TimerProps) {
   return (
     <>
       <div className='font-varsity text-green text-5xl'>0:{seconds}</div>
-      <div className='font-varsity text-green text-2xl'>seconds</div>
+      <div className='font-varsity text-green text-xl'>seconds</div>
     </>
   );
 }

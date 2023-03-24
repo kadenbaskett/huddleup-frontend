@@ -9,7 +9,6 @@ export interface DraftBeltProps {
 }
 
 export default function DraftBelt({ teams, time }: DraftBeltProps) {
-  console.log('teams', teams);
   return (
     <>
       <div className='flex h-40'>
@@ -20,7 +19,12 @@ export default function DraftBelt({ teams, time }: DraftBeltProps) {
             {teams.slice(1, teams.length).map((team) => (
               <>
                 <div className='p-1'>
-                  <Drafter team={team} auto={team.id % 2 === 0} />
+                  <Drafter
+                    team={team}
+                    auto={team.id % 2 === 0}
+                    time={time}
+                    nextUp={team.id === teams[1].id}
+                  />
                 </div>
               </>
             ))}

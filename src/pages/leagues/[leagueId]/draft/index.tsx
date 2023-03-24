@@ -8,6 +8,7 @@ import { Grid } from '@mantine/core';
 import DraftBelt from '@components/DraftBelt/DraftBelt';
 import DraftRosterAndQueueCard from '@components/DraftRosterAndQueueCard/DraftRosterAndQueueCard';
 import DraftHistory from '@components/DraftHistory/DraftHistory';
+import { DraftPlayer, QueuePlayer } from '@interfaces/draft.interface';
 
 export default function index() {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function index() {
     (state: StoreState) => state.draft.isEstablishingConnection,
   );
   const league = useSelector((state: StoreState) => state.league.league);
-  const user = useSelector((state: StoreState) => state.user.userInfo);
+  const user = useSelector((state: StoreState) => state.user);
   const draftTime = useSelector(
     (state: StoreState) => state.league.league?.settings.draft_settings.date,
   );
@@ -28,6 +29,25 @@ export default function index() {
     const content: string = JSON.stringify(msg);
     const type: string = JSON.stringify(msgType);
     dispatch(draftActions.sendMessage({ content, type }));
+  };
+
+  const draftCallback = (player) => {
+    const draftPlayer: DraftPlayer = {
+      player_id: player.id,
+      team_id: user.teams.find((team) => team.league.id === league.id).id,
+      league_id: league.id,
+    };
+
+    console.log('draftPlayer', draftPlayer);
+  };
+
+  const queueCallback = (player) => {
+    const queuePlayer: QueuePlayer = {
+      player_id: player.id,
+      team_id: user.teams.find((team) => team.league.id === league.id).id,
+      league_id: league.id,
+    };
+    console.log('queuePlayer', queuePlayer);
   };
 
   const print = false;
@@ -93,10 +113,14 @@ export default function index() {
             </div>
             <Grid>
               <Grid.Col span={3} className='pl-4'>
-                <DraftRosterAndQueueCard currUser={user} teams={league.teams} />
+                <DraftRosterAndQueueCard currUser={user.userInfo} teams={league.teams} />
               </Grid.Col>
               <Grid.Col span={6}>
-                <DraftPlayerTable playersChosen={[]} />
+                <DraftPlayerTable
+                  playersChosen={[]}
+                  draftCallback={(player) => draftCallback(player)}
+                  queueCallback={(player) => queueCallback(player)}
+                />
               </Grid.Col>
               <Grid.Col span={3} className='pr-4'>
                 <DraftHistory players={[]} />
