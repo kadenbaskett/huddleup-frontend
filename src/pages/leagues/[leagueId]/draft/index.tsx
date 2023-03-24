@@ -27,12 +27,6 @@ export default function index() {
     dispatch(draftActions.sendMessage({ content }));
   };
 
-  const playersChosen: any[] = [];
-
-  function removePlayerFromList(player) {
-    playersChosen.push(player);
-  }
-
   const print = false;
 
   if (print) {
@@ -95,10 +89,7 @@ export default function index() {
                 <DraftRosterAndQueueCard currUser={user} teams={league.teams} />
               </Grid.Col>
               <Grid.Col span={6}>
-                <DraftPlayerTable
-                  playersChosen={playersChosen}
-                  removePlayerFromList={removePlayerFromList}
-                />
+                <DraftPlayerTable playersChosen={[]} />
               </Grid.Col>
               <Grid.Col span={3} className='pr-4'>
                 <DraftHistory players={[]} />
