@@ -10,7 +10,9 @@ const draftMiddleware: Middleware = (store) => {
   return (next) => (action) => {
     const isConnectionEstablished = socket && store.getState().draft.isConnected;
 
-    if (draftActions.startConnecting.match(action)) {
+    if (draftActions.startConnecting.match(action) && !socket) {
+      console.log('Socket: ', socket);
+
       socket = new SockJS(url);
 
       socket.onopen = function () {
@@ -24,13 +26,13 @@ const draftMiddleware: Middleware = (store) => {
       socket.onclose = function () {
         socket = null;
         store.dispatch(draftActions.connectionClosed());
-        // store.dispatch(draftActions.startConnecting());
+        store.dispatch(draftActions.startConnecting());
       };
 
       socket.close = function () {
         console.log('Telling server to close connection');
-        socket = null;
-        store.dispatch(draftActions.connectionClosed());
+        // socket = null;
+        // store.dispatch(draftActions.connectionClosed());
       };
     }
 

@@ -34,12 +34,9 @@ export default function index() {
 
   useEffect(() => {
     if (!websocketConnected && !websocketTryingToConnect) {
-      // console.log('Use effect: trying to establish connection');
       dispatch(draftActions.startConnecting());
     }
-  }, [websocketTryingToConnect]);
 
-  useEffect(() => {
     return () => {
       console.log('Connection should be killed now!');
     };
