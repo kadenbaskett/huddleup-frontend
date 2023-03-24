@@ -27,16 +27,16 @@ export function proposalToString(proposal: Proposal): string {
       proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
         ? 'd'
         : ''
-    } ${offeredPlayers.join(', ')} to ${proposal.related_team.name} for ${recievedPlayers.join(
-      ', ',
-    )}`;
+    } ${offeredPlayers.join(', ')} to ${String(
+      proposal.related_team.name,
+    )} for ${recievedPlayers.join(', ')}`;
     sentence = `Trade${
       proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
         ? 'd'
         : ''
-    } ${offeredPlayers.join(', ')} to ${proposal.related_team.name} for ${recievedPlayers.join(
-      ', ',
-    )}`;
+    } ${offeredPlayers.join(', ')} to ${String(
+      proposal.related_team.name,
+    )} for ${recievedPlayers.join(', ')}`;
   } else if (proposal.type === ProposalType.add) {
     // add
     sentence = `Add ${proposal.players[0].player.first_name} ${proposal.players[0].player.last_name}`;
@@ -68,16 +68,16 @@ export function relatedTeamTradeString(proposal: Proposal): string {
     proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
       ? 'd'
       : ''
-  } ${offeredPlayers.join(', ')} to ${proposal.proposing_team.name} for ${recievedPlayers.join(
-    ', ',
-  )}`;
+  } ${offeredPlayers.join(', ')} to ${String(
+    proposal.proposing_team.name,
+  )} for ${recievedPlayers.join(', ')}`;
   sentence = `Trade${
     proposal.status === ProposalStatus.complete || proposal.status === ProposalStatus.rejected
       ? 'd'
       : ''
-  } ${offeredPlayers.join(', ')} to ${proposal.proposing_team.name} for ${recievedPlayers.join(
-    ', ',
-  )}`;
+  } ${offeredPlayers.join(', ')} to ${String(
+    proposal.proposing_team.name,
+  )} for ${recievedPlayers.join(', ')}`;
   return sentence;
 }
 
@@ -88,7 +88,7 @@ export function proposalExecutionerString(proposal: Proposal): string {
       proposal.status === ProposalStatus.complete || ProposalStatus.sent ? 'Approved' : 'Rejected'
     } by ${transactionUser}`;
     if (proposal?.status === 'SentToRelatedTeam') {
-      s += `, offer sent to ${proposal?.related_team.name}`;
+      s += `, offer sent to ${String(proposal?.related_team.name)}`;
     }
     return s;
   }
