@@ -4,6 +4,7 @@ export enum ProposalStatus {
   pending = 'Pending',
   complete = 'Complete',
   rejected = 'Rejected',
+  sent = 'SentToRelatedTeam',
 }
 export enum ProposalType {
   trade = 'Trade',

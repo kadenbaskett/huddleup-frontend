@@ -1,8 +1,10 @@
 import AddDropPlayerConfirmPopup from '@components/AddDropPlayerConfirmPopup/AddDropPlayerConfirmPopup';
 import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
+import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import TradePlayerPopup from '@components/TradePlayerPopup/TradePlayerPopup';
 import { DndContext } from '@dnd-kit/core';
+import { Proposal } from '@interfaces/types.interface';
 import { Grid, SegmentedControl } from '@mantine/core';
 import { editLineup } from '@services/apiClient';
 import CONFIG from '@services/config';
@@ -17,12 +19,14 @@ export interface TableData {
   rosters: any;
   currentWeek: string;
   disabled: boolean;
+  proposals: Proposal[];
 }
-export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableData) {
+export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals }: TableData) {
   // Application state
   const league = useSelector((state: StoreState) => state.league.league);
   const myTeam = useSelector((state: StoreState) => state.league.userTeam);
   const user = useSelector((state: StoreState) => state.user.userInfo);
+  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
 
   const [players, setPlayers] = useState([]);
   const [week, setWeek] = useState(currentWeek);
@@ -82,7 +86,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
   // Takes the necessary action to add/drop/trade for player
   const takePlayerAction = (player) => {
     setSelectedPlayer(player);
-    const playerTeam = getTeamThatOwnsPlayer(player, Number(currentWeek));
+    const playerTeam = getTeamThatOwnsPlayer(player, Number(currentWeek), league.id);
     const myRoster = getMyRoster();
     const isMyPlayer = playerTeam?.id === myTeam.id;
 
@@ -171,7 +175,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
 
   useEffect(() => {
     void updateLineup();
-  }, [lineupChange]);
+  }, [lineupChange, rosters]);
 
   const updateLineup = async () => {
     const positions = ['TE', 'RB', 'WR', 'QB', 'BE', 'FLEX'];
@@ -318,142 +322,147 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled }: TableDa
   for (let i = 1; i <= Number(currentWeek); i++) {
     weeks[i - 1] = { label: i.toString(), value: i.toString() };
   }
-
   return (
     <>
-      <PlayerPopup
-        player={selectedPlayer}
-        opened={playerPopupOpen}
-        onClose={onPlayerPopupClose}
-        onPlayerAction={takePlayerAction}
-      />
-      <AddDropPlayerPopup
-        roster={getMyRoster()}
-        player={selectedPlayer}
-        opened={addDropPopupOpen}
-        onClose={onAddDropPopupClose}
-        userId={user.id}
-      />
-      <TradePlayerPopup
-        otherRoster={tradeRoster}
-        myRoster={getMyRoster()}
-        player={selectedPlayer}
-        opened={tradePopupOpen}
-        onClose={onTradePopupClose}
-        userId={user.id}
-        week={currentWeek}
-      />
-      <AddDropPlayerConfirmPopup
-        roster={getMyRoster()}
-        isAdd={addingPlayer}
-        player={selectedPlayer}
-        opened={addDropConfirmPopupOpen}
-        onClose={onAddDropConfirmClose}
-        userId={user.id}
-      />
-      <div className='text-xl font-varsity'>Week:</div>
-      <div className='p-3'>
-        <SegmentedControl fullWidth value={week} data={weeks} onChange={(e) => setWeek(e)} />
-      </div>
-      <DndContext onDragEnd={handleDragEnd}>
-        {/* QuarterBacks */}
-        <Grid>
-          <Grid.Col span={7}>
-            <div className='text-xl font-varsity text-darkBlue'>Quarterback:</div>
-            <Droppable key={'QB'} id={'QB'}>
-              {QB.map((child) => {
-                return (
-                  <Draggable
-                    key={child}
-                    id={child}
-                    player={players.find(({ id }) => id === child).player}
-                    disabled={disabled || week !== currentWeek}
-                  >
-                    {child}
-                  </Draggable>
-                );
-              })}
-            </Droppable>
-            <div className='text-xl font-varsity text-darkBlue'>Wide Recievers:</div>
-            <Droppable key={'WR'} id={'WR'}>
-              {WR.map((child) => {
-                return (
-                  <Draggable
-                    key={child}
-                    id={child}
-                    player={players.find(({ id }) => id === child).player}
-                    disabled={disabled || week !== currentWeek}
-                  >
-                    {child}
-                  </Draggable>
-                );
-              })}
-            </Droppable>
-            <div className='text-xl font-varsity text-darkBlue'>Running Backs:</div>
-            <Droppable key={'RB'} id={'RB'}>
-              {RB.map((child) => {
-                return (
-                  <Draggable
-                    key={child}
-                    id={child}
-                    player={players.find(({ id }) => id === child).player}
-                    disabled={disabled || week !== currentWeek}
-                  >
-                    {child}
-                  </Draggable>
-                );
-              })}
-            </Droppable>
-            <div className='text-xl font-varsity text-darkBlue'>Tight End:</div>
-            <Droppable key={'TE'} id={'TE'}>
-              {TE.map((child) => {
-                return (
-                  <Draggable
-                    key={child}
-                    id={child}
-                    player={players.find(({ id }) => id === child).player}
-                    disabled={disabled || week !== currentWeek}
-                  >
-                    {child}
-                  </Draggable>
-                );
-              })}
-            </Droppable>
-            <div className='text-xl font-varsity text-darkBlue'>Flex:</div>
-            <Droppable key={'FLEX'} id={'FLEX'}>
-              {FLEX.map((child) => {
-                return (
-                  <Draggable
-                    key={child}
-                    id={child}
-                    player={players.find(({ id }) => id === child).player}
-                    disabled={disabled || week !== currentWeek}
-                  >
-                    {child}
-                  </Draggable>
-                );
-              })}
-            </Droppable>
-          </Grid.Col>
-          <Grid.Col span={5}>
-            <div className='text-xl font-varsity text-darkBlue'>Bench:</div>
-            <Droppable key={'Bench'} id={'Bench'}>
-              {bench.map((child) => {
-                return (
-                  <Draggable
-                    key={child}
-                    id={child}
-                    player={players.find(({ id }) => id === child).player}
-                    disabled={disabled || week !== currentWeek}
-                  >
-                    {child}
-                  </Draggable>
-                );
-              })}
-            </Droppable>
-          </Grid.Col>
-        </Grid>
-      </DndContext>
+      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {leagueInfoFetchStatus === 'succeeded' && (
+        <>
+          <PlayerPopup
+            player={selectedPlayer}
+            opened={playerPopupOpen}
+            onClose={onPlayerPopupClose}
+            onPlayerAction={takePlayerAction}
+            leagueId={league.id}
+          />
+          <AddDropPlayerPopup
+            roster={getMyRoster()}
+            player={selectedPlayer}
+            opened={addDropPopupOpen}
+            onClose={onAddDropPopupClose}
+            userId={user.id}
+          />
+          <TradePlayerPopup
+            otherRoster={tradeRoster}
+            myRoster={getMyRoster()}
+            player={selectedPlayer}
+            opened={tradePopupOpen}
+            onClose={onTradePopupClose}
+            userId={user.id}
+            week={currentWeek}
+          />
+          <AddDropPlayerConfirmPopup
+            roster={getMyRoster()}
+            isAdd={addingPlayer}
+            player={selectedPlayer}
+            opened={addDropConfirmPopupOpen}
+            onClose={onAddDropConfirmClose}
+            userId={user.id}
+          />
+          <div className='text-xl font-varsity'>Week:</div>
+          <div className='p-3'>
+            <SegmentedControl fullWidth value={week} data={weeks} onChange={(e) => setWeek(e)} />
+          </div>
+          <DndContext onDragEnd={handleDragEnd}>
+            {/* QuarterBacks */}
+            <Grid>
+              <Grid.Col span={7}>
+                <div className='text-xl font-varsity text-darkBlue'>Quarterback:</div>
+                <Droppable key={'QB'} id={'QB'}>
+                  {QB.map((child) => {
+                    return (
+                      <Draggable
+                        key={child}
+                        id={child}
+                        player={players.find(({ id }) => id === child).player}
+                        disabled={disabled || week !== currentWeek}
+                      >
+                        {child}
+                      </Draggable>
+                    );
+                  })}
+                </Droppable>
+                <div className='text-xl font-varsity text-darkBlue'>Wide Recievers:</div>
+                <Droppable key={'WR'} id={'WR'}>
+                  {WR.map((child) => {
+                    return (
+                      <Draggable
+                        key={child}
+                        id={child}
+                        player={players.find(({ id }) => id === child).player}
+                        disabled={disabled || week !== currentWeek}
+                      >
+                        {child}
+                      </Draggable>
+                    );
+                  })}
+                </Droppable>
+                <div className='text-xl font-varsity text-darkBlue'>Running Backs:</div>
+                <Droppable key={'RB'} id={'RB'}>
+                  {RB.map((child) => {
+                    return (
+                      <Draggable
+                        key={child}
+                        id={child}
+                        player={players.find(({ id }) => id === child).player}
+                        disabled={disabled || week !== currentWeek}
+                      >
+                        {child}
+                      </Draggable>
+                    );
+                  })}
+                </Droppable>
+                <div className='text-xl font-varsity text-darkBlue'>Tight End:</div>
+                <Droppable key={'TE'} id={'TE'}>
+                  {TE.map((child) => {
+                    return (
+                      <Draggable
+                        key={child}
+                        id={child}
+                        player={players.find(({ id }) => id === child).player}
+                        disabled={disabled || week !== currentWeek}
+                      >
+                        {child}
+                      </Draggable>
+                    );
+                  })}
+                </Droppable>
+                <div className='text-xl font-varsity text-darkBlue'>Flex:</div>
+                <Droppable key={'FLEX'} id={'FLEX'}>
+                  {FLEX.map((child) => {
+                    return (
+                      <Draggable
+                        key={child}
+                        id={child}
+                        player={players.find(({ id }) => id === child).player}
+                        disabled={disabled || week !== currentWeek}
+                      >
+                        {child}
+                      </Draggable>
+                    );
+                  })}
+                </Droppable>
+              </Grid.Col>
+              <Grid.Col span={5}>
+                <div className='text-xl font-varsity text-darkBlue'>Bench:</div>
+                <Droppable key={'Bench'} id={'Bench'}>
+                  {bench.map((child) => {
+                    return (
+                      <Draggable
+                        key={child}
+                        id={child}
+                        player={players.find(({ id }) => id === child).player}
+                        disabled={disabled || week !== currentWeek}
+                      >
+                        {child}
+                      </Draggable>
+                    );
+                  })}
+                </Droppable>
+              </Grid.Col>
+            </Grid>
+          </DndContext>
+        </>
+      )}
     </>
   );
 }

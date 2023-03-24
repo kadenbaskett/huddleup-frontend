@@ -30,8 +30,7 @@ const login = async (email, password, rememberMe) => {
     // LOCAL = explicict sign out is needed | SESSION = persists during current tab
     await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
 
-    const user = await signInWithEmailAndPassword(auth, email, password);
-    console.log(user);
+    await signInWithEmailAndPassword(auth, email, password);
 
     return 'success';
   } catch (err) {
