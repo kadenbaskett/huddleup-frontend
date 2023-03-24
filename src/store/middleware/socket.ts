@@ -21,6 +21,7 @@ const draftMiddleware: Middleware = (store) => {
       };
 
       socket.onclose = function () {
+        socket = null;
         store.dispatch(draftActions.connectionClosed());
         store.dispatch(draftActions.startConnecting());
       };
