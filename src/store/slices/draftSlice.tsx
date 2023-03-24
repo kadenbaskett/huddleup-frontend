@@ -38,7 +38,7 @@ export const draftSlice = createSlice({
         socketMessage;
       }>,
     ) => {
-      console.log('Websocket: recieved message');
+      // console.log('Websocket: recieved message');
       const message = JSON.parse(action.payload.socketMessage.data);
       console.log(message);
     },
@@ -48,7 +48,7 @@ export const draftSlice = createSlice({
         content: string;
       }>,
     ) => {
-      console.log('Websocket: send message');
+      // console.log('Websocket: send message');
       console.log(action.payload.content);
     },
   },
