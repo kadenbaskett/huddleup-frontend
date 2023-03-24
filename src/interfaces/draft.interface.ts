@@ -10,4 +10,5 @@ export interface DraftQueue {
   player_id: number;
   team_id: number;
   league_id: number;
+  order: number;
 }
