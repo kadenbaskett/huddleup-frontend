@@ -22,22 +22,12 @@ const draftMiddleware: Middleware = (store) => {
 
       socket.onclose = function () {
         store.dispatch(draftActions.connectionClosed());
+        store.dispatch(draftActions.startConnecting());
       };
     }
 
-    // TODO remove after testing
-    if (draftActions.connectionEstablished.match(action)) {
-      setInterval(() => {
-        const msg = {
-          time: new Date().getTime(),
-        };
-
-        socket.send(JSON.stringify(msg));
-      }, 5000);
-    }
-
     if (draftActions.sendMessage.match(action) && isConnectionEstablished) {
-      socket.send(action.payload.content);
+      socket?.send(action.payload.content);
     }
 
     next(action);

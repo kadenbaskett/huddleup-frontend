@@ -6,6 +6,11 @@ import { useSelector } from 'react-redux';
 
 function DraftPlayerTable() {
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
+  let players = [];
+
+  if (allPlayers) {
+    players = allPlayers.slice(0, 50);
+  }
 
   return (
     <>
@@ -15,7 +20,7 @@ function DraftPlayerTable() {
         highlightOnHover
         striped
         withColumnBorders
-        records={allPlayers}
+        records={players}
         columns={[
           {
             accessor: 'id',
