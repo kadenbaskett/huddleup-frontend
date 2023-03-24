@@ -8,7 +8,7 @@ export const numFLEX = 1;
 export const numWeeks = 18;
 
 export const TIMEOUTS = {
-  LEAGUE: 1000,
-  USER: 5000,
-  GLOBAL: 5000,
+  LEAGUE: 10000,
+  USER: 10000,
+  GLOBAL: 10000,
 };
