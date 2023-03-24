@@ -10,14 +10,14 @@ export default function index() {
 
   const websocketConnected = useSelector((state: StoreState) => state.draft.isConnected);
   const websocketTryingToConnect = useSelector((state: StoreState) => state.draft.isConnected);
-  const league = useSelector((state: StoreState) => state.league);
-  const draftTime = useSelector(
-    (state: StoreState) => state.league.league?.settings.draft_settings.date,
-  );
-  const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
-  const draftInProgress = new Date(draftTime).getTime() < new Date().getTime() && !draftCompleted;
-  console.log(draftInProgress);
-  console.log(league);
+  // const league = useSelector((state: StoreState) => state.league);
+  // const draftTime = useSelector(
+  //   (state: StoreState) => state.league.league?.settings.draft_settings.date,
+  // );
+  // const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
+  // const draftInProgress = new Date(draftTime).getTime() < new Date().getTime() && !draftCompleted;
+  // console.log(draftInProgress);
+  // console.log(league);
 
   // const sendMessage = (msg: Object) => {
   //   const content: string = JSON.stringify(msg);
