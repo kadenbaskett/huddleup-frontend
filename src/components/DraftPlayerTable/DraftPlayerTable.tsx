@@ -18,7 +18,7 @@ function DraftPlayerTable() {
         records={allPlayers}
         columns={[
           {
-            accessor: 'first_name',
+            accessor: 'id',
             title: 'Player',
             render: (p) => (
               <Group>
@@ -32,7 +32,7 @@ function DraftPlayerTable() {
             ),
           },
           {
-            accessor: 'first_name',
+            accessor: 'external_id',
             title: 'Draft',
             render: (p) => (
               <Group>
