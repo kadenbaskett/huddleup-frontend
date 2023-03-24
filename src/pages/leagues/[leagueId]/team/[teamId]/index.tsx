@@ -24,7 +24,6 @@ function league() {
   const user = useSelector((state: StoreState) => state.user.userInfo);
 
   const team = league?.teams?.find((t) => t.id === Number(teamId));
-  console.log('team', team);
   const isMyTeam = team && userTeam ? Number(team.id) === Number(userTeam.id) : false;
 
   const rosters = team?.rosters;
@@ -39,7 +38,9 @@ function league() {
   // const players = team?.rosters.find((roster) => roster.week === currentWeek)?.players;
   return (
     <>
-      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
+      {leagueInfoFetchStatus !== 'succeeded' && leagueInfoFetchStatus !== 'succeeded' && (
+        <HuddleUpLoader />
+      )}
       {leagueInfoFetchStatus === 'succeeded' && (
         <>
           <LeagueNavBar
