@@ -18,7 +18,7 @@ export default function DeleteATeamPopUp(props: DeleteATeamPopUpProps) {
   const handleSubmit = preventDefault(async () => {
     await deleteTeam(props.team);
     await router.push({
-      pathname: '/home',
+      pathname: '/leagues',
     });
   });
 
