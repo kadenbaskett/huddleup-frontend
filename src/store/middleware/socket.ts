@@ -10,8 +10,11 @@ const draftMiddleware: Middleware = (store) => {
   return (next) => (action) => {
     const isConnectionEstablished = socket && store.getState().draft.isConnected;
 
-    if (draftActions.startConnecting.match(action) && !socket) {
-      console.log('Socket: ', socket);
+    if (draftActions.killConnection.match(action)) {
+      // console.log('Socket in kill connection: ', socket);
+      socket.close();
+    } else if (draftActions.startConnecting.match(action)) {
+      // console.log('Socket: ', socket);
 
       socket = new SockJS(url);
 
@@ -24,15 +27,12 @@ const draftMiddleware: Middleware = (store) => {
       };
 
       socket.onclose = function () {
-        socket = null;
-        store.dispatch(draftActions.connectionClosed());
-        store.dispatch(draftActions.startConnecting());
-      };
-
-      socket.close = function () {
-        console.log('Telling server to close connection');
-        // socket = null;
-        // store.dispatch(draftActions.connectionClosed());
+        if (!store.getState().draft.isKilled) {
+          store.dispatch(draftActions.connectionClosed());
+          store.dispatch(draftActions.startConnecting());
+        } else {
+          store.dispatch(draftActions.leaveDraft());
+        }
       };
     }
 

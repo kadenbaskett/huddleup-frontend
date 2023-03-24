@@ -11,7 +11,9 @@ export default function index() {
   const dispatch = useDispatch();
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const websocketConnected = useSelector((state: StoreState) => state.draft.isConnected);
-  const websocketTryingToConnect = useSelector((state: StoreState) => state.draft.isConnected);
+  const websocketTryingToConnect = useSelector(
+    (state: StoreState) => state.draft.isEstablishingConnection,
+  );
   const league = useSelector((state: StoreState) => state.league);
   const draftTime = useSelector(
     (state: StoreState) => state.league.league?.settings.draft_settings.date,
@@ -39,6 +41,7 @@ export default function index() {
 
     return () => {
       console.log('Connection should be killed now!');
+      dispatch(draftActions.killConnection());
     };
   }, []);
 

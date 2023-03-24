@@ -4,12 +4,14 @@ export interface draftSliceState {
   isEstablishingConnection: boolean;
   isConnected: boolean;
   lostConnection: boolean;
+  isKilled: boolean;
 }
 
 const initialState: draftSliceState = {
   isEstablishingConnection: false,
   isConnected: false,
   lostConnection: false,
+  isKilled: false,
 };
 
 export const draftSlice = createSlice({
@@ -31,6 +33,17 @@ export const draftSlice = createSlice({
       state.isConnected = false;
       state.isEstablishingConnection = false;
       state.lostConnection = true;
+    },
+    killConnection: (state) => {
+      console.log('Websocket: connection killed');
+      state.isConnected = false;
+      state.isEstablishingConnection = false;
+      state.lostConnection = false;
+      state.isKilled = true;
+    },
+    leaveDraft: (state) => {
+      console.log('Websocket: leaving deaft');
+      state.isKilled = false;
     },
     receiveMessage: (
       state,
