@@ -58,18 +58,27 @@ export const draftSlice = createSlice({
     ) => {
       // console.log('Websocket: recieved message');
       const message = JSON.parse(action.payload.socketMessage.data);
-      console.log('Message', message);
+      console.log(message);
+      const type = message.type;
+      const content = message.content;
+
+      switch (type) {
+        case 'draftUpdate':
+          state.draftPlayers = content ? content.draftPlayers : [];
+          // TODO draft queue
+          break;
+        default:
+          console.log('Unhandles type.');
+      }
     },
     sendMessage: (
       state,
       action: PayloadAction<{
-        content: string;
+        content: Object;
         type: string;
       }>,
     ) => {
       // console.log('Websocket: send message');
-      console.log('Content: ', action.payload.content);
-      console.log('Type: ', action.payload.type);
     },
   },
 });

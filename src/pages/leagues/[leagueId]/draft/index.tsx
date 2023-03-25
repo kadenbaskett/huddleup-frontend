@@ -46,10 +46,8 @@ export default function index() {
     draftHistorySpan = 12;
   }
 
-  const sendMessage = (msg: Object, msgType: string) => {
-    const content: string = JSON.stringify(msg);
-    const type: string = JSON.stringify(msgType);
-    dispatch(draftActions.sendMessage({ content, type }));
+  const sendMessage = (msgContent: Object, type: string) => {
+    dispatch(draftActions.sendMessage({ content: msgContent, type }));
   };
 
   const draftCallback = (player) => {

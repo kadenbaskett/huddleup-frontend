@@ -14,7 +14,6 @@ export default function index() {
   const user: userSliceState = useSelector((state: StoreState) => state.user);
 
   const router = useRouter();
-  const { leagueId } = router.query;
 
   const [teamName, setTeamName] = useState<string>('');
 
@@ -25,13 +24,13 @@ export default function index() {
 
   const handleSubmit = preventDefault(async () => {
     const team = {
-      leagueId,
+      leagueId: league.id,
       teamOwnerId: user.userInfo.id,
       teamName,
     };
     const newTeam = await createTeam(team);
     await router.push({
-      pathname: `/leagues/${Number(leagueId)}/create/${String(newTeam.data.token)}`,
+      pathname: `/leagues/${Number(league.id)}/create/${String(newTeam.data.token)}`,
     });
   });
 
