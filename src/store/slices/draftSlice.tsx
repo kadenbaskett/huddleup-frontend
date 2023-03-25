@@ -68,8 +68,6 @@ export const draftSlice = createSlice({
       }>,
     ) => {
       // console.log('Websocket: send message');
-      console.log('Content: ', action.payload.content);
-      console.log('Type: ', action.payload.type);
     },
   },
 });
