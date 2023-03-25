@@ -11,12 +11,14 @@ export interface DraftBeltProps {
 export default function DraftBelt({ teams, time }: DraftBeltProps) {
   return (
     <>
-      <div className='flex h-40'>
-        <div className='w-6/12 h-40 bg-gradient-to-l from-lightGrey' id={styles.abs} />
-
+      <div className='md:flex xl:flex h-40'>
+        <div
+          className='relative w-6/12 h-40 sm:h-52 bg-gradient-to-l from-lightGrey z-10'
+          id={styles.abs}
+        />
         <ActiveDrafter team={teams[0]} time={time} />
-        <div className='overflow-x-hidden w-3/4'>
-          <div className='flex h-full '>
+        <div className='overflow-x-hidden w-full md:w-1/2 lg:w-1/2 xl:w-3/4 z-0'>
+          <div className='flex h-full'>
             {teams.slice(1, teams.length).map((team) => (
               <>
                 <div className='pl-2'>

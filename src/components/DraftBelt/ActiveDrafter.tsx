@@ -11,9 +11,9 @@ export default function ActiveDrafter({ team, time }: ActiveDrafterProps) {
   const seconds = time % 60;
   return (
     <div
-      className={`bg-white rounded-xl h-full border-4 ${
+      className={`relative z-20 bg-white rounded-xl sm:h-auto border-4 ${
         time < 10 ? 'border-red' : 'border-green'
-      } hover:drop-shadow-md w-1/4`}
+      } hover:drop-shadow-md w-full md:w-1/2 xl:w-1/4`}
     >
       <div className='grid content-center h-full'>
         <Grid columns={16}>
