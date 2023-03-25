@@ -44,15 +44,8 @@ const draftMiddleware: Middleware = (store) => {
     }
 
     if (draftActions.sendMessage.match(action) && isConnectionEstablished) {
-      console.log(
-        'Payload: ',
-        { content: JSON.stringify(action.payload.content) },
-        { type: action.payload.type },
-      );
-      socket?.send(
-        { content: JSON.stringify(action.payload.content) },
-        { type: action.payload.type },
-      );
+      console.log(JSON.stringify(action.payload));
+      socket?.send(JSON.stringify(action.payload));
     }
 
     next(action);

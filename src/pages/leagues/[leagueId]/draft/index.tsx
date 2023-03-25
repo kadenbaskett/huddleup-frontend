@@ -26,8 +26,6 @@ export default function index() {
   const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
 
   const sendMessage = (msgContent: Object, type: string) => {
-    // const content: string = JSON.stringify(msgContent);
-    // const type: string = JSON.stringify(msgType);
     dispatch(draftActions.sendMessage({ content: msgContent, type }));
   };
 
@@ -49,7 +47,7 @@ export default function index() {
       order: 1,
     };
 
-    sendMessage({ content: queuePlayer }, 'queuePlayer');
+    sendMessage(queuePlayer, 'queuePlayer');
   };
 
   const print = false;
