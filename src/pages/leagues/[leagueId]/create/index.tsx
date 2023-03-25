@@ -13,9 +13,10 @@ export default function index() {
   const league = useSelector((state: StoreState) => state.league.league);
   const user: userSliceState = useSelector((state: StoreState) => state.user);
 
-  const [teamName, setTeamName] = useState<string>('');
-
   const router = useRouter();
+  const { leagueId } = router.query;
+
+  const [teamName, setTeamName] = useState<string>('');
 
   const preventDefault = (f) => (e) => {
     e.preventDefault();
@@ -24,13 +25,13 @@ export default function index() {
 
   const handleSubmit = preventDefault(async () => {
     const team = {
-      leagueId: league.id,
+      leagueId,
       teamOwnerId: user.userInfo.id,
       teamName,
     };
     const newTeam = await createTeam(team);
     await router.push({
-      pathname: `/leagues/${Number(league.id)}/create/${String(newTeam.data.token)}`,
+      pathname: `/leagues/${Number(leagueId)}/create/${String(newTeam.data.token)}`,
     });
   });
 
