@@ -48,7 +48,7 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
               aria-current='page'
               className={`inline-block ${
                 roster ? 'bg-white text-darkBlue' : 'bg-darkBlue text-white'
-              } p-4 rounded-t-lg active text-2xl font-varsity cursor-pointer`}
+              } p-4 rounded-t-lg active text-xl font-varsity cursor-pointer`}
             >
               Roster
             </div>
@@ -60,7 +60,7 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
                 aria-current='page'
                 className={`inline-block ${
                   queue ? 'bg-white text-darkBlue' : 'bg-darkBlue text-white'
-                } p-4 rounded-t-lg active text-2xl font-varsity cursor-pointer`}
+                } p-4 rounded-t-lg active text-xl font-varsity cursor-pointer`}
               >
                 Queue
               </div>
