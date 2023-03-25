@@ -1,3 +1,4 @@
+import DraftNotificationCard from '@components/DraftNotificationCard/DraftNotificationCard';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import JoinTeamByToken from '@components/JoinTeamByToken/JoinTeamByToken';
 import { Group, Button } from '@mantine/core';
@@ -14,6 +15,11 @@ export default function index() {
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const league = useSelector((state: StoreState) => state.league.league);
   const [JoinTeamByTokenPopUp, setJoinTeamByTokenPopUp] = useState(false);
+  const draftTime = useSelector(
+    (state: StoreState) => state.league.league?.settings.draft_settings.date,
+  );
+  const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
+  const draftInProgress = new Date(draftTime).getTime() < new Date().getTime() && !draftCompleted;
 
   const managerIDs: number[] = [];
   league?.teams.forEach((team) => {
@@ -57,6 +63,11 @@ export default function index() {
                   Back To Your Leagues
                 </Button>
               </Link>
+            </div>
+            <div className='pt-5'>
+              {!draftInProgress && leagueInfoFetchStatus === 'succeeded' && (
+                <DraftNotificationCard league={league} />
+              )}
             </div>
             <div className='pt-5'>
               <LeagueCard league={league} />

@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { StoreState } from '@store/store';
 import { userSliceState } from '@store/slices/userSlice';
 import router from 'next/router';
+
 interface teamSlider {
   value: number;
   label: string;
