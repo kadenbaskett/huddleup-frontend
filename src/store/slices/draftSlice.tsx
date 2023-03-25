@@ -58,7 +58,18 @@ export const draftSlice = createSlice({
     ) => {
       // console.log('Websocket: recieved message');
       const message = JSON.parse(action.payload.socketMessage.data);
-      console.log('Message', message);
+      console.log(message);
+      const type = message.type;
+      const content = message.content ? message.content : {};
+
+      switch (type) {
+        case 'draftUpdate':
+          state.draftPlayers = content.draftPlayers;
+          state.draftQueue = content.draftQueue;
+          break;
+        default:
+          console.log('Unhandles type.');
+      }
     },
     sendMessage: (
       state,
