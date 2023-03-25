@@ -28,9 +28,9 @@ const draftMiddleware: Middleware = (store) => {
 
       socket.onmessage = function (socketMessage) {
         store.dispatch(draftActions.receiveMessage({ socketMessage }));
-        store.dispatch(
-          draftActions.sendMessage({ content: 'this is a test response', type: 'testType' }),
-        );
+        // store.dispatch(
+        //   draftActions.sendMessage({ content: 'this is a test response', type: 'testType' }),
+        // );
       };
 
       socket.onclose = function () {
@@ -44,8 +44,15 @@ const draftMiddleware: Middleware = (store) => {
     }
 
     if (draftActions.sendMessage.match(action) && isConnectionEstablished) {
-      console.log(action.payload);
-      socket?.send(JSON.stringify(action.payload));
+      console.log(
+        'Payload: ',
+        { content: JSON.stringify(action.payload.content) },
+        { type: action.payload.type },
+      );
+      socket?.send(
+        { content: JSON.stringify(action.payload.content) },
+        { type: action.payload.type },
+      );
     }
 
     next(action);

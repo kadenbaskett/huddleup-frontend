@@ -63,7 +63,7 @@ export const draftSlice = createSlice({
     sendMessage: (
       state,
       action: PayloadAction<{
-        content: string;
+        content: Object;
         type: string;
       }>,
     ) => {

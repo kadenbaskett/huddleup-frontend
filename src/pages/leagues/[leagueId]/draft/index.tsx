@@ -25,10 +25,10 @@ export default function index() {
   const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
   const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
 
-  const sendMessage = (msg: Object, msgType: string) => {
-    const content: string = JSON.stringify(msg);
-    const type: string = JSON.stringify(msgType);
-    dispatch(draftActions.sendMessage({ content, type }));
+  const sendMessage = (msgContent: Object, type: string) => {
+    // const content: string = JSON.stringify(msgContent);
+    // const type: string = JSON.stringify(msgType);
+    dispatch(draftActions.sendMessage({ content: msgContent, type }));
   };
 
   const draftCallback = (player) => {
@@ -38,7 +38,7 @@ export default function index() {
       league_id: league.id,
     };
 
-    console.log('draftPlayer', draftPlayer);
+    sendMessage(draftPlayer, 'draftPlayer');
   };
 
   const queueCallback = (player) => {
@@ -48,7 +48,8 @@ export default function index() {
       league_id: league.id,
       order: 1,
     };
-    console.log('queuePlayer', queuePlayer);
+
+    sendMessage({ content: queuePlayer }, 'queuePlayer');
   };
 
   const print = false;
