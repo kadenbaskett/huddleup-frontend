@@ -25,6 +25,9 @@ export default function index() {
   const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
   const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
 
+  // const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
+  // const queuePlayers = useSelector((state: StoreState) => state.draft.draftQueue);
+
   const sendMessage = (msgContent: Object, type: string) => {
     dispatch(draftActions.sendMessage({ content: msgContent, type }));
   };

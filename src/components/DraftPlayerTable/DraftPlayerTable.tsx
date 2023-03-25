@@ -10,6 +10,7 @@ import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 
 export default function DraftPlayerTable({ playersChosen, draftCallback, queueCallback, league }) {
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
+  const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
 
   // Player filtering
   const form = useForm({
@@ -39,11 +40,12 @@ export default function DraftPlayerTable({ playersChosen, draftCallback, queueCa
   };
 
   useEffect(() => {
+    console.log(draftPlayers);
     if (allPlayers) {
       const data = sortBy(filterPlayers(), sortStatus.columnAccessor);
       setRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
     }
-  }, [sortStatus, allPlayers, form.values, playersChosen]);
+  }, [sortStatus, allPlayers, form.values, playersChosen, draftPlayers]);
 
   const filterPlayers = () => {
     let players = allPlayers;
@@ -56,8 +58,13 @@ export default function DraftPlayerTable({ playersChosen, draftCallback, queueCa
       players = players.filter((player) => player.position === position);
     }
 
-    if (playersChosen) {
-      players.filter((player) => !playersChosen.includes(player));
+    if (draftPlayers) {
+      players = players.filter(
+        (player) =>
+          !draftPlayers.find((dp) => {
+            return player.id === dp.player_id;
+          }),
+      );
     }
     const playerSearchName = form.values.player;
 

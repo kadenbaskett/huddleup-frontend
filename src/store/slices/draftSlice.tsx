@@ -65,6 +65,7 @@ export const draftSlice = createSlice({
       switch (type) {
         case 'draftUpdate':
           state.draftPlayers = content ? content.draftPlayers : [];
+          console.log(state.draftPlayers);
           // TODO draft queue
           break;
         default:
