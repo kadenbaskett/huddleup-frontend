@@ -1,4 +1,4 @@
-import { DraftPlayer, QueuePlayer } from '@interfaces/draft.interface';
+import { DraftPlayer, QueuePlayer, DraftOrder, AutoDraft } from '@interfaces/draft.interface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MSG_TYPES } from '@store/middleware/socket';
 
@@ -10,6 +10,11 @@ export interface draftSliceState {
   isKilled: boolean;
   draftPlayers: DraftPlayer[];
   draftQueue: QueuePlayer[];
+  draftOrder: DraftOrder[];
+  autoDraft: AutoDraft[];
+  currentPickTeamId: number;
+  currentPickNum: number;
+  currentRoundNum: number;
 }
 
 const initialState: draftSliceState = {
@@ -20,6 +25,11 @@ const initialState: draftSliceState = {
   isKilled: false,
   draftPlayers: [],
   draftQueue: [],
+  draftOrder: [],
+  autoDraft: [],
+  currentPickNum: 1,
+  currentPickTeamId: -1, // this shouldn't matter but who knows
+  currentRoundNum: 1,
 };
 
 export const draftSlice = createSlice({
@@ -68,6 +78,11 @@ export const draftSlice = createSlice({
           console.log(message);
           state.draftPlayers = content.draftPlayers;
           state.draftQueue = content.draftQueue;
+          state.draftOrder = content.draftOrder;
+          state.autoDraft = content.autoDraft;
+          state.currentPickNum = content.currentPickNum;
+          state.currentPickTeamId = content.currentPickTeamId;
+          state.currentRoundNum = content.currentRoundNum;
           state.hasInitialDraftState = true;
           break;
         case MSG_TYPES.PING:

@@ -10,3 +10,13 @@ export interface QueuePlayer {
   league_id: number;
   order: number;
 }
+
+export interface DraftOrder {
+  teamId: number;
+  pick: number;
+}
+
+export interface AutoDraft {
+  teamId: number;
+  auto: boolean;
+}

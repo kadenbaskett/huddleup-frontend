@@ -2,6 +2,8 @@ import { Team } from '@interfaces/league.interface';
 import ActiveDrafter from './ActiveDrafter';
 import Drafter from './Drafter';
 import styles from './DraftBelt.module.css';
+import { useSelector } from 'react-redux';
+import { StoreState } from '@store/store';
 
 export interface DraftBeltProps {
   teams: Team[];
@@ -9,6 +11,8 @@ export interface DraftBeltProps {
 }
 
 export default function DraftBelt({ teams, time }: DraftBeltProps) {
+  const autoDraft = useSelector((state: StoreState) => state.draft.autoDraft);
+
   return (
     <>
       <div className='md:flex xl:flex h-40'>
@@ -24,7 +28,7 @@ export default function DraftBelt({ teams, time }: DraftBeltProps) {
                 <div className='pl-2'>
                   <Drafter
                     team={team}
-                    auto={team.id % 2 === 0}
+                    auto={autoDraft.find((autoTeam) => autoTeam.teamId === team.id)?.auto}
                     time={time}
                     nextUp={team.id === teams[1].id}
                   />
