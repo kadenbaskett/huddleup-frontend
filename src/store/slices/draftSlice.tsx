@@ -1,10 +1,12 @@
 import { DraftPlayer, QueuePlayer } from '@interfaces/draft.interface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { MSG_TYPES } from '@store/middleware/socket';
 
 export interface draftSliceState {
   isEstablishingConnection: boolean;
   isConnected: boolean;
   lostConnection: boolean;
+  hasInitialDraftState: boolean;
   isKilled: boolean;
   draftPlayers: DraftPlayer[];
   draftQueue: QueuePlayer[];
@@ -14,6 +16,7 @@ const initialState: draftSliceState = {
   isEstablishingConnection: false,
   isConnected: false,
   lostConnection: false,
+  hasInitialDraftState: false,
   isKilled: false,
   draftPlayers: [],
   draftQueue: [],
@@ -47,7 +50,7 @@ export const draftSlice = createSlice({
       state.isKilled = true;
     },
     leaveDraft: (state) => {
-      console.log('Websocket: leaving deaft');
+      console.log('Websocket: leaving draft');
       state.isKilled = false;
     },
     receiveMessage: (
@@ -56,20 +59,22 @@ export const draftSlice = createSlice({
         socketMessage;
       }>,
     ) => {
-      // console.log('Websocket: recieved message');
       const message = JSON.parse(action.payload.socketMessage.data);
-      console.log(message);
       const type = message.type;
       const content = message.content;
 
       switch (type) {
-        case 'draftUpdate':
-          state.draftPlayers = content ? content.draftPlayers : [];
-          console.log(state.draftPlayers);
-          // TODO draft queue
+        case MSG_TYPES.DRAFT_UPDATE:
+          console.log(message);
+          state.draftPlayers = content.draftPlayers;
+          state.draftQueue = content.draftQueue;
+          state.hasInitialDraftState = true;
+          break;
+        case MSG_TYPES.PING:
           break;
         default:
-          console.log('Unhandles type.');
+          console.log('Enexpected message type: ', type);
+          console.log(content);
       }
     },
     sendMessage: (
@@ -78,9 +83,7 @@ export const draftSlice = createSlice({
         content: Object;
         type: string;
       }>,
-    ) => {
-      // console.log('Websocket: send message');
-    },
+    ) => {},
   },
 });
 

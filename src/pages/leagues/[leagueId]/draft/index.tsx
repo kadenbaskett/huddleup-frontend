@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { draftActions } from '@store/slices/draftSlice';
@@ -8,8 +9,12 @@ import { Grid } from '@mantine/core';
 import DraftBelt from '@components/DraftBelt/DraftBelt';
 import DraftRosterAndQueueCard from '@components/DraftRosterAndQueueCard/DraftRosterAndQueueCard';
 import DraftHistory from '@components/DraftHistory/DraftHistory';
-import { DraftPlayer, QueuePlayer } from '@interfaces/draft.interface';
 import { useWindowResize } from '@services/helpers';
+import { formatMessage, MSG_TYPES } from '@store/middleware/socket';
+
+const DRAFT_CONFIG = {
+  SECONDS_PER_PICK: 5,
+};
 
 export default function index() {
   const dispatch = useDispatch();
@@ -47,37 +52,41 @@ export default function index() {
   }
 
   const sendMessage = (msgContent: Object, type: string) => {
-    dispatch(draftActions.sendMessage({ content: msgContent, type }));
+    const formatted = formatMessage(msgContent, type);
+    dispatch(draftActions.sendMessage(formatted));
   };
 
   const draftCallback = (player) => {
-    const draftPlayer: DraftPlayer = {
+    // const draftPlayer: DraftPlayer = {
+    //   player_id: player.id,
+    //   team_id: user.teams.find((team) => team.league.id === league.id).id,
+    //   league_id: league.id,
+    // };
+
+    const content = {
       player_id: player.id,
-      team_id: user.teams.find((team) => team.league.id === league.id).id,
-      league_id: league.id,
     };
 
-    console.log('draftPlayer', draftPlayer);
+    sendMessage(content, MSG_TYPES.DRAFT_PLAYER);
   };
 
   const queueCallback = (player) => {
-    const queuePlayer: QueuePlayer = {
+    // const queuePlayer: QueuePlayer = {
+    //   player_id: player.id,
+    //   team_id: user.teams.find((team) => team.league.id === league.id).id,
+    //   league_id: league.id,
+    //   order: 1,
+    // };
+    // console.log('queuePlayer', queuePlayer);
+    const content = {
       player_id: player.id,
-      team_id: user.teams.find((team) => team.league.id === league.id).id,
-      league_id: league.id,
-      order: 1,
+      order: new Date().getTime(),
     };
-    console.log('queuePlayer', queuePlayer);
+
+    sendMessage(content, MSG_TYPES.QUEUE_PLAYER);
   };
 
-  const print = false;
-
-  if (print) {
-    sendMessage({ draftObject: 'testObject' }, 'testType');
-    console.log(draftInProgress);
-    console.log(league);
-  }
-  const [time, setTime] = useState(5);
+  const [time, setTime] = useState(DRAFT_CONFIG.SECONDS_PER_PICK);
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
@@ -92,7 +101,7 @@ export default function index() {
         setTime(time - 1);
       }
       if (time < 1) {
-        setTime(5);
+        setTime(DRAFT_CONFIG.SECONDS_PER_PICK);
         const tempTeam = teams[0];
         const tempTeams = [...teams];
         tempTeams.shift();

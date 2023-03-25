@@ -40,7 +40,6 @@ export default function DraftPlayerTable({ playersChosen, draftCallback, queueCa
   };
 
   useEffect(() => {
-    console.log(draftPlayers);
     if (allPlayers) {
       const data = sortBy(filterPlayers(), sortStatus.columnAccessor);
       setRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
@@ -82,7 +81,7 @@ export default function DraftPlayerTable({ playersChosen, draftCallback, queueCa
     }
 
     // Only display first 50 results
-    players = players.slice(0, 50);
+    players = players.slice(0, 50).reverse();
 
     return players;
   };
