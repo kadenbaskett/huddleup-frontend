@@ -60,12 +60,12 @@ export const draftSlice = createSlice({
       const message = JSON.parse(action.payload.socketMessage.data);
       console.log(message);
       const type = message.type;
-      const content = message.content ? message.content : {};
+      const content = message.content;
 
       switch (type) {
         case 'draftUpdate':
-          state.draftPlayers = content.draftPlayers;
-          state.draftQueue = content.draftQueue;
+          state.draftPlayers = content ? content.draftPlayers : [];
+          // TODO draft queue
           break;
         default:
           console.log('Unhandles type.');
