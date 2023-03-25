@@ -13,6 +13,12 @@ export interface DraftBeltProps {
 export default function DraftBelt({ teams, time }: DraftBeltProps) {
   const autoDraft = useSelector((state: StoreState) => state.draft.autoDraft);
 
+  function isAuto(team): Boolean {
+    if (autoDraft.length === 0) return true;
+    const autoTeam = autoDraft.find((ad) => ad.teamId === team.id);
+    return autoTeam.auto;
+  }
+
   return (
     <>
       <div className='md:flex xl:flex h-40'>
@@ -28,7 +34,7 @@ export default function DraftBelt({ teams, time }: DraftBeltProps) {
                 <div className='pl-2'>
                   <Drafter
                     team={team}
-                    auto={autoDraft.find((autoTeam) => autoTeam.teamId === team.id)?.auto}
+                    auto={isAuto(team)}
                     time={time}
                     nextUp={team.id === teams[1].id}
                   />
