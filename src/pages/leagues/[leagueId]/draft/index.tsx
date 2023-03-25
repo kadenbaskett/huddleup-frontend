@@ -23,7 +23,7 @@ export default function index() {
     (state: StoreState) => state.league.league?.settings.draft_settings.date,
   );
   const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
-  const draftInProgress = new Date(draftTime).getTime() < new Date().getTime() && !draftCompleted;
+  const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
 
   const sendMessage = (msg: Object, msgType: string) => {
     const content: string = JSON.stringify(msg);
@@ -57,7 +57,7 @@ export default function index() {
     console.log(draftInProgress);
     console.log(league);
   }
-  const [time, setTime] = useState(5);
+  const [time, setTime] = useState(30);
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function index() {
         setTime(time - 1);
       }
       if (time < 1) {
-        setTime(5);
+        setTime(30);
         const tempTeam = teams[0];
         const tempTeams = [...teams];
         tempTeams.shift();
@@ -108,6 +108,9 @@ export default function index() {
       {teams.length > 0 && leagueInfoFetchStatus === 'succeeded' && (
         <>
           <div className='bg-lightGrey min-h-screen'>
+            <div className='text-4xl font-varsity font-darkBlue pl-3 text-center'>
+              {league.name} Draft - Round 3
+            </div>
             <div className='p-3'>
               <DraftBelt teams={teams !== undefined ? teams : league.teams} time={time} />
             </div>
@@ -120,6 +123,7 @@ export default function index() {
                   playersChosen={[]}
                   draftCallback={(player) => draftCallback(player)}
                   queueCallback={(player) => queueCallback(player)}
+                  league={league}
                 />
               </Grid.Col>
               <Grid.Col span={3} className='pr-4'>

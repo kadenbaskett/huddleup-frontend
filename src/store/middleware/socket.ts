@@ -3,8 +3,8 @@ import SockJS from 'sockjs-client';
 import { draftActions } from '@store/slices/draftSlice';
 
 const draftMiddleware: Middleware = (store) => {
-  // const url = 'http://localhost:9999/echo';
-  const url = 'http://c367-155-98-131-7.ngrok.io/echo';
+  const url = 'http://localhost:9999/echo';
+  // const url = 'http://c367-155-98-131-7.ngrok.io/echo';
   let socket;
 
   return (next) => (action) => {

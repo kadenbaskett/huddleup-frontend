@@ -13,12 +13,13 @@ export default function DraftBelt({ teams, time }: DraftBeltProps) {
     <>
       <div className='flex h-40'>
         <div className='w-6/12 h-40 bg-gradient-to-l from-lightGrey' id={styles.abs} />
+
         <ActiveDrafter team={teams[0]} time={time} />
-        <div className='overflow-x-hidden'>
-          <div className='flex h-full'>
+        <div className='overflow-x-hidden w-3/4'>
+          <div className='flex h-full '>
             {teams.slice(1, teams.length).map((team) => (
               <>
-                <div className='p-1'>
+                <div className='pl-2'>
                   <Drafter
                     team={team}
                     auto={team.id % 2 === 0}

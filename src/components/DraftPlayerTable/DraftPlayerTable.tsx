@@ -6,8 +6,9 @@ import CONFIG from '@services/config';
 import { useForm } from '@mantine/form';
 import { sortBy } from 'lodash';
 import { useSelector } from 'react-redux';
+import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 
-export default function DraftPlayerTable({ playersChosen, draftCallback, queueCallback }) {
+export default function DraftPlayerTable({ playersChosen, draftCallback, queueCallback, league }) {
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
 
   // Player filtering
@@ -23,6 +24,19 @@ export default function DraftPlayerTable({ playersChosen, draftCallback, queueCa
     direction: 'desc',
   });
   const [records, setRecords] = useState(sortBy(allPlayers, 'currentWeekProj'));
+
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [playerPopupOpen, setPlayerPopupOpen] = useState(false);
+
+  const onPlayerClick = (event, p) => {
+    event.preventDefault();
+    setSelectedPlayer(p);
+    setPlayerPopupOpen(true);
+  };
+
+  const onPlayerPopupClose = () => {
+    setPlayerPopupOpen(false);
+  };
 
   useEffect(() => {
     if (allPlayers) {
@@ -110,14 +124,16 @@ export default function DraftPlayerTable({ playersChosen, draftCallback, queueCa
               accessor: 'id',
               title: 'Player',
               render: (p) => (
-                <Group>
-                  <Avatar src={p.photo_url} alt={'player image'} />
-                  {p.first_name} {p.last_name}
-                  {'\n'}
-                  {p.position}
-                  {'\n'}
-                  {p.current_nfl_team ? p.current_nfl_team.key : ''}
-                </Group>
+                <a href='#' onClick={(evt) => onPlayerClick(evt, p)}>
+                  <Group>
+                    <Avatar src={p.photo_url} alt={'player image'} />
+                    {p.first_name} {p.last_name}
+                    {'\n'}
+                    {p.position}
+                    {'\n'}
+                    {p.current_nfl_team ? p.current_nfl_team.key : ''}
+                  </Group>
+                </a>
               ),
             },
             {
@@ -145,6 +161,13 @@ export default function DraftPlayerTable({ playersChosen, draftCallback, queueCa
           onSortStatusChange={setSortStatus}
         />
       </div>
+      <PlayerPopup
+        player={selectedPlayer}
+        opened={playerPopupOpen}
+        onClose={onPlayerPopupClose}
+        onPlayerAction={null}
+        leagueId={league.id}
+      />
     </>
   );
 }

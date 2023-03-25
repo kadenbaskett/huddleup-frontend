@@ -1,5 +1,6 @@
 import { Team } from '@interfaces/league.interface';
 import { GiAmericanFootballHelmet } from 'react-icons/gi';
+import styles from './DraftBelt.module.css';
 
 export interface DrafterProps {
   team: Team;
@@ -8,12 +9,11 @@ export interface DrafterProps {
   nextUp: Boolean;
 }
 export default function Drafter({ team, auto, time, nextUp }: DrafterProps) {
-  const colors = auto ? 'text-darkGrey' : nextUp ? 'text-orange' : 'text-darkBlue';
+  const colors = auto ? 'text-darkGrey' : 'text-darkBlue';
   return (
     <div
-      className={`bg-white rounded-xl h-full w-36 hover:drop-shadow-md grid place-items-center ${
-        nextUp && !auto ? 'border-4 border-orange' : ''
-      }`}
+      className='bg-white rounded-xl h-full hover:drop-shadow-md grid place-items-center '
+      id={time < 1 && nextUp ? styles.shrunk : styles.full}
     >
       <div>
         <div className={`text-2xl ${colors} font-varsity text-center`}>{team.name}</div>
