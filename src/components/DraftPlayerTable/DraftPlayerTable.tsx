@@ -8,10 +8,9 @@ import { sortBy } from 'lodash';
 import { useSelector } from 'react-redux';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 
-export default function DraftPlayerTable({ playersChosen, draftCallback, queueCallback, league }) {
+export default function DraftPlayerTable({ draftCallback, queueCallback, league }) {
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
   const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
-
   // Player filtering
   const form = useForm({
     initialValues: {
@@ -44,7 +43,7 @@ export default function DraftPlayerTable({ playersChosen, draftCallback, queueCa
       const data = sortBy(filterPlayers(), sortStatus.columnAccessor);
       setRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
     }
-  }, [sortStatus, allPlayers, form.values, playersChosen, draftPlayers]);
+  }, [sortStatus, allPlayers, form.values, draftPlayers]);
 
   const filterPlayers = () => {
     let players = allPlayers;

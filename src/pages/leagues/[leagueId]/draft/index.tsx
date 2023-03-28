@@ -30,6 +30,7 @@ export default function index() {
   );
   const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
   const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
+  const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
 
   const windowSize: number[] = useWindowResize();
 
@@ -37,7 +38,7 @@ export default function index() {
   let draftPlayerTableSpan = 0;
   let draftHistorySpan = 0;
 
-  if (windowSize[0] > 1050) {
+  if (windowSize[0] > 1050 || windowSize[0] === 0) {
     draftRosterAndQueueCardSpan = 3;
     draftPlayerTableSpan = 6;
     draftHistorySpan = 3;
@@ -149,14 +150,13 @@ export default function index() {
               </Grid.Col>
               <Grid.Col span={draftPlayerTableSpan}>
                 <DraftPlayerTable
-                  playersChosen={[]}
-                  draftCallback={(player) => draftCallback(player)}
-                  queueCallback={(player) => queueCallback(player)}
+                  draftCallback={(player: any) => draftCallback(player)}
+                  queueCallback={(player: any) => queueCallback(player)}
                   league={league}
                 />
               </Grid.Col>
               <Grid.Col span={draftHistorySpan} className='pr-4'>
-                <DraftHistory players={[]} />
+                <DraftHistory />
               </Grid.Col>
             </Grid>
           </div>

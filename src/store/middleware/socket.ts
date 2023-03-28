@@ -102,7 +102,7 @@ const draftMiddleware: Middleware = (store) => {
     if (draftActions.killConnection.match(action)) {
       socket.close();
     } else if (draftActions.startConnecting.match(action)) {
-      socket = new SockJS(url);
+      socket = new SockJS(local_url);
 
       socket.onopen = function () {
         store.dispatch(draftActions.connectionEstablished());
