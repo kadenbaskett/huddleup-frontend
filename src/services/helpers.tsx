@@ -227,6 +227,7 @@ export function createManagerString(managers) {
       <>
         {<Link href={`/user/${id}/profile`}>{m.user?.username}</Link>}
         {i !== managers.length ? ', ' : ''}
+        {i === 2 ? <br /> : ''}
       </>
     );
   });

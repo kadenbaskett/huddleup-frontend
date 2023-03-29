@@ -41,6 +41,9 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction, l
   };
 
   const getActionButton = () => {
+    if (onPlayerAction === null) {
+      return;
+    }
     const team = getTeamThatOwnsPlayer(player, currentWeek, leagueId);
 
     if (!team) {
