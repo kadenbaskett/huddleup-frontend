@@ -85,6 +85,8 @@ export default function DraftPlayerTable({ draftCallback, queueCallback, league 
     return players;
   };
 
+  const dontShow = false;
+
   return (
     <>
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
@@ -136,14 +138,14 @@ export default function DraftPlayerTable({ draftCallback, queueCallback, league 
                     {'\n'}
                     {p.position}
                     {'\n'}
-                    {p.current_nfl_team ? p.current_nfl_team.key : ''}
+                    {p.current_nfl_team ? p.current_nfl_team.name : ''}
                   </Group>
                 </a>
               ),
             },
             {
               accessor: 'external_id',
-              title: 'Draft or Queue',
+              title: 'Draft',
               render: (p) => (
                 <Group>
                   <Button
@@ -152,12 +154,14 @@ export default function DraftPlayerTable({ draftCallback, queueCallback, league 
                   >
                     {'Draft'}
                   </Button>
-                  <Button
-                    className={`${'bg-transparent hover:bg-orange text-orange hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-orange rounded border-orange transition ease-in duration-200`}
-                    onClick={() => queueCallback(p)}
-                  >
-                    {'Queue'}
-                  </Button>
+                  {dontShow && (
+                    <Button
+                      className={`${'bg-transparent hover:bg-orange text-orange hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-orange rounded border-orange transition ease-in duration-200`}
+                      onClick={() => queueCallback(p)}
+                    >
+                      {'Queue'}
+                    </Button>
+                  )}
                 </Group>
               ),
             },

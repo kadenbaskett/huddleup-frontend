@@ -15,9 +15,9 @@ export default function DraftHistory() {
   const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
   const league = useSelector((state: StoreState) => state.league.league);
   const showPlayers: ShowPlayers[] = [];
-  draftPlayers.forEach((player2) => {
+  draftPlayers?.forEach((player2) => {
     showPlayers.push({
-      player: allPlayers.find((player) => player.id === player2.player_id),
+      player: allPlayers?.find((player) => player.id === player2.player_id),
       draftPlayer: player2,
     });
   });

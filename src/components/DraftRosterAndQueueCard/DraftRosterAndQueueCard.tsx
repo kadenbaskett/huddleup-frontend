@@ -37,6 +37,8 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
     team.managers.find((manager) => manager.user_id === props.currUser.id),
   );
 
+  const dontShow = false;
+
   return (
     <div className='bg-white rounded-xl hover:drop-shadow-md'>
       {/* header */}
@@ -46,14 +48,14 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
             <div
               onClick={selectLineup}
               aria-current='page'
-              className={`inline-block ${
-                roster ? 'bg-white text-darkBlue' : 'bg-darkBlue text-white'
-              } p-4 rounded-t-lg active text-xl font-varsity cursor-pointer`}
+              className={
+                'p-4 font-varsity justify-left text-2xl bg-darkBlue text-white rounded-t-xl'
+              }
             >
               Roster
             </div>
           </li>
-          {
+          {dontShow && (
             <li className='mr-2'>
               <div
                 onClick={selectManagement}
@@ -65,7 +67,7 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
                 Queue
               </div>
             </li>
-          }
+          )}
         </ul>
       </div>
       {/* content */}

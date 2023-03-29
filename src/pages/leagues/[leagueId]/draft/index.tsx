@@ -31,6 +31,7 @@ export default function index() {
   const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
   const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
   const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
+  const queuePlayers = useSelector((state: StoreState) => state.draft.draftQueue);
 
   const windowSize: number[] = useWindowResize();
 
@@ -81,7 +82,7 @@ export default function index() {
     // console.log('queuePlayer', queuePlayer);
     const content = {
       player_id: player.id,
-      order: new Date().getTime(),
+      order: 0,
     };
 
     sendMessage(content, MSG_TYPES.QUEUE_PLAYER);
