@@ -22,14 +22,14 @@ function Profile() {
       {userInfoFetchStatus === 'succeeded' && (
         <>
           <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
-            <div className='font-varsity text-5xl text-orange p-10'>{user.userInfo.username}</div>
+            <div className='font-varsity text-5xl text-orange'>{user.userInfo.username}</div>
             <Grid>
               <Grid.Col>
-                <TextInput value={user.userInfo.username} label='Username' />
+                <TextInput value={user.userInfo.username} label='Username' disabled />
               </Grid.Col>
 
               <Grid.Col>
-                <TextInput value={user.userInfo.email} label='Email' />
+                <TextInput value={user.userInfo.email} label='Email' disabled />
               </Grid.Col>
 
               <Grid.Col span={12}>

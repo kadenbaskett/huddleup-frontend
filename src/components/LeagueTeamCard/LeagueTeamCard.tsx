@@ -1,5 +1,5 @@
 import { League, Team } from '@interfaces/league.interface';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import NFL from '../../public/assets/NFL.png';
 import { Button, Grid } from '@mantine/core';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { userSliceState } from '@store/slices/userSlice';
 import { StoreState } from '@store/store';
 import { useSelector } from 'react-redux';
+import ProfilePopup from '@components/ProfilePopup/ProfilePopup';
 
 export interface LeagueTeamCardProps {
   team: Team;
@@ -42,6 +43,16 @@ export default function LeagueTeamCard(props: LeagueTeamCardProps) {
   props.team.managers.forEach((manager) => {
     managerIDs.push(manager.user_id);
   });
+  const [profilePopupOpen, setProfilePopupOpen] = useState(false);
+  const [username, setUsername] = useState('');
+
+  const onProfileClick = (otherUsername) => {
+    setUsername(otherUsername);
+    setProfilePopupOpen(true);
+  };
+  const onProfilePopupClose = () => {
+    setProfilePopupOpen(false);
+  };
   return (
     <>
       <div className='bg-white rounded-xl border border-white p-2 transition-all ease-in duration-200 hover:drop-shadow'>
@@ -59,7 +70,7 @@ export default function LeagueTeamCard(props: LeagueTeamCardProps) {
                   Team Members:
                 </div>
                 <div className='lg:text-md sm:text-sm font-OpenSans font-bold text-darkBlue'>
-                  {createManagerString(props.team.managers)}
+                  {createManagerString(props.team.managers, onProfileClick)}
                 </div>
               </div>
             </div>
@@ -84,6 +95,15 @@ export default function LeagueTeamCard(props: LeagueTeamCardProps) {
           </Grid.Col>
         </Grid>
       </div>
+      {user !== null && (
+        <ProfilePopup
+          opened={profilePopupOpen}
+          onClose={onProfilePopupClose}
+          user={user.userInfo}
+          myProfile={user.userInfo.username === username}
+          otherUsername={username}
+        />
+      )}
     </>
   );
 }

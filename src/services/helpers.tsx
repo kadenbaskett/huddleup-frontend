@@ -218,14 +218,17 @@ export function calculateStandings(league, currentWeek) {
   return teams.sort((teamOne, teamTwo) => teamTwo.wins - teamOne.wins);
 }
 
-export function createManagerString(managers) {
+export function createManagerString(managers, onProfileClick) {
   let i = 0;
   const tempManagerString = managers.map((m) => {
     i++;
-    const id: number = m.user?.id;
     return (
       <>
-        {<Link href={`/user/${id}/profile`}>{m.user?.username}</Link>}
+        {
+          <Link href={'#'} onClick={() => onProfileClick(m.user?.username)}>
+            {m.user?.username}
+          </Link>
+        }
         {i !== managers.length ? ', ' : ''}
         {i === 2 ? <br /> : ''}
       </>
