@@ -13,9 +13,9 @@ export default function index() {
   const league = useSelector((state: StoreState) => state.league.league);
   const user: userSliceState = useSelector((state: StoreState) => state.user);
 
-  const [teamName, setTeamName] = useState<string>('');
-
   const router = useRouter();
+
+  const [teamName, setTeamName] = useState<string>('');
 
   const preventDefault = (f) => (e) => {
     e.preventDefault();
@@ -29,7 +29,6 @@ export default function index() {
       teamName,
     };
     const newTeam = await createTeam(team);
-    console.log(newTeam);
     await router.push({
       pathname: `/leagues/${Number(league.id)}/create/${String(newTeam.data.token)}`,
     });

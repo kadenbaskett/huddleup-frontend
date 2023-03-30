@@ -18,25 +18,32 @@ const renderRow = (team: Team, leagues: League[]) => {
     : '/leagues/' + team.league.id.toString() + '/team/' + team.id.toString();
 
   return (
-    <div className='grid grid-cols-4 p-3'>
-      <Image
-        className='circularImage justify-right col-span-1 align-middle'
-        src={TeamProfilePic}
-        alt={team.name + ' profile pic'}
-        width={92}
-        height={92}
-      />
-      <Link href={teamLink} className='justify-center col-span-3 text-2xl break-words align-middle'>
-        {team.name}
-        <br />
+    <>
+      <div className='inline-flex'>
+        <div>
+          <Image
+            className='circularImage justify-right col-span-1 align-middle'
+            src={TeamProfilePic}
+            alt={team.name + ' profile pic'}
+            width={92}
+            height={92}
+          />
+        </div>
         <Link
-          href={leagueLink}
-          className='justify-right col-span-3 text-lg text-orange break-words align-middle'
+          href={teamLink}
+          className='justify-left col-span-3 text-2xl break-words align-middle pl-3'
         >
-          {team.league.name}
+          {team.name}
+          <br />
+          <Link
+            href={leagueLink}
+            className='justify-left col-span-3 text-lg text-orange break-words align-middle pl-1'
+          >
+            {team.league.name}
+          </Link>
         </Link>
-      </Link>
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -25,6 +25,7 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "18.0.8",
     "axios": "^1.2.1",
+    "classnames": "^2.3.2",
     "eslint-config-next": "13.0.2",
     "firebase": "^9.15.0",
     "husky": "^8.0.2",
@@ -39,10 +40,13 @@
     "react-icons": "^4.7.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.0",
-    "react-svg": "^15.1.14"
+    "react-svg": "^15.1.14",
+    "sockjs": "^0.3.24",
+    "sockjs-client": "^1.6.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
+    "@types/sockjs-client": "^1.5.1",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
     "autoprefixer": "^10.4.13",

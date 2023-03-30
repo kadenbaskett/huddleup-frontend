@@ -4,6 +4,7 @@ export enum ProposalStatus {
   pending = 'Pending',
   complete = 'Complete',
   rejected = 'Rejected',
+  sent = 'SentToRelatedTeam',
 }
 export enum ProposalType {
   trade = 'Trade',
@@ -23,6 +24,8 @@ export interface TransactionPlayer {
   player: Player;
 }
 export interface Proposal {
+  related_team: any;
+  proposing_team: any;
   id: Number;
   type: ProposalType;
   status: ProposalStatus;

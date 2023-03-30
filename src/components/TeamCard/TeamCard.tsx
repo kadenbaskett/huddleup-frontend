@@ -10,6 +10,7 @@ export interface TeamCardProps {
   proposals: Proposal[];
   isMyTeam: boolean;
   userId: Number;
+  teamId: Number;
 }
 
 export function TeamCard(props: TeamCardProps) {
@@ -42,34 +43,42 @@ export function TeamCard(props: TeamCardProps) {
               Lineup
             </div>
           </li>
-          <li className='mr-2'>
-            <div
-              onClick={selectManagement}
-              aria-current='page'
-              className={`inline-block ${
-                management ? 'bg-white text-darkBlue' : 'bg-darkBlue text-white'
-              } p-4 rounded-t-lg active text-2xl font-varsity cursor-pointer`}
-            >
-              Management
-            </div>
-          </li>
+          {props.isMyTeam ? (
+            <li className='mr-2'>
+              <div
+                onClick={selectManagement}
+                aria-current='page'
+                className={`inline-block ${
+                  management ? 'bg-white text-darkBlue' : 'bg-darkBlue text-white'
+                } p-4 rounded-t-lg active text-2xl font-varsity cursor-pointer`}
+              >
+                Management
+              </div>
+            </li>
+          ) : (
+            <></>
+          )}
         </ul>
       </div>
       {/* content */}
-      {lineup && (
+      {lineup && props.rosters ? (
         <div className='p-5'>
           <DraggableLineupTable
             rosters={props.rosters}
             currentWeek={props.currentWeek.toString()}
             disabled={!props.isMyTeam}
+            proposals={[...props.proposals].sort(compareProposals)}
           />
         </div>
+      ) : (
+        <></>
       )}
-      {management && (
+      {management && props.isMyTeam && (
         <div className='p-5'>
           <ManagementTable
             userId={props.userId}
             proposals={[...props.proposals].sort(compareProposals)}
+            teamId={props.teamId}
           />
         </div>
       )}

@@ -1,18 +1,21 @@
 import { League } from '@interfaces/league.interface';
 import { Table } from '@mantine/core';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 export const HuddleUpDate = (date: Date) => {
   return date.toUTCString();
 };
 
-export const getTeamThatOwnsPlayer = (player, currentWeek) => {
-  const currentRosterPlayer = player.roster_players?.find((rp) => rp.roster.week === currentWeek);
+export const getTeamThatOwnsPlayer = (player, currentWeek, leagueId) => {
+  const currentRosterPlayer = player?.roster_players?.find(
+    (rp) => rp.roster.week === currentWeek && rp.roster.team.league_id === leagueId,
+  );
   return currentRosterPlayer ? currentRosterPlayer.roster.team : null;
 };
 
-export const getPlayerAvailability = (player, currentWeek) => {
-  const team = getTeamThatOwnsPlayer(player, currentWeek);
+export const getPlayerAvailability = (player, currentWeek, leagueId) => {
+  const team = getTeamThatOwnsPlayer(player, currentWeek, leagueId);
   const teamName = team ? team.name : '';
   const onWaivers = false;
 
@@ -134,7 +137,6 @@ export function mapPositionToTable(player, gameLogs) {
 }
 
 export function fantasyPoints(s, pprValue = 1): number {
-  // console.log('s', s);
   if (s) {
     let points = 0;
     points += -2 * s.interceptions_thrown;
@@ -225,6 +227,7 @@ export function createManagerString(managers) {
       <>
         {<Link href={`/user/${id}/profile`}>{m.user?.username}</Link>}
         {i !== managers.length ? ', ' : ''}
+        {i === 2 ? <br /> : ''}
       </>
     );
   });
@@ -248,4 +251,21 @@ export function getTeamScore(roster, week) {
     score += fantasyPoints(stats);
   });
   return Math.round(score * 100) / 100;
+}
+
+export function useWindowResize() {
+  const [dimension, setDimension] = useState([0, 0]);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      setDimension([window.innerWidth, window.innerHeight]);
+    });
+    return () => {
+      window.removeEventListener('resize', () => {
+        setDimension([window.innerWidth, window.innerHeight]);
+      });
+    };
+  }, []);
+
+  return dimension;
 }

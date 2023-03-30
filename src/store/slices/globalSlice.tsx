@@ -37,9 +37,6 @@ export const globalSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(handleGlobalInitThunk.pending, (state, action) => {
-        state.status = SLICE_STATUS.LOADING;
-      })
       .addCase(handleGlobalInitThunk.fulfilled, (state, action) => {
         state.status = SLICE_STATUS.SUCCEEDED;
         state.publicLeagues = action.payload.publicLeagues;

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import FormInput from '../../components/FormInput/FormInput';
 import { createAccount } from '../../firebase/firebase';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { PasswordInput, TextInput } from '@mantine/core';
 
 function Signup() {
   const [error, setError] = useState('');
@@ -23,7 +23,10 @@ function Signup() {
     const re =
       /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (password !== confirmPassword) {
+    if (username.includes(' ')) {
+      setLoading(false);
+      setError('Username cannot contain spaces');
+    } else if (password !== confirmPassword) {
       setLoading(false);
       setError('Passwords didnt match try again');
     } else if (!re.test(email)) {
@@ -50,19 +53,45 @@ function Signup() {
             CREATE ACCOUNT
           </h1>
           <div className='mb-8 mx-auto w-3/4'>
-            <FormInput
-              label='Username'
-              inputId='usernameInput'
+            <TextInput
+              id='usernameInput'
               placeholder='johnnyfootball69'
-            ></FormInput>
-            <FormInput
-              label='Email'
-              inputId='emailInput'
-              placeholder='johnnyfootball@huddleup.com'
-            ></FormInput>
-            <FormInput label='Password' inputId='passwordInput'></FormInput>
-            <FormInput label='Confirm Password' inputId='confirmPasswordInput'></FormInput>
+              label='Username'
+              withAsterisk
+              variant='filled'
+              radius='md'
+              className='py-2.5 focus:border-orange'
+            />
 
+            <TextInput
+              id='emailInput'
+              placeholder='johnnyfootball@huddleup.com'
+              label='Email'
+              withAsterisk
+              variant='filled'
+              radius='md'
+              className='py-2.5'
+            />
+
+            <PasswordInput
+              id='passwordInput'
+              placeholder='Password'
+              label='Password'
+              withAsterisk
+              variant='filled'
+              radius='md'
+              className='py-2.5'
+            />
+
+            <PasswordInput
+              id='confirmPasswordInput'
+              placeholder='Password'
+              label='Confirm Password'
+              withAsterisk
+              variant='filled'
+              radius='md'
+              className='py-2.5'
+            />
             <div id='error' className='mt-4 text-red font-md font-bold text-center'>
               {error}
             </div>

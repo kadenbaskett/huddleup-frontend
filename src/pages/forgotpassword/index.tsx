@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import FormInput from '../../components/FormInput/FormInput';
 import { sendPasswordReset } from '../../firebase/firebase';
 import { useRouter } from 'next/router';
+import { TextInput } from '@mantine/core';
 
 function ForgotPassword() {
   const [message, setMessage] = useState('');
@@ -19,8 +19,6 @@ function ForgotPassword() {
       /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(email)) {
       const resp = await sendPasswordReset(email);
-
-      console.log('Response: ', resp);
 
       if (resp === 'success') {
         setIsError(false);
@@ -58,11 +56,15 @@ function ForgotPassword() {
             FORGOT PASSWORD
           </h1>
           <div className='mb-10 mx-auto w-3/4'>
-            <FormInput
-              label='Email'
-              inputId='emailInput'
+            <TextInput
+              id='emailInput'
               placeholder='johnnyfootball@huddleup.com'
-            ></FormInput>
+              label='Email'
+              withAsterisk
+              variant='filled'
+              radius='md'
+              className='py-2.5'
+            />
 
             <div
               id='loginError'
