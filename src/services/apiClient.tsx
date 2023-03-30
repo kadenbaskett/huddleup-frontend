@@ -60,6 +60,18 @@ export async function editLineup(rosterPlayerId: number, newPosition: string) {
   return await postRequest(url, data);
 }
 
+export async function fillLeague(leagueId: number) {
+  const data = { leagueId };
+  const url = `${BASE_URL}/database/league/fill`;
+  return await postRequest(url, data);
+}
+
+export async function startDraft(leagueId: number) {
+  const data = { leagueId };
+  const url = `${BASE_URL}/database/league/startDraft`;
+  return await postRequest(url, data);
+}
+
 export async function proposeTrade(
   sendPlayerIds: number[],
   recPlayerIds: number[],
