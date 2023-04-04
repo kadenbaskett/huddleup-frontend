@@ -1,7 +1,7 @@
 import { DraftPlayer, QueuePlayer, DraftOrder, AutoDraft } from '@interfaces/draft.interface';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MSG_TYPES } from '@store/middleware/socket';
-// import { fetchDraftPort } from '@services/apiClient';
+import { fetchDraftPort } from '@services/apiClient';
 
 export interface draftSliceState {
   isEstablishingConnection: boolean;
@@ -16,7 +16,7 @@ export interface draftSliceState {
   currentPickTeamId: number;
   currentPickNum: number;
   currentRoundNum: number;
-  draftPort: number;
+  draftPort: string;
 }
 
 const initialState: draftSliceState = {
@@ -32,7 +32,7 @@ const initialState: draftSliceState = {
   currentPickNum: 1,
   currentPickTeamId: -1, // this shouldn't matter but who knows
   currentRoundNum: 1,
-  draftPort: -1,
+  draftPort: '',
 };
 
 export const draftSlice = createSlice({
@@ -65,10 +65,6 @@ export const draftSlice = createSlice({
     leaveDraft: (state) => {
       console.log('Websocket: leaving draft');
       state.isKilled = false;
-    },
-    getDraftPort: (state, leagueId) => {
-      console.log('Websocket: getting port from backend');
-      // await fetchDraftPort(leagueId);
     },
     receiveMessage: (
       state,
@@ -107,7 +103,26 @@ export const draftSlice = createSlice({
       }>,
     ) => {},
   },
+  extraReducers(builder) {
+    builder
+      .addCase(handleFetchDraftPort.rejected, (state, action) => {
+        console.log('Request for draft port number rejected');
+      })
+      .addCase(handleFetchDraftPort.fulfilled, (state, action) => {
+        state.draftPort = action.payload.port;
+      });
+  },
 });
+
+export const handleFetchDraftPort = createAsyncThunk(
+  'draft/initDraft',
+  async (leagueId: number) => {
+    const resp = await fetchDraftPort(leagueId);
+    return {
+      port: resp.data,
+    };
+  },
+);
 
 export const draftActions = draftSlice.actions;
 export default draftSlice;

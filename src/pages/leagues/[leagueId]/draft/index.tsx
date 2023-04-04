@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { draftActions } from '@store/slices/draftSlice';
-import { StoreState } from '@store/store';
+import { draftActions, handleFetchDraftPort } from '@store/slices/draftSlice';
+import { StoreState, AppDispatch } from '@store/store';
 import DraftPlayerTable from '@components/DraftPlayerTable/DraftPlayerTable';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Grid } from '@mantine/core';
@@ -11,13 +11,16 @@ import DraftRosterAndQueueCard from '@components/DraftRosterAndQueueCard/DraftRo
 import DraftHistory from '@components/DraftHistory/DraftHistory';
 import { useWindowResize } from '@services/helpers';
 import { formatMessage, MSG_TYPES } from '@store/middleware/socket';
-
-const DRAFT_CONFIG = {
-  SECONDS_PER_PICK: 5,
-};
+import { useRouter } from 'next/router';
+import { fetchDraftPort } from '@services/apiClient';
 
 export default function index() {
-  const dispatch = useDispatch();
+  const DRAFT_CONFIG = {
+    SECONDS_PER_PICK: 30,
+  };
+  const router = useRouter();
+  const { leagueId } = router.query;
+  const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
   const websocketConnected = useSelector((state: StoreState) => state.draft.isConnected);
   const websocketTryingToConnect = useSelector(
@@ -117,12 +120,11 @@ export default function index() {
 
   useEffect(() => {
     if (!websocketConnected && !websocketTryingToConnect) {
-      await dispatch(draftActions.getDraftPort(league.id));
+      dispatch(handleFetchDraftPort(Number(leagueId)));
       dispatch(draftActions.startConnecting());
     }
 
     return () => {
-      console.log('Connection should be killed now!');
       dispatch(draftActions.killConnection());
     };
   }, []);

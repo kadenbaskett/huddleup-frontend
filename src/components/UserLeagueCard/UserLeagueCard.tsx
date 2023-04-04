@@ -10,7 +10,6 @@ export interface UserLeagueCardProps {
 }
 
 export function UserLeagueCard(props: UserLeagueCardProps) {
-  console.log('props.userTeam', props.userTeam);
   const link =
     props.league.settings.roster_settings.roster_size_limit !==
     props.userTeam.rosters[0]?.players.length

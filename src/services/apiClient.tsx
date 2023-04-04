@@ -217,5 +217,6 @@ export async function fetchNews(amountOfNews: number): Promise<respObj> {
 
 export async function fetchDraftPort(leagueId: number): Promise<respObj> {
   const url = `${BASE_URL}/database/league/getDraftSocket/${leagueId}`;
+  console.log('sending api request');
   return await getRequest(url);
 }

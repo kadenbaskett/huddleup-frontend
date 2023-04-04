@@ -8,7 +8,7 @@ import { leagueSliceState } from '@store/slices/leagueSlice';
 
 const CONNECTION = {
   HOST: 'localhost',
-  PORT: '9999',
+  PORT: 9999,
   SERVER_PREFIX: '/websocket/draft',
   SCHEME: 'http',
 };
@@ -41,7 +41,6 @@ const draftMiddleware: Middleware = (store) => {
   const local_url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${CONNECTION.PORT}${CONNECTION.SERVER_PREFIX}`;
   const url = `${NGROK_CONNECTION.SCHEME}://${NGROK_CONNECTION.HOST}${NGROK_CONNECTION.SERVER_PREFIX}`;
 
-  console.log('URL: ', local_url);
   let socket;
   let initDraftStateInterval;
 
@@ -96,14 +95,14 @@ const draftMiddleware: Middleware = (store) => {
     }
 
     const draftState: draftSliceState = store.getState().draft;
-
     const isConnectionEstablished = socket && draftState.isConnected;
     const isDraftKilled = draftState.isKilled;
 
     if (draftActions.killConnection.match(action)) {
       socket.close();
     } else if (draftActions.startConnecting.match(action)) {
-      socket = new SockJS(local_url);
+      const url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
+      socket = new SockJS(url);
 
       socket.onopen = function () {
         store.dispatch(draftActions.connectionEstablished());
