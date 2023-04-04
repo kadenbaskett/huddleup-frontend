@@ -1,6 +1,7 @@
 import { DraftPlayer, QueuePlayer, DraftOrder, AutoDraft } from '@interfaces/draft.interface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MSG_TYPES } from '@store/middleware/socket';
+// import { fetchDraftPort } from '@services/apiClient';
 
 export interface draftSliceState {
   isEstablishingConnection: boolean;
@@ -15,6 +16,7 @@ export interface draftSliceState {
   currentPickTeamId: number;
   currentPickNum: number;
   currentRoundNum: number;
+  draftPort: number;
 }
 
 const initialState: draftSliceState = {
@@ -30,6 +32,7 @@ const initialState: draftSliceState = {
   currentPickNum: 1,
   currentPickTeamId: -1, // this shouldn't matter but who knows
   currentRoundNum: 1,
+  draftPort: -1,
 };
 
 export const draftSlice = createSlice({
@@ -62,6 +65,10 @@ export const draftSlice = createSlice({
     leaveDraft: (state) => {
       console.log('Websocket: leaving draft');
       state.isKilled = false;
+    },
+    getDraftPort: (state, leagueId) => {
+      console.log('Websocket: getting port from backend');
+      // await fetchDraftPort(leagueId);
     },
     receiveMessage: (
       state,

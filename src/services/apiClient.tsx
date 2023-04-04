@@ -214,3 +214,8 @@ export async function fetchNews(amountOfNews: number): Promise<respObj> {
   const url = `${BASE_URL}/database/news/${amountOfNews}`;
   return await getRequest(url);
 }
+
+export async function fetchDraftPort(leagueId: number): Promise<respObj> {
+  const url = `${BASE_URL}/database/league/getDraftSocket/${leagueId}`;
+  return await getRequest(url);
+}

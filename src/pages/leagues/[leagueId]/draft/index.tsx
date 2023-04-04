@@ -117,6 +117,7 @@ export default function index() {
 
   useEffect(() => {
     if (!websocketConnected && !websocketTryingToConnect) {
+      await dispatch(draftActions.getDraftPort(league.id));
       dispatch(draftActions.startConnecting());
     }
 

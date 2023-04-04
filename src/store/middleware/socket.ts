@@ -41,6 +41,7 @@ const draftMiddleware: Middleware = (store) => {
   const local_url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${CONNECTION.PORT}${CONNECTION.SERVER_PREFIX}`;
   const url = `${NGROK_CONNECTION.SCHEME}://${NGROK_CONNECTION.HOST}${NGROK_CONNECTION.SERVER_PREFIX}`;
 
+  console.log('URL: ', local_url);
   let socket;
   let initDraftStateInterval;
 
