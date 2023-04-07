@@ -13,7 +13,7 @@ export default function ActiveDrafter({ team, time }: ActiveDrafterProps) {
     <div
       className={`relative z-20 bg-white rounded-xl sm:h-auto border-4 ${
         time < 10 ? 'border-red' : 'border-green'
-      } hover:drop-shadow-md w-full md:w-1/2 xl:w-1/4`}
+      } hover:drop-shadow-md w-full md:w-1/2 xl:w-1/3 2xl:w-1/4`}
     >
       <div className='grid content-center h-full'>
         <Grid columns={16}>

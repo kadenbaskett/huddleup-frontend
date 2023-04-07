@@ -60,7 +60,7 @@ export default function DraftPlayerTable({ draftCallback, queueCallback, league 
       players = players.filter(
         (player) =>
           !draftPlayers.find((dp) => {
-            return player.id === dp.player_id;
+            return player.id === dp?.player_id;
           }),
       );
     }

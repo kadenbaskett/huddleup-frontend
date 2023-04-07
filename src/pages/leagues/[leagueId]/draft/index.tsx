@@ -35,6 +35,9 @@ export default function index() {
   const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
   const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
   const queuePlayers = useSelector((state: StoreState) => state.draft.draftQueue);
+  const draftOrder = useSelector((state: StoreState) => state.draft.draftOrder);
+  const draftState = useSelector((state: StoreState) => state.draft);
+  console.log('draftState', draftState);
 
   const windowSize: number[] = useWindowResize();
 
@@ -60,6 +63,14 @@ export default function index() {
     const formatted = formatMessage(msgContent, type);
     dispatch(draftActions.sendMessage(formatted));
   };
+
+  function compareTeam(a, b) {
+    const draftOrderA = draftState?.draftOrder.find((d) => d.teamId === a.id);
+    const draftOrderB = draftState?.draftOrder.find((d) => d.teamId === b.id);
+    if (draftOrderA?.pick < draftOrderB?.pick) return -1;
+    else if (draftOrderA?.pick > draftOrderB?.pick) return 1;
+    return 0;
+  }
 
   const draftCallback = (player) => {
     // const draftPlayer: DraftPlayer = {
@@ -96,9 +107,9 @@ export default function index() {
 
   useEffect(() => {
     if (league !== null) {
-      setTeams(league.teams);
+      setTeams([...league.teams].sort(compareTeam));
     }
-  }, [leagueInfoFetchStatus]);
+  }, [leagueInfoFetchStatus, draftOrder]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -120,7 +131,7 @@ export default function index() {
 
   useEffect(() => {
     if (!websocketConnected && !websocketTryingToConnect) {
-      dispatch(handleFetchDraftPort(Number(leagueId)));
+      // dispatch(handleFetchDraftPort(Number(leagueId)));
       dispatch(draftActions.startConnecting());
     }
 
@@ -143,7 +154,8 @@ export default function index() {
         <>
           <div className='bg-lightGrey min-h-screen'>
             <div className='text-4xl font-varsity font-darkBlue pl-3 text-center'>
-              {league.name} Draft - Round 3
+              {league.name} Draft - Round {draftState.currentRoundNum} - Pick{' '}
+              {draftState.currentPickNum}
             </div>
             <div className='p-3 sm:pb-9 md:pb-3'>
               <DraftBelt teams={teams !== undefined ? teams : league.teams} time={time} />
