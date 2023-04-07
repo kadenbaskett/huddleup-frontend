@@ -16,7 +16,18 @@ export default function index() {
   const userInfoFetchStatus: String = store.user.status;
   const leagueInfoFetchStatus: String = store.league.status;
   const league = store.league.league;
-  console.log(league.settings);
+
+  const now = new Date().getTime();
+  const draftStart = new Date(league.settings.draft_settings.date).getTime();
+  const diffMilliseconds = draftStart - now;
+  const inSeconds = diffMilliseconds / 1000;
+  const fiveMins = 60 * 5;
+  const draftNotEnded = true;
+
+  const readyToDraft = inSeconds < fiveMins && draftNotEnded;
+
+  console.log(league.settings?.draft_settings);
+
   const [JoinTeamByTokenPopUp, setJoinTeamByTokenPopUp] = useState(false);
   // const draftTime = useSelector(
   //   (state: StoreState) => state.league.league?.settings.draft_settings.date,
@@ -99,9 +110,7 @@ export default function index() {
                 </Button>
               )}
             </div>
-            <div className='pt-5'>
-              {leagueInfoFetchStatus === 'succeeded' && <DraftNotificationCard league={league} />}
-            </div>
+            <div className='pt-5'>{readyToDraft && <DraftNotificationCard league={league} />}</div>
             <div className='pt-5'>
               <LeagueCard league={league} />
             </div>
