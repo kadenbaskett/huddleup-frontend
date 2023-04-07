@@ -23,15 +23,12 @@ export default function index() {
   const websocketTryingToConnect = store.draft.isEstablishingConnection;
   const league = store.league.league;
   const user = store.user;
-  const draftTime = league.settings.draft_settings.date;
+  const userTeam = store.league.userTeam;
 
-  const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
-  const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
-  const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
-  const queuePlayers = useSelector((state: StoreState) => state.draft.draftQueue);
-  const draftOrder = useSelector((state: StoreState) => state.draft.draftOrder);
-  const draftState = useSelector((state: StoreState) => state.draft);
-  console.log('draftState', draftState);
+  const draftPlayers = store.draft.draftPlayers;
+  const draftOrder = store.draft.draftOrder;
+  const draftState = store.draft;
+  const currentPickTeamId = store.draft.currentPickTeamId;
 
   const windowSize: number[] = useWindowResize();
 
@@ -67,12 +64,6 @@ export default function index() {
   }
 
   const draftCallback = (player) => {
-    // const draftPlayer: DraftPlayer = {
-    //   player_id: player.id,
-    //   team_id: user.teams.find((team) => team.league.id === league.id).id,
-    //   league_id: league.id,
-    // };
-
     const content = {
       player_id: player.id,
     };
@@ -81,13 +72,6 @@ export default function index() {
   };
 
   const queueCallback = (player) => {
-    // const queuePlayer: QueuePlayer = {
-    //   player_id: player.id,
-    //   team_id: user.teams.find((team) => team.league.id === league.id).id,
-    //   league_id: league.id,
-    //   order: 1,
-    // };
-    // console.log('queuePlayer', queuePlayer);
     const content = {
       player_id: player.id,
       order: 0,
@@ -163,6 +147,7 @@ export default function index() {
                   draftCallback={(player: any) => draftCallback(player)}
                   queueCallback={(player: any) => queueCallback(player)}
                   league={league}
+                  currentlyPicking={userTeam.id === currentPickTeamId}
                 />
               </Grid.Col>
               <Grid.Col span={draftHistorySpan} className='pr-4'>
