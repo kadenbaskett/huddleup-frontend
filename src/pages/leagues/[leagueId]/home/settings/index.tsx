@@ -5,17 +5,15 @@ import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 import LeagueSettingsCard from '@components/LeagueSettingsCard/LeagueSettingsCard';
 import { HuddleUpDate } from '@services/helpers';
 import { StoreState } from '@store/store';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
 function index() {
-  const router = useRouter();
-  const { leagueId } = router.query;
+  const leagueSlice = useSelector((state: StoreState) => state.league);
+  const userTeam = leagueSlice.userTeam;
+  const league = leagueSlice.league;
 
   const leagueInfoFetchStatus = useSelector((state: StoreState) => state.league.status);
-  const league = useSelector((state: StoreState) => state.league.league);
-  const team = useSelector((state: StoreState) => state.league.userTeam);
 
   const basicSettingsContent = league?.settings ? (
     <tbody>
@@ -184,19 +182,19 @@ function index() {
   return (
     <div>
       <LeagueNavBar
-        teamName={team ? team.name : ' '}
-        teamId={team ? team.id : ' '}
-        leagueName={league ? league.name : ' '}
-        leagueId={Number(leagueId)}
+        teamName={userTeam.name}
+        teamId={userTeam.id}
+        leagueName={league.name}
+        leagueId={league.id}
         page='settings'
       />
       {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
       {leagueInfoFetchStatus === 'succeeded' && (
         <>
           <LeagueHomeNavigation
-            leagueId={Number(leagueId)}
-            leagueName={league?.name}
-            leagueDescription={league?.description}
+            leagueId={league.id}
+            leagueName={league.name}
+            leagueDescription={league.description}
             page='settings'
           />
           <div className='bg-lightGrey pt-2 pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>

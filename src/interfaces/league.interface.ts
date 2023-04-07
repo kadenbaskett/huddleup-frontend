@@ -38,6 +38,8 @@ export interface Team {
   managers: any[];
   league: League;
   rosters: Roster[];
+  proposed_transactions: any[];
+  related_transactions: any[];
 }
 
 export interface Roster {

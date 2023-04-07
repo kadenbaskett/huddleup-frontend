@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { GrAddCircle, GrDisabledOutline, GrLinkNext } from 'react-icons/gr';
@@ -18,16 +17,14 @@ import TradePlayerPopup from '@components/TradePlayerPopup/TradePlayerPopup';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 
 function League(props) {
-  const router = useRouter();
-  const { leagueId } = router.query;
-
+  const store = useSelector((state: StoreState) => state);
   // Application state
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
-  const allPlayers = useSelector((state: StoreState) => state.league.playerList);
-  const league = useSelector((state: StoreState) => state.league.league);
-  const myTeam = useSelector((state: StoreState) => state.league.userTeam);
-  const currentWeek = useSelector((state: StoreState) => state.global.week);
-  const user = useSelector((state: StoreState) => state.user.userInfo);
+  const leagueInfoFetchStatus: String = store.league.status;
+  const allPlayers = store.league.playerList;
+  const league = store.league.league;
+  const myTeam = store.league.userTeam;
+  const currentWeek = store.global.week;
+  const user = store.user.userInfo;
 
   // Trade popup
   const [tradePopupOpen, setTradePopupOpen] = useState(false);
@@ -85,7 +82,7 @@ function League(props) {
   const takePlayerAction = (player) => {
     setSelectedPlayer(player);
 
-    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek, Number(leagueId));
+    const playerTeam = getTeamThatOwnsPlayer(player, currentWeek, league.id);
     const myRoster = getMyRoster();
     const isMyPlayer = playerTeam?.id === myTeam.id;
 
@@ -152,18 +149,18 @@ function League(props) {
 
     if (availability === 'Available') {
       players = players.filter((player) => {
-        return !getTeamThatOwnsPlayer(player, currentWeek, Number(leagueId));
+        return !getTeamThatOwnsPlayer(player, currentWeek, league.id);
       });
     } else if (availability === 'Waivers') {
       // TODO implement waivers
     } else if (availability === 'Free Agents') {
       // TODO also filter out waivers
       players = players.filter((player) => {
-        return !getTeamThatOwnsPlayer(player, currentWeek, Number(leagueId));
+        return !getTeamThatOwnsPlayer(player, currentWeek, league.id);
       });
     } else if (availability === 'On Rosters') {
       players = players.filter((player) => {
-        const team = getTeamThatOwnsPlayer(player, currentWeek, Number(leagueId));
+        const team = getTeamThatOwnsPlayer(player, currentWeek, league.id);
         return team ? team.name : '';
       });
     }
@@ -206,7 +203,7 @@ function League(props) {
   };
 
   const getPlayerAction = (player) => {
-    const av = getPlayerAvailability(player, currentWeek, Number(leagueId));
+    const av = getPlayerAvailability(player, currentWeek, league.id);
     const myTeamName = myTeam?.name;
 
     if (av === 'Free Agent') {
@@ -247,10 +244,10 @@ function League(props) {
   return (
     <>
       <LeagueNavBar
-        teamName={myTeam?.name}
-        teamId={myTeam?.id}
-        leagueName={league?.name}
-        leagueId={Number(leagueId)}
+        teamName={myTeam.name}
+        teamId={myTeam.id}
+        leagueName={league.name}
+        leagueId={league.id}
         page='players'
       />
       {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
