@@ -17,7 +17,7 @@ export default function DraftHistory() {
   const showPlayers: ShowPlayers[] = [];
   draftPlayers?.forEach((player2) => {
     showPlayers.push({
-      player: allPlayers?.find((player) => player.id === player2.player_id),
+      player: allPlayers?.find((player) => player.id === player2?.player_id),
       draftPlayer: player2,
     });
   });
@@ -49,13 +49,13 @@ export default function DraftHistory() {
                 title: 'Player',
                 render: (p) => (
                   <Group>
-                    <Avatar src={p.player.photo_url} alt={'player image'} />
+                    <Avatar src={p.player?.photo_url} alt={'player image'} />
                     <div className='text-darkBlue font-bold text-xl'>
-                      {p.player.first_name} {p.player.last_name}
+                      {p.player?.first_name} {p.player?.last_name}
                       <div className='text-orange font-thin text-sm'>
                         Picked by{' '}
-                        {league.teams.find((team) => team.id === p.draftPlayer.team_id).name} as the{' '}
-                        {p.draftPlayer.pick_number} pick
+                        {league.teams.find((team) => team.id === p.draftPlayer?.team_id)?.name} as
+                        the {p.draftPlayer?.pick_number} pick
                       </div>
                     </div>
                   </Group>

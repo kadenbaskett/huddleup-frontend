@@ -1,9 +1,10 @@
 import DraftQueue from '@components/DraftQueue/DraftQueue';
 import DraftRoster from '@components/DraftRoster/DraftRoster';
+import { StoreState } from '@store/store';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export interface DraftRosterAndQueueCardProps {
-  teams: any[];
   currUser: any;
 }
 
@@ -13,6 +14,8 @@ export interface TeamData {
 }
 
 export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardProps) {
+  const store = useSelector((state: StoreState) => state);
+  const league = store.league.league;
   const [roster, setRoster] = useState(true);
   const [queue, setQueue] = useState(false);
 
@@ -26,14 +29,14 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
     setQueue(true);
   };
 
-  const teamData: TeamData[] = props.teams?.map((team) => {
+  const teamData: TeamData[] = league.teams?.map((team) => {
     return {
       value: team.token,
       label: team.name,
     };
   });
 
-  const myTeam = props.teams.find((team) =>
+  const myTeam = league.teams.find((team) =>
     team.managers.find((manager) => manager.user_id === props.currUser.id),
   );
 
@@ -74,7 +77,7 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
 
       {roster ? (
         <div className='p-5'>
-          <DraftRoster myTeam={myTeam} teamData={teamData} teams={props.teams} />
+          <DraftRoster myTeam={myTeam} teamData={teamData} teams={league.teams} />
         </div>
       ) : (
         <></>

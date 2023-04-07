@@ -60,6 +60,18 @@ export async function editLineup(rosterPlayerId: number, newPosition: string) {
   return await postRequest(url, data);
 }
 
+export async function fillLeague(leagueId: number) {
+  const data = { leagueId };
+  const url = `${BASE_URL}/database/league/fill`;
+  return await postRequest(url, data);
+}
+
+export async function startDraft(leagueId: number) {
+  const data = { leagueId };
+  const url = `${BASE_URL}/database/league/startDraft`;
+  return await postRequest(url, data);
+}
+
 export async function proposeTrade(
   sendPlayerIds: number[],
   recPlayerIds: number[],
@@ -200,5 +212,11 @@ export async function fetchUserTeams(userId: number): Promise<respObj> {
 
 export async function fetchNews(amountOfNews: number): Promise<respObj> {
   const url = `${BASE_URL}/database/news/${amountOfNews}`;
+  return await getRequest(url);
+}
+
+export async function fetchDraftPort(leagueId: number): Promise<respObj> {
+  const url = `${BASE_URL}/database/league/getDraftSocket/${leagueId}`;
+  console.log('sending api request');
   return await getRequest(url);
 }

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { draftActions } from '@store/slices/draftSlice';
-import { StoreState } from '@store/store';
+import { draftActions, handleFetchDraftPort } from '@store/slices/draftSlice';
+import { StoreState, AppDispatch } from '@store/store';
 import DraftPlayerTable from '@components/DraftPlayerTable/DraftPlayerTable';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import { Grid } from '@mantine/core';
@@ -12,26 +12,22 @@ import DraftHistory from '@components/DraftHistory/DraftHistory';
 import { useWindowResize } from '@services/helpers';
 import { formatMessage, MSG_TYPES } from '@store/middleware/socket';
 
-const DRAFT_CONFIG = {
-  SECONDS_PER_PICK: 5,
-};
-
 export default function index() {
-  const dispatch = useDispatch();
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
-  const websocketConnected = useSelector((state: StoreState) => state.draft.isConnected);
-  const websocketTryingToConnect = useSelector(
-    (state: StoreState) => state.draft.isEstablishingConnection,
-  );
-  const league = useSelector((state: StoreState) => state.league.league);
-  const user = useSelector((state: StoreState) => state.user);
-  const draftTime = useSelector(
-    (state: StoreState) => state.league.league?.settings.draft_settings.date,
-  );
-  const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
-  const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
-  const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
-  const queuePlayers = useSelector((state: StoreState) => state.draft.draftQueue);
+  const DRAFT_CONFIG = {
+    SECONDS_PER_PICK: 30,
+  };
+  const store = useSelector((state: StoreState) => state);
+  const dispatch = useDispatch<AppDispatch>();
+  const leagueInfoFetchStatus: String = store.league.status;
+  const websocketConnected = store.draft.isConnected;
+  const websocketTryingToConnect = store.draft.isEstablishingConnection;
+  const league = store.league.league;
+  const user = store.user;
+  const userTeam = store.league.userTeam;
+
+  const draftOrder = store.draft.draftOrder;
+  const draftState = store.draft;
+  const currentPickTeamId = store.draft.currentPickTeamId;
 
   const windowSize: number[] = useWindowResize();
 
@@ -58,13 +54,15 @@ export default function index() {
     dispatch(draftActions.sendMessage(formatted));
   };
 
-  const draftCallback = (player) => {
-    // const draftPlayer: DraftPlayer = {
-    //   player_id: player.id,
-    //   team_id: user.teams.find((team) => team.league.id === league.id).id,
-    //   league_id: league.id,
-    // };
+  function compareTeam(a, b) {
+    const draftOrderA = draftState?.draftOrder.find((d) => d.teamId === a.id);
+    const draftOrderB = draftState?.draftOrder.find((d) => d.teamId === b.id);
+    if (draftOrderA?.pick < draftOrderB?.pick) return -1;
+    else if (draftOrderA?.pick > draftOrderB?.pick) return 1;
+    return 0;
+  }
 
+  const draftCallback = (player) => {
     const content = {
       player_id: player.id,
     };
@@ -73,13 +71,6 @@ export default function index() {
   };
 
   const queueCallback = (player) => {
-    // const queuePlayer: QueuePlayer = {
-    //   player_id: player.id,
-    //   team_id: user.teams.find((team) => team.league.id === league.id).id,
-    //   league_id: league.id,
-    //   order: 1,
-    // };
-    // console.log('queuePlayer', queuePlayer);
     const content = {
       player_id: player.id,
       order: 0,
@@ -93,9 +84,9 @@ export default function index() {
 
   useEffect(() => {
     if (league !== null) {
-      setTeams(league.teams);
+      setTeams([...league.teams].sort(compareTeam));
     }
-  }, [leagueInfoFetchStatus]);
+  }, [leagueInfoFetchStatus, draftOrder]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -117,11 +108,11 @@ export default function index() {
 
   useEffect(() => {
     if (!websocketConnected && !websocketTryingToConnect) {
+      dispatch(handleFetchDraftPort(league.id));
       dispatch(draftActions.startConnecting());
     }
 
     return () => {
-      console.log('Connection should be killed now!');
       dispatch(draftActions.killConnection());
     };
   }, []);
@@ -140,20 +131,22 @@ export default function index() {
         <>
           <div className='bg-lightGrey min-h-screen'>
             <div className='text-4xl font-varsity font-darkBlue pl-3 text-center'>
-              {league.name} Draft - Round 3
+              {league.name} Draft - Round {draftState.currentRoundNum} - Pick{' '}
+              {draftState.currentPickNum}
             </div>
             <div className='p-3 sm:pb-9 md:pb-3'>
               <DraftBelt teams={teams !== undefined ? teams : league.teams} time={time} />
             </div>
             <Grid className='relative z-30'>
               <Grid.Col span={draftRosterAndQueueCardSpan} className='pl-4'>
-                <DraftRosterAndQueueCard currUser={user.userInfo} teams={league.teams} />
+                <DraftRosterAndQueueCard currUser={user.userInfo} />
               </Grid.Col>
               <Grid.Col span={draftPlayerTableSpan}>
                 <DraftPlayerTable
                   draftCallback={(player: any) => draftCallback(player)}
                   queueCallback={(player: any) => queueCallback(player)}
                   league={league}
+                  currentlyPicking={userTeam.id === currentPickTeamId}
                 />
               </Grid.Col>
               <Grid.Col span={draftHistorySpan} className='pr-4'>

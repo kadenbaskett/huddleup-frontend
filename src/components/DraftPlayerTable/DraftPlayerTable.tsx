@@ -8,7 +8,12 @@ import { sortBy } from 'lodash';
 import { useSelector } from 'react-redux';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 
-export default function DraftPlayerTable({ draftCallback, queueCallback, league }) {
+export default function DraftPlayerTable({
+  draftCallback,
+  queueCallback,
+  league,
+  currentlyPicking,
+}) {
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
   const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
   // Player filtering
@@ -60,7 +65,7 @@ export default function DraftPlayerTable({ draftCallback, queueCallback, league 
       players = players.filter(
         (player) =>
           !draftPlayers.find((dp) => {
-            return player.id === dp.player_id;
+            return player.id === dp?.player_id;
           }),
       );
     }
@@ -84,8 +89,6 @@ export default function DraftPlayerTable({ draftCallback, queueCallback, league 
 
     return players;
   };
-
-  const dontShow = false;
 
   return (
     <>
@@ -151,17 +154,10 @@ export default function DraftPlayerTable({ draftCallback, queueCallback, league 
                   <Button
                     className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
                     onClick={() => draftCallback(p)}
+                    disabled={!currentlyPicking}
                   >
                     {'Draft'}
                   </Button>
-                  {dontShow && (
-                    <Button
-                      className={`${'bg-transparent hover:bg-orange text-orange hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-orange rounded border-orange transition ease-in duration-200`}
-                      onClick={() => queueCallback(p)}
-                    >
-                      {'Queue'}
-                    </Button>
-                  )}
                 </Group>
               ),
             },

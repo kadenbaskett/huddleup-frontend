@@ -11,6 +11,7 @@ import {
   browserLocalPersistence,
   updateProfile,
 } from 'firebase/auth';
+import router from 'next/router';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -58,6 +59,7 @@ const createAccount = async (username, email, password) => {
 };
 
 const logout = async () => {
+  await router.push('/');
   await signOut(auth);
 };
 

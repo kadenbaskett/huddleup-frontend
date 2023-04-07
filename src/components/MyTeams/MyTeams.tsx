@@ -5,9 +5,9 @@ import { Team, League } from '@interfaces/league.interface';
 import Link from 'next/link';
 
 const renderRow = (team: Team, leagues: League[]) => {
-  const userLeague: League = leagues.find((league) => league.id === team.league.id);
-
-  const activeLeague = userLeague.teams.length < 8;
+  const userLeague = leagues.find((league) => league.id === team.league.id);
+  const activeLeague =
+    userLeague.settings.roster_settings.roster_size_limit !== team.rosters[0]?.players.length;
 
   const leagueLink = activeLeague
     ? `/leagues/${Number(team.league.id)}/join/${team.league.token}`
