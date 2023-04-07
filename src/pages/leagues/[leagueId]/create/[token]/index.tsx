@@ -99,7 +99,14 @@ export default function index() {
 
   return (
     <>
-      {!userTeam && <HuddleUpLoader />}
+      {!userTeam && (
+        <>
+          <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold'>
+            Creating team...
+          </h1>
+          <HuddleUpLoader />
+        </>
+      )}
       {userTeam && (
         <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
           <div className='pt-5'>
