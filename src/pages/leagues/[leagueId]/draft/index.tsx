@@ -125,7 +125,7 @@ export default function index() {
 
   useEffect(() => {
     if (!websocketConnected && !websocketTryingToConnect) {
-      // dispatch(handleFetchDraftPort(Number(leagueId)));
+      dispatch(handleFetchDraftPort(league.id));
       dispatch(draftActions.startConnecting());
     }
 
