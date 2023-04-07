@@ -16,17 +16,17 @@ export default function index() {
   const userInfoFetchStatus: String = store.user.status;
   const leagueInfoFetchStatus: String = store.league.status;
   const league = store.league.league;
+  const userTeam = store.league.userTeam;
 
   const now = new Date().getTime();
   const draftStart = new Date(league.settings.draft_settings.date).getTime();
   const diffMilliseconds = draftStart - now;
   const inSeconds = diffMilliseconds / 1000;
   const fiveMins = 60 * 5;
-  const draftNotEnded = true;
+  const teamFilled =
+    userTeam.rosters[0].players.length < league.settings.roster_settings.roster_size_limit;
 
-  const readyToDraft = inSeconds < fiveMins && draftNotEnded;
-
-  console.log(league.settings?.draft_settings);
+  const readyToDraft = inSeconds < fiveMins && teamFilled;
 
   const [JoinTeamByTokenPopUp, setJoinTeamByTokenPopUp] = useState(false);
   // const draftTime = useSelector(
