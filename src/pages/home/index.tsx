@@ -52,6 +52,8 @@ export default function Home(props: any) {
     teamAndFriendSpan = 20;
     newsSpan = 20;
   }
+
+  const dontShow = false;
   return (
     <>
       {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
@@ -64,7 +66,7 @@ export default function Home(props: any) {
               </div>
               <br></br>
               <div className='bg-white hover:drop-shadow-md rounded-xl'>
-                <MyFriends friends={friendData} />
+                {dontShow && <MyFriends friends={friendData} />}
               </div>
             </Grid.Col>
             <Grid.Col span={newsSpan}>

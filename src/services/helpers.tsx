@@ -1,6 +1,5 @@
 import { League } from '@interfaces/league.interface';
 import { Table } from '@mantine/core';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export const HuddleUpDate = (date: Date) => {
@@ -222,12 +221,11 @@ export function createManagerString(managers) {
   let i = 0;
   const tempManagerString = managers.map((m) => {
     i++;
-    const id: number = m.user?.id;
     return (
       <>
-        {<Link href={`/user/${id}/profile`}>{m.user?.username}</Link>}
+        {m.user?.username}
         {i !== managers.length ? ', ' : ''}
-        {i === 2 ? <br /> : ''}
+        {i === managers.length ? <br /> : ''}
       </>
     );
   });
