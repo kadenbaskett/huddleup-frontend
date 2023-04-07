@@ -31,8 +31,8 @@ export const leagueSlice = createSlice({
   initialState,
 
   reducers: {
-    clearLeagueStatus: (state) => {
-      state.status = SLICE_STATUS.IDLE;
+    resetSlice: (state) => {
+      return { ...initialState };
     },
     setURLParams: (state, { payload }) => {
       state.urlLeagueId = payload.leagueIdNumURL;
@@ -74,6 +74,7 @@ export const handleLeagueInitThunk = createAsyncThunk(
   async (data: any, { getState }) => {
     const leagueIdURL = data.leagueIdURL;
     const teamIdURL = data.teamIdURL;
+    // console.log(teamIdURL);
 
     const playersResp = await fetchLeaguePlayers(leagueIdURL);
     const leagueResp = await fetchLeagueInfo(leagueIdURL);
@@ -97,5 +98,5 @@ export const handleLeagueInitThunk = createAsyncThunk(
   },
 );
 
-export const { clearLeagueStatus, setURLParams } = leagueSlice.actions;
+export const { resetSlice, setURLParams } = leagueSlice.actions;
 export default leagueSlice;

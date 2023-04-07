@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, StoreState } from '@store/store';
 import { handleGlobalInitThunk } from '@store/slices/globalSlice';
-import { clearLeagueStatus, handleLeagueInitThunk, setURLParams } from '@store/slices/leagueSlice';
+import { resetSlice, handleLeagueInitThunk, setURLParams } from '@store/slices/leagueSlice';
 import { SLICE_STATUS } from '@store/slices/common';
 import { TIMEOUTS } from 'static';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
@@ -20,6 +20,9 @@ export default function AppStateInit({ children }) {
   const dispatch = useDispatch<AppDispatch>();
 
   let leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
+  let userFetched = state.user.status === SLICE_STATUS.SUCCEEDED;
+  let globalFetched = state.global.status === SLICE_STATUS.SUCCEEDED;
+  let userLoggedIn = state.user.status === SLICE_STATUS.SUCCEEDED;
 
   const startLeagueSliceUpdateLoop = (leagueIdParam: number, teamIdParam: number) => {
     // console.log('Start league slice update loop for league id: ', leagueIdParam);
@@ -39,9 +42,9 @@ export default function AppStateInit({ children }) {
     globalPollTimeoutID = setInterval(() => dispatch(handleGlobalInitThunk()), TIMEOUTS.GLOBAL);
   };
 
-  useEffect(() => {
-    leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
-  }, [state.league.status]);
+  // useEffect(() => {
+  //   leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
+  // }, [state.league.status]);
 
   useEffect(() => {
     leagueId = router.query.leagueId;
@@ -50,12 +53,18 @@ export default function AppStateInit({ children }) {
     const leagueIdNumURL = Number(leagueId);
     const teamIdNumURL = Number(teamId);
 
+    userLoggedIn = state.user.status === SLICE_STATUS.SUCCEEDED;
+    leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
+    globalFetched = state.global.status === SLICE_STATUS.SUCCEEDED;
+    userFetched = state.user.status === SLICE_STATUS.SUCCEEDED;
+
     const firstGlobalUpdate = state.global.status === SLICE_STATUS.IDLE;
-    const userLoggedIn = state.user.status === SLICE_STATUS.SUCCEEDED;
 
     const leagueInURL = leagueId !== undefined;
     const storeLeagueID = state.league.league?.id;
-    const URLMatchesStore = leagueInURL && storeLeagueID === leagueIdNumURL;
+    const storeURLLeagueID = state.league.urlLeagueId;
+    const URLMatchesStore =
+      leagueInURL && storeLeagueID === leagueIdNumURL && storeURLLeagueID === leagueIdNumURL;
 
     dispatch(setURLParams({ leagueIdNumURL, teamIdNumURL }));
 
@@ -65,7 +74,7 @@ export default function AppStateInit({ children }) {
 
     if (userLoggedIn) {
       if (!leagueInURL) {
-        dispatch(clearLeagueStatus());
+        dispatch(resetSlice());
         clearInterval(leaguePollTimeoutID);
       } else if (leagueInURL && !URLMatchesStore) {
         startLeagueSliceUpdateLoop(leagueIdNumURL, teamIdNumURL);
@@ -79,7 +88,17 @@ export default function AppStateInit({ children }) {
     } else {
       return children;
     }
+  } else if (userLoggedIn) {
+    if (!userFetched) {
+      return <HuddleUpLoader />;
+    } else {
+      return children;
+    }
   } else {
-    return children;
+    if (!globalFetched) {
+      return <HuddleUpLoader />;
+    } else {
+      return children;
+    }
   }
 }

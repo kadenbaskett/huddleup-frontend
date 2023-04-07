@@ -7,9 +7,10 @@ import { useSelector } from 'react-redux';
 import OverviewCard from '@components/OverviewCard/OverviewCard';
 
 function index() {
-  const league = useSelector((state: StoreState) => state.league.league);
-  const week = useSelector((state: StoreState) => state.global.week);
-  const userTeam = useSelector((state: StoreState) => state.league.userTeam);
+  const store = useSelector((state: StoreState) => state);
+  const league = store.league.league;
+  const week = store.global.week;
+  const userTeam = store.league.userTeam;
 
   let allTransactions = [];
 

@@ -16,6 +16,7 @@ export default function index() {
   const userInfoFetchStatus: String = store.user.status;
   const leagueInfoFetchStatus: String = store.league.status;
   const league = store.league.league;
+  console.log(league.settings);
   const [JoinTeamByTokenPopUp, setJoinTeamByTokenPopUp] = useState(false);
   // const draftTime = useSelector(
   //   (state: StoreState) => state.league.league?.settings.draft_settings.date,
