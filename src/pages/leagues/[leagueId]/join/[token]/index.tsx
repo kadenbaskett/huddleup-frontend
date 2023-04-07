@@ -11,10 +11,11 @@ import LeagueCard from '../../../../../components/LeagueCard/LeagueCard';
 import LeagueTeamCard from '../../../../../components/LeagueTeamCard/LeagueTeamCard';
 
 export default function index() {
-  const user = useSelector((state: StoreState) => state.user);
-  const userInfoFetchStatus: String = useSelector((state: StoreState) => state.user.status);
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
-  const league = useSelector((state: StoreState) => state.league.league);
+  const store = useSelector((state: StoreState) => state);
+  const user = store.user;
+  const userInfoFetchStatus: String = store.user.status;
+  const leagueInfoFetchStatus: String = store.league.status;
+  const league = store.league.league;
   const [JoinTeamByTokenPopUp, setJoinTeamByTokenPopUp] = useState(false);
   // const draftTime = useSelector(
   //   (state: StoreState) => state.league.league?.settings.draft_settings.date,

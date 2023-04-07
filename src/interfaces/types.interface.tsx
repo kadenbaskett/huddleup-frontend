@@ -80,4 +80,5 @@ export interface Team {
   managers: string;
   wins: Number;
   losses: Number;
+  proposed_transactions: any[];
 }

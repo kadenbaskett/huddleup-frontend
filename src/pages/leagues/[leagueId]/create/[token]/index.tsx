@@ -19,11 +19,13 @@ const createTeamMemberCard = (manager, isCaptain: boolean, team) => {
 };
 
 export default function index() {
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
-  const userStatus: String = useSelector((state: StoreState) => state.user.status);
-  const league = useSelector((state: StoreState) => state.league.league);
-  const userTeam = useSelector((state: StoreState) => state.league.userTeam);
-  const currUser = useSelector((state: StoreState) => state.user);
+  const store = useSelector((state: StoreState) => state);
+  const leagueInfoFetchStatus: String = store.league.status;
+  const userStatus: String = store.user.status;
+  const league = store.league.league;
+  const userTeam = store.league.userTeam;
+  const currUser = store.user;
+
   const captainID = userTeam?.managers.find((manager) => manager.is_captain).user_id;
   const isUserManager = currUser.userInfo?.id === captainID;
   const teamManagers = userTeam?.managers;

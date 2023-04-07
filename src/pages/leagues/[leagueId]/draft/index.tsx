@@ -11,26 +11,20 @@ import DraftRosterAndQueueCard from '@components/DraftRosterAndQueueCard/DraftRo
 import DraftHistory from '@components/DraftHistory/DraftHistory';
 import { useWindowResize } from '@services/helpers';
 import { formatMessage, MSG_TYPES } from '@store/middleware/socket';
-import { useRouter } from 'next/router';
-import { fetchDraftPort } from '@services/apiClient';
 
 export default function index() {
   const DRAFT_CONFIG = {
     SECONDS_PER_PICK: 30,
   };
-  const router = useRouter();
-  const { leagueId } = router.query;
+  const store = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
-  const websocketConnected = useSelector((state: StoreState) => state.draft.isConnected);
-  const websocketTryingToConnect = useSelector(
-    (state: StoreState) => state.draft.isEstablishingConnection,
-  );
-  const league = useSelector((state: StoreState) => state.league.league);
-  const user = useSelector((state: StoreState) => state.user);
-  const draftTime = useSelector(
-    (state: StoreState) => state.league.league?.settings.draft_settings.date,
-  );
+  const leagueInfoFetchStatus: String = store.league.status;
+  const websocketConnected = store.draft.isConnected;
+  const websocketTryingToConnect = store.draft.isEstablishingConnection;
+  const league = store.league.league;
+  const user = store.user;
+  const draftTime = league.settings.draft_settings.date;
+
   const draftCompleted = useSelector((state: StoreState) => false); // TODO put draft complete into database
   const draftInProgress = new Date(draftTime).getTime() > new Date().getTime() && !draftCompleted;
   const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
