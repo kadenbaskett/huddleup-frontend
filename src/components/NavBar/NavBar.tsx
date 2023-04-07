@@ -6,8 +6,11 @@ import { StoreState } from '@store/store';
 import { useWindowResize } from '@services/helpers';
 import { useState } from 'react';
 import ProfilePopup from '@components/ProfilePopup/ProfilePopup';
+import { useRouter } from 'next/router';
+import { logout } from '../../firebase/firebase';
 
 export default function Navbar() {
+  const router = useRouter();
   const user = useSelector((store: StoreState) => store.user.userInfo);
   const windowSize: number[] = useWindowResize();
   const [profilePopupOpen, setProfilePopupOpen] = useState(false);
@@ -23,6 +26,11 @@ export default function Navbar() {
 
   const onProfilePopupClose = () => {
     setProfilePopupOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    void router.push('/');
   };
 
   const dontShow = false;
@@ -98,8 +106,7 @@ export default function Navbar() {
               opened={profilePopupOpen}
               onClose={onProfilePopupClose}
               user={user}
-              myProfile={true}
-              otherUsername={''}
+              handleLogout={handleLogout}
             />
           )}
         </div>
