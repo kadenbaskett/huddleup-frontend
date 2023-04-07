@@ -154,7 +154,7 @@ export default function DraftPlayerTable({
                   <Button
                     className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
                     onClick={() => draftCallback(p)}
-                    disabled={currentlyPicking}
+                    disabled={!currentlyPicking}
                   >
                     {'Draft'}
                   </Button>

@@ -25,7 +25,6 @@ export default function index() {
   const user = store.user;
   const userTeam = store.league.userTeam;
 
-  const draftPlayers = store.draft.draftPlayers;
   const draftOrder = store.draft.draftOrder;
   const draftState = store.draft;
   const currentPickTeamId = store.draft.currentPickTeamId;
@@ -140,7 +139,7 @@ export default function index() {
             </div>
             <Grid className='relative z-30'>
               <Grid.Col span={draftRosterAndQueueCardSpan} className='pl-4'>
-                <DraftRosterAndQueueCard currUser={user.userInfo} teams={league.teams} />
+                <DraftRosterAndQueueCard currUser={user.userInfo} />
               </Grid.Col>
               <Grid.Col span={draftPlayerTableSpan}>
                 <DraftPlayerTable

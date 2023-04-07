@@ -6,10 +6,11 @@ import { ThisWeekCard } from '../../../../components/ThisWeekCard/ThisWeekCard';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 
 function matchups() {
-  const league = useSelector((state: StoreState) => state.league.league);
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
-  const team = useSelector((state: StoreState) => state.league.userTeam);
-  const currentWeek = useSelector((state: StoreState) => state.global.week);
+  const store = useSelector((state: StoreState) => state);
+  const league = store.league.league;
+  const leagueInfoFetchStatus: String = store.league.status;
+  const team = store.league.userTeam;
+  const currentWeek = store.global.week;
 
   return (
     <>
