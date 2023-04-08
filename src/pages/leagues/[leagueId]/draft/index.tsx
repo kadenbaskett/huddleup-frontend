@@ -164,6 +164,10 @@ export default function index() {
                 activeTeam={teams.find((t) => t.id === draftState.currentPickTeamId)}
                 teams={teams !== undefined ? teams : league.teams}
                 time={time}
+                draftStarted={
+                  draftState.draftStartTimeMS !== 0 &&
+                  draftState.draftStartTimeMS < new Date().getTime()
+                }
               />
             </div>
             <Grid className='relative z-30'>

@@ -9,9 +9,10 @@ export interface DraftBeltProps {
   teams: Team[];
   time: number;
   activeTeam: Team;
+  draftStarted: boolean;
 }
 
-export default function DraftBelt({ teams, time, activeTeam }: DraftBeltProps) {
+export default function DraftBelt({ teams, time, activeTeam, draftStarted }: DraftBeltProps) {
   const autoDraft = useSelector((state: StoreState) => state.draft.autoDraft);
 
   function isAuto(team): Boolean {
@@ -27,7 +28,7 @@ export default function DraftBelt({ teams, time, activeTeam }: DraftBeltProps) {
           className='relative w-6/12 h-40 sm:h-52 bg-gradient-to-l from-lightGrey z-10'
           id={styles.abs}
         />
-        <ActiveDrafter team={activeTeam} time={time} />
+        <ActiveDrafter team={activeTeam} time={time} draftStarted={draftStarted} />
         <div className='overflow-x-hidden w-full md:w-1/2 lg:w-1/2 xl:w-3/4 z-0'>
           <div className='flex h-full'>
             {teams.map((team) => (

@@ -6,10 +6,12 @@ import { GiAmericanFootballHelmet } from 'react-icons/gi';
 export interface ActiveDrafterProps {
   team: Team;
   time: number;
+  draftStarted: boolean;
 }
-export default function ActiveDrafter({ team, time }: ActiveDrafterProps) {
-  const seconds = time >= 0 ? time % 60 : '-';
-  const prefix = time >= 0 ? '0' : '-';
+export default function ActiveDrafter({ team, time, draftStarted }: ActiveDrafterProps) {
+  const seconds = time >= 0 ? time % 60 : '';
+  const colon = time >= 0 ? ':' : '';
+  const minutes = time >= 0 ? Math.floor(time / 60) : '';
 
   return (
     <div
@@ -26,24 +28,36 @@ export default function ActiveDrafter({ team, time }: ActiveDrafterProps) {
               </div>
             </div>
           </Grid.Col>
-          <Grid.Col span={9}>
-            <div className='grid place-items-start'>
-              <div className={`text-4xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
-                {team?.name}
+          {draftStarted ? (
+            <Grid.Col span={9}>
+              <div className='grid place-items-start'>
+                <div className={`text-4xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
+                  {team?.name}
+                </div>
+                <div className='text-sm text-darkBlue'>
+                  {team?.managers.length > 0 ? createManagerString(team?.managers) : ''}
+                </div>
               </div>
-              <div className='text-sm text-darkBlue'>
-                {team?.managers.length > 0 ? createManagerString(team?.managers) : ''}
+            </Grid.Col>
+          ) : (
+            <Grid.Col span={9}>
+              <div className='grid place-items-start'>
+                <div className={`text-4xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
+                  {'Draft Starting In...'}
+                </div>
               </div>
-            </div>
-          </Grid.Col>
+            </Grid.Col>
+          )}
           <Grid.Col span={3}>
             <div className='grid place-items-center'>
               <div className={`text-5xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
-                {prefix}:{seconds}
+                {minutes}
+                {colon}
+                {seconds}
               </div>
-              <div className={`text-xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
+              {/* <div className={`text-xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
                 seconds
-              </div>
+              </div> */}
             </div>
           </Grid.Col>
         </Grid>
