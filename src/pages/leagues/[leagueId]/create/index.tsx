@@ -51,11 +51,16 @@ export default function index() {
                 required
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
+                autoComplete='off'
+                autoFocus
                 styles={() => ({
                   input: {
                     fontFamily: 'Varsity Team',
                     color: '#ff6b00',
                     fontSize: '3rem',
+                    '&:focus-within': {
+                      borderColor: '#ff6b00',
+                    },
                   },
                 })}
               />

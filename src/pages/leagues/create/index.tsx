@@ -93,11 +93,16 @@ export default function index() {
             required
             value={leagueName}
             onChange={(e) => setLeagueName(e.target.value)}
+            autoComplete='off'
+            autoFocus
             styles={() => ({
               input: {
                 fontFamily: 'Varsity Team',
                 color: '#ff6b00',
                 fontSize: '3rem',
+                '&:focus-within': {
+                  borderColor: '#ff6b00',
+                },
               },
             })}
           />
@@ -211,6 +216,13 @@ export default function index() {
             autosize
             minRows={2}
             size='xl'
+            styles={(theme) => ({
+              input: {
+                '&:focus-within': {
+                  borderColor: '#ff6b00',
+                },
+              },
+            })}
           />
         </div>
 
