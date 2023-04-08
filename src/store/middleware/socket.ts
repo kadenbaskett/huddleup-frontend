@@ -100,10 +100,12 @@ const draftMiddleware: Middleware = (store) => {
     const isDraftKilled = draftState.isKilled;
 
     if (draftActions.killConnection.match(action)) {
-      socket.close();
+      socket?.close();
     } else if (draftActions.startConnecting.match(action)) {
+      console.log('Port: ', draftState.draftPort);
       const url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
       socket = new SockJS(url);
+      console.log('Past socket: ', socket);
 
       socket.onopen = function () {
         store.dispatch(draftActions.connectionEstablished());

@@ -121,7 +121,10 @@ export const draftSlice = createSlice({
         console.log('Request for draft port number rejected');
       })
       .addCase(handleFetchDraftPort.fulfilled, (state, action) => {
-        state.draftPort = action.payload.port;
+        if (action.payload.port !== state.draftPort) {
+          console.log('New port: ', action.payload.port);
+          state.draftPort = action.payload.port;
+        }
       });
   },
 });

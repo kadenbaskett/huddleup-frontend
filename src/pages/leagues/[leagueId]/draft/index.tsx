@@ -124,6 +124,8 @@ export default function index() {
   useEffect(() => {
     console.log('websocket connected: ', websocketConnected);
     console.log('webscoket trying to connect: ', websocketTryingToConnect);
+    console.log('draft port ', draftState.draftPort);
+
     if (!websocketConnected && !websocketTryingToConnect) {
       dispatch(handleFetchDraftPort(league.id));
       dispatch(draftActions.startConnecting());
@@ -133,7 +135,7 @@ export default function index() {
       console.log('kill connection');
       dispatch(draftActions.killConnection());
     };
-    // TODO add webscket connected or trying to connect to array?
+    // TODO add webscket connected or trying to connect to array? or draft port...
   }, []);
 
   const content = (
