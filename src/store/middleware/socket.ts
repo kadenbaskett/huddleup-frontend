@@ -28,6 +28,7 @@ export const MSG_TYPES = {
   QUEUE_PLAYER: 'queuePlayer',
   DRAFT_PLAYER: 'draftPlayer',
   ERROR: 'error',
+  END_DRAFT: 'endDraft',
 };
 
 export function formatMessage(msgContent, type) {

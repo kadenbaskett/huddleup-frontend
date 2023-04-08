@@ -80,7 +80,6 @@ export const draftSlice = createSlice({
 
       switch (type) {
         case MSG_TYPES.DRAFT_UPDATE:
-          console.log(message);
           state.draftPlayers = content.draftPlayers;
           state.draftQueue = content.draftQueue;
           state.draftOrder = content.draftOrder;
@@ -90,7 +89,9 @@ export const draftSlice = createSlice({
           state.currentRoundNum = content.currentRoundNum;
           state.hasInitialDraftState = true;
           state.currentPickTimeMS = Number(content.currentPickTimeMS);
-          console.log(new Date().getTime() - state.currentPickTimeMS);
+          break;
+        case MSG_TYPES.END_DRAFT:
+          console.log('ending draft');
           break;
         case MSG_TYPES.PING:
           break;
