@@ -2,7 +2,7 @@ import DraftNotificationCard from '@components/DraftNotificationCard/DraftNotifi
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 import JoinTeamByToken from '@components/JoinTeamByToken/JoinTeamByToken';
 import { Group, Button } from '@mantine/core';
-import { fillLeague, startDraft } from '@services/apiClient';
+import { fillLeague } from '@services/apiClient';
 import { StoreState } from '@store/store';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -64,9 +64,9 @@ export default function index() {
     await fillLeague(league.id);
   };
 
-  const clickStartDraft = async () => {
-    await startDraft(league.id);
-  };
+  // const clickStartDraft = async () => {
+  //   await startDraft(league.id);
+  // };
 
   return (
     <>
@@ -98,7 +98,7 @@ export default function index() {
                   Fill League
                 </Button>
               )}
-              {!needToFillLeague && isCommissioner && (
+              {/* {!needToFillLeague && isCommissioner && (
                 <Button
                   className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
                   variant='default'
@@ -108,7 +108,7 @@ export default function index() {
                 >
                   Start Draft
                 </Button>
-              )}
+              )} */}
             </div>
             <div className='pt-5'>{readyToDraft && <DraftNotificationCard league={league} />}</div>
             <div className='pt-5'>

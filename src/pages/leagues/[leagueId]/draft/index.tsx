@@ -104,25 +104,28 @@ export default function index() {
 
     intervalID = setInterval(() => {
       const currentTime = new Date().getTime();
-      const currentTeamAuto = draftState.autoDraft.find(
-        (a) => a.teamId === draftState.currentPickTeamId,
-      )?.auto;
-      const seconds = currentTeamAuto
-        ? DRAFT_CONFIG.AUTO_SECONDS_PER_PICK
-        : DRAFT_CONFIG.SECONDS_PER_PICK;
-      if (draftState.currentPickTimeMS === 0 || currentTime < draftState.currentPickTimeMS) {
-        setTime(seconds);
+
+      if (draftState.draftStartTimeMS > currentTime) {
+        const thisDiff = draftState.draftStartTimeMS - currentTime;
+        const diffSecs = Math.round(thisDiff / 1000);
+        setTime(diffSecs);
       } else {
+        const currentTeamAuto = draftState.autoDraft.find(
+          (a) => a.teamId === draftState.currentPickTeamId,
+        )?.auto;
+
+        const seconds = currentTeamAuto
+          ? DRAFT_CONFIG.AUTO_SECONDS_PER_PICK
+          : DRAFT_CONFIG.SECONDS_PER_PICK;
+
         const thisDiff = currentTime - draftState.currentPickTimeMS;
         const diffSecs = Math.round(thisDiff / 1000);
         let tempTime = seconds - diffSecs;
-
         tempTime = Math.min(seconds, tempTime);
-
         setTime(tempTime);
       }
     }, 50);
-  }, [draftState.currentPickTimeMS]);
+  }, [draftState.currentPickTimeMS, draftState.draftStartTimeMS]);
 
   useEffect(() => {
     console.log('websocket connected: ', websocketConnected);

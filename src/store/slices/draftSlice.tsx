@@ -18,6 +18,7 @@ export interface draftSliceState {
   currentRoundNum: number;
   draftPort: string;
   currentPickTimeMS: number;
+  draftStartTimeMS: number;
 }
 
 const initialState: draftSliceState = {
@@ -34,7 +35,8 @@ const initialState: draftSliceState = {
   currentPickTeamId: -1, // this shouldn't matter but who knows
   currentRoundNum: 1,
   draftPort: '',
-  currentPickTimeMS: null,
+  currentPickTimeMS: 0,
+  draftStartTimeMS: 0,
 };
 
 export const draftSlice = createSlice({
@@ -89,11 +91,10 @@ export const draftSlice = createSlice({
           state.currentRoundNum = content.currentRoundNum;
           state.hasInitialDraftState = true;
           state.currentPickTimeMS = Number(content.currentPickTimeMS);
+          state.draftStartTimeMS = Number(content.draftStartTimeMS);
           break;
         case MSG_TYPES.END_DRAFT:
           console.log('ending draft');
-          break;
-        case MSG_TYPES.PING:
           break;
         default:
           console.log('Enexpected message type: ', type);
