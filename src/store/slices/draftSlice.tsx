@@ -69,10 +69,12 @@ export const draftSlice = createSlice({
       state.isEstablishingConnection = false;
       state.lostConnection = false;
       state.isKilled = true;
+      state.draftPort = null;
     },
     leaveDraft: (state) => {
       console.log('Websocket: leaving draft');
       state.isKilled = false;
+      state.draftPort = null;
     },
     receiveMessage: (
       state,

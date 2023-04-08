@@ -121,21 +121,36 @@ export default function index() {
     }, 50);
   }, [draftState.currentPickTimeMS, draftState.draftStartTimeMS]);
 
+  const [hasPort, setHasPort] = useState(false);
+
   useEffect(() => {
-    console.log('websocket connected: ', websocketConnected);
-    console.log('webscoket trying to connect: ', websocketTryingToConnect);
-    console.log('draft port ', draftState.draftPort);
+    console.log('Draft port use effect');
+
+    // We don't have a draft port yet and we didn't leave the draft on purpose
+    if (!draftState.draftPort && !draftState.isKilled) {
+      dispatch(handleFetchDraftPort(league.id));
+    }
+    // We have a draft port in the store, but havn't set the variable to let the other use effect know
+    else if (draftState.draftPort && !hasPort) {
+      setHasPort(true);
+    }
+  }, [draftState.draftPort]);
+
+  // This should run once - once we have a draft port
+  useEffect(() => {
+    console.log('websocket use effect');
 
     if (!websocketConnected && !websocketTryingToConnect) {
-      dispatch(handleFetchDraftPort(league.id));
       dispatch(draftActions.startConnecting());
     }
+  }, [hasPort]);
 
+  // This will run once, and the dismount will only run when we leave the page
+  useEffect(() => {
     return () => {
       console.log('kill connection');
       dispatch(draftActions.killConnection());
     };
-    // TODO add webscket connected or trying to connect to array? or draft port...
   }, []);
 
   const content = (
