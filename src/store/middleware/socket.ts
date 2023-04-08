@@ -5,6 +5,7 @@ import SockJS from 'sockjs-client';
 import { draftActions, draftSliceState } from '@store/slices/draftSlice';
 import { userSliceState } from '@store/slices/userSlice';
 import { leagueSliceState } from '@store/slices/leagueSlice';
+import { useRouter } from 'next/router';
 
 const CONNECTION = {
   HOST: 'localhost',
@@ -41,6 +42,8 @@ export function formatMessage(msgContent, type) {
 const draftMiddleware: Middleware = (store) => {
   const local_url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${CONNECTION.PORT}${CONNECTION.SERVER_PREFIX}`;
   const url = `${NGROK_CONNECTION.SCHEME}://${NGROK_CONNECTION.HOST}${NGROK_CONNECTION.SERVER_PREFIX}`;
+
+  const router = useRouter();
 
   let socket;
   let initDraftStateInterval;
@@ -113,7 +116,18 @@ const draftMiddleware: Middleware = (store) => {
       };
 
       socket.onmessage = function (socketMessage) {
-        store.dispatch(draftActions.receiveMessage({ socketMessage }));
+        const { data } = socketMessage;
+        const dataObj = JSON.parse(data);
+
+        if (dataObj?.type === MSG_TYPES.END_DRAFT) {
+          setTimeout(() => {
+            console.log('TIME TO LEAVE');
+            store.dispatch(draftActions.killConnection());
+            void router.push('/leagues');
+          }, 5000);
+        } else {
+          store.dispatch(draftActions.receiveMessage({ socketMessage }));
+        }
       };
 
       socket.onclose = function () {
