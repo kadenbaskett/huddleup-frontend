@@ -1,6 +1,8 @@
 import { Select, Group, Avatar } from '@mantine/core';
+import { StoreState } from '@store/store';
 import { DataTable } from 'mantine-datatable';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export interface TeamData {
   value: string;
@@ -8,20 +10,38 @@ export interface TeamData {
 }
 
 export interface DraftRosterProps {
-  teams: any[];
   teamData: TeamData[];
-  myTeam: any;
 }
 
 export default function DraftRoster(props: DraftRosterProps) {
-  const [token, setToken] = useState(props.myTeam?.token);
+  const store = useSelector((state: StoreState) => state);
+  const league = store.league.league;
+  const userTeam = store.league.userTeam;
+  const allPlayers = store.league.playerList;
+  const draftPlayers = store.draft.draftPlayers;
 
-  const [viewRoster, setViewRoster] = useState(props?.myTeam);
+  const [token, setToken] = useState(userTeam.token);
+
+  const myRosterID = draftPlayers
+    .filter((draftPlayer) => draftPlayer.team_id === userTeam.id)
+    .map((player) => player.player_id);
+  const myPlayers = allPlayers.filter((player) => myRosterID.includes(player.id));
+
+  const [viewRoster, setViewRoster] = useState(myPlayers);
 
   const setRoster = (e) => {
     setToken(e);
-    setViewRoster(props.teams.find((team) => team.token === e));
+    const currTeam = league.teams.find((team) => team.token === e);
+    const currRosterID = draftPlayers
+      .filter((draftPlayer) => draftPlayer.team_id === currTeam.id)
+      .map((player) => player.player_id);
+    const getPlayers = allPlayers.filter((player) => currRosterID.includes(player.id));
+    setViewRoster(getPlayers);
   };
+
+  useEffect(() => {
+    setRoster(token);
+  }, [league]);
 
   return (
     <>
@@ -41,19 +61,18 @@ export default function DraftRoster(props: DraftRosterProps) {
           highlightOnHover
           striped
           withColumnBorders
-          records={viewRoster.rosters[0].players}
+          records={viewRoster}
           columns={[
             {
               accessor: 'Players',
               render: (p) => (
                 <>
                   <Group>
-                    <Avatar src={p.player.photo_url} alt={'player image'} />
+                    <Avatar src={p.photo_url} alt={'player image'} />
                     <div className='text-darkBlue font-bold text-xl'>
-                      {p.player.first_name} {p.player.last_name}
+                      {p.first_name} {p.last_name}
                       <div className='text-orange font-thin text-sm'>
-                        {p.player.position} |{' '}
-                        {p.player.current_nfl_team ? p.player.current_nfl_team.name : ''}
+                        {p.position} | {p.current_nfl_team ? p.current_nfl_team.name : ''}
                       </div>
                     </div>
                   </Group>

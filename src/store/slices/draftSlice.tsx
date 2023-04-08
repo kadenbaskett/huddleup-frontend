@@ -89,7 +89,8 @@ export const draftSlice = createSlice({
           state.currentPickTeamId = content.currentPickTeamId;
           state.currentRoundNum = content.currentRoundNum;
           state.hasInitialDraftState = true;
-          state.currentPickTimeMS = content.currentPickTimeMS;
+          state.currentPickTimeMS = Number(content.currentPickTimeMS);
+          console.log(new Date().getTime() - state.currentPickTimeMS);
           break;
         case MSG_TYPES.PING:
           break;
@@ -121,6 +122,7 @@ export const handleFetchDraftPort = createAsyncThunk(
   'draft/initDraft',
   async (leagueId: number) => {
     const resp = await fetchDraftPort(leagueId);
+    console.log(resp.data);
     return {
       port: resp.data,
     };

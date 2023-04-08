@@ -8,7 +8,9 @@ export interface ActiveDrafterProps {
   time: number;
 }
 export default function ActiveDrafter({ team, time }: ActiveDrafterProps) {
-  const seconds = time % 60;
+  const seconds = time >= 0 ? time % 60 : '-';
+  const prefix = time >= 0 ? '0' : '-';
+
   return (
     <div
       className={`relative z-20 bg-white rounded-xl sm:h-auto border-4 ${
@@ -27,15 +29,17 @@ export default function ActiveDrafter({ team, time }: ActiveDrafterProps) {
           <Grid.Col span={9}>
             <div className='grid place-items-start'>
               <div className={`text-4xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
-                {team.name}
+                {team?.name}
               </div>
-              <div className='text-sm text-darkBlue'>{createManagerString(team.managers)}</div>
+              <div className='text-sm text-darkBlue'>
+                {team?.managers.length > 0 ? createManagerString(team?.managers) : ''}
+              </div>
             </div>
           </Grid.Col>
           <Grid.Col span={3}>
             <div className='grid place-items-center'>
               <div className={`text-5xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
-                0:{seconds}
+                {prefix}:{seconds}
               </div>
               <div className={`text-xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
                 seconds

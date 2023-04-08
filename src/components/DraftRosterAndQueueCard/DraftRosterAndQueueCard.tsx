@@ -36,10 +36,6 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
     };
   });
 
-  const myTeam = league.teams.find((team) =>
-    team.managers.find((manager) => manager.user_id === props.currUser.id),
-  );
-
   const dontShow = false;
 
   return (
@@ -77,7 +73,7 @@ export default function DraftRosterAndQueueCard(props: DraftRosterAndQueueCardPr
 
       {roster ? (
         <div className='p-5'>
-          <DraftRoster myTeam={myTeam} teamData={teamData} teams={league.teams} />
+          <DraftRoster teamData={teamData} />
         </div>
       ) : (
         <></>

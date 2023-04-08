@@ -12,9 +12,12 @@ import DraftHistory from '@components/DraftHistory/DraftHistory';
 import { useWindowResize } from '@services/helpers';
 import { formatMessage, MSG_TYPES } from '@store/middleware/socket';
 
+let intervalID = null;
+
 export default function index() {
   const DRAFT_CONFIG = {
     SECONDS_PER_PICK: 30,
+    AUTO_SECONDS_PER_PICK: 5,
   };
   const store = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
@@ -84,38 +87,56 @@ export default function index() {
 
   useEffect(() => {
     if (league !== null) {
-      setTeams([...league.teams].sort(compareTeam));
+      const draftOrderFiltered = draftState.draftOrder
+        .filter((d) => d.pick > draftState.currentPickNum)
+        .map((d) => {
+          return d.teamId;
+        });
+      const teamsFiltered = league.teams
+        .filter((t) => draftOrderFiltered.includes(t.id))
+        .sort(compareTeam);
+      setTeams(teamsFiltered.concat([...league.teams].sort(compareTeam)));
     }
-  }, [leagueInfoFetchStatus, draftOrder]);
+  }, [draftState.draftOrder, league]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      console.log('every second');
-      if (time > 0) {
-        setTime(time - 1);
-      }
-      if (time < 1) {
-        setTime(DRAFT_CONFIG.SECONDS_PER_PICK);
-        const tempTeam = teams[0];
-        const tempTeams = [...teams];
-        tempTeams.shift();
-        tempTeams.push(tempTeam);
-        setTeams(tempTeams);
-      }
-    }, 1000);
+    clearInterval(intervalID);
 
-    return () => clearInterval(interval);
-  }, [time]);
+    intervalID = setInterval(() => {
+      const currentTime = new Date().getTime();
+      const currentTeamAuto = draftState.autoDraft.find(
+        (a) => a.teamId === draftState.currentPickTeamId,
+      )?.auto;
+      const seconds = currentTeamAuto
+        ? DRAFT_CONFIG.AUTO_SECONDS_PER_PICK
+        : DRAFT_CONFIG.SECONDS_PER_PICK;
+      if (draftState.currentPickTimeMS === 0 || currentTime < draftState.currentPickTimeMS) {
+        setTime(seconds);
+      } else {
+        const thisDiff = currentTime - draftState.currentPickTimeMS;
+        const diffSecs = Math.round(thisDiff / 1000);
+        let tempTime = seconds - diffSecs;
+
+        tempTime = Math.min(seconds, tempTime);
+
+        setTime(tempTime);
+      }
+    }, 50);
+  }, [draftState.currentPickTimeMS]);
 
   useEffect(() => {
+    console.log('websocket connected: ', websocketConnected);
+    console.log('webscoket trying to connect: ', websocketTryingToConnect);
     if (!websocketConnected && !websocketTryingToConnect) {
       dispatch(handleFetchDraftPort(league.id));
       dispatch(draftActions.startConnecting());
     }
 
     return () => {
+      console.log('kill connection');
       dispatch(draftActions.killConnection());
     };
+    // TODO add webscket connected or trying to connect to array?
   }, []);
 
   const content = (
@@ -136,7 +157,11 @@ export default function index() {
               {draftState.currentPickNum}
             </div>
             <div className='p-3 sm:pb-9 md:pb-3'>
-              <DraftBelt teams={teams !== undefined ? teams : league.teams} time={time} />
+              <DraftBelt
+                activeTeam={teams.find((t) => t.id === draftState.currentPickTeamId)}
+                teams={teams !== undefined ? teams : league.teams}
+                time={time}
+              />
             </div>
             <Grid className='relative z-30'>
               <Grid.Col span={draftRosterAndQueueCardSpan} className='pl-4'>
