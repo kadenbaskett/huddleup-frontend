@@ -67,6 +67,13 @@ function Login() {
               variant='filled'
               radius='md'
               className='py-2.5'
+              styles={(theme) => ({
+                input: {
+                  '&:focus-within': {
+                    borderColor: '#ff6b00',
+                  },
+                },
+              })}
             />
 
             <PasswordInput
@@ -77,6 +84,13 @@ function Login() {
               variant='filled'
               radius='md'
               className='py-2.5'
+              styles={(theme) => ({
+                input: {
+                  '&:focus-within': {
+                    borderColor: '#ff6b00',
+                  },
+                },
+              })}
             />
 
             <div className=' mt-2 flex items-center justify-between'>
