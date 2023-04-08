@@ -103,6 +103,9 @@ function leagues() {
                     fontFamily: 'Varsity Team',
                     color: '#ff6b00',
                     fontSize: '3rem',
+                    '&:focus-within': {
+                      borderColor: '#ff6b00',
+                    },
                   },
                 })}
               />

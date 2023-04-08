@@ -93,7 +93,8 @@ export default function index() {
             required
             value={leagueName}
             onChange={(e) => setLeagueName(e.target.value)}
-            autoComplete=''
+            autoComplete='off'
+            autoFocus
             styles={() => ({
               input: {
                 fontFamily: 'Varsity Team',
