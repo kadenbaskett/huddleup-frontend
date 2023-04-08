@@ -70,4 +70,13 @@ const sendPasswordReset = async (email) => {
   }
 };
 
-export { auth, login, createAccount, sendPasswordReset, logout };
+const getUsersJWT = async () => {
+  try {
+    const jwt = await auth.currentUser.getIdToken();
+    return jwt;
+  } catch (err) {
+    console.error('Error getting users firebase JWT: ', err);
+  }
+};
+
+export { auth, login, createAccount, sendPasswordReset, logout, getUsersJWT };
