@@ -90,6 +90,7 @@ export default function index() {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      console.log('every second');
       if (time > 0) {
         setTime(time - 1);
       }

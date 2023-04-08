@@ -67,6 +67,7 @@ function Login() {
               variant='filled'
               radius='md'
               className='py-2.5'
+              value='talloryx0@gmail.com'
             />
 
             <PasswordInput
@@ -77,6 +78,7 @@ function Login() {
               variant='filled'
               radius='md'
               className='py-2.5'
+              value='password'
             />
 
             <div className=' mt-2 flex items-center justify-between'>

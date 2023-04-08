@@ -17,6 +17,7 @@ export interface draftSliceState {
   currentPickNum: number;
   currentRoundNum: number;
   draftPort: string;
+  currentPickTimeMS: number;
 }
 
 const initialState: draftSliceState = {
@@ -33,6 +34,7 @@ const initialState: draftSliceState = {
   currentPickTeamId: -1, // this shouldn't matter but who knows
   currentRoundNum: 1,
   draftPort: '',
+  currentPickTimeMS: null,
 };
 
 export const draftSlice = createSlice({
@@ -87,6 +89,7 @@ export const draftSlice = createSlice({
           state.currentPickTeamId = content.currentPickTeamId;
           state.currentRoundNum = content.currentRoundNum;
           state.hasInitialDraftState = true;
+          state.currentPickTimeMS = content.currentPickTimeMS;
           break;
         case MSG_TYPES.PING:
           break;
