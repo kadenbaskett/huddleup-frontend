@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Team } from '@interfaces/league.interface';
 import { Grid } from '@mantine/core';
 import { createManagerString } from '@services/helpers';
@@ -9,7 +10,18 @@ export interface ActiveDrafterProps {
   draftStarted: boolean;
 }
 export default function ActiveDrafter({ team, time, draftStarted }: ActiveDrafterProps) {
-  const seconds = time >= 0 ? time % 60 : '';
+  let seconds;
+
+  if (time >= 0) {
+    seconds = time % 60;
+
+    if (seconds < 10) {
+      seconds = `0${seconds}`;
+    }
+  } else {
+    seconds = '';
+  }
+
   const colon = time >= 0 ? ':' : '';
   const minutes = time >= 0 ? Math.floor(time / 60) : '';
 

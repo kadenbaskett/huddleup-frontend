@@ -19,6 +19,8 @@ export interface draftSliceState {
   draftPort: string;
   currentPickTimeMS: number;
   draftStartTimeMS: number;
+  secondsPerPick: number;
+  autoSecondsPerPick: number;
 }
 
 const initialState: draftSliceState = {
@@ -37,6 +39,8 @@ const initialState: draftSliceState = {
   draftPort: '',
   currentPickTimeMS: 0,
   draftStartTimeMS: 0,
+  secondsPerPick: 0,
+  autoSecondsPerPick: 0,
 };
 
 export const draftSlice = createSlice({
@@ -92,6 +96,8 @@ export const draftSlice = createSlice({
           state.hasInitialDraftState = true;
           state.currentPickTimeMS = Number(content.currentPickTimeMS);
           state.draftStartTimeMS = Number(content.draftStartTimeMS);
+          state.secondsPerPick = Number(content.secondsPerPick);
+          state.autoSecondsPerPick = Number(content.autoSecondsPerPick);
           break;
         case MSG_TYPES.END_DRAFT:
           console.log('ending draft');
@@ -124,7 +130,6 @@ export const handleFetchDraftPort = createAsyncThunk(
   'draft/initDraft',
   async (leagueId: number) => {
     const resp = await fetchDraftPort(leagueId);
-    console.log(resp.data);
     return {
       port: resp.data,
     };

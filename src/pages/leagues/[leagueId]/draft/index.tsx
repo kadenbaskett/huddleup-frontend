@@ -15,10 +15,6 @@ import { formatMessage, MSG_TYPES } from '@store/middleware/socket';
 let intervalID = null;
 
 export default function index() {
-  const DRAFT_CONFIG = {
-    SECONDS_PER_PICK: 30,
-    AUTO_SECONDS_PER_PICK: 5,
-  };
   const store = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus: String = store.league.status;
@@ -82,7 +78,7 @@ export default function index() {
     sendMessage(content, MSG_TYPES.QUEUE_PLAYER);
   };
 
-  const [time, setTime] = useState(DRAFT_CONFIG.SECONDS_PER_PICK);
+  const [time, setTime] = useState(draftState.secondsPerPick);
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
@@ -114,9 +110,7 @@ export default function index() {
           (a) => a.teamId === draftState.currentPickTeamId,
         )?.auto;
 
-        const seconds = currentTeamAuto
-          ? DRAFT_CONFIG.AUTO_SECONDS_PER_PICK
-          : DRAFT_CONFIG.SECONDS_PER_PICK;
+        const seconds = currentTeamAuto ? draftState.autoSecondsPerPick : draftState.secondsPerPick;
 
         const thisDiff = currentTime - draftState.currentPickTimeMS;
         const diffSecs = Math.round(thisDiff / 1000);
