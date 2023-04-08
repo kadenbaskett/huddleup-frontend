@@ -1,7 +1,6 @@
 import { Anchor, Table } from '@mantine/core';
 import { StoreState } from '@store/store';
 import Link from 'next/link';
-import router from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Team } from '@interfaces/types.interface';
@@ -11,8 +10,9 @@ export interface Top5StandingTableProps {
 }
 
 export default function Top5StandingTable(props: Top5StandingTableProps) {
-  const { leagueId } = router.query;
   const league = useSelector((state: StoreState) => state.league.league);
+  const leagueId: number = league.id;
+
   let i = 0;
   const rows = props.teams.map(({ id, name, wins, losses }) => (
     <tr key={id.toString()}>

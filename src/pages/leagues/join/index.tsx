@@ -9,11 +9,12 @@ import { JoinLeagueCard } from '@components/JoinLeagueCard/JoinLeagueCard';
 import JoinLeagueByToken from '@components/JoinLeagueByToken/JoinLeagueByToken';
 
 function leagues() {
-  const globalStatus = useSelector((state: StoreState) => state.global.status);
-  const publicLeagues = useSelector((state: StoreState) => state.global.publicLeagues);
-  const privateLeagues = useSelector((state: StoreState) => state.global.privateLeagues);
-  const userInfoFetchStatus = useSelector((state: StoreState) => state.user.status);
-  const user: userSliceState = useSelector((state: StoreState) => state.user);
+  const store = useSelector((state: StoreState) => state);
+  const globalStatus = store.global.status;
+  const publicLeagues = store.global.publicLeagues;
+  const privateLeagues = store.global.privateLeagues;
+  const userInfoFetchStatus = store.user.status;
+  const user: userSliceState = store.user;
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [JoinLeagueByTokenPopUp, setJoinLeagueByTokenPopUp] = useState(false);

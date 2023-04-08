@@ -4,15 +4,33 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@store/store';
 import { useWindowResize } from '@services/helpers';
+import { useState } from 'react';
+import ProfilePopup from '@components/ProfilePopup/ProfilePopup';
+import { logout } from '../../firebase/firebase';
 
 export default function Navbar() {
   const user = useSelector((store: StoreState) => store.user.userInfo);
   const windowSize: number[] = useWindowResize();
+  const [profilePopupOpen, setProfilePopupOpen] = useState(false);
 
   let flexWrap = '';
   if (windowSize[0] < 600 && windowSize[0] !== 0) {
     flexWrap = 'flex-wrap';
   }
+
+  const onProfileClick = () => {
+    setProfilePopupOpen(true);
+  };
+
+  const onProfilePopupClose = () => {
+    setProfilePopupOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+  };
+
+  const dontShow = false;
 
   return (
     <>
@@ -42,12 +60,14 @@ export default function Navbar() {
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link
-                    className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                    href='/friends'
-                  >
-                    Friends
-                  </Link>
+                  {dontShow && (
+                    <Link
+                      className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                      href='/friends'
+                    >
+                      Friends
+                    </Link>
+                  )}
                 </li>
                 <li className='nav-item'>
                   <Link
@@ -69,14 +89,23 @@ export default function Navbar() {
                 </Link>
               ) : (
                 <Link
-                  href='/profile'
+                  href='#'
                   className='text-orange px-3 py-2 flex items-center  hover:opacity-75'
+                  onClick={() => onProfileClick()}
                 >
                   <FaRegUser size='1.7rem' />
                 </Link>
               )}
             </li>
           </ul>
+          {user !== null && (
+            <ProfilePopup
+              opened={profilePopupOpen}
+              onClose={onProfilePopupClose}
+              user={user}
+              handleLogout={handleLogout}
+            />
+          )}
         </div>
       </nav>
     </>

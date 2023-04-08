@@ -24,6 +24,8 @@ export interface TransactionPlayer {
   player: Player;
 }
 export interface Proposal {
+  related_team: any;
+  proposing_team: any;
   id: Number;
   type: ProposalType;
   status: ProposalStatus;
@@ -78,4 +80,5 @@ export interface Team {
   managers: string;
   wins: Number;
   losses: Number;
+  proposed_transactions: any[];
 }

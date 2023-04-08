@@ -37,7 +37,12 @@ const makeStore = () =>
   configureStore({
     reducer: masterReducer,
     middleware: (getDefaultMiddleware) => {
-      return getDefaultMiddleware().concat([draftMiddleware]);
+      return getDefaultMiddleware({
+        serializableCheck: {
+          // Ignore these field paths in all actions
+          ignoredActionPaths: ['payload'],
+        },
+      }).concat([draftMiddleware]);
     },
   });
 export const wrapper = createWrapper(makeStore, { debug: false });

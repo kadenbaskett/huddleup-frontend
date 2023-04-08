@@ -11,7 +11,8 @@ export interface UserLeagueCardProps {
 
 export function UserLeagueCard(props: UserLeagueCardProps) {
   const link =
-    props.league.teams.length < 8
+    props.league.settings.roster_settings.roster_size_limit !==
+    props.userTeam.rosters[0]?.players.length
       ? `/leagues/${Number(props.league.id)}/join/${props.league.token}`
       : `/leagues/${Number(props.league.id)}/team/${props.userTeam?.id}`;
   return (

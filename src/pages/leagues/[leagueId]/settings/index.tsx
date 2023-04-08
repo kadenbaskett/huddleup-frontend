@@ -1,26 +1,22 @@
 import { StoreState } from '@store/store';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
 
 function league() {
-  const router = useRouter();
-  const { leagueId } = router.query;
-
   const league = useSelector((state: StoreState) => state.league.league);
-  const team = useSelector((state: StoreState) => state.league.userTeam);
+  const userTeam = useSelector((state: StoreState) => state.league.userTeam);
 
   return (
     <>
       <LeagueNavBar
-        teamName={team ? team.name : ' '}
-        teamId={team ? team.id : ' '}
-        leagueName={league ? league.name : ' '}
-        leagueId={Number(leagueId)}
+        teamName={userTeam.name}
+        teamId={userTeam.id}
+        leagueName={league.name}
+        leagueId={league.id}
         page='settings'
       />
-      <div>This will display the settings of league - {leagueId}</div>
+      <div>This will display the settings of league - {league.id}</div>
     </>
   );
 }
