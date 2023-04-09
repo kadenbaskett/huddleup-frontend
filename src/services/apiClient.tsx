@@ -20,7 +20,6 @@ api.interceptors.request.use(async (config) => {
 
 async function getRequest(url: string): Promise<respObj> {
   try {
-    console.log('GET URL: ', url);
     const resp = await api.get(url);
     return { data: resp.data, error: null };
   } catch (err) {
@@ -31,7 +30,6 @@ async function getRequest(url: string): Promise<respObj> {
 
 async function postRequest(url: string, data: object): Promise<respObj> {
   try {
-    console.log('POST URL: ', url);
     const resp = await api.post(url, data);
     return { data: resp.data, error: null };
   } catch (err) {
