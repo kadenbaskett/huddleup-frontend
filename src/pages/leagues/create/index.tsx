@@ -74,6 +74,7 @@ export default function index() {
       // need to add a parameter for the current user because this would be the commisioner of this league
     };
     const newLeague = await createLeague(league);
+    console.log('Data: ', newLeague);
     await router.push({
       pathname: `/leagues/${Number(newLeague.data.id)}/create`,
     });
