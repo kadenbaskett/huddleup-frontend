@@ -108,6 +108,9 @@ const draftMiddleware: Middleware = (store) => {
       // console.log('Port: ', draftState.draftPort);
       // const url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
       const url = `https://huddleupfantasy.com/draftSocket/${draftState.draftPort}/${CONNECTION.SERVER_PREFIX}`;
+
+      console.log('Socket URL: ', url);
+
       socket = new SockJS(url);
       // console.log('Past socket: ', socket);
 
