@@ -13,6 +13,10 @@ const api = axios.create({
 api.interceptors.request.use(async (config) => {
   const jwt = await getUsersJWT();
   if (jwt) {
+    config.headers['Access-Control-Allow-Origin'] = '*';
+    config.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE';
+    config.headers['Access-Control-Allow-Headers'] =
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization';
     config.headers.Authorization = `Bearer ${jwt}`;
   }
   return config;
