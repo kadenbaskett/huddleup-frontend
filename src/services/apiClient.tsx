@@ -20,7 +20,6 @@ api.interceptors.request.use(async (config) => {
 
 async function getRequest(url: string): Promise<respObj> {
   try {
-    console.log('FULL URL: ' + BASE_URL + url);
     const resp = await api.get(url);
     return { data: resp.data, error: null };
   } catch (err) {
@@ -31,7 +30,6 @@ async function getRequest(url: string): Promise<respObj> {
 
 async function postRequest(url: string, data: object): Promise<respObj> {
   try {
-    console.log('FULL URL: ' + BASE_URL + url);
     const resp = await api.post(url, data);
     return { data: resp.data, error: null };
   } catch (err) {
@@ -78,13 +76,13 @@ export async function editLineup(rosterPlayerId: number, newPosition: string) {
 
 export async function fillLeague(leagueId: number) {
   const data = { leagueId };
-  const url = `${BASE_URL}/database/league/fill`;
+  const url = '/database/league/fill';
   return await postRequest(url, data);
 }
 
 export async function startDraft(leagueId: number) {
   const data = { leagueId };
-  const url = `${BASE_URL}/database/league/startDraft`;
+  const url = '/database/league/startDraft';
   return await postRequest(url, data);
 }
 
@@ -232,7 +230,7 @@ export async function fetchNews(amountOfNews: number): Promise<respObj> {
 }
 
 export async function fetchDraftPort(leagueId: number): Promise<respObj> {
-  const url = `${BASE_URL}/database/league/getDraftSocket/${leagueId}`;
+  const url = `/database/league/getDraftSocket/${leagueId}`;
   console.log('sending api request');
   return await getRequest(url);
 }
