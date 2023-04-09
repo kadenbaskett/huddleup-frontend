@@ -67,7 +67,7 @@ function Login() {
               variant='filled'
               radius='md'
               className='py-2.5'
-              value='talloryx0@gmail.com'
+              defaultValue='talloryx0@gmail.com'
               styles={(theme) => ({
                 input: {
                   '&:focus-within': {
@@ -85,7 +85,7 @@ function Login() {
               variant='filled'
               radius='md'
               className='py-2.5'
-              value='password'
+              defaultValue='password'
               styles={(theme) => ({
                 input: {
                   '&:focus-within': {
