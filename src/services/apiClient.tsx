@@ -13,10 +13,6 @@ const api = axios.create({
 api.interceptors.request.use(async (config) => {
   const jwt = await getUsersJWT();
   if (jwt) {
-    config.headers['Access-Control-Allow-Origin'] = '*';
-    config.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE';
-    config.headers['Access-Control-Allow-Headers'] =
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization';
     config.headers.Authorization = `Bearer ${jwt}`;
   }
   return config;
@@ -24,6 +20,7 @@ api.interceptors.request.use(async (config) => {
 
 async function getRequest(url: string): Promise<respObj> {
   try {
+    console.log('FULL URL: ' + BASE_URL + url);
     const resp = await api.get(url);
     return { data: resp.data, error: null };
   } catch (err) {
@@ -34,6 +31,7 @@ async function getRequest(url: string): Promise<respObj> {
 
 async function postRequest(url: string, data: object): Promise<respObj> {
   try {
+    console.log('FULL URL: ' + BASE_URL + url);
     const resp = await api.post(url, data);
     return { data: resp.data, error: null };
   } catch (err) {
