@@ -11,6 +11,7 @@ function Signup() {
   const router = useRouter();
 
   const handleCreateAccount = async () => {
+    console.log('firing handle create');
     setLoading(true);
     setError('');
 
