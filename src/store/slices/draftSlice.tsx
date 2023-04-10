@@ -17,6 +17,10 @@ export interface draftSliceState {
   currentPickNum: number;
   currentRoundNum: number;
   draftPort: string;
+  currentPickTimeMS: number;
+  draftStartTimeMS: number;
+  secondsPerPick: number;
+  autoSecondsPerPick: number;
 }
 
 const initialState: draftSliceState = {
@@ -33,6 +37,10 @@ const initialState: draftSliceState = {
   currentPickTeamId: -1, // this shouldn't matter but who knows
   currentRoundNum: 1,
   draftPort: '',
+  currentPickTimeMS: 0,
+  draftStartTimeMS: 0,
+  secondsPerPick: 0,
+  autoSecondsPerPick: 0,
 };
 
 export const draftSlice = createSlice({
@@ -61,10 +69,12 @@ export const draftSlice = createSlice({
       state.isEstablishingConnection = false;
       state.lostConnection = false;
       state.isKilled = true;
+      state.draftPort = null;
     },
     leaveDraft: (state) => {
       console.log('Websocket: leaving draft');
       state.isKilled = false;
+      state.draftPort = null;
     },
     receiveMessage: (
       state,
@@ -78,7 +88,6 @@ export const draftSlice = createSlice({
 
       switch (type) {
         case MSG_TYPES.DRAFT_UPDATE:
-          console.log(message);
           state.draftPlayers = content.draftPlayers;
           state.draftQueue = content.draftQueue;
           state.draftOrder = content.draftOrder;
@@ -87,8 +96,13 @@ export const draftSlice = createSlice({
           state.currentPickTeamId = content.currentPickTeamId;
           state.currentRoundNum = content.currentRoundNum;
           state.hasInitialDraftState = true;
+          state.currentPickTimeMS = Number(content.currentPickTimeMS);
+          state.draftStartTimeMS = Number(content.draftStartTimeMS);
+          state.secondsPerPick = Number(content.secondsPerPick);
+          state.autoSecondsPerPick = Number(content.autoSecondsPerPick);
           break;
-        case MSG_TYPES.PING:
+        case MSG_TYPES.END_DRAFT:
+          console.log('ending draft');
           break;
         default:
           console.log('Enexpected message type: ', type);
@@ -109,7 +123,10 @@ export const draftSlice = createSlice({
         console.log('Request for draft port number rejected');
       })
       .addCase(handleFetchDraftPort.fulfilled, (state, action) => {
-        state.draftPort = action.payload.port;
+        if (action.payload.port !== state.draftPort) {
+          console.log('New port: ', action.payload.port);
+          state.draftPort = action.payload.port;
+        }
       });
   },
 });

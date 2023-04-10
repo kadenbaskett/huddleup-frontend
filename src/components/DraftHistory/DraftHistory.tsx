@@ -55,7 +55,7 @@ export default function DraftHistory() {
                       <div className='text-orange font-thin text-sm'>
                         Picked by{' '}
                         {league.teams.find((team) => team.id === p.draftPlayer?.team_id)?.name} as
-                        the {p.draftPlayer?.pick_number} pick
+                        pick {p.draftPlayer?.pick_number}
                       </div>
                     </div>
                   </Group>

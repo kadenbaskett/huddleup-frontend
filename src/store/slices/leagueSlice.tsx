@@ -46,7 +46,6 @@ export const leagueSlice = createSlice({
         const data = action.payload;
 
         if (data.league.id === state.urlLeagueId) {
-          // console.log('Updating the league info: ', data.league.id);
           if (data.status) {
             state.playerList = data.players;
             state.league = data.league;
@@ -60,7 +59,6 @@ export const leagueSlice = createSlice({
           }
         } else {
           // console.log('old request, not updating league info');
-          console.log(data.league.id, state.urlLeagueId);
         }
       })
       .addCase(handleLeagueInitThunk.rejected, (state, action) => {

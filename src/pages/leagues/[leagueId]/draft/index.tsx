@@ -12,10 +12,9 @@ import DraftHistory from '@components/DraftHistory/DraftHistory';
 import { useWindowResize } from '@services/helpers';
 import { formatMessage, MSG_TYPES } from '@store/middleware/socket';
 
+let intervalID = null;
+
 export default function index() {
-  const DRAFT_CONFIG = {
-    SECONDS_PER_PICK: 30,
-  };
   const store = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
   const leagueInfoFetchStatus: String = store.league.status;
@@ -79,40 +78,77 @@ export default function index() {
     sendMessage(content, MSG_TYPES.QUEUE_PLAYER);
   };
 
-  const [time, setTime] = useState(DRAFT_CONFIG.SECONDS_PER_PICK);
+  const [time, setTime] = useState(draftState.secondsPerPick);
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
     if (league !== null) {
-      setTeams([...league.teams].sort(compareTeam));
+      const draftOrderFiltered = draftState.draftOrder
+        .filter((d) => d.pick > draftState.currentPickNum)
+        .map((d) => {
+          return d.teamId;
+        });
+      const teamsFiltered = league.teams
+        .filter((t) => draftOrderFiltered.includes(t.id))
+        .sort(compareTeam);
+      setTeams(teamsFiltered.concat([...league.teams].sort(compareTeam)));
     }
-  }, [leagueInfoFetchStatus, draftOrder]);
+  }, [draftState.draftOrder, league]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (time > 0) {
-        setTime(time - 1);
-      }
-      if (time < 1) {
-        setTime(DRAFT_CONFIG.SECONDS_PER_PICK);
-        const tempTeam = teams[0];
-        const tempTeams = [...teams];
-        tempTeams.shift();
-        tempTeams.push(tempTeam);
-        setTeams(tempTeams);
-      }
-    }, 1000);
+    clearInterval(intervalID);
 
-    return () => clearInterval(interval);
-  }, [time]);
+    intervalID = setInterval(() => {
+      const currentTime = new Date().getTime();
+
+      if (draftState.draftStartTimeMS > currentTime) {
+        const thisDiff = draftState.draftStartTimeMS - currentTime;
+        const diffSecs = Math.round(thisDiff / 1000);
+        setTime(diffSecs);
+      } else {
+        const currentTeamAuto = draftState.autoDraft.find(
+          (a) => a.teamId === draftState.currentPickTeamId,
+        )?.auto;
+
+        const seconds = currentTeamAuto ? draftState.autoSecondsPerPick : draftState.secondsPerPick;
+
+        const thisDiff = currentTime - draftState.currentPickTimeMS;
+        const diffSecs = Math.round(thisDiff / 1000);
+        let tempTime = seconds - diffSecs;
+        tempTime = Math.min(seconds, tempTime);
+        setTime(tempTime);
+      }
+    }, 50);
+  }, [draftState.currentPickTimeMS, draftState.draftStartTimeMS]);
+
+  const [hasPort, setHasPort] = useState(false);
 
   useEffect(() => {
-    if (!websocketConnected && !websocketTryingToConnect) {
+    console.log('Draft port use effect');
+
+    // We don't have a draft port yet and we didn't leave the draft on purpose
+    if (!draftState.draftPort && !draftState.isKilled) {
       dispatch(handleFetchDraftPort(league.id));
+    }
+    // We have a draft port in the store, but havn't set the variable to let the other use effect know
+    else if (draftState.draftPort && !hasPort) {
+      setHasPort(true);
+    }
+  }, [draftState.draftPort]);
+
+  // This should run once - once we have a draft port
+  useEffect(() => {
+    console.log('websocket use effect');
+
+    if (!websocketConnected && !websocketTryingToConnect) {
       dispatch(draftActions.startConnecting());
     }
+  }, [hasPort]);
 
+  // This will run once, and the dismount will only run when we leave the page
+  useEffect(() => {
     return () => {
+      console.log('kill connection');
       dispatch(draftActions.killConnection());
     };
   }, []);
@@ -135,7 +171,15 @@ export default function index() {
               {draftState.currentPickNum}
             </div>
             <div className='p-3 sm:pb-9 md:pb-3'>
-              <DraftBelt teams={teams !== undefined ? teams : league.teams} time={time} />
+              <DraftBelt
+                activeTeam={teams.find((t) => t.id === draftState.currentPickTeamId)}
+                teams={teams !== undefined ? teams : league.teams}
+                time={time}
+                draftStarted={
+                  draftState.draftStartTimeMS !== 0 &&
+                  draftState.draftStartTimeMS < new Date().getTime()
+                }
+              />
             </div>
             <Grid className='relative z-30'>
               <Grid.Col span={draftRosterAndQueueCardSpan} className='pl-4'>
