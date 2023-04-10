@@ -105,12 +105,10 @@ const draftMiddleware: Middleware = (store) => {
     if (draftActions.killConnection.match(action)) {
       socket?.close();
     } else if (draftActions.startConnecting.match(action)) {
-      // console.log('Port: ', draftState.draftPort);
-      // const url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
-      const url = `https://huddleupfantasy.com/draftSocket/${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
-      console.log('Socket URL: ', url);
-      socket = new SockJS(url);
-      // console.log('Past socket: ', socket);
+      const devURL = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
+      const prodURL = `https://huddleupfantasy.com/draftSocket/${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
+
+      socket = process.env.NODE_ENV === 'production' ? new SockJS(prodURL) : new SockJS(devURL);
 
       socket.onopen = function () {
         store.dispatch(draftActions.connectionEstablished());
