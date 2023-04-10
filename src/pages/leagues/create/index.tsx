@@ -208,6 +208,10 @@ export default function index() {
         </div>
 
         <div>
+          <label className='font-OpenSans font-bold text-2xl'>Date and Time of Draft:</label>
+        </div>
+
+        <div>
           <label className='font-OpenSans font-bold text-2xl'>League Description:</label>
           <Textarea
             id='leagueDescription'
