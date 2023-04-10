@@ -109,18 +109,16 @@ const draftMiddleware: Middleware = (store) => {
       // const url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
       const url = `https://huddleupfantasy.com/draftSocket/${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
 
-      console.log('Socket URL: ', url);
-      console.log(
-        'Dev URL: ',
-        `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`,
-      );
-
       socket = new SockJS(url);
       // console.log('Past socket: ', socket);
 
       socket.onopen = function () {
         store.dispatch(draftActions.connectionEstablished());
         requestInitialDraftState();
+      };
+
+      socket.onerror = (error) => {
+        console.error('Socket Connection error:', error);
       };
 
       socket.onmessage = function (socketMessage) {
