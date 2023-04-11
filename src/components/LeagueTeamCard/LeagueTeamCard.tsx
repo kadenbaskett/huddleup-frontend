@@ -7,7 +7,6 @@ import { userSliceState } from '@store/slices/userSlice';
 import { StoreState } from '@store/store';
 import { useSelector } from 'react-redux';
 import { GiAmericanFootballHelmet } from 'react-icons/gi';
-import stc from 'string-to-color';
 
 export interface LeagueTeamCardProps {
   team: Team;
@@ -50,10 +49,10 @@ export default function LeagueTeamCard(props: LeagueTeamCardProps) {
           <Grid.Col className='pt-7' span={5}>
             <div className='flex'>
               <div className='pl-2 pr-5'>
-                <GiAmericanFootballHelmet size={75} color={stc(props.team.name)} />
+                <GiAmericanFootballHelmet size={75} />
               </div>
               <div>
-                <div className='lg:text-3xl sm:text-xl font-varsity text-orange inline-block'>
+                <div className='lg:text-3xl sm:text-xl font-varsity text-darkBlue inline-block'>
                   {props.team.name}{' '}
                 </div>
                 <div className='lg:text-xl sm:text-md font-OpenSans font-bold text-darkBlue'>
