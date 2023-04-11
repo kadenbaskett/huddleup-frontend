@@ -50,7 +50,9 @@ export default function index() {
   const [leagueName, setLeagueName] = useState<string>('');
   const [leagueDescription, setLeagueDescription] = useState<string>('');
   const [publicOrPrivate, setPublicOrPrivate] = useState('Public');
-  const [draftDate, setDraftDate] = useState<Date | null>(null);
+  const [draftDate, setDraftDate] = useState<Date | null>(new Date());
+  const [draftTime, setDraftTime] = useState<string>('12:00 PM');
+
   const ref = useRef<HTMLInputElement>();
 
   function setRange(value: number[]) {
@@ -74,10 +76,10 @@ export default function index() {
       leagueDescription,
       publicJoin: publicOrPrivate === 'Public',
       scoring,
-      // need to add a parameter for the current user because this would be the commisioner of this league
+      date: draftDate.toISOString().split('T')[0], // only get the date of of the string. take away the time
+      draftTime,
     };
     const newLeague = await createLeague(league);
-    console.log('Data: ', newLeague);
     await router.push({
       pathname: `/leagues/${Number(newLeague.data.id)}/create`,
     });
@@ -216,19 +218,20 @@ export default function index() {
           <div>
             <label className='font-OpenSans font-bold text-2xl'>Date of Draft:</label>
             <Group position='left'>
-              <DatePicker
-                className='bg-white'
-                allowDeselect
-                value={draftDate}
-                onChange={setDraftDate}
-              />
+              <DatePicker className='bg-white' value={draftDate} onChange={setDraftDate} />
             </Group>
           </div>
 
           <div>
             <label className='font-OpenSans font-bold text-2xl'>Time of Draft:</label>
             <Group position='left'>
-              <TimeInput ref={ref} onClick={() => ref.current.showPicker()} />
+              <TimeInput
+                required
+                value={draftTime}
+                onChange={(e) => setDraftTime(ref.current.value)}
+                ref={ref}
+                onClick={() => ref.current.showPicker()}
+              />
             </Group>
           </div>
 
