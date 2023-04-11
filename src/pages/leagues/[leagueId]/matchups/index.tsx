@@ -8,14 +8,12 @@ import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 function matchups() {
   const store = useSelector((state: StoreState) => state);
   const league = store.league.league;
-  const leagueInfoFetchStatus: String = store.league.status;
   const team = store.league.userTeam;
   const currentWeek = store.global.week;
-
   return (
     <>
-      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
-      {leagueInfoFetchStatus === 'succeeded' && (
+      {!league && !team && !currentWeek && <HuddleUpLoader />}
+      {team && league && (
         <>
           <LeagueNavBar
             teamName={team.name}

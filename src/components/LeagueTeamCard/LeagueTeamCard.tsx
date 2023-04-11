@@ -1,13 +1,13 @@
 import { League, Team } from '@interfaces/league.interface';
 import React from 'react';
-import Image from 'next/image';
-import NFL from '../../public/assets/NFL.png';
 import { Button, Grid } from '@mantine/core';
 import { createManagerString } from '@services/helpers';
 import Link from 'next/link';
 import { userSliceState } from '@store/slices/userSlice';
 import { StoreState } from '@store/store';
 import { useSelector } from 'react-redux';
+import { GiAmericanFootballHelmet } from 'react-icons/gi';
+import stc from 'string-to-color';
 
 export interface LeagueTeamCardProps {
   team: Team;
@@ -42,6 +42,7 @@ export default function LeagueTeamCard(props: LeagueTeamCardProps) {
   props.team.managers.forEach((manager) => {
     managerIDs.push(manager.user_id);
   });
+
   return (
     <>
       <div className='bg-white rounded-xl border border-white p-2 transition-all ease-in duration-200 hover:drop-shadow'>
@@ -49,7 +50,7 @@ export default function LeagueTeamCard(props: LeagueTeamCardProps) {
           <Grid.Col className='pt-7' span={5}>
             <div className='flex'>
               <div className='pl-2 pr-5'>
-                <Image src={NFL} alt={props.team.name + '-image'} height={55} width={55} />
+                <GiAmericanFootballHelmet size={75} color={stc(props.team.name)} />
               </div>
               <div>
                 <div className='lg:text-3xl sm:text-xl font-varsity text-orange inline-block'>

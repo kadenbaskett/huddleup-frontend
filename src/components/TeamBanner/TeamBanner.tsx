@@ -1,7 +1,7 @@
 import { Grid } from '@mantine/core';
 import { createManagerString } from '@services/helpers';
-import Image from 'next/image';
-import Shield from '@public/assets/shield.png';
+import { GiAmericanFootballHelmet } from 'react-icons/gi';
+import stc from 'string-to-color';
 
 export interface TeamBannerProps {
   team: any;
@@ -14,7 +14,7 @@ export function TeamBanner(props: TeamBannerProps) {
     <div className='bg-white rounded-xl hover:drop-shadow-md'>
       <Grid>
         <Grid.Col span={2}>
-          <Image width={120} src={Shield} alt={props.name + '-image'} />
+          <GiAmericanFootballHelmet size={75} color={stc(props.name)} />
         </Grid.Col>
         <Grid.Col span={10}>
           <div className='text-6xl font-varsity'>{props.name}</div>

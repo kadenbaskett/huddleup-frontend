@@ -1,11 +1,9 @@
 import React from 'react';
-import Image from 'next/image';
-import NFL from '@public/assets/NFL.png';
 import { Button, Grid } from '@mantine/core';
 import styles from './JoinLeagueCard.module.css';
 import Link from 'next/link';
 import { League } from '@interfaces/league.interface';
-import { useWindowResize } from '@services/helpers';
+import { getLeagueIcon, useWindowResize } from '@services/helpers';
 
 export interface JoinLeagueCardProps {
   league: League;
@@ -23,10 +21,10 @@ export function JoinLeagueCard(props: JoinLeagueCardProps) {
 
   if (windowSize[0] > 805 || windowSize[0] === 0) {
     leagueNameSpan = 6;
-    numPlayerSpan = 5;
+    numPlayerSpan = 4;
     scoringTypeSpan = 3;
     registerButtonSpan = 5;
-    imageSpan = 1;
+    imageSpan = 2;
   } else {
     leagueNameSpan = 20;
     numPlayerSpan = 20;
@@ -42,9 +40,7 @@ export function JoinLeagueCard(props: JoinLeagueCardProps) {
         className='bg-white rounded-xl border border-white h-[7rem] transition-all ease-in duration-200 hover:h-[11rem] hover:border-orange'
       >
         <Grid columns={20} align='center' className='pl-5'>
-          <Grid.Col span={imageSpan}>
-            <Image src={NFL} alt={props.league.name + '-image'} height={45} width={45} />
-          </Grid.Col>
+          <Grid.Col span={imageSpan}>{getLeagueIcon(props.league.name, windowSize[0])}</Grid.Col>
 
           <Grid.Col
             span={leagueNameSpan}

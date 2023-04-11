@@ -11,6 +11,8 @@ import { GiAmericanFootballHelmet } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
 import { OtherMatchups } from '../MatchupsOtherMatchups/OtherMatchups';
 import { PlayerCard } from '../MatchupsPlayerCard/PlayerCard';
+import stc from 'string-to-color';
+import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 
 export interface ThisWeekCardProps {
   league: League;
@@ -74,10 +76,6 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
 
     setOtherScore(getTeamScore(newOtherRoster, week));
   }, [week]);
-
-  const userTeamManagers: String[] = team.managers.map((manager) => {
-    return manager.user.username;
-  });
 
   // On close methods of popups
   const onTradePopupClose = () => {
@@ -149,279 +147,298 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
   }
   return (
     <>
-      <PlayerPopup
-        player={selectedPlayer}
-        opened={playerPopupOpen}
-        onClose={onPlayerPopupClose}
-        onPlayerAction={takePlayerAction}
-        leagueId={league.id}
-      />
-
-      <AddDropPlayerPopup
-        roster={getMyRoster()}
-        player={selectedPlayer}
-        opened={addDropPopupOpen}
-        onClose={onAddDropPopupClose}
-        userId={user.id}
-      />
-
-      <TradePlayerPopup
-        otherRoster={tradeRoster}
-        myRoster={getMyRoster()}
-        player={selectedPlayer}
-        opened={tradePopupOpen}
-        onClose={onTradePopupClose}
-        userId={user.id}
-        week={currentWeek}
-      />
-      <AddDropPlayerConfirmPopup
-        roster={getMyRoster()}
-        isAdd={addingPlayer}
-        player={selectedPlayer}
-        opened={addDropConfirmPopupOpen}
-        onClose={onAddDropConfirmClose}
-        userId={user.id}
-      />
-
-      <div className='bg-white rounded-xl hover:drop-shadow-md'>
-        <div className='p-3'>
-          <div className='font-varsity text-darkBlue text-2xl'>Week:</div>
-          <SegmentedControl
-            fullWidth
-            value={week.toString()}
-            data={weeks}
-            onChange={(e) => setWeek(Number(e))}
+      {!otherTeam && <HuddleUpLoader />}
+      {otherTeam && (
+        <>
+          <PlayerPopup
+            player={selectedPlayer}
+            opened={playerPopupOpen}
+            onClose={onPlayerPopupClose}
+            onPlayerAction={takePlayerAction}
+            leagueId={league.id}
           />
-        </div>
-        <div className='pl-5 pr-5 pt-2'>
-          <div className='text-xl font-varisty'>
-            <div className='grid place-items-center'>
-              <div className='flex'>
-                <div className='text-5xl text-darkBlue pr-5'>
-                  <GiAmericanFootballHelmet />
+
+          <AddDropPlayerPopup
+            roster={getMyRoster()}
+            player={selectedPlayer}
+            opened={addDropPopupOpen}
+            onClose={onAddDropPopupClose}
+            userId={user.id}
+          />
+
+          <TradePlayerPopup
+            otherRoster={tradeRoster}
+            myRoster={getMyRoster()}
+            player={selectedPlayer}
+            opened={tradePopupOpen}
+            onClose={onTradePopupClose}
+            userId={user.id}
+            week={currentWeek}
+          />
+          <AddDropPlayerConfirmPopup
+            roster={getMyRoster()}
+            isAdd={addingPlayer}
+            player={selectedPlayer}
+            opened={addDropConfirmPopupOpen}
+            onClose={onAddDropConfirmClose}
+            userId={user.id}
+          />
+
+          <div className='bg-white rounded-xl hover:drop-shadow-md'>
+            <div className='p-3'>
+              <div className='font-varsity text-darkBlue text-2xl'>Week:</div>
+              <SegmentedControl
+                fullWidth
+                value={week.toString()}
+                data={weeks}
+                onChange={(e) => setWeek(Number(e))}
+              />
+            </div>
+            <div className='pl-5 pr-5 pt-2'>
+              <div className='text-xl font-varisty'>
+                <div className='grid place-items-center'>
+                  <div className='flex'>
+                    <div className='text-5xl text-darkBlue pr-5'>
+                      <GiAmericanFootballHelmet color={stc(team.name)} />
+                    </div>
+                    <div className='font-varsity text-darkBlue text-2xl pr-5 pt-2'>{`Week ${week.toString()}`}</div>
+                    <div className='text-5xl transform -scale-x-100 text-darkBlue'>
+                      <GiAmericanFootballHelmet color={stc(otherTeam.name)} />
+                    </div>
+                  </div>
+                  <div className='grid grid-cols-11 items-center'>
+                    <div className='grid col-span-5 place-items-end'>
+                      <div className='flex'>
+                        <div className='pr-5'>
+                          <div className='md:text-4xl text-2xl font-varsity text-darkBlue pl-5 text-right'>
+                            {team.name}
+                          </div>
+                          <div className='md:text-lg text-sm font-openSans text-orange text-right pl-5'>
+                            {team.managers
+                              .map((manager) => {
+                                return manager.user.username;
+                              })
+                              .join(', ')}
+                          </div>
+                        </div>
+                        <div className='grid place-items-center font-varsity text-darkBlue md:text-6xl text-3xl'>
+                          {homeScore}
+                        </div>
+                      </div>
+                    </div>
+                    <div className='grid col-span-1 place-items-center font-varsity text-darkBlue md:text-6xl text-3xl'>
+                      -
+                    </div>
+                    <div className='grid col-span-5 place-items-start'>
+                      <div className='flex'>
+                        <div className='grid place-items-center font-varsity text-darkBlue md:text-6xl text-3xl'>
+                          {otherScore}
+                        </div>
+                        <div className='pl-5'>
+                          <div className='md:text-4xl text-2xl font-varsity text-darkBlue pr-5'>
+                            {otherTeam?.name}
+                          </div>
+                          <div className='md:text-lg text-sm font-openSans text-orange text-left pr-5'>
+                            {otherTeam?.managers
+                              .map((manager) => {
+                                return manager.user.username;
+                              })
+                              .join(', ')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className='font-varsity text-darkBlue text-2xl pr-5 pt-2'>{`Week ${week.toString()}`}</div>
-                <div className='text-5xl transform -scale-x-100 text-darkBlue'>
-                  <GiAmericanFootballHelmet />
+                <div className='pt-2'>
+                  <div className='text-xl font-varsity text-darkBlue text-center'>
+                    Quarterbacks:
+                  </div>
+                  <Grid>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {userRoster?.players
+                          .filter((player) => {
+                            return player.position === 'QB' && {};
+                          })
+                          .map((qb) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, qb.player)}>
+                                <PlayerCard player={qb.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {otherRoster?.players
+                          .filter((player) => {
+                            return player.position === 'QB' && {};
+                          })
+                          .map((qb) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, qb.player)}>
+                                <PlayerCard player={qb.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                  </Grid>
+                </div>
+                <div className='pt-2'>
+                  <div className='text-xl font-varsity text-darkBlue text-center'>
+                    Wide Receivers:
+                  </div>
+                  <Grid>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {userRoster?.players
+                          .filter((player) => {
+                            return player.position === 'WR' && {};
+                          })
+                          .map((wr) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, wr.player)}>
+                                <PlayerCard player={wr.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {otherRoster?.players
+                          .filter((player) => {
+                            return player.position === 'WR' && {};
+                          })
+                          .map((wr) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, wr.player)}>
+                                <PlayerCard player={wr.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                  </Grid>
+                </div>
+                <div className='pt-2'>
+                  <div className='text-xl font-varsity text-darkBlue text-center'>
+                    Running Backs:
+                  </div>
+                  <Grid>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {userRoster?.players
+                          .filter((player) => {
+                            return player.position === 'RB' && {};
+                          })
+                          .map((rb) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, rb.player)}>
+                                <PlayerCard player={rb.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {otherRoster?.players
+                          .filter((player) => {
+                            return player.position === 'RB' && {};
+                          })
+                          .map((rb) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, rb.player)}>
+                                <PlayerCard player={rb.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                  </Grid>
+                </div>
+                <div className='pt-2'>
+                  <div className='text-xl font-varsity text-darkBlue text-center'>Tight End:</div>
+                  <Grid>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {userRoster?.players
+                          .filter((player) => {
+                            return player.position === 'TE' && {};
+                          })
+                          .map((te) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, te.player)}>
+                                <PlayerCard player={te.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {otherRoster?.players
+                          .filter((player) => {
+                            return player.position === 'TE' && {};
+                          })
+                          .map((te) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, te.player)}>
+                                <PlayerCard player={te.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                  </Grid>
+                </div>
+                <div className='pt-2'>
+                  <div className='text-xl font-varsity text-darkBlue text-center'>Flex:</div>
+                  <Grid>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {userRoster?.players
+                          .filter((player) => {
+                            return player.position === 'FLEX' && {};
+                          })
+                          .map((f) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, f.player)}>
+                                <PlayerCard player={f.player} currentWeek={week} />
+                              </a>{' '}
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <div className='bg-lightGrey rounded-xl p-2'>
+                        {otherRoster?.players
+                          .filter((player) => {
+                            return player.position === 'FLEX' && {};
+                          })
+                          .map((f) => (
+                            <>
+                              <a href='#' onClick={(e) => onPlayerClick(e, f.player)}>
+                                <PlayerCard player={f.player} currentWeek={week} />
+                              </a>
+                            </>
+                          ))}
+                      </div>
+                    </Grid.Col>
+                  </Grid>
+                </div>
+                <div className='pt-5'>
+                  <OtherMatchups league={league} userTeamId={team.id} week={week} />
                 </div>
               </div>
-              <div className='flex'>
-                <div className='grid place-items-end'>
-                  <div className='pr-5'>
-                    <div className='md:text-4xl text-2xl font-varsity text-darkBlue pl-5 text-right'>
-                      {team.name}
-                    </div>
-                    <div className='md:text-lg text-sm font-openSans text-orange text-right pl-5'>
-                      {userTeamManagers.join(', ')}
-                    </div>
-                  </div>
-                </div>
-                <div className='grid place-items-center font-varsity text-darkBlue md:text-6xl text-3xl'>
-                  {homeScore}
-                </div>
-                <div className='grid place-items-center font-varsity text-darkBlue md:text-6xl text-3xl'>
-                  -
-                </div>
-                <div className='grid place-items-center font-varsity text-darkBlue md:text-6xl text-3xl'>
-                  {otherScore}
-                </div>
-                <div className='grid place-items-start'>
-                  <div className='pl-5'>
-                    <div className='md:text-4xl text-2xl font-varsity text-darkBlue pr-5'>
-                      {otherTeam?.name}
-                    </div>
-                    <div className='md:text-lg text-sm font-openSans text-orange text-left pr-5'>
-                      {otherTeam?.managers
-                        .map((manager) => {
-                          return manager.user.username;
-                        })
-                        .join(', ')}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='pt-2'>
-              <div className='text-xl font-varsity text-darkBlue text-center'>Quarterbacks:</div>
-              <Grid>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {userRoster?.players
-                      .filter((player) => {
-                        return player.position === 'QB' && {};
-                      })
-                      .map((qb) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, qb.player)}>
-                            <PlayerCard player={qb.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {otherRoster?.players
-                      .filter((player) => {
-                        return player.position === 'QB' && {};
-                      })
-                      .map((qb) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, qb.player)}>
-                            <PlayerCard player={qb.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-              </Grid>
-            </div>
-            <div className='pt-2'>
-              <div className='text-xl font-varsity text-darkBlue text-center'>Wide Receivers:</div>
-              <Grid>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {userRoster?.players
-                      .filter((player) => {
-                        return player.position === 'WR' && {};
-                      })
-                      .map((wr) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, wr.player)}>
-                            <PlayerCard player={wr.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {otherRoster?.players
-                      .filter((player) => {
-                        return player.position === 'WR' && {};
-                      })
-                      .map((wr) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, wr.player)}>
-                            <PlayerCard player={wr.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-              </Grid>
-            </div>
-            <div className='pt-2'>
-              <div className='text-xl font-varsity text-darkBlue text-center'>Running Backs:</div>
-              <Grid>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {userRoster?.players
-                      .filter((player) => {
-                        return player.position === 'RB' && {};
-                      })
-                      .map((rb) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, rb.player)}>
-                            <PlayerCard player={rb.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {otherRoster?.players
-                      .filter((player) => {
-                        return player.position === 'RB' && {};
-                      })
-                      .map((rb) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, rb.player)}>
-                            <PlayerCard player={rb.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-              </Grid>
-            </div>
-            <div className='pt-2'>
-              <div className='text-xl font-varsity text-darkBlue text-center'>Tight End:</div>
-              <Grid>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {userRoster?.players
-                      .filter((player) => {
-                        return player.position === 'TE' && {};
-                      })
-                      .map((te) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, te.player)}>
-                            <PlayerCard player={te.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {otherRoster?.players
-                      .filter((player) => {
-                        return player.position === 'TE' && {};
-                      })
-                      .map((te) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, te.player)}>
-                            <PlayerCard player={te.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-              </Grid>
-            </div>
-            <div className='pt-2'>
-              <div className='text-xl font-varsity text-darkBlue text-center'>Flex:</div>
-              <Grid>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {userRoster?.players
-                      .filter((player) => {
-                        return player.position === 'FLEX' && {};
-                      })
-                      .map((f) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, f.player)}>
-                            <PlayerCard player={f.player} currentWeek={week} />
-                          </a>{' '}
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-                <Grid.Col span={6}>
-                  <div className='bg-lightGrey rounded-xl p-2'>
-                    {otherRoster?.players
-                      .filter((player) => {
-                        return player.position === 'FLEX' && {};
-                      })
-                      .map((f) => (
-                        <>
-                          <a href='#' onClick={(e) => onPlayerClick(e, f.player)}>
-                            <PlayerCard player={f.player} currentWeek={week} />
-                          </a>
-                        </>
-                      ))}
-                  </div>
-                </Grid.Col>
-              </Grid>
-            </div>
-            <div className='pt-5'>
-              <OtherMatchups league={league} userTeamId={team.id} week={week} />
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 }
