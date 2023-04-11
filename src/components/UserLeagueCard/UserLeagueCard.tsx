@@ -18,11 +18,11 @@ export function UserLeagueCard(props: UserLeagueCardProps) {
   // const color = getColor(props.league.name);
   return (
     <Link href={link}>
-      <div className='flex bg-white rounded-xl border border-solid p-5'>
+      <div className='flex bg-white rounded-xl border-4 border-solid hover:border-darkBlue border-white p-5'>
         <div className='items-center'>{getLeagueIcon(props.league.name, windowSize[0])}</div>
         <div className=' items-center'>
           <div className=''>
-            <div className='lg:text-5xl md:text-3xl sm:text-3xl font-varsity'>
+            <div className='lg:text-5xl md:text-3xl sm:text-3xl font-varsity color-darkBlue'>
               {props.league.name}
             </div>
             <div className='lg:text-xl md:text-lg sm:text-md font-OpenSans text-darkBlue'>
