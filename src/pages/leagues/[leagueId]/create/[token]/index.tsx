@@ -109,7 +109,7 @@ export default function index() {
       )}
       {userTeam && (
         <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
-          <div className='pt-5'>
+          <div className='pt-5 pb-5'>
             <Link href={`/leagues/${Number(league.id)}/join/${String(league.token)}`}>
               <Button
                 className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
@@ -121,10 +121,13 @@ export default function index() {
               </Button>
             </Link>
           </div>
-          <div className='pt-4 pb-4'>
-            <label className='font-varsity text-6xl'>{league.name}</label>
-            <div>
-              <label className='font-varsity text-orange text-3xl'>{userTeam.name}</label>
+
+          <div className='pt-4 pb-4 bg-white rounded-xl border border-white transition-all ease-in duration-200 hover:drop-shadow-md'>
+            <div className='pl-5'>
+              <label className='font-varsity text-6xl'>{league.name}</label>
+              <div>
+                <label className='font-varsity text-orange text-3xl'>{userTeam.name}</label>
+              </div>
             </div>
           </div>
 

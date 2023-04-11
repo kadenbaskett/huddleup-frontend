@@ -24,7 +24,7 @@ export default function index() {
   const inSeconds = diffMilliseconds / 1000;
   const fiveMins = 60 * 5;
   const teamFilled =
-    userTeam.rosters[0].players.length < league.settings.roster_settings.roster_size_limit;
+    userTeam?.rosters[0].players.length < league.settings.roster_settings.roster_size_limit;
 
   const readyToDraft = inSeconds < fiveMins && teamFilled;
 
