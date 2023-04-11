@@ -243,6 +243,7 @@ export default function index() {
               value={leagueDescription}
               onChange={(e) => setLeagueDescription(e.target.value)}
               autosize
+              required
               minRows={2}
               size='xl'
               styles={(theme) => ({

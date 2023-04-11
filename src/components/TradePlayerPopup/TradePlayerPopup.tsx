@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useEffect, useState } from 'react';
-import { Button, Group, Modal, Checkbox, Table, Text, Grid, Space } from '@mantine/core';
+import { Button, Group, Modal, Checkbox, Table, Text, Grid, Space, Avatar } from '@mantine/core';
 import { proposeTrade } from '@services/apiClient';
 
 export default function TradePlayerPopup({
@@ -76,10 +76,17 @@ export default function TradePlayerPopup({
     const rows = otherRoster.players?.map((rosterPlayer) => {
       return (
         <tr key={rosterPlayer.id}>
-          <td>
-            {rosterPlayer.player.first_name} {rosterPlayer.player.last_name}
-          </td>
-          <td>{rosterPlayer.position}</td>
+          <div className='flex'>
+            <div className='pl-2'>
+              <Avatar src={rosterPlayer.player.photo_url} alt={'player image'} />
+            </div>
+            <div className='pl-2'>
+              <div className='text-md text-darkBlue'>
+                {rosterPlayer.player.first_name} {rosterPlayer.player.last_name}
+              </div>
+              <div className='text-xs text-orange'>{rosterPlayer.position}</div>
+            </div>
+          </div>
           <td>
             <Checkbox
               label={'Select'}
@@ -96,11 +103,10 @@ export default function TradePlayerPopup({
         <Grid.Col>
           <Space h='md' />
           <Text fz='md'>Select player(s) to receive</Text>
-          <Table striped highlightOnHover withBorder withColumnBorders>
+          <Table verticalSpacing='sm' striped highlightOnHover withBorder withColumnBorders>
             <thead>
               <tr>
-                <th>Slot</th>
-                <th>Name</th>
+                <th>Player</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -117,10 +123,17 @@ export default function TradePlayerPopup({
     const rows = myRoster.players?.map((rosterPlayer) => {
       return (
         <tr key={rosterPlayer.id}>
-          <td>
-            {rosterPlayer.player.first_name} {rosterPlayer.player.last_name}
-          </td>
-          <td>{rosterPlayer.position}</td>
+          <div className='flex'>
+            <div className='pl-2'>
+              <Avatar src={rosterPlayer.player.photo_url} alt={'player image'} />
+            </div>
+            <div className='pl-2'>
+              <div className='text-md text-darkBlue'>
+                {rosterPlayer.player.first_name} {rosterPlayer.player.last_name}
+              </div>
+              <div className='text-xs text-orange'>{rosterPlayer.position}</div>
+            </div>
+          </div>
           <td>
             <Checkbox
               label={'Select'}
@@ -137,11 +150,10 @@ export default function TradePlayerPopup({
         <Grid.Col>
           <Space h='md' />
           <Text fz='md'>Select player(s) to trade away</Text>
-          <Table striped highlightOnHover withBorder withColumnBorders>
+          <Table verticalSpacing='sm' striped highlightOnHover withBorder withColumnBorders>
             <thead>
               <tr>
-                <th>Slot</th>
-                <th>Name</th>
+                <th>Player</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -158,7 +170,7 @@ export default function TradePlayerPopup({
         opened={opened}
         onClose={() => onClose()}
         title={<Text fz='lg'>Select Players</Text>}
-        size={'75%'}
+        size={'100%'}
       >
         <Grid>
           <Grid.Col span={5} offset={0}>
