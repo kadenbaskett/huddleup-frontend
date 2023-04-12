@@ -39,6 +39,9 @@ export default function AddDropPlayerConfirmPopup({
         onClose={() => onClose()}
         title={<Text fz='lg'>{isAdd ? 'Add player?' : 'Drop player?'}</Text>}
         size={'100%'}
+        overlayProps={{
+          blur: 3,
+        }}
       >
         <Table striped highlightOnHover withBorder withColumnBorders>
           <thead>

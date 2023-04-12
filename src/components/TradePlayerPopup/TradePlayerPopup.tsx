@@ -171,6 +171,9 @@ export default function TradePlayerPopup({
         onClose={() => onClose()}
         title={<Text fz='lg'>Select Players</Text>}
         size={'100%'}
+        overlayProps={{
+          blur: 3,
+        }}
       >
         <Grid>
           <Grid.Col span={5} offset={0}>

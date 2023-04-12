@@ -12,7 +12,15 @@ export default function ProfilePopup({ opened, onClose, user, handleLogout }) {
 
   return (
     <>
-      <Modal opened={opened} onClose={() => onClose()} title={'Huddle Up Profile'} centered>
+      <Modal
+        opened={opened}
+        onClose={() => onClose()}
+        title={'Huddle Up Profile'}
+        centered
+        overlayProps={{
+          blur: 3,
+        }}
+      >
         <div>
           <div>
             <TextInput

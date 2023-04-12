@@ -62,23 +62,23 @@ export function mapPositionToTable(player, gameLogs) {
     );
 
     const rows = gameLogs.map((game) => (
-      <tr key={game.id}>
-        <td>{game.game.week}</td>
+      <tr key={game?.id}>
+        <td>{game?.game.week}</td>
         <td>
-          {game.completions}/{game.pass_attempts}
+          {game?.completions}/{game?.pass_attempts}
         </td>
-        <td>{game.pass_yards}</td>
-        <td>{game.pass_td}</td>
-        <td>{game.interceptions_thrown}</td>
-        <td>{game.rush_attempts}</td>
-        <td>{game.rush_yards}</td>
-        <td>{game.rush_td}</td>
+        <td>{game?.pass_yards}</td>
+        <td>{game?.pass_td}</td>
+        <td>{game?.interceptions_thrown}</td>
+        <td>{game?.rush_attempts}</td>
+        <td>{game?.rush_yards}</td>
+        <td>{game?.rush_td}</td>
         <td>{fantasyPoints(game)}</td>
       </tr>
     ));
 
     return (
-      <Table fontSize='xs'>
+      <Table striped highlightOnHover fontSize='xs'>
         {cols}
         <tbody>{rows}</tbody>
       </Table>
@@ -134,14 +134,14 @@ export function mapPositionToTable(player, gameLogs) {
         <td>{game?.targets}</td>
         <td>{game?.receptions}</td>
         <td>{game?.rec_yards}</td>
-        <td>{game?.rec_td ? 1 : ''}</td>
-        <td>{game?.fumbles ? 1 : ''}</td>
+        <td>{game?.rec_td}</td>
+        <td>{game?.fumbles}</td>
         <td>{fantasyPoints(game)}</td>
       </tr>
     ));
 
     return (
-      <Table fontSize='xs'>
+      <Table striped highlightOnHover fontSize='xs'>
         {cols}
         <tbody>{rows}</tbody>
       </Table>

@@ -2,7 +2,7 @@ import AddDropPlayerConfirmPopup from '@components/AddDropPlayerConfirmPopup/Add
 import AddDropPlayerPopup from '@components/AddDropPlayerPopup/AddDropPlayerPopup';
 import PlayerPopup from '@components/PlayerPopup/PlayerPopup';
 import TradePlayerPopup from '@components/TradePlayerPopup/TradePlayerPopup';
-import { League, Team } from '@interfaces/league.interface';
+import { League, Roster, Team } from '@interfaces/league.interface';
 import { Grid, SegmentedControl } from '@mantine/core';
 import { getTeamScore, getTeamThatOwnsPlayer } from '@services/helpers';
 import { StoreState } from '@store/store';
@@ -11,7 +11,6 @@ import { GiAmericanFootballHelmet } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
 import { OtherMatchups } from '../MatchupsOtherMatchups/OtherMatchups';
 import { PlayerCard } from '../MatchupsPlayerCard/PlayerCard';
-import stc from 'string-to-color';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 
 export interface ThisWeekCardProps {
@@ -109,7 +108,7 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
     setSelectedPlayer(player);
 
     const playerTeam = getTeamThatOwnsPlayer(player, currentWeek, league.id);
-    const myRoster = getMyRoster();
+    const myRoster: Roster = getMyRoster();
     const isMyPlayer = playerTeam?.id === team.id;
 
     // Nobody owns the player -> they are a free agent
@@ -139,7 +138,7 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
   };
 
   const getMyRoster = () => {
-    return team ? team.rosters.find((r) => r.week === currentWeek) : [];
+    return team.rosters.find((r) => r.week === currentWeek);
   };
   const weeks = new Array(Number(currentWeek) - 1);
   for (let i = 1; i <= Number(currentWeek); i++) {
@@ -199,11 +198,11 @@ export function ThisWeekCard({ league, currentWeek, team }: ThisWeekCardProps) {
                 <div className='grid place-items-center'>
                   <div className='flex'>
                     <div className='text-5xl text-darkBlue pr-5'>
-                      <GiAmericanFootballHelmet color={stc(team.name)} />
+                      <GiAmericanFootballHelmet />
                     </div>
                     <div className='font-varsity text-darkBlue text-2xl pr-5 pt-2'>{`Week ${week.toString()}`}</div>
                     <div className='text-5xl transform -scale-x-100 text-darkBlue'>
-                      <GiAmericanFootballHelmet color={stc(otherTeam.name)} />
+                      <GiAmericanFootballHelmet />
                     </div>
                   </div>
                   <div className='grid grid-cols-11 items-center'>

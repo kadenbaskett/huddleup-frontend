@@ -2,7 +2,6 @@ import React from 'react';
 import { Team, League } from '@interfaces/league.interface';
 import Link from 'next/link';
 import { GiAmericanFootballHelmet } from 'react-icons/gi';
-import stc from 'string-to-color';
 
 const renderRow = (team: Team, leagues: League[]) => {
   const userLeague = leagues.find((league) => league.id === team.league.id);
@@ -21,7 +20,7 @@ const renderRow = (team: Team, leagues: League[]) => {
     <>
       <div className='inline-flex'>
         <div>
-          <GiAmericanFootballHelmet size={45} color={stc(team.name)} />
+          <GiAmericanFootballHelmet size={45} />
         </div>
         <Link
           href={teamLink}

@@ -125,6 +125,9 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose, us
         onClose={() => onClose()}
         title={<Text fz='lg'>Roster full, select player(s) to drop</Text>}
         size={'100%'}
+        overlayProps={{
+          blur: 3,
+        }}
       >
         {getRoster()}
         <div className='pt-5'>
