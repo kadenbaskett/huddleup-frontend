@@ -1,4 +1,4 @@
-import { Select, Group, Avatar } from '@mantine/core';
+import { Select, Group, Avatar, Stack } from '@mantine/core';
 import { StoreState } from '@store/store';
 import { DataTable } from 'mantine-datatable';
 import React, { useEffect, useState } from 'react';
@@ -80,6 +80,13 @@ export default function DraftRoster(props: DraftRosterProps) {
               ),
             },
           ]}
+          emptyState={
+            <div className='p-5'>
+              <Stack align='center' spacing='md'>
+                No players on team yet
+              </Stack>
+            </div>
+          }
         />
       </div>
     </>

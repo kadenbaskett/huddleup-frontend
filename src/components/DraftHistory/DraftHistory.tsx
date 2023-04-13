@@ -14,7 +14,7 @@ export default function DraftHistory() {
   const allPlayers = useSelector((state: StoreState) => state.league.playerList);
   const draftPlayers = useSelector((state: StoreState) => state.draft.draftPlayers);
   const league = useSelector((state: StoreState) => state.league.league);
-  const showPlayers: ShowPlayers[] = [];
+  let showPlayers: ShowPlayers[] = [];
   draftPlayers?.forEach((player2) => {
     showPlayers.push({
       player: allPlayers?.find((player) => player.id === player2?.player_id),
@@ -22,6 +22,7 @@ export default function DraftHistory() {
     });
   });
   showPlayers.reverse();
+  showPlayers = showPlayers.slice(0, 50);
   return (
     <>
       <div className='bg-white rounded-xl hover:drop-shadow-md'>
