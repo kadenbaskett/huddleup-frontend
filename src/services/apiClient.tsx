@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { respObj } from '@interfaces/respobj.interface';
 import { ProposalAction } from '@interfaces/types.interface';
-import { getUsersJWT } from '../firebase/firebase';
+// import { getUsersJWT } from '../firebase/firebase';
 
 const BASE_URL: string = process.env.NEXT_PUBLIC_API_URI;
 
@@ -10,13 +10,13 @@ const api = axios.create({
   withCredentials: true,
 });
 
-api.interceptors.request.use(async (config) => {
-  const jwt = await getUsersJWT();
-  if (jwt) {
-    config.headers.Authorization = `Bearer ${jwt}`;
-  }
-  return config;
-});
+// api.interceptors.request.use(async (config) => {
+//   const jwt = await getUsersJWT();
+//   if (jwt) {
+//     config.headers.Authorization = `Bearer ${jwt}`;
+//   }
+//   return config;
+// });
 
 async function getRequest(url: string): Promise<respObj> {
   try {

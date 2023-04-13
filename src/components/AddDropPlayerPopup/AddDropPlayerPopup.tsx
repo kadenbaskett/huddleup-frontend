@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useEffect, useState } from 'react';
-import { Button, Group, Modal, Checkbox, Table, Text, Grid, Space } from '@mantine/core';
+import { Button, Group, Modal, Checkbox, Table, Text, Grid, Space, Avatar } from '@mantine/core';
 import { addDropPlayer } from '@services/apiClient';
 
 export default function AddDropPlayerPopup({ roster, player, opened, onClose, userId }) {
@@ -51,9 +51,18 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose, us
       return (
         <tr key={rosterPlayer.id}>
           <td>
-            {rosterPlayer.player.first_name} {rosterPlayer.player.last_name}
+            <div className='flex'>
+              <div>
+                <Avatar src={rosterPlayer.player.photo_url} alt={'player image'} />
+              </div>
+              <div className='pl-2'>
+                <div className='text-md text-darkBlue'>
+                  {rosterPlayer.player.first_name} {rosterPlayer.player.last_name}
+                </div>
+                <div className='text-xs text-orange'>{rosterPlayer.position}</div>
+              </div>
+            </div>
           </td>
-          <td>{rosterPlayer.position}</td>
           <td>
             <Checkbox
               label={'Drop'}
@@ -72,16 +81,24 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose, us
           <Table striped highlightOnHover withBorder withColumnBorders>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Position</th>
+                <th>Player</th>
               </tr>
             </thead>
             <tbody>
               <tr key={player?.id}>
                 <td>
-                  {player?.first_name} {player?.last_name}
+                  <div className='flex'>
+                    <div>
+                      <Avatar src={player?.photo_url} alt={'player image'} />
+                    </div>
+                    <div className='pl-2'>
+                      <div className='text-md text-darkBlue'>
+                        {player?.first_name} {player?.last_name}
+                      </div>
+                      <div className='text-xs text-orange'>{player?.position}</div>
+                    </div>
+                  </div>
                 </td>
-                <td>{player?.position}</td>
               </tr>
             </tbody>
           </Table>
@@ -90,8 +107,7 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose, us
           <Table striped highlightOnHover withBorder withColumnBorders>
             <thead>
               <tr>
-                <th>Slot</th>
-                <th>Name</th>
+                <th>Player</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -108,30 +124,35 @@ export default function AddDropPlayerPopup({ roster, player, opened, onClose, us
         opened={opened}
         onClose={() => onClose()}
         title={<Text fz='lg'>Roster full, select player(s) to drop</Text>}
-        size={'75%'}
+        size={'100%'}
+        overlayProps={{
+          blur: 3,
+        }}
       >
         {getRoster()}
-        <Group>
-          <Button
-            className={`${'bg-transparent hover:bg-red text-red hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
-            variant='default'
-            size='sm'
-            color='red'
-            onClick={onClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
-            variant='default'
-            size='sm'
-            color='red'
-            loading={submitLoading}
-            onClick={onSubmit}
-          >
-            Submit
-          </Button>
-        </Group>
+        <div className='pt-5'>
+          <Group>
+            <Button
+              className={`${'bg-transparent hover:bg-red text-red hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-red rounded border-red transition ease-in duration-200`}
+              variant='default'
+              size='sm'
+              color='red'
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
+              variant='default'
+              size='sm'
+              color='red'
+              loading={submitLoading}
+              onClick={onSubmit}
+            >
+              Submit
+            </Button>
+          </Group>
+        </div>
       </Modal>
     </>
   );

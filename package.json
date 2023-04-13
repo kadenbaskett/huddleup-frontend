@@ -17,6 +17,7 @@
     "@emotion/server": "^11.10.0",
     "@mantine/core": "^6.0.6",
     "@mantine/dates": "^6.0.6",
+    "@mantine/form": "^6.0.7",
     "@mantine/hooks": "^6.0.6",
     "@mantine/notifications": "^6.0.6",
     "@reduxjs/toolkit": "^1.9.1",
@@ -30,6 +31,7 @@
     "eslint-config-next": "13.0.2",
     "firebase": "^9.15.0",
     "husky": "^8.0.2",
+    "invert-color": "^2.0.0",
     "lint-staged": "^13.0.3",
     "lodash": "^4.17.21",
     "mantine-datatable": "^2.3.5",
@@ -43,7 +45,8 @@
     "react-router-dom": "^6.8.0",
     "react-svg": "^15.1.14",
     "sockjs": "^0.3.24",
-    "sockjs-client": "^1.6.1"
+    "sockjs-client": "^1.6.1",
+    "string-to-color": "^2.2.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",

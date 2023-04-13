@@ -1,6 +1,20 @@
 import { League } from '@interfaces/league.interface';
 import { Table } from '@mantine/core';
 import { useState, useEffect } from 'react';
+import {
+  GiVibratingShield,
+  GiSlashedShield,
+  GiSpikedShield,
+  GiEyeShield,
+  GiFireShield,
+  GiEnergyShield,
+  GiEdgedShield,
+  GiDragonShield,
+  GiBoltShield,
+  GiBorderedShield,
+  GiMagicShield,
+} from 'react-icons/gi';
+import stc from 'string-to-color';
 
 export const HuddleUpDate = (date: Date) => {
   return date.toUTCString();
@@ -48,23 +62,23 @@ export function mapPositionToTable(player, gameLogs) {
     );
 
     const rows = gameLogs.map((game) => (
-      <tr key={game.id}>
-        <td>{game.game.week}</td>
+      <tr key={game?.id}>
+        <td>{game?.game.week}</td>
         <td>
-          {game.completions}/{game.pass_attempts}
+          {game?.completions}/{game?.pass_attempts}
         </td>
-        <td>{game.pass_yards}</td>
-        <td>{game.pass_td}</td>
-        <td>{game.interceptions_thrown}</td>
-        <td>{game.rush_attempts}</td>
-        <td>{game.rush_yards}</td>
-        <td>{game.rush_td}</td>
+        <td>{game?.pass_yards}</td>
+        <td>{game?.pass_td}</td>
+        <td>{game?.interceptions_thrown}</td>
+        <td>{game?.rush_attempts}</td>
+        <td>{game?.rush_yards}</td>
+        <td>{game?.rush_td}</td>
         <td>{fantasyPoints(game)}</td>
       </tr>
     ));
 
     return (
-      <Table fontSize='xs'>
+      <Table striped highlightOnHover fontSize='xs'>
         {cols}
         <tbody>{rows}</tbody>
       </Table>
@@ -120,14 +134,14 @@ export function mapPositionToTable(player, gameLogs) {
         <td>{game?.targets}</td>
         <td>{game?.receptions}</td>
         <td>{game?.rec_yards}</td>
-        <td>{game?.rec_td ? 1 : ''}</td>
-        <td>{game?.fumbles ? 1 : ''}</td>
+        <td>{game?.rec_td}</td>
+        <td>{game?.fumbles}</td>
         <td>{fantasyPoints(game)}</td>
       </tr>
     ));
 
     return (
-      <Table fontSize='xs'>
+      <Table striped highlightOnHover fontSize='xs'>
         {cols}
         <tbody>{rows}</tbody>
       </Table>
@@ -266,4 +280,32 @@ export function useWindowResize() {
   }, []);
 
   return dimension;
+}
+
+export function getLeagueIcon(leagueName: string, screenSize: number) {
+  const size = screenSize > 700 || screenSize === 0 ? 100 : 75;
+  const color = stc(leagueName);
+  const possibleLeagueIcons = [
+    <GiVibratingShield key={'vibratingShield'} size={size} color={color} />,
+    <GiSlashedShield key={'GiSlashedShield'} size={size} color={color} />,
+    <GiSpikedShield key={'GiSpikedShield'} size={size} color={color} />,
+    <GiEyeShield key={'vibratingShield'} size={size} color={color} />,
+    <GiFireShield key={'GiFireShield'} size={size} color={color} />,
+    <GiEnergyShield key={'GiEnergyShield'} size={size} color={color} />,
+    <GiEdgedShield key={'GiEdgedShield'} size={size} color={color} />,
+    <GiDragonShield key={'GiDragonShield'} size={size} color={color} />,
+    <GiBoltShield key={'GiBoltShield'} size={size} color={color} />,
+    <GiBorderedShield key={'GiBorderedShield'} size={size} color={color} />,
+    <GiMagicShield key={'GiMagicShield'} size={size} color={color} />,
+  ];
+
+  let letterSum = 0;
+  leagueName.split('').forEach((char) => (letterSum += char.toString().charCodeAt(0)));
+  let charCode = Math.round(
+    (letterSum / possibleLeagueIcons.length + (leagueName.length % 9)) % 11,
+  );
+
+  charCode === 11 ? charCode-- : (charCode += 0);
+
+  return possibleLeagueIcons[charCode];
 }
