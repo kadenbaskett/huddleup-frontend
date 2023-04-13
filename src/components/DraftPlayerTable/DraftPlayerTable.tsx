@@ -110,7 +110,6 @@ export default function DraftPlayerTable({
                 { label: 'RB', value: 'RB' },
                 { label: 'WR', value: 'WR' },
                 { label: 'TE', value: 'TE' },
-                { label: 'FLEX', value: 'FLEX' },
               ]}
               {...form.getInputProps('position')}
             />

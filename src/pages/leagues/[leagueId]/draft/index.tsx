@@ -27,6 +27,8 @@ export default function index() {
   const draftOrder = store.draft.draftOrder;
   const draftState = store.draft;
   const currentPickTeamId = store.draft.currentPickTeamId;
+  const draftStarted =
+    draftState.draftStartTimeMS !== 0 && draftState.draftStartTimeMS < new Date().getTime();
 
   const windowSize: number[] = useWindowResize();
 
@@ -165,7 +167,7 @@ export default function index() {
       )}
       {teams.length > 0 && leagueInfoFetchStatus === 'succeeded' && (
         <>
-          <div className='bg-lightGrey min-h-screen'>
+          <div className='bg-lightGrey min-h-screen overflow-hidden'>
             <div className='text-4xl font-varsity font-darkBlue pl-3 text-center'>
               {league.name} Draft - Round {draftState.currentRoundNum} - Pick{' '}
               {draftState.currentPickNum}
@@ -175,10 +177,7 @@ export default function index() {
                 activeTeam={teams.find((t) => t.id === draftState.currentPickTeamId)}
                 teams={teams !== undefined ? teams : league.teams}
                 time={time}
-                draftStarted={
-                  draftState.draftStartTimeMS !== 0 &&
-                  draftState.draftStartTimeMS < new Date().getTime()
-                }
+                draftStarted={draftStarted}
               />
             </div>
             <Grid className='relative z-30'>
@@ -190,7 +189,7 @@ export default function index() {
                   draftCallback={(player: any) => draftCallback(player)}
                   queueCallback={(player: any) => queueCallback(player)}
                   league={league}
-                  currentlyPicking={userTeam.id === currentPickTeamId}
+                  currentlyPicking={userTeam.id === currentPickTeamId && draftStarted}
                 />
               </Grid.Col>
               <Grid.Col span={draftHistorySpan} className='pr-4'>

@@ -11,8 +11,8 @@ export interface UserLeagueCardProps {
 export function UserLeagueCard(props: UserLeagueCardProps) {
   const windowSize = useWindowResize();
   const link =
-    props.league.settings.roster_settings.roster_size_limit !==
-    props.userTeam.rosters[0]?.players.length
+    props.userTeam.rosters[0]?.players.length <
+    props.league.settings.roster_settings.roster_size_limit
       ? `/leagues/${Number(props.league.id)}/join/${props.league.token}`
       : `/leagues/${Number(props.league.id)}/team/${props.userTeam?.id}`;
   // const color = getColor(props.league.name);

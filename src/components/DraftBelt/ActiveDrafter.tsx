@@ -43,6 +43,13 @@ export default function ActiveDrafter({ team, time, draftStarted }: ActiveDrafte
           {draftStarted ? (
             <Grid.Col span={9}>
               <div className='grid place-items-start'>
+                <div
+                  className={`text-md font-openSans font-bold ${
+                    time < 10 ? 'text-red' : 'text-green'
+                  }`}
+                >
+                  Currently drafting:
+                </div>
                 <div className={`text-4xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
                   {team?.name}
                 </div>
@@ -62,7 +69,7 @@ export default function ActiveDrafter({ team, time, draftStarted }: ActiveDrafte
           )}
           <Grid.Col span={3}>
             <div className='grid place-items-center'>
-              <div className={`text-5xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
+              <div className={`text-4xl font-varsity ${time < 10 ? 'text-red' : 'text-green'}`}>
                 {minutes}
                 {colon}
                 {seconds}

@@ -37,7 +37,7 @@ function league() {
   return (
     <>
       {!leagueFetched && <HuddleUpLoader />}
-      {leagueFetched && (
+      {leagueFetched && user && (
         <>
           <LeagueNavBar
             teamName={viewingTeam.name}
