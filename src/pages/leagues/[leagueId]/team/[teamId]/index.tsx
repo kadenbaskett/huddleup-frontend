@@ -23,9 +23,9 @@ function league() {
   const user = store.user.userInfo;
   const currentWeek = store.global.week;
 
-  const rosters = viewingTeam.rosters;
-  const isMyTeam = viewingTeam.id === userTeam?.id;
-  const leagueFetched = leagueInfoFetchStatus === SLICE_STATUS.SUCCEEDED;
+  const rosters = viewingTeam?.rosters;
+  const isMyTeam = viewingTeam?.id === userTeam?.id;
+  const leagueFetched = leagueInfoFetchStatus === SLICE_STATUS.SUCCEEDED && viewingTeam;
 
   useEffect(() => {
     const notification = userTeam?.proposed_transactions.find(
