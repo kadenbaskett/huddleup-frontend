@@ -13,6 +13,7 @@ export function TeamInfoBanner(props: TeamInfoBannerProps) {
   const [homeScore, setHomeScore] = useState(0);
   const [otherScore, setOtherScore] = useState(0);
   const [nextTeamName, setNextTeamName] = useState('');
+  console.log('league', props.league);
   useEffect(() => {
     const newMatchup = props.league?.matchups.find((matchup) => {
       return (
@@ -48,6 +49,7 @@ export function TeamInfoBanner(props: TeamInfoBannerProps) {
     const newOtherRoster = newOtherTeam?.rosters.find((roster) => {
       return roster.week === props.week;
     });
+    console.log('newOtherRoster', newOtherRoster);
 
     setHomeScore(getTeamScore(newUserRoster, props.week));
 
