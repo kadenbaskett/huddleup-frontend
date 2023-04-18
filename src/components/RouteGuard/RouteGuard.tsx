@@ -25,7 +25,15 @@ export default function RouteGuard({ children }) {
 
   async function authCheck(url) {
     const path = url.split('?')[0];
-    const publicPaths = ['/login', '/', '/signup', '/forgotpassword']; // pages that logged out users are able to access
+    const publicPaths = [
+      '/login',
+      '/',
+      '/signup',
+      '/forgotpassword',
+      '/about',
+      '/about/team',
+      '/about/tutorial',
+    ]; // pages that logged out users are able to access
     const loginPages = ['/login', '/signup', '/forgotpassword'];
 
     if (firebaseStatus === 'idle') {

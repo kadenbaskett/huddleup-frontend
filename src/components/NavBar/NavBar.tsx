@@ -69,14 +69,6 @@ export default function Navbar() {
                     </Link>
                   )}
                 </li>
-                <li className='nav-item'>
-                  <Link
-                    className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                    href='/about'
-                  >
-                    About
-                  </Link>
-                </li>
 
                 <li className='nav-item'>
                   <Link
@@ -88,6 +80,14 @@ export default function Navbar() {
                 </li>
               </>
             )}
+            <li className='nav-item pr-5'>
+              <Link
+                className='pl-5 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+                href='/about'
+              >
+                About
+              </Link>
+            </li>
             <li className='nav-item'>
               {user == null ? (
                 <Link
