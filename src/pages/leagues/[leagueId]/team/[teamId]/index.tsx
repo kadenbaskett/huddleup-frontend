@@ -27,6 +27,11 @@ function league() {
   const isMyTeam = viewingTeam?.id === userTeam?.id;
   const leagueFetched = leagueInfoFetchStatus === SLICE_STATUS.SUCCEEDED && viewingTeam;
 
+  // if(rosters)
+  // {
+  //   console.log(rosters[0].players);
+  // }
+
   useEffect(() => {
     const notification = userTeam?.proposed_transactions.find(
       (e) => e.status === ProposalStatus.pending && user.id !== e.user_id,
