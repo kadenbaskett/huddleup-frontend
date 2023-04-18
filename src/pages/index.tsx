@@ -21,7 +21,9 @@ export default function Home() {
         </Head>
         <main className={styles.main}>
           <Image src={logo} alt='huddle logo' width={700} height={700} />
-          <p className='landingText'>It's in the game</p>
+          <Link href='/about'>
+            <p className='landingText underline hover:text-orange'>Learn More </p>
+          </Link>
           {user ? (
             <></>
           ) : (
