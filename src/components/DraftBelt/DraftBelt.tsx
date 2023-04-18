@@ -18,6 +18,7 @@ export default function DraftBelt({ teams, time, activeTeam, draftStarted }: Dra
   function isAuto(team): Boolean {
     if (autoDraft.length === 0) return true;
     const autoTeam = autoDraft.find((ad) => ad.teamId === team.id);
+    if (autoTeam === undefined) return false;
     return autoTeam.auto;
   }
 
