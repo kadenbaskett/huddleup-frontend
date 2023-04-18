@@ -18,13 +18,13 @@
     "noUnusedLocals": true,
     "baseUrl": "src",
     "paths": {
-        "@store/*": ["store/*"],
-        "@components/*": ["components/*"],
-        "@pages/*": ["pages/*"],
-        "@styles/*": ["styles/*"],
-        "@public/*": ["public/*"],
-        "@services/*": ["services/*"],
-        "@interfaces/*": ["interfaces/*"],
+      "@store/*": ["store/*"],
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@styles/*": ["styles/*"],
+      "@public/*": ["public/*"],
+      "@services/*": ["services/*"],
+      "@interfaces/*": ["interfaces/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
