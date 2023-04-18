@@ -61,10 +61,18 @@ export default function AppStateInit({ children }) {
     const firstGlobalUpdate = state.global.status === SLICE_STATUS.IDLE;
 
     const leagueInURL = leagueId !== undefined;
+    const teamInURL = teamId !== undefined;
     const storeLeagueID = state.league.league?.id;
     const storeURLLeagueID = state.league.urlLeagueId;
+    const storeTeamID = state.league.urlTeamId;
     const URLMatchesStore =
       leagueInURL && storeLeagueID === leagueIdNumURL && storeURLLeagueID === leagueIdNumURL;
+
+    const teamURLMatchesStore = teamInURL && storeTeamID === teamIdNumURL;
+
+    console.log('teamIdNumURL', teamIdNumURL);
+
+    console.log('teamURLMatchesStore', teamURLMatchesStore);
 
     dispatch(setURLParams({ leagueIdNumURL, teamIdNumURL }));
 
@@ -77,6 +85,11 @@ export default function AppStateInit({ children }) {
         dispatch(resetSlice());
         clearInterval(leaguePollTimeoutID);
       } else if (leagueInURL && !URLMatchesStore) {
+        console.log('starting league slice update loop');
+        startLeagueSliceUpdateLoop(leagueIdNumURL, teamIdNumURL);
+      } else if (teamInURL && !teamURLMatchesStore) {
+        console.log('starting league slice update loop');
+
         startLeagueSliceUpdateLoop(leagueIdNumURL, teamIdNumURL);
       }
     }

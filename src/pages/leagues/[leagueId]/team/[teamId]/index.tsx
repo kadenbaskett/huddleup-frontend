@@ -69,7 +69,7 @@ function league() {
                   <TeamBanner name={viewingTeam.name} team={viewingTeam} />
                 </Grid.Col>
                 <Grid.Col span={6}>
-                  <TeamInfoBanner league={league} week={currentWeek} team={userTeam} />
+                  <TeamInfoBanner league={league} week={currentWeek} team={viewingTeam} />
                 </Grid.Col>
               </Grid>
             </div>
