@@ -114,10 +114,11 @@ export default function index() {
             <Grid.Col span={6}>
               <div className='font-openSans font-bold text-4xl'>Kaden Baskett</div>
               <div className='font-openSans text-2xl text-left'>
-                I am a senior studying computer science at the University of Utah, and I am
-                originally from Atlanta, Georgia. In my free time I enjoy playing chess,
-                snowboarding, and skateboarding. I am passionate about computer science and will be
-                pursuing a career at Cox Automotive.
+                I am a senior studying computer science at the University of Utah. I am originally
+                from Boise, Idaho. In my free time I enjoy skiing, hiking, and studying financial
+                markets. I've thoroughly enjoyed my education in computer science at Utah and am
+                excited to begin my professional career as a software developer for Nerd United, a
+                Web3 development company.
               </div>
             </Grid.Col>
             <Grid.Col className='font-bold text-xl' span={12}>
