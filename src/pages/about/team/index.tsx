@@ -20,7 +20,7 @@ export default function index() {
           We are huddle up!
         </div>
         <Group position='center'>
-          <Image src={TeamHuddleUp} alt='Joe Rodman' width={500} height={500} />
+          <Image src={TeamHuddleUp} alt='Joe Rodman' width={700} height={700} />
         </Group>
         <div className='font-varsity text-4xl text-darkBlue text-center pt-2 pb-5'>
           Team Members
