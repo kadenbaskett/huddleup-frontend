@@ -85,7 +85,7 @@ export default function index() {
 
   useEffect(() => {
     if (league !== null) {
-      if (draftStarted && draftState.currentPickNum > 1) {
+      if (draftStarted && draftState.currentPickNum > 0) {
         const draftOrderFiltered = draftState.draftOrder
           .filter((d) => d.pick > draftState.currentPickNum)
           .map((d) => {
@@ -104,7 +104,6 @@ export default function index() {
 
   useEffect(() => {
     clearInterval(intervalID);
-    console.log('changing');
 
     intervalID = setInterval(() => {
       const currentTime = new Date().getTime();
