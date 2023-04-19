@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import NFL from '../../public/assets/jakewhiteprofessionalpic.png';
+import NFL from '../../public/assets/jakewhiteprofessionalpic.jpg';
 import styles from './FriendCard.module.css';
 import { Button, Grid, Group } from '@mantine/core';
 import { BsFillPersonFill } from 'react-icons/bs';
