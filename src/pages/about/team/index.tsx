@@ -121,11 +121,6 @@ export default function index() {
                 </Group>
               </div>
             </Grid.Col>
-            <Grid.Col className='font-openSans text-lg' span={12}>
-              <Link className='underline' href='https://www.josephrodman.com' target='_href'>
-                www.josephrodman.com/
-              </Link>
-            </Grid.Col>
           </Grid>
 
           <Grid className='p-5'>
