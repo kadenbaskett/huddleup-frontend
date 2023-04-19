@@ -37,7 +37,11 @@ export default function index() {
             </Grid.Col>
             <Grid.Col className='font-openSans text-lg' span={12}>
               LinkedIn:{' '}
-              <Link className='underline' href='https://www.linkedin.com/in/jakewhiteyo/'>
+              <Link
+                className='underline'
+                href='https://www.linkedin.com/in/jakewhiteyo/'
+                target='_href'
+              >
                 https://www.linkedin.com/in/jakewhiteyo/
               </Link>
             </Grid.Col>
@@ -52,10 +56,13 @@ export default function index() {
             <Grid.Col span={6}>
               <div className='font-varsity font-bold text-4xl'>Joe Rodman</div>
               <div className='font-openSans text-2xl text-left'>
-                I am a senior studying computer science at the University of Utah, and I am
-                originally from Atlanta, Georgia. In my free time I enjoy playing chess,
-                snowboarding, and skateboarding. I am passionate about computer science and will be
-                pursuing a career at Cox Automotive.
+                I took my first programming class three years ago and feel very blessed to have
+                found a career that I find really interesting, that teaches me something new every
+                day, and that provides me the opportunity to solve interesting problems. Of all the
+                topics in CS, I'm most interested in algorithms, and someday I would love to teach
+                an algorithms class. I currently work part time as a Software Engineer at Marq
+                (formerly LucidPress) in Draper and am really looking forward to starting there as a
+                full-time Software Engineer at Marq (formerly LucidPress) after graduation.
               </div>
             </Grid.Col>
             <Grid.Col className='font-bold text-xl' span={12}>
@@ -69,8 +76,17 @@ export default function index() {
             </Grid.Col>
             <Grid.Col className='font-openSans text-lg' span={12}>
               LinkedIn:{' '}
-              <Link className='underline' href='https://www.linkedin.com/in/josephrodman/'>
+              <Link
+                className='underline'
+                href='https://www.linkedin.com/in/josephrodman/'
+                target='_href'
+              >
                 https://www.linkedin.com/in/josephrodman/
+              </Link>
+            </Grid.Col>
+            <Grid.Col className='font-openSans text-lg' span={12}>
+              <Link className='underline' href='https://www.josephrodman.com' target='_href'>
+                www.josephrodman.com/
               </Link>
             </Grid.Col>
           </Grid>
@@ -99,7 +115,11 @@ export default function index() {
             </Grid.Col>
             <Grid.Col className='font-openSans text-lg' span={12}>
               LinkedIn:{' '}
-              <Link className='underline' href='https://www.linkedin.com/in/justindperez/'>
+              <Link
+                className='underline'
+                href='https://www.linkedin.com/in/justindperez/'
+                target='_href'
+              >
                 https://www.linkedin.com/in/justindperez/
               </Link>
             </Grid.Col>
@@ -134,6 +154,7 @@ export default function index() {
               <Link
                 className='underline'
                 href='https://www.linkedin.com/in/kaden-baskett-729143191/'
+                target='_href'
               >
                 https://www.linkedin.com/in/kaden-baskett-729143191/
               </Link>
