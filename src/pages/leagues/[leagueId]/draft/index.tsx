@@ -104,10 +104,10 @@ export default function index() {
 
   useEffect(() => {
     clearInterval(intervalID);
+    console.log('changing');
 
     intervalID = setInterval(() => {
       const currentTime = new Date().getTime();
-
       if (draftState.draftStartTimeMS > currentTime) {
         const thisDiff = draftState.draftStartTimeMS - currentTime;
         const diffSecs = Math.round(thisDiff / 1000);
@@ -131,8 +131,6 @@ export default function index() {
   const [hasPort, setHasPort] = useState(false);
 
   useEffect(() => {
-    console.log('Draft port use effect');
-
     // We don't have a draft port yet and we didn't leave the draft on purpose
     if (!draftState.draftPort && !draftState.isKilled) {
       dispatch(handleFetchDraftPort(league.id));
@@ -145,8 +143,6 @@ export default function index() {
 
   // This should run once - once we have a draft port
   useEffect(() => {
-    console.log('websocket use effect');
-
     if (!websocketConnected && !websocketTryingToConnect) {
       dispatch(draftActions.startConnecting());
     }
@@ -155,7 +151,6 @@ export default function index() {
   // This will run once, and the dismount will only run when we leave the page
   useEffect(() => {
     return () => {
-      console.log('kill connection');
       dispatch(draftActions.killConnection());
     };
   }, []);
