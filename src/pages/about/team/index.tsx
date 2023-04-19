@@ -107,17 +107,12 @@ export default function index() {
                 topics in CS, I'm most interested in algorithms, and someday I would love to teach
                 an algorithms class. I currently work part time as a Software Engineer at Marq
                 (formerly LucidPress) in Draper and am really looking forward to starting there as a
-                full-time Software Engineer at Marq (formerly LucidPress) after graduation.
+                full-time Software Engineer after graduation.
               </div>
               <div className='pt-2 font-bold text-xl'>Contact Info:</div>
               <div className='font-openSans text-lg'>
                 <Group position='center'>
                   <AiFillPhone /> 508-233-0563
-                </Group>
-              </div>
-              <div className='font-openSans text-lg'>
-                <Group position='center'>
-                  <MdEmail /> joesephrodman5@gmail.com
                 </Group>
               </div>
               <div className='font-openSans text-lg'>
@@ -128,11 +123,6 @@ export default function index() {
                   </Link>
                 </Group>
               </div>
-            </Grid.Col>
-            <Grid.Col className='font-openSans text-lg' span={12}>
-              <Link className='underline' href='https://www.josephrodman.com' target='_href'>
-                www.josephrodman.com/
-              </Link>
             </Grid.Col>
           </Grid>
 
