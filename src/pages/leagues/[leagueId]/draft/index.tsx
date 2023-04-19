@@ -85,15 +85,20 @@ export default function index() {
 
   useEffect(() => {
     if (league !== null) {
-      const draftOrderFiltered = draftState.draftOrder
-        .filter((d) => d.pick > draftState.currentPickNum)
-        .map((d) => {
-          return d.teamId;
-        });
-      const teamsFiltered = league.teams
-        .filter((t) => draftOrderFiltered.includes(t.id))
-        .sort(compareTeam);
-      setTeams(teamsFiltered.concat([...league.teams].sort(compareTeam)));
+      if (draftStarted && draftState.currentPickNum > 1) {
+        const draftOrderFiltered = draftState.draftOrder
+          .filter((d) => d.pick > draftState.currentPickNum)
+          .map((d) => {
+            return d.teamId;
+          });
+        const teamsFiltered = league.teams
+          .filter((t) => draftOrderFiltered.includes(t.id))
+          .sort(compareTeam);
+        setTeams(teamsFiltered.concat([...league.teams].sort(compareTeam)));
+      } else {
+        const teamsFiltered = [...league.teams].sort(compareTeam);
+        setTeams(teamsFiltered.concat([...league.teams].sort(compareTeam)));
+      }
     }
   }, [draftState.draftOrder, league]);
 
@@ -121,7 +126,7 @@ export default function index() {
         setTime(tempTime);
       }
     }, 50);
-  }, [draftState.currentPickTimeMS, draftState.draftStartTimeMS]);
+  }, [draftState.currentPickTimeMS, draftState.draftStartTimeMS, draftStarted]);
 
   const [hasPort, setHasPort] = useState(false);
 
