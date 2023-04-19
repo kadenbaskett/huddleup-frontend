@@ -72,7 +72,6 @@ export const handleLeagueInitThunk = createAsyncThunk(
   async (data: any, { getState }) => {
     const leagueIdURL = data.leagueIdURL;
     const teamIdURL = data.teamIdURL;
-    // console.log(teamIdURL);
 
     const playersResp = await fetchLeaguePlayers(leagueIdURL);
     const leagueResp = await fetchLeagueInfo(leagueIdURL);

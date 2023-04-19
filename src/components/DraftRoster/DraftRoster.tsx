@@ -17,26 +17,15 @@ export default function DraftRoster(props: DraftRosterProps) {
   const store = useSelector((state: StoreState) => state);
   const league = store.league.league;
   const userTeam = store.league.userTeam;
-  const allPlayers = store.league.playerList;
-  const draftPlayers = store.draft.draftPlayers;
 
   const [token, setToken] = useState(userTeam.token);
 
-  const myRosterID = draftPlayers
-    .filter((draftPlayer) => draftPlayer.team_id === userTeam.id)
-    .map((player) => player.player_id);
-  const myPlayers = allPlayers.filter((player) => myRosterID.includes(player.id));
-
-  const [viewRoster, setViewRoster] = useState(myPlayers);
+  const [viewRoster, setViewRoster] = useState(userTeam.rosters[0].players);
 
   const setRoster = (e) => {
     setToken(e);
     const currTeam = league.teams.find((team) => team.token === e);
-    const currRosterID = draftPlayers
-      .filter((draftPlayer) => draftPlayer.team_id === currTeam.id)
-      .map((player) => player.player_id);
-    const getPlayers = allPlayers.filter((player) => currRosterID.includes(player.id));
-    setViewRoster(getPlayers);
+    setViewRoster(currTeam.rosters[0].players);
   };
 
   useEffect(() => {
@@ -68,11 +57,12 @@ export default function DraftRoster(props: DraftRosterProps) {
               render: (p) => (
                 <>
                   <Group>
-                    <Avatar src={p.photo_url} alt={'player image'} />
+                    <Avatar src={p.player.photo_url} alt={'player image'} />
                     <div className='text-darkBlue font-bold text-xl'>
-                      {p.first_name} {p.last_name}
+                      {p.player.first_name} {p.player.last_name}
                       <div className='text-orange font-thin text-sm'>
-                        {p.position} | {p.current_nfl_team ? p.current_nfl_team.name : ''}
+                        {p.player.position} |{' '}
+                        {p.player.current_nfl_team ? p.player.current_nfl_team.name : ''}
                       </div>
                     </div>
                   </Group>

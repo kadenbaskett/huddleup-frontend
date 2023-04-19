@@ -171,11 +171,11 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
         return player.id;
       });
     setBench(benched);
-  }, [week]);
+  }, [week, rosters]);
 
   useEffect(() => {
     void updateLineup();
-  }, [lineupChange, rosters]);
+  }, [lineupChange]);
 
   const updateLineup = async () => {
     const positions = ['TE', 'RB', 'WR', 'QB', 'BE', 'FLEX'];
@@ -204,8 +204,19 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
           break;
       }
 
-      // For every player in the UI, make sure their roster player obj has the correct position
-      const outOfPosition = playersInPosition.filter((p) => p.position !== position);
+      const outOfPosition = [];
+
+      for (const playerInPosRosterId of playersInPosition) {
+        const roster = rosters.find((r) => r.week === Number(currentWeek));
+        const rosterPlayer = roster.players.find(
+          (rosterPlayer) => rosterPlayer.id === playerInPosRosterId,
+        );
+
+        if (rosterPlayer.position !== position) {
+          outOfPosition.push(rosterPlayer.id);
+        }
+      }
+
       for (const rosterPlayerId of outOfPosition) {
         await editLineup(rosterPlayerId, position);
       }

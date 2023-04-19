@@ -27,6 +27,11 @@ function league() {
   const isMyTeam = viewingTeam?.id === userTeam?.id;
   const leagueFetched = leagueInfoFetchStatus === SLICE_STATUS.SUCCEEDED && viewingTeam;
 
+  // if(rosters)
+  // {
+  //   console.log(rosters[0].players);
+  // }
+
   useEffect(() => {
     const notification = userTeam?.proposed_transactions.find(
       (e) => e.status === ProposalStatus.pending && user.id !== e.user_id,
@@ -69,7 +74,7 @@ function league() {
                   <TeamBanner name={viewingTeam.name} team={viewingTeam} />
                 </Grid.Col>
                 <Grid.Col span={6}>
-                  <TeamInfoBanner league={league} week={currentWeek} team={userTeam} />
+                  <TeamInfoBanner league={league} week={currentWeek} team={viewingTeam} />
                 </Grid.Col>
               </Grid>
             </div>
