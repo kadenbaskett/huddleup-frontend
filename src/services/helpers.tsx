@@ -257,8 +257,6 @@ export async function findLeagueByToken(privateleagues, token: string) {
 
 export function getTeamScore(roster, week) {
   let score = 0;
-  console.log('week', week);
-  console.log('roster', roster);
   roster.players.forEach((player) => {
     if (player.position === 'BE') return;
     const stats = player.player.player_game_stats.find((stat) => stat.game.week === week);
