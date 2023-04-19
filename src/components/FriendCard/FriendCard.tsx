@@ -1,6 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
-import NFL from '../../public/assets/jakewhiteprofessionalpic.png';
 import styles from './FriendCard.module.css';
 import { Button, Grid, Group } from '@mantine/core';
 import { BsFillPersonFill } from 'react-icons/bs';
@@ -23,7 +21,6 @@ export function FriendCard(friend: friendProps) {
       <Grid>
         <Grid.Col span='auto'>
           <Group position='left'>
-            <Image src={NFL} alt={friend.name + '-image'} height={100} width={100} />
             <div className='text-6xl font-varsity text-darkBlue pt-1'>{friend.name}</div>
           </Group>
         </Grid.Col>
