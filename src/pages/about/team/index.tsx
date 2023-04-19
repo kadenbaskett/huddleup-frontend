@@ -11,8 +11,11 @@ import Link from 'next/link';
 import { AiFillPhone } from 'react-icons/ai';
 import { MdEmail } from 'react-icons/md';
 import { AiFillLinkedin } from 'react-icons/ai';
+import { useWindowResize } from '@services/helpers';
 
 export default function index() {
+  const windowSize: number[] = useWindowResize();
+  const spanCol = windowSize[0] > 800 || windowSize[0] === 0 ? 6 : 12;
   return (
     <div className='bg-lightGrey min-h-screen p-5 xl:pl-40 xl:pr-40'>
       <div className='pb-5'>
@@ -41,7 +44,7 @@ export default function index() {
         </div>
         <div className='text-center'>
           <Grid className='p-5'>
-            <Grid.Col span={6}>
+            <Grid.Col span={spanCol}>
               <div className='font-varsity font-bold text-4xl'>Jake White</div>
               <div className='font-openSans text-2xl text-left'>
                 Originally from Park City, Utah. I have spent my last year at the University of Utah
@@ -72,7 +75,7 @@ export default function index() {
                 </div>
               </div>
             </Grid.Col>
-            <Grid.Col span={6}>
+            <Grid.Col span={spanCol}>
               <Image
                 className='rotate-3 hover:rotate-0 transition ease-in-out duration-300'
                 src={Jake}
@@ -84,7 +87,7 @@ export default function index() {
           </Grid>
 
           <Grid className='p-5'>
-            <Grid.Col span={6}>
+            <Grid.Col span={spanCol}>
               <div className='grid place-items-end'>
                 <Image
                   className='-rotate-3 hover:rotate-0 transition ease-in-out duration-300'
@@ -95,7 +98,7 @@ export default function index() {
                 />
               </div>
             </Grid.Col>
-            <Grid.Col span={6}>
+            <Grid.Col span={spanCol}>
               <div className='font-varsity font-bold text-4xl'>Joe Rodman</div>
               <div className='font-openSans text-2xl text-left'>
                 I took my first programming class three years ago and feel very blessed to have
@@ -134,7 +137,7 @@ export default function index() {
           </Grid>
 
           <Grid className='p-5'>
-            <Grid.Col span={6}>
+            <Grid.Col span={spanCol}>
               <div className='font-varsity font-bold text-4xl'>Justin Perez</div>
               <div className='font-openSans text-2xl text-left'>
                 I am a senior studying computer science at the University of Utah, and I am
@@ -162,7 +165,7 @@ export default function index() {
                 </Group>
               </div>
             </Grid.Col>
-            <Grid.Col span={6}>
+            <Grid.Col span={spanCol}>
               <Image
                 className='rotate-3 hover:rotate-0 transition ease-in-out duration-300'
                 src={Justin}
@@ -174,7 +177,7 @@ export default function index() {
           </Grid>
 
           <Grid className='p-5'>
-            <Grid.Col span={6}>
+            <Grid.Col span={spanCol}>
               <div className='grid place-items-end'>
                 <Image
                   className='-rotate-3 hover:rotate-0 transition ease-in-out duration-300'
@@ -185,7 +188,7 @@ export default function index() {
                 />
               </div>
             </Grid.Col>
-            <Grid.Col span={6}>
+            <Grid.Col span={spanCol}>
               <div className='font-openSans font-bold text-4xl'>Kaden Baskett</div>
               <div className='font-openSans text-2xl text-left'>
                 I am a senior studying computer science at the University of Utah. I am originally
