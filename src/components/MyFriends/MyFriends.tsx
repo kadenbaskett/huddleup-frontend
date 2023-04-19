@@ -1,10 +1,8 @@
 import React from 'react';
-import Image from 'next/image';
-import ProfilePic from '../../public/assets/jakewhiteprofessionalpic.png';
 import styles from './MyFriends.module.css';
 import { Grid, Group } from '@mantine/core';
-import { Friend } from '@pages/home/types';
 import Link from 'next/link';
+import { Friend } from '@interfaces/types.interface';
 export interface myFriendProps {
   friends: Friend[];
 }
@@ -19,7 +17,6 @@ const renderFriend = (friend: Friend) => {
         <Grid>
           <Grid.Col span='auto'>
             <Group position='left'>
-              <Image src={ProfilePic} alt={'-image'} height={100} width={100} />
               <div className='text-xl font-varsity text-darkBlue pt-1'>{friend.name}</div>
             </Group>
           </Grid.Col>
