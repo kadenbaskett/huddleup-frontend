@@ -1,5 +1,5 @@
 /* eslint-disable import/no-duplicates */
-import { Grid, Group } from '@mantine/core';
+import { Button, Grid, Group } from '@mantine/core';
 import React from 'react';
 import Image from 'next/image';
 import Jake from '@public/assets/jakewhiteprofessionalpic.jpg';
@@ -15,6 +15,20 @@ import { AiFillLinkedin } from 'react-icons/ai';
 export default function index() {
   return (
     <div className='bg-lightGrey min-h-screen p-5 xl:pl-40 xl:pr-40'>
+      <div className='pb-5'>
+        <Group position='left'>
+          <Link href='/about'>
+            <Button
+              className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+              variant='default'
+              size='md'
+              radius='lg'
+            >
+              Back to About
+            </Button>
+          </Link>
+        </Group>
+      </div>
       <div className='bg-white rounded-xl p-5 pl-5 xl:pl-20 2xl:pl-40'>
         <div className='font-varsity text-4xl text-darkBlue text-center pb-5'>
           We are huddle up!
