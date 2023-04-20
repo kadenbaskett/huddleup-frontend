@@ -150,15 +150,15 @@ export default function index() {
   // This will run once, and the dismount will only run when we leave the page
   useEffect(() => {
     return () => {
-      dispatch(draftActions.killConnection());
+      dispatch(draftActions.closeSocketIntentionally());
     };
   }, []);
 
-  useEffect(() => {
-    if (draftState.isKilled) {
-      dispatch(draftActions.closeSocketIntentionally());
-    }
-  }, [draftState.isKilled]);
+  // useEffect(() => {
+  //   if (draftState.isKilled) {
+  //     dispatch(draftActions.closeSocketIntentionally());
+  //   }
+  // }, [draftState.isKilled]);
 
   const content = (
     <>

@@ -47,6 +47,7 @@ const draftMiddleware: Middleware = (store) => {
 
   let socket;
   let initDraftStateInterval;
+  let isKilled = false;
 
   // This is the only place socket.send should be called
   function sendSocketMessage(msg) {
@@ -103,6 +104,7 @@ const draftMiddleware: Middleware = (store) => {
     const isDraftKilled = draftState.isKilled;
 
     if (draftActions.closeSocketIntentionally.match(action)) {
+      isKilled = true;
       socket?.close();
     } else if (draftActions.startConnecting.match(action)) {
       const devURL = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
@@ -129,7 +131,7 @@ const draftMiddleware: Middleware = (store) => {
         if (dataObj?.type === MSG_TYPES.END_DRAFT) {
           setTimeout(() => {
             console.log('TIME TO LEAVE');
-            store.dispatch(draftActions.killConnection());
+            store.dispatch(draftActions.closeSocketIntentionally());
             void router.push('/leagues');
           }, 5000);
         } else {
@@ -138,11 +140,19 @@ const draftMiddleware: Middleware = (store) => {
       };
 
       socket.onclose = function () {
-        if (!isDraftKilled) {
+        console.log('we are in on close');
+        console.log('isKilled', isKilled);
+        if (!isKilled) {
+          // this restarts the connection loop
           store.dispatch(draftActions.connectionClosed());
           store.dispatch(draftActions.startConnecting());
         } else {
+          // reset draft state for future connection
+
           store.dispatch(draftActions.resetDraftState());
+          isKilled = false;
+          console.log('resetting is killed');
+          console.log('isKilled', isKilled);
         }
       };
     }
