@@ -9,6 +9,6 @@ export const numWeeks = 18;
 
 export const TIMEOUTS = {
   LEAGUE: 1000,
-  USER: 5000,
-  GLOBAL: 5000,
+  USER: 1000,
+  GLOBAL: 1000,
 };

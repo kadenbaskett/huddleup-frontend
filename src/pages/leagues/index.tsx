@@ -16,12 +16,14 @@ function Leagues() {
 
   const renderLeague = (league: League) => {
     return (
-      <div className='grid col-span-10'>
-        <UserLeagueCard
-          league={league}
-          userTeam={userTeams.find((t) => t.league_id === league.id)}
-        />
-      </div>
+      <>
+        <div className='pt-2'>
+          <UserLeagueCard
+            league={league}
+            userTeam={userTeams.find((t) => t.league_id === league.id)}
+          />
+        </div>
+      </>
     );
   };
 
@@ -29,34 +31,36 @@ function Leagues() {
     <>
       {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
       {userInfoFetchStatus === 'succeeded' && (
-        <div className='grid grid-cols-10 bg-lightGrey p-10 min-h-screen gap-3 flex items-start'>
-          <div className='col-span-4'>
-            <Group>
-              <Link href={'/leagues/join'}>
-                <Button
-                  leftIcon={<HiUserGroup />}
-                  className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-                  variant='default'
-                  size='xl'
-                >
-                  Join a league
-                </Button>
-              </Link>
+        <>
+          <div className='bg-lightGrey p-10 min-h-screen'>
+            <div className=''>
+              <Group>
+                <Link href={'/leagues/join'}>
+                  <Button
+                    leftIcon={<HiUserGroup />}
+                    className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                    variant='default'
+                    size='xl'
+                  >
+                    Join a league
+                  </Button>
+                </Link>
 
-              <Link href={'/leagues/create'}>
-                <Button
-                  leftIcon={<BsPlusLg />}
-                  className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-                  variant='default'
-                  size='xl'
-                >
-                  Create a League
-                </Button>
-              </Link>
-            </Group>
+                <Link href={'/leagues/create'}>
+                  <Button
+                    leftIcon={<BsPlusLg />}
+                    className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                    variant='default'
+                    size='xl'
+                  >
+                    Create a League
+                  </Button>
+                </Link>
+              </Group>
+            </div>
+            <div className='pt-5'>{userLeagues.map((league) => renderLeague(league))}</div>
           </div>
-          {userLeagues.map((league) => renderLeague(league))}
-        </div>
+        </>
       )}
     </>
   );

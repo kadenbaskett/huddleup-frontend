@@ -20,10 +20,8 @@ export default function Authorization({ children }) {
     // bug causing useEffect and then onAuthStateChanged to happen twice
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log('Auth change: Logged in with firebase');
         startUserSliceUpdateLoop(user.email);
       } else {
-        console.log('Auth change: Logged out');
         clearTimeout(userPollTimeoutID);
         dispatch(logoutUser({}));
       }

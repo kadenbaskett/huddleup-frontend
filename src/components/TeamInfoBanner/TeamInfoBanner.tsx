@@ -27,10 +27,10 @@ export function TeamInfoBanner(props: TeamInfoBannerProps) {
       );
     });
 
-    if (nextMatchup.home_team_id === props.team.id) {
-      setNextTeamName(nextMatchup.away_team.name);
+    if (nextMatchup?.home_team_id === props.team.id) {
+      setNextTeamName(nextMatchup?.away_team.name);
     } else {
-      setNextTeamName(nextMatchup.home_team.name);
+      setNextTeamName(nextMatchup?.home_team.name);
     }
 
     const newUserRoster = props.team?.rosters.find((roster) => {
@@ -43,7 +43,6 @@ export function TeamInfoBanner(props: TeamInfoBannerProps) {
     const newOtherTeam = props.league?.teams.find((t) => {
       return t.id === otherTeamId;
     });
-
     setOtherTeam(newOtherTeam);
     const newOtherRoster = newOtherTeam?.rosters.find((roster) => {
       return roster.week === props.week;
@@ -51,6 +50,7 @@ export function TeamInfoBanner(props: TeamInfoBannerProps) {
 
     setHomeScore(getTeamScore(newUserRoster, props.week));
 
+    console.log('newOtherRoster', newOtherRoster);
     setOtherScore(getTeamScore(newOtherRoster, props.week));
   }, [props.week]);
 

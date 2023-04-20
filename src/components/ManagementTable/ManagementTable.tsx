@@ -123,8 +123,7 @@ export function ManagementTable({ proposals, teamId, userId }: ManagementTablePr
         </td>
       </tr>
     ));
-  console.log('relatedRows', relatedRows);
-  console.log('proposedRows', proposedRows);
+
   return (
     <>
       <Table>

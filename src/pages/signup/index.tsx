@@ -36,7 +36,6 @@ function Signup() {
       const resp = await createAccount(username, email, password);
 
       if (resp === 'success') {
-        console.log('Account created succesfully!');
         void router.push('/home');
       } else {
         setLoading(false);

@@ -1,43 +1,157 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Middleware } from 'redux';
-import { draftActions } from '@store/slices/draftSlice';
 import SockJS from 'sockjs-client';
+import { draftActions, draftSliceState } from '@store/slices/draftSlice';
+import { userSliceState } from '@store/slices/userSlice';
+import { leagueSliceState } from '@store/slices/leagueSlice';
+import { useRouter } from 'next/router';
+
+const CONNECTION = {
+  HOST: 'localhost',
+  PORT: 9999,
+  SERVER_PREFIX: '/websocket/draft',
+  SCHEME: 'http',
+};
+
+const NGROK_CONNECTION = {
+  HOST: 'c367-155-98-131-7.ngrok.io',
+  PORT: '9999',
+  SERVER_PREFIX: '/websocket/draft',
+  SCHEME: 'http',
+};
+
+// NEEDS TO BY IN SYNC WITH THE BACKEND
+export const MSG_TYPES = {
+  PING: 'ping',
+  INITIAL_CONNECTION: 'initialConnectionGetDraftState',
+  DRAFT_UPDATE: 'draftUpdate',
+  QUEUE_PLAYER: 'queuePlayer',
+  DRAFT_PLAYER: 'draftPlayer',
+  ERROR: 'error',
+  END_DRAFT: 'endDraft',
+  FILL_DRAFT: 'fillDraft',
+};
+
+export function formatMessage(msgContent, type) {
+  return {
+    content: msgContent,
+    type,
+  };
+}
 
 const draftMiddleware: Middleware = (store) => {
-  const url = 'http://localhost:9999/echo';
+  const local_url = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${CONNECTION.PORT}${CONNECTION.SERVER_PREFIX}`;
+  const url = `${NGROK_CONNECTION.SCHEME}://${NGROK_CONNECTION.HOST}${NGROK_CONNECTION.SERVER_PREFIX}`;
+
+  const router = useRouter();
+
   let socket;
+  let initDraftStateInterval;
+  let isKilled = false;
+
+  // This is the only place socket.send should be called
+  function sendSocketMessage(msg) {
+    msg = packMessage(msg);
+    socket?.send(JSON.stringify(msg));
+  }
+
+  function requestInitialDraftState() {
+    initDraftStateInterval = setInterval(() => {
+      console.log('Requesting initial draft state');
+      const draftState: draftSliceState = store.getState().draft;
+      const userState: userSliceState = store.getState().user;
+      const leagueState: leagueSliceState = store.getState().league;
+
+      if (
+        !draftState.hasInitialDraftState &&
+        userState.userInfo.id &&
+        leagueState.league?.id &&
+        leagueState.userTeam?.id
+      ) {
+        const initMsg = {
+          type: MSG_TYPES.INITIAL_CONNECTION,
+          content: {},
+        };
+        sendSocketMessage(initMsg);
+      } else {
+        clearInterval(initDraftStateInterval);
+      }
+    }, 1000);
+  }
+
+  // Responsible for adding fields to the message that we want to send every time, eg: if we want to send user_id, team_id, and league_id with every msg
+  function packMessage(msg) {
+    const userState: userSliceState = store.getState().user;
+    const leagueState: leagueSliceState = store.getState().league;
+    return {
+      ...msg,
+      content: {
+        ...msg.content,
+        user_id: userState.userInfo.id,
+        league_id: leagueState.league.id,
+        team_id: leagueState.userTeam.id,
+      },
+    };
+  }
 
   return (next) => (action) => {
-    const isConnectionEstablished = socket && store.getState().draft.isConnected;
+    if (!action.type.startsWith('draft')) {
+      next(action);
+    }
 
-    if (draftActions.startConnecting.match(action)) {
-      socket = new SockJS(url);
+    const draftState: draftSliceState = store.getState().draft;
+    const isConnectionEstablished = socket && draftState.isConnected;
+
+    if (draftActions.closeSocketIntentionally.match(action)) {
+      isKilled = true;
+      socket?.close();
+    } else if (draftActions.startConnecting.match(action)) {
+      const devURL = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
+      const prodURL = `https://huddleupfantasy.com/draftSocket/${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
+
+      socket = process.env.NODE_ENV === 'production' ? new SockJS(prodURL) : new SockJS(devURL);
 
       socket.onopen = function () {
         store.dispatch(draftActions.connectionEstablished());
+        requestInitialDraftState();
+      };
+
+      socket.onerror = (error) => {
+        console.error('Socket Connection error:', error);
       };
 
       socket.onmessage = function (socketMessage) {
-        store.dispatch(draftActions.receiveMessage({ socketMessage }));
+        const { data } = socketMessage;
+        const dataObj = JSON.parse(data);
+
+        if (dataObj?.type === MSG_TYPES.END_DRAFT) {
+          setTimeout(() => {
+            console.log('TIME TO LEAVE');
+            store.dispatch(draftActions.closeSocketIntentionally());
+            void router.push('/leagues');
+          }, 5000);
+        } else {
+          store.dispatch(draftActions.receiveMessage({ socketMessage }));
+        }
       };
 
       socket.onclose = function () {
-        store.dispatch(draftActions.connectionClosed());
+        if (!isKilled) {
+          // this restarts the connection loop
+          store.dispatch(draftActions.connectionClosed());
+          store.dispatch(draftActions.startConnecting());
+        } else {
+          // reset draft state for future connection
+
+          store.dispatch(draftActions.resetDraftState());
+          isKilled = false;
+        }
       };
     }
 
-    // TODO remove after testing
-    if (draftActions.connectionEstablished.match(action)) {
-      setInterval(() => {
-        const msg = {
-          time: new Date().getTime(),
-        };
-
-        socket.send(JSON.stringify(msg));
-      }, 5000);
-    }
-
     if (draftActions.sendMessage.match(action) && isConnectionEstablished) {
-      socket.send(action.payload.content);
+      sendSocketMessage(action.payload);
     }
 
     next(action);

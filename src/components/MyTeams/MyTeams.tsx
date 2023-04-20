@@ -1,13 +1,12 @@
 import React from 'react';
-import Image from 'next/image';
-import TeamProfilePic from '../../public/assets/huddle-up-logo.png';
 import { Team, League } from '@interfaces/league.interface';
 import Link from 'next/link';
+import { GiAmericanFootballHelmet } from 'react-icons/gi';
 
 const renderRow = (team: Team, leagues: League[]) => {
-  const userLeague: League = leagues.find((league) => league.id === team.league.id);
-
-  const activeLeague = userLeague.teams.length < 8;
+  const userLeague = leagues.find((league) => league.id === team.league.id);
+  const activeLeague =
+    userLeague.settings.roster_settings.roster_size_limit !== team.rosters[0]?.players.length;
 
   const leagueLink = activeLeague
     ? `/leagues/${Number(team.league.id)}/join/${team.league.token}`
@@ -21,13 +20,7 @@ const renderRow = (team: Team, leagues: League[]) => {
     <>
       <div className='inline-flex'>
         <div>
-          <Image
-            className='circularImage justify-right col-span-1 align-middle'
-            src={TeamProfilePic}
-            alt={team.name + ' profile pic'}
-            width={92}
-            height={92}
-          />
+          <GiAmericanFootballHelmet size={45} />
         </div>
         <Link
           href={teamLink}

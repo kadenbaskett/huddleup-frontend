@@ -5,25 +5,8 @@ import { useWindowResize } from '@services/helpers';
 import { StoreState } from '@store/store';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import MyFriends from '../../components/MyFriends/MyFriends';
 import MyNews from '../../components/MyNews/MyNews';
 import MyTeams from '../../components/MyTeams/MyTeams';
-import { Friend } from './types';
-
-const friendData: Friend[] = [
-  {
-    name: 'Joe',
-    id: 1,
-  },
-  {
-    name: 'Jake',
-    id: 2,
-  },
-  {
-    name: 'Kaden',
-    id: 3,
-  },
-];
 
 // const mynews: News[] = [
 //   { news: 'This wil be news about something' },
@@ -52,6 +35,7 @@ export default function Home(props: any) {
     teamAndFriendSpan = 20;
     newsSpan = 20;
   }
+
   return (
     <>
       {userInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
@@ -63,9 +47,6 @@ export default function Home(props: any) {
                 <MyTeams teams={userTeams} leagues={userLeagues} />
               </div>
               <br></br>
-              <div className='bg-white hover:drop-shadow-md rounded-xl'>
-                <MyFriends friends={friendData} />
-              </div>
             </Grid.Col>
             <Grid.Col span={newsSpan}>
               <div className='hover:drop-shadow-md rounded-xl'>

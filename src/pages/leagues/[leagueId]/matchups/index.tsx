@@ -1,5 +1,4 @@
 import { StoreState } from '@store/store';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import LeagueNavBar from '@components/LeagueNavBar/LeagueNavBar';
@@ -7,23 +6,20 @@ import { ThisWeekCard } from '../../../../components/ThisWeekCard/ThisWeekCard';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
 
 function matchups() {
-  const router = useRouter();
-  const { leagueId } = router.query;
-  const league = useSelector((state: StoreState) => state.league.league);
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
-  const team = useSelector((state: StoreState) => state.league.userTeam);
-  const currentWeek = useSelector((state: StoreState) => state.global.week);
-
+  const store = useSelector((state: StoreState) => state);
+  const league = store.league.league;
+  const team = store.league.userTeam;
+  const currentWeek = store.global.week;
   return (
     <>
-      {leagueInfoFetchStatus !== 'succeeded' && <HuddleUpLoader />}
-      {leagueInfoFetchStatus === 'succeeded' && (
+      {!league && !team && !currentWeek && <HuddleUpLoader />}
+      {team && league && (
         <>
           <LeagueNavBar
-            teamName={team ? team.name : ' '}
-            teamId={team ? team.id : 0}
-            leagueName={league ? league.name : ' '}
-            leagueId={Number(leagueId)}
+            teamName={team.name}
+            teamId={team.id}
+            leagueName={league.name}
+            leagueId={Number(league.id)}
             page='matchups'
           />
           <div className='bg-lightGrey lg:pl-10 lg:pr-10 md:pr-5 md:pl-5 sm:pr-0 sm:pl-0 xl:pl-40 xl:pr-40 min-h-screen'>

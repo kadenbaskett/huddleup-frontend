@@ -19,11 +19,13 @@ const createTeamMemberCard = (manager, isCaptain: boolean, team) => {
 };
 
 export default function index() {
-  const leagueInfoFetchStatus: String = useSelector((state: StoreState) => state.league.status);
-  const userStatus: String = useSelector((state: StoreState) => state.user.status);
-  const league = useSelector((state: StoreState) => state.league.league);
-  const userTeam = useSelector((state: StoreState) => state.league.userTeam);
-  const currUser = useSelector((state: StoreState) => state.user);
+  const store = useSelector((state: StoreState) => state);
+  // const leagueInfoFetchStatus: String = store.league.status;
+  // const userStatus: String = store.user.status;
+  const league = store.league.league;
+  const userTeam = store.league.userTeam;
+  const currUser = store.user;
+
   const captainID = userTeam?.managers.find((manager) => manager.is_captain).user_id;
   const isUserManager = currUser.userInfo?.id === captainID;
   const teamManagers = userTeam?.managers;
@@ -97,10 +99,17 @@ export default function index() {
 
   return (
     <>
-      {leagueInfoFetchStatus !== 'succeeded' && userStatus !== 'succeeded' && <HuddleUpLoader />}
-      {leagueInfoFetchStatus === 'succeeded' && (
+      {!userTeam && (
+        <>
+          <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold'>
+            Loading ...
+          </h1>
+          <HuddleUpLoader />
+        </>
+      )}
+      {userTeam && (
         <div className='bg-lightGrey pl-10 pr-10 sm:pl-5 sm:pr-5 xl:pl-40 xl:pr-40 min-h-screen'>
-          <div className='pt-5'>
+          <div className='pt-5 pb-5'>
             <Link href={`/leagues/${Number(league.id)}/join/${String(league.token)}`}>
               <Button
                 className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
@@ -112,19 +121,20 @@ export default function index() {
               </Button>
             </Link>
           </div>
-          <div className='pt-4 pb-4'>
-            <label className='font-varsity text-6xl'>{league.name}</label>
-            <div>
-              <label className='font-varsity text-orange text-3xl'>
-                {userTeam ? userTeam.name : ''}
-              </label>
+
+          <div className='pt-4 pb-4 bg-white rounded-xl border border-white transition-all ease-in duration-200 hover:drop-shadow-md'>
+            <div className='pl-5'>
+              <label className='font-varsity text-6xl'>{league.name}</label>
+              <div>
+                <label className='font-varsity text-orange text-3xl'>{userTeam.name}</label>
+              </div>
             </div>
           </div>
 
           <div className='pt-4 pb-4'>
             <label className='font-OpenSans font-bold text-2xl'>Team Members:</label>
             <>
-              {teamManagers?.map((manager) => {
+              {teamManagers.map((manager) => {
                 return createTeamMemberCard(manager, isUserManager, userTeam);
               })}
             </>

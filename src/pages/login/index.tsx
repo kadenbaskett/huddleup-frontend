@@ -8,11 +8,21 @@ function Login() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [emailValue, setEmailValue] = useState('talloryx0@gmail.com');
+  const [passwordValue, setPasswordValue] = useState('password');
 
   const router = useRouter();
 
   const handleRememberMe = () => {
     setRememberMe((current) => !current);
+  };
+
+  const handleEmailChange = (event) => {
+    setEmailValue(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPasswordValue(event.target.value);
   };
 
   const handleLogin = async () => {
@@ -67,6 +77,15 @@ function Login() {
               variant='filled'
               radius='md'
               className='py-2.5'
+              value={emailValue}
+              onChange={handleEmailChange}
+              styles={(theme) => ({
+                input: {
+                  '&:focus-within': {
+                    borderColor: '#ff6b00',
+                  },
+                },
+              })}
             />
 
             <PasswordInput
@@ -77,6 +96,15 @@ function Login() {
               variant='filled'
               radius='md'
               className='py-2.5'
+              value={passwordValue}
+              onChange={handlePasswordChange}
+              styles={(theme) => ({
+                input: {
+                  '&:focus-within': {
+                    borderColor: '#ff6b00',
+                  },
+                },
+              })}
             />
 
             <div className=' mt-2 flex items-center justify-between'>

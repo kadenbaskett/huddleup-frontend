@@ -3,27 +3,38 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, StoreState } from '@store/store';
 import { handleGlobalInitThunk } from '@store/slices/globalSlice';
-import { handleLeagueInitThunk } from '@store/slices/leagueSlice';
+import { resetSlice, handleLeagueInitThunk, setURLParams } from '@store/slices/leagueSlice';
 import { SLICE_STATUS } from '@store/slices/common';
 import { TIMEOUTS } from 'static';
+import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
+
+let leaguePollTimeoutID = null;
+let globalPollTimeoutID = null;
 
 export default function AppStateInit({ children }) {
   const router = useRouter();
-  const { leagueId } = router.query;
+  let { leagueId } = router.query;
+  let { teamId } = router.query;
 
   const state = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
 
-  let leaguePollTimeoutID = null;
-  let globalPollTimeoutID = null;
+  let leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
+  let userFetched = state.user.status === SLICE_STATUS.SUCCEEDED;
+  let globalFetched = state.global.status === SLICE_STATUS.SUCCEEDED;
+  let userLoggedIn = state.user.status === SLICE_STATUS.SUCCEEDED;
+  let areRostersReadyForCurrentWeek = true;
 
-  const startLeagueSliceUpdateLoop = (id: number) => {
-    dispatch(handleLeagueInitThunk(Number(id)));
+  const startLeagueSliceUpdateLoop = (leagueIdParam: number, teamIdParam: number) => {
+    // console.log('Start league slice update loop for league id: ', leagueIdParam);
+
+    const data: any = { leagueIdURL: leagueIdParam, teamIdURL: teamIdParam };
+
     clearInterval(leaguePollTimeoutID);
-    leaguePollTimeoutID = setInterval(
-      () => dispatch(handleLeagueInitThunk(Number(id))),
-      TIMEOUTS.LEAGUE,
-    );
+
+    dispatch(handleLeagueInitThunk(data));
+
+    leaguePollTimeoutID = setInterval(() => dispatch(handleLeagueInitThunk(data)), TIMEOUTS.LEAGUE);
   };
 
   const startGlobalSliceUpdateLoop = () => {
@@ -32,22 +43,84 @@ export default function AppStateInit({ children }) {
     globalPollTimeoutID = setInterval(() => dispatch(handleGlobalInitThunk()), TIMEOUTS.GLOBAL);
   };
 
-  useEffect(() => {
-    const firstGlobalUpdate = state.global.status === SLICE_STATUS.IDLE;
-    const firstLeagueUpdate = state.league.status === SLICE_STATUS.IDLE;
+  // useEffect(() => {
+  //   leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
+  // }, [state.league.status]);
 
-    const viewingNewLeague =
-      state.league.status === SLICE_STATUS.SUCCEEDED && state.league.league.id !== Number(leagueId);
-    const userLoggedIn = state.user.status === SLICE_STATUS.SUCCEEDED;
+  useEffect(() => {
+    leagueId = router.query.leagueId;
+    teamId = router.query.teamId;
+
+    const leagueIdNumURL = Number(leagueId);
+    const teamIdNumURL = Number(teamId);
+
+    userLoggedIn = state.user.status === SLICE_STATUS.SUCCEEDED;
+    leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
+    globalFetched = state.global.status === SLICE_STATUS.SUCCEEDED;
+    userFetched = state.user.status === SLICE_STATUS.SUCCEEDED;
+
+    const firstGlobalUpdate = state.global.status === SLICE_STATUS.IDLE;
+
+    const leagueInURL = leagueId !== undefined;
+    const teamInURL = teamId !== undefined;
+    const storeLeagueID = state.league.league?.id;
+    const storeURLLeagueID = state.league.urlLeagueId;
+    const storeTeamID = state.league.urlTeamId;
+    const URLMatchesStore =
+      leagueInURL && storeLeagueID === leagueIdNumURL && storeURLLeagueID === leagueIdNumURL;
+
+    const teamURLMatchesStore = teamInURL && storeTeamID === teamIdNumURL;
+
+    dispatch(setURLParams({ leagueIdNumURL, teamIdNumURL }));
 
     if (firstGlobalUpdate) {
       startGlobalSliceUpdateLoop();
     }
 
-    if (userLoggedIn && leagueId && (firstLeagueUpdate || viewingNewLeague)) {
-      startLeagueSliceUpdateLoop(Number(leagueId));
+    if (userLoggedIn) {
+      if (!leagueInURL) {
+        dispatch(resetSlice());
+        clearInterval(leaguePollTimeoutID);
+      } else if (leagueInURL && !URLMatchesStore) {
+        startLeagueSliceUpdateLoop(leagueIdNumURL, teamIdNumURL);
+      } else if (teamInURL && !teamURLMatchesStore) {
+        startLeagueSliceUpdateLoop(leagueIdNumURL, teamIdNumURL);
+      }
     }
-  }, [state.user.status, state.global.status, state.league.status, leagueId]);
+  }, [state.user.status, state.global.status, state.league.status, state.global.week, router]);
 
-  return children;
+  if (leagueFetched) {
+    let currentRosters = 0;
+
+    for (const team of state.league.league.teams) {
+      for (const roster of team.rosters) {
+        if (roster.week === state.global.week) {
+          currentRosters++;
+        }
+      }
+    }
+
+    areRostersReadyForCurrentWeek = currentRosters < state.league.league.teams.length;
+  }
+
+  if (leagueId) {
+    // Make sure the league has been fetched since the week was updated
+    if (!leagueFetched || !areRostersReadyForCurrentWeek) {
+      return <HuddleUpLoader />;
+    } else {
+      return children;
+    }
+  } else if (userLoggedIn) {
+    if (!userFetched) {
+      return <HuddleUpLoader />;
+    } else {
+      return children;
+    }
+  } else {
+    if (!globalFetched) {
+      return <HuddleUpLoader />;
+    } else {
+      return children;
+    }
+  }
 }

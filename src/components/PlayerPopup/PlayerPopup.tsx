@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React from 'react';
-import { Avatar, Button, Text, Modal, Grid, Space, Group } from '@mantine/core';
+import { Avatar, Button, Modal, Space } from '@mantine/core';
 import { getTeamThatOwnsPlayer, mapPositionToTable } from '@services/helpers';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@store/store';
@@ -15,10 +15,9 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction, l
       ? player.player_projections.find((pgs) => pgs.game.week === currentWeek)
       : [];
     const projection = mapPositionToTable(player, [game]);
-
     return (
       <div>
-        {`Week ${currentWeek} projection`}
+        {`Week ${currentWeek} projection: `}
         {projection}
       </div>
     );
@@ -41,6 +40,9 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction, l
   };
 
   const getActionButton = () => {
+    if (onPlayerAction === null) {
+      return;
+    }
     const team = getTeamThatOwnsPlayer(player, currentWeek, leagueId);
 
     if (!team) {
@@ -65,7 +67,7 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction, l
       return (
         <Button
           onClick={playerButtonClicked}
-          className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
+          className={`${'bg-transparent hover:bg-green text-green hover:text-white'} hover:cursor-pointer p-4' text-2xl font-bold hover:border hover:border-green rounded border-green transition ease-in duration-200`}
         >
           {'Trade'}
         </Button>
@@ -79,17 +81,25 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction, l
     const team = getTeamThatOwnsPlayer(player, currentWeek, leagueId);
 
     return (
-      <Grid>
-        <Group>
-          <Avatar src={player?.photo_url} alt={'player image'} size={'lg'} />
-
-          <Text>
-            {player.first_name} {player.last_name} | {player.current_nfl_team.city}{' '}
-            {player.current_nfl_team.name} | {player.position} | {player.status} |{' '}
-            {team ? `Owned by: ${team.name}` : 'Free Agent'}
-          </Text>
-        </Group>
-      </Grid>
+      <>
+        <div className=' flex'>
+          <div>
+            <Avatar src={player?.photo_url} alt={'player image'} size={'lg'} />
+          </div>
+          <div className='pl-4'>
+            <div className='font-varsity text-darkBlue text-3xl'>
+              {player.first_name} {player.last_name}
+            </div>
+            <div className='font-openSans text-orange'>
+              {player.current_nfl_team.name} | {player.position} | {player.status} |{' '}
+              {team ? `Owned by: ${team.name}` : 'Free Agent'}
+            </div>
+          </div>
+          <div className='pl-5 pt-1'>
+            <div>{getActionButton()}</div>
+          </div>
+        </div>
+      </>
     );
   };
 
@@ -98,12 +108,13 @@ export default function PlayerPopup({ player, opened, onClose, onPlayerAction, l
       <Modal
         opened={opened}
         onClose={() => onClose()}
-        title={renderTitle()}
         withCloseButton={true}
         size={'75%'}
+        title={renderTitle()}
+        overlayProps={{
+          blur: 3,
+        }}
       >
-        <Space h='md' />
-        {getActionButton()}
         <Space h='md' />
         {getPlayerOutlook(player)}
         <Space h='md' />

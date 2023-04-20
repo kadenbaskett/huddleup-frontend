@@ -1,0 +1,14 @@
+#abs {
+  position: absolute;
+  top: 20;
+  right: 0;
+}
+#full {
+  width: 150px;
+}
+#shrunk {
+  width: 0px;
+  transition-property: width;
+  transition-duration: 1s;
+  transition-timing-function: linear;
+}

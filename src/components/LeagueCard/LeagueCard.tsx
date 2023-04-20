@@ -1,23 +1,21 @@
 import { League } from '@interfaces/league.interface';
 import { Grid } from '@mantine/core';
 import React from 'react';
-import Image from 'next/image';
-import NFL from '../../public/assets/NFL.png';
+import { getLeagueIcon, useWindowResize } from '@services/helpers';
 
 export interface LeagueCardProps {
   league: League;
 }
 
 export default function LeagueCard(props: LeagueCardProps) {
+  const windowSize = useWindowResize();
   return (
     <>
       <div className='bg-white rounded-xl border border-white p-2 transition-all ease-in duration-200 hover:drop-shadow'>
         <Grid grow align='center' justify='start' className='pt-5 pl-5'>
           <Grid.Col span={8}>
             <div className='flex'>
-              <div className='pl-2 pr-5'>
-                <Image src={NFL} alt={props.league.name + '-image'} height={80} width={80} />
-              </div>
+              <div className='pl-2 pr-5'>{getLeagueIcon(props.league.name, windowSize[0])}</div>
               <div>
                 <div className='lg:text-5xl sm:text-3xl font-varsity text-darkBlue pt-1'>
                   {props.league.name}
