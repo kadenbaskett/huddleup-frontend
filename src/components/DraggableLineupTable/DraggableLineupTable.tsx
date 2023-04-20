@@ -121,56 +121,61 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
   };
 
   useEffect(() => {
-    const players = rosters.find((roster) => roster.week.toString() === week)?.players;
-    setPlayers(players);
-    const activeQB = players
-      .filter(
-        ({ position, player }) =>
-          player.position === 'QB' && position !== 'BE' && position !== 'FLEX',
-      )
-      .map((player) => {
-        return player.id;
-      });
-    setQB(activeQB);
-    const activeWR = players
-      .filter(
-        ({ position, player }) =>
-          player.position === 'WR' && position !== 'BE' && position !== 'FLEX',
-      )
-      .map((player) => {
-        return player.id;
-      });
-    setWR(activeWR);
-    const activeRB = players
-      .filter(
-        ({ position, player }) =>
-          player.position === 'RB' && position !== 'BE' && position !== 'FLEX',
-      )
-      .map((player) => {
-        return player.id;
-      });
-    setRB(activeRB);
-    const activeTE = players
-      .filter(
-        ({ position, player }) =>
-          player.position === 'TE' && position !== 'BE' && position !== 'FLEX',
-      )
-      .map((player) => {
-        return player.id;
-      });
-    setTE(activeTE);
-    const activeFLEX = players
-      .filter(({ position }) => position === 'FLEX')
-      .map((player) => {
-        return player.id;
-      });
-    setFLEX(activeFLEX);
-    const benched = players
-      .filter(({ position }) => position === 'BE')
-      .map((player) => {
-        return player.id;
-      });
-    setBench(benched);
+    // Don't update the positions unless the lineup change came from the database (as opposed to the client making the local change)
+    if (!lineupChange) {
+      const players = rosters.find((roster) => roster.week.toString() === week)?.players;
+      setPlayers(players);
+      const activeQB = players
+        .filter(
+          ({ position, player }) =>
+            player.position === 'QB' && position !== 'BE' && position !== 'FLEX',
+        )
+        .map((player) => {
+          return player.id;
+        });
+      setQB(activeQB);
+      const activeWR = players
+        .filter(
+          ({ position, player }) =>
+            player.position === 'WR' && position !== 'BE' && position !== 'FLEX',
+        )
+        .map((player) => {
+          return player.id;
+        });
+      setWR(activeWR);
+      const activeRB = players
+        .filter(
+          ({ position, player }) =>
+            player.position === 'RB' && position !== 'BE' && position !== 'FLEX',
+        )
+        .map((player) => {
+          return player.id;
+        });
+      setRB(activeRB);
+      const activeTE = players
+        .filter(
+          ({ position, player }) =>
+            player.position === 'TE' && position !== 'BE' && position !== 'FLEX',
+        )
+        .map((player) => {
+          return player.id;
+        });
+      setTE(activeTE);
+      const activeFLEX = players
+        .filter(({ position }) => position === 'FLEX')
+        .map((player) => {
+          return player.id;
+        });
+      setFLEX(activeFLEX);
+      const benched = players
+        .filter(({ position }) => position === 'BE')
+        .map((player) => {
+          return player.id;
+        });
+      setBench(benched);
+    } else {
+      setLineupChange(false);
+    }
   }, [week, rosters]);
 
   useEffect(() => {
