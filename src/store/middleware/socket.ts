@@ -103,7 +103,6 @@ const draftMiddleware: Middleware = (store) => {
     const isDraftKilled = draftState.isKilled;
 
     if (draftActions.closeSocketIntentionally.match(action)) {
-      console.log('calling socket close');
       socket?.close();
     } else if (draftActions.startConnecting.match(action)) {
       const devURL = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
@@ -121,6 +120,9 @@ const draftMiddleware: Middleware = (store) => {
       };
 
       socket.onmessage = function (socketMessage) {
+        if (isDraftKilled) {
+          store.dispatch(draftActions.closeSocketIntentionally());
+        }
         const { data } = socketMessage;
         const dataObj = JSON.parse(data);
 

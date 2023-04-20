@@ -132,23 +132,17 @@ export default function index() {
   useEffect(() => {
     // We don't have a draft port yet and we didn't leave the draft on purpose
     if (!draftState.draftPort && !draftState.isKilled) {
-      console.log('fetching port');
       dispatch(handleFetchDraftPort(league.id));
     }
     // We have a draft port in the store, but havn't set the variable to let the other use effect know
     else if (draftState.draftPort && !hasPort) {
-      console.log('port recieved setting has port true');
       setHasPort(true);
     }
   }, [draftState.draftPort]);
 
   // This should run once - once we have a draft port
   useEffect(() => {
-    console.log('inside of has port use effect');
-    console.log('websocketConnected', websocketConnected);
-    console.log('websocketTryingToConnect', websocketTryingToConnect);
     if (!websocketConnected && !websocketTryingToConnect && draftState.draftPort) {
-      console.log('starting ocnnection in use effect hasport');
       dispatch(draftActions.startConnecting());
     }
   }, [hasPort]);
@@ -161,7 +155,6 @@ export default function index() {
   }, []);
 
   useEffect(() => {
-    console.log('checking if draftState is killed');
     if (draftState.isKilled) {
       dispatch(draftActions.closeSocketIntentionally());
     }
