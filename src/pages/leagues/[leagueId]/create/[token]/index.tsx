@@ -102,7 +102,7 @@ export default function index() {
       {!userTeam && (
         <>
           <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold'>
-            Creating team...
+            Loading ...
           </h1>
           <HuddleUpLoader />
         </>

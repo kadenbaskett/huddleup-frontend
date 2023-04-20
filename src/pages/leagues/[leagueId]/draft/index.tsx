@@ -5,12 +5,13 @@ import { draftActions, handleFetchDraftPort } from '@store/slices/draftSlice';
 import { StoreState, AppDispatch } from '@store/store';
 import DraftPlayerTable from '@components/DraftPlayerTable/DraftPlayerTable';
 import { HuddleUpLoader } from '@components/HuddleUpLoader/HuddleUpLoader';
-import { Grid } from '@mantine/core';
+import { Button, Grid } from '@mantine/core';
 import DraftBelt from '@components/DraftBelt/DraftBelt';
 import DraftRosterAndQueueCard from '@components/DraftRosterAndQueueCard/DraftRosterAndQueueCard';
 import DraftHistory from '@components/DraftHistory/DraftHistory';
 import { useWindowResize } from '@services/helpers';
 import { formatMessage, MSG_TYPES } from '@store/middleware/socket';
+// import { finishDraft } from '@services/apiClient';
 
 let intervalID = null;
 
@@ -154,6 +155,11 @@ export default function index() {
     };
   }, []);
 
+  const clickFinishDraft = async () => {
+    sendMessage(' ', MSG_TYPES.FILL_DRAFT);
+    // await finishDraft(league.id);
+  };
+
   const content = (
     <>
       {leagueInfoFetchStatus !== 'succeeded' && (
@@ -167,9 +173,18 @@ export default function index() {
       {teams.length > 0 && leagueInfoFetchStatus === 'succeeded' && (
         <>
           <div className='bg-lightGrey min-h-screen overflow-hidden'>
-            <div className='text-4xl font-varsity font-darkBlue pl-3 text-center'>
+            <div className='text-4xl font-varsity font-darkBlue pr-3 text-center'>
               {league.name} Draft - Round {draftState.currentRoundNum} - Pick{' '}
-              {draftState.currentPickNum}
+              {draftState.currentPickNum}{' '}
+              <Button
+                className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                variant='default'
+                radius='lg'
+                size='lg'
+                onClick={async () => await clickFinishDraft()}
+              >
+                Finish Draft
+              </Button>
             </div>
             <div className='p-3 sm:pb-9 md:pb-3'>
               <DraftBelt

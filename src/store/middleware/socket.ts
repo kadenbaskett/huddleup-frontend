@@ -30,6 +30,7 @@ export const MSG_TYPES = {
   DRAFT_PLAYER: 'draftPlayer',
   ERROR: 'error',
   END_DRAFT: 'endDraft',
+  FILL_DRAFT: 'fillDraft',
 };
 
 export function formatMessage(msgContent, type) {

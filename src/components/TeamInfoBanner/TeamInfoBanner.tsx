@@ -43,7 +43,6 @@ export function TeamInfoBanner(props: TeamInfoBannerProps) {
     const newOtherTeam = props.league?.teams.find((t) => {
       return t.id === otherTeamId;
     });
-
     setOtherTeam(newOtherTeam);
     const newOtherRoster = newOtherTeam?.rosters.find((roster) => {
       return roster.week === props.week;
@@ -51,6 +50,7 @@ export function TeamInfoBanner(props: TeamInfoBannerProps) {
 
     setHomeScore(getTeamScore(newUserRoster, props.week));
 
+    console.log('newOtherRoster', newOtherRoster);
     setOtherScore(getTeamScore(newOtherRoster, props.week));
   }, [props.week]);
 
