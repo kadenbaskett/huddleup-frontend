@@ -13,10 +13,12 @@ let globalPollTimeoutID = null;
 
 export default function AppStateInit({ children }) {
   const router = useRouter();
+
   let { leagueId } = router.query;
   let { teamId } = router.query;
-  let leagueInURL = false;
-  let teamInURL = false;
+
+  let leagueInURL = leagueId !== undefined;
+  let teamInURL = teamId !== undefined;
 
   const state = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
@@ -44,10 +46,6 @@ export default function AppStateInit({ children }) {
     clearInterval(globalPollTimeoutID);
     globalPollTimeoutID = setInterval(() => dispatch(handleGlobalInitThunk()), TIMEOUTS.GLOBAL);
   };
-
-  // useEffect(() => {
-  //   leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
-  // }, [state.league.status]);
 
   useEffect(() => {
     leagueId = router.query.leagueId;
@@ -91,7 +89,7 @@ export default function AppStateInit({ children }) {
     }
   }, [state.user.status, state.global.status, state.league.status, state.global.week, router]);
 
-  if (leagueFetched && teamInURL) {
+  if (leagueFetched) {
     let currentRosters = 0;
 
     for (const team of state.league.league.teams) {
@@ -102,14 +100,17 @@ export default function AppStateInit({ children }) {
       }
     }
 
-    areRostersReadyForCurrentWeek = currentRosters < state.league.league.teams.length;
+    console.log(currentRosters, state.league.league.teams.length);
+
+    areRostersReadyForCurrentWeek = currentRosters === state.league.league.teams.length;
   }
 
   if (leagueId) {
     // Make sure the league has been fetched since the week was updated
-    if (!leagueFetched || !areRostersReadyForCurrentWeek) {
+    if (!leagueFetched || (teamInURL && !areRostersReadyForCurrentWeek)) {
       return <HuddleUpLoader />;
     } else {
+      console.log(leagueFetched, teamInURL, areRostersReadyForCurrentWeek);
       return children;
     }
   } else if (userLoggedIn) {
