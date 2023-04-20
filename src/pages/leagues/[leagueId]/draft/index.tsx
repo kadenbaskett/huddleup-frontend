@@ -160,6 +160,13 @@ export default function index() {
     };
   }, []);
 
+  useEffect(() => {
+    console.log('checking if draftState is killed');
+    if (draftState.isKilled) {
+      dispatch(draftActions.closeSocketIntentionally());
+    }
+  }, [draftState.isKilled]);
+
   const content = (
     <>
       {leagueInfoFetchStatus !== 'succeeded' && (

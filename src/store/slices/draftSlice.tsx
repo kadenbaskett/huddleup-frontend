@@ -65,14 +65,16 @@ export const draftSlice = createSlice({
     },
     killConnection: (state) => {
       console.log('Websocket: connection killed');
+      state.isKilled = true;
+    },
+    closeSocketIntentionally: (state) => {
+      console.log('Websocket: leaving draft on purpose');
+    },
+    resetDraftState: (state) => {
+      console.log('Websocket: resetting draft state');
       state.isConnected = false;
       state.isEstablishingConnection = false;
       state.lostConnection = false;
-      state.isKilled = true;
-      state.draftPort = null;
-    },
-    leaveDraft: (state) => {
-      console.log('Websocket: leaving draft');
       state.isKilled = false;
       state.draftPort = null;
     },

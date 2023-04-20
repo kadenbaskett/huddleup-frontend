@@ -102,7 +102,8 @@ const draftMiddleware: Middleware = (store) => {
     const isConnectionEstablished = socket && draftState.isConnected;
     const isDraftKilled = draftState.isKilled;
 
-    if (draftActions.killConnection.match(action)) {
+    if (draftActions.closeSocketIntentionally.match(action)) {
+      console.log('calling socket close');
       socket?.close();
     } else if (draftActions.startConnecting.match(action)) {
       const devURL = `${CONNECTION.SCHEME}://${CONNECTION.HOST}:${draftState.draftPort}${CONNECTION.SERVER_PREFIX}`;
@@ -139,7 +140,7 @@ const draftMiddleware: Middleware = (store) => {
           store.dispatch(draftActions.connectionClosed());
           store.dispatch(draftActions.startConnecting());
         } else {
-          store.dispatch(draftActions.leaveDraft());
+          store.dispatch(draftActions.resetDraftState());
         }
       };
     }
