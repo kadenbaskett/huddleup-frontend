@@ -136,8 +136,6 @@ const draftMiddleware: Middleware = (store) => {
       };
 
       socket.onclose = function () {
-        console.log('we are in on close');
-        console.log('isKilled', isKilled);
         if (!isKilled) {
           // this restarts the connection loop
           store.dispatch(draftActions.connectionClosed());
@@ -147,8 +145,6 @@ const draftMiddleware: Middleware = (store) => {
 
           store.dispatch(draftActions.resetDraftState());
           isKilled = false;
-          console.log('resetting is killed');
-          console.log('isKilled', isKilled);
         }
       };
     }
