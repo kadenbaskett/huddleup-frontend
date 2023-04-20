@@ -15,6 +15,8 @@ export default function AppStateInit({ children }) {
   const router = useRouter();
   let { leagueId } = router.query;
   let { teamId } = router.query;
+  let leagueInURL = false;
+  let teamInURL = false;
 
   const state = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
@@ -61,8 +63,8 @@ export default function AppStateInit({ children }) {
 
     const firstGlobalUpdate = state.global.status === SLICE_STATUS.IDLE;
 
-    const leagueInURL = leagueId !== undefined;
-    const teamInURL = teamId !== undefined;
+    leagueInURL = leagueId !== undefined;
+    teamInURL = teamId !== undefined;
     const storeLeagueID = state.league.league?.id;
     const storeURLLeagueID = state.league.urlLeagueId;
     const storeTeamID = state.league.urlTeamId;
@@ -89,7 +91,7 @@ export default function AppStateInit({ children }) {
     }
   }, [state.user.status, state.global.status, state.league.status, state.global.week, router]);
 
-  if (leagueFetched) {
+  if (leagueFetched && teamInURL) {
     let currentRosters = 0;
 
     for (const team of state.league.league.teams) {
