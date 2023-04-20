@@ -11,7 +11,6 @@ function Signup() {
   const router = useRouter();
 
   const handleCreateAccount = async () => {
-    console.log('firing handle create');
     setLoading(true);
     setError('');
 
@@ -37,7 +36,6 @@ function Signup() {
       const resp = await createAccount(username, email, password);
 
       if (resp === 'success') {
-        console.log('Account created succesfully!');
         void router.push('/home');
       } else {
         setLoading(false);
