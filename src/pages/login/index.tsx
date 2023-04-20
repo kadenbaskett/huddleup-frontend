@@ -8,8 +8,8 @@ function Login() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [emailValue, setEmailValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
+  const [emailValue, setEmailValue] = useState('talloryx0@gmail.com');
+  const [passwordValue, setPasswordValue] = useState('password');
 
   const router = useRouter();
 
