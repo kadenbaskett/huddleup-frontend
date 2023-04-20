@@ -28,7 +28,6 @@ const initialState: draftSliceState = {
   isConnected: false,
   lostConnection: false,
   hasInitialDraftState: false,
-  isKilled: false,
   draftPlayers: [],
   draftQueue: [],
   draftOrder: [],
@@ -63,18 +62,27 @@ export const draftSlice = createSlice({
       state.isEstablishingConnection = false;
       state.lostConnection = true;
     },
-    killConnection: (state) => {
-      console.log('Websocket: connection killed');
-      state.isConnected = false;
-      state.isEstablishingConnection = false;
-      state.lostConnection = false;
-      state.isKilled = true;
-      state.draftPort = null;
+    closeSocketIntentionally: (state) => {
+      console.log('Websocket: leaving draft on purpose');
     },
-    leaveDraft: (state) => {
-      console.log('Websocket: leaving draft');
-      state.isKilled = false;
+    resetDraftState: (state) => {
+      console.log('Websocket: resetting draft state');
+      state.isEstablishingConnection = false;
+      state.isConnected = false;
+      state.lostConnection = false;
+      state.hasInitialDraftState = false;
+      state.draftPlayers = [];
+      state.draftQueue = [];
+      state.draftOrder = [];
+      state.autoDraft = [];
+      state.currentPickNum = 1;
+      state.currentPickTeamId = -1;
+      state.currentRoundNum = 1;
       state.draftPort = null;
+      state.currentPickTimeMS = 0;
+      state.draftStartTimeMS = 0;
+      state.secondsPerPick = 0;
+      state.autoSecondsPerPick = 0;
     },
     receiveMessage: (
       state,

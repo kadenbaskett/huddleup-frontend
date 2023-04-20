@@ -131,7 +131,7 @@ export default function index() {
 
   useEffect(() => {
     // We don't have a draft port yet and we didn't leave the draft on purpose
-    if (!draftState.draftPort && !draftState.isKilled) {
+    if (!draftState.draftPort) {
       dispatch(handleFetchDraftPort(league.id));
     }
     // We have a draft port in the store, but havn't set the variable to let the other use effect know
@@ -142,7 +142,7 @@ export default function index() {
 
   // This should run once - once we have a draft port
   useEffect(() => {
-    if (!websocketConnected && !websocketTryingToConnect) {
+    if (!websocketConnected && !websocketTryingToConnect && draftState.draftPort) {
       dispatch(draftActions.startConnecting());
     }
   }, [hasPort]);
@@ -150,7 +150,7 @@ export default function index() {
   // This will run once, and the dismount will only run when we leave the page
   useEffect(() => {
     return () => {
-      dispatch(draftActions.killConnection());
+      dispatch(draftActions.closeSocketIntentionally());
     };
   }, []);
 
