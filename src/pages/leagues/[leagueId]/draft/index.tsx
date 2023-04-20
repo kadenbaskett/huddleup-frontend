@@ -131,7 +131,7 @@ export default function index() {
 
   useEffect(() => {
     // We don't have a draft port yet and we didn't leave the draft on purpose
-    if (!draftState.draftPort && !draftState.isKilled) {
+    if (!draftState.draftPort) {
       dispatch(handleFetchDraftPort(league.id));
     }
     // We have a draft port in the store, but havn't set the variable to let the other use effect know
@@ -153,12 +153,6 @@ export default function index() {
       dispatch(draftActions.closeSocketIntentionally());
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (draftState.isKilled) {
-  //     dispatch(draftActions.closeSocketIntentionally());
-  //   }
-  // }, [draftState.isKilled]);
 
   const content = (
     <>

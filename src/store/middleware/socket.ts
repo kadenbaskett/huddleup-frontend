@@ -101,7 +101,6 @@ const draftMiddleware: Middleware = (store) => {
 
     const draftState: draftSliceState = store.getState().draft;
     const isConnectionEstablished = socket && draftState.isConnected;
-    const isDraftKilled = draftState.isKilled;
 
     if (draftActions.closeSocketIntentionally.match(action)) {
       isKilled = true;
@@ -122,9 +121,6 @@ const draftMiddleware: Middleware = (store) => {
       };
 
       socket.onmessage = function (socketMessage) {
-        if (isDraftKilled) {
-          store.dispatch(draftActions.closeSocketIntentionally());
-        }
         const { data } = socketMessage;
         const dataObj = JSON.parse(data);
 
