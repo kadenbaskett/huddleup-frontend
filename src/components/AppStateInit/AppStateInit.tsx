@@ -23,6 +23,7 @@ export default function AppStateInit({ children }) {
   let userFetched = state.user.status === SLICE_STATUS.SUCCEEDED;
   let globalFetched = state.global.status === SLICE_STATUS.SUCCEEDED;
   let userLoggedIn = state.user.status === SLICE_STATUS.SUCCEEDED;
+  let areRostersReadyForCurrentWeek = true;
 
   const startLeagueSliceUpdateLoop = (leagueIdParam: number, teamIdParam: number) => {
     // console.log('Start league slice update loop for league id: ', leagueIdParam);
@@ -86,10 +87,25 @@ export default function AppStateInit({ children }) {
         startLeagueSliceUpdateLoop(leagueIdNumURL, teamIdNumURL);
       }
     }
-  }, [state.user.status, state.global.status, state.league.status, router]);
+  }, [state.user.status, state.global.status, state.league.status, state.global.week, router]);
+
+  if (leagueFetched) {
+    let currentRosters = 0;
+
+    for (const team of state.league.league.teams) {
+      for (const roster of team.rosters) {
+        if (roster.week === state.global.week) {
+          currentRosters++;
+        }
+      }
+    }
+
+    areRostersReadyForCurrentWeek = currentRosters < state.league.league.teams.length;
+  }
 
   if (leagueId) {
-    if (!leagueFetched) {
+    // Make sure the league has been fetched since the week was updated
+    if (!leagueFetched || !areRostersReadyForCurrentWeek) {
       return <HuddleUpLoader />;
     } else {
       return children;
