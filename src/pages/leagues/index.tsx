@@ -13,6 +13,7 @@ function Leagues() {
   const userInfoFetchStatus = useSelector((state: StoreState) => state.user.status);
   const userLeagues = useSelector((state: StoreState) => state.user.leagues);
   const userTeams = useSelector((state: StoreState) => state.user.teams);
+  const currentWeek = useSelector((state: StoreState) => state.global.week);
 
   const renderLeague = (league: League) => {
     return (
@@ -33,31 +34,39 @@ function Leagues() {
       {userInfoFetchStatus === 'succeeded' && (
         <>
           <div className='bg-lightGrey p-10 min-h-screen'>
-            <div className=''>
-              <Group>
-                <Link href={'/leagues/join'}>
-                  <Button
-                    leftIcon={<HiUserGroup />}
-                    className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-                    variant='default'
-                    size='xl'
-                  >
-                    Join a league
-                  </Button>
-                </Link>
+            {currentWeek < 2 ? (
+              <div className=''>
+                <Group>
+                  <Link href={'/leagues/join'}>
+                    <Button
+                      leftIcon={<HiUserGroup />}
+                      className='hover:bg-transparent hover:text-orange text-xl font-bold hover:border hover:border-orange rounded bg-orange text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                      variant='default'
+                      size='xl'
+                    >
+                      Join a league
+                    </Button>
+                  </Link>
 
-                <Link href={'/leagues/create'}>
-                  <Button
-                    leftIcon={<BsPlusLg />}
-                    className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-                    variant='default'
-                    size='xl'
-                  >
-                    Create a League
-                  </Button>
-                </Link>
-              </Group>
-            </div>
+                  <Link href={'/leagues/create'}>
+                    <Button
+                      leftIcon={<BsPlusLg />}
+                      className='hover:bg-transparent hover:text-green text-xl font-bold hover:border hover:border-green rounded bg-green text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                      variant='default'
+                      size='xl'
+                    >
+                      Create a League
+                    </Button>
+                  </Link>
+                </Group>
+              </div>
+            ) : (
+              <div className='grid place-items-left py-4'>
+                <div className='text-2xl font-varsity text-darkBlue'>
+                  You can't join or create new leagues now that the NFL season has begun
+                </div>
+              </div>
+            )}
             <div className='pt-5'>{userLeagues.map((league) => renderLeague(league))}</div>
           </div>
         </>
