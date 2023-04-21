@@ -13,8 +13,12 @@ let globalPollTimeoutID = null;
 
 export default function AppStateInit({ children }) {
   const router = useRouter();
+
   let { leagueId } = router.query;
   let { teamId } = router.query;
+
+  let leagueInURL = leagueId !== undefined;
+  let teamInURL = teamId !== undefined;
 
   const state = useSelector((state: StoreState) => state);
   const dispatch = useDispatch<AppDispatch>();
@@ -43,10 +47,6 @@ export default function AppStateInit({ children }) {
     globalPollTimeoutID = setInterval(() => dispatch(handleGlobalInitThunk()), TIMEOUTS.GLOBAL);
   };
 
-  // useEffect(() => {
-  //   leagueFetched = state.league.status === SLICE_STATUS.SUCCEEDED;
-  // }, [state.league.status]);
-
   useEffect(() => {
     leagueId = router.query.leagueId;
     teamId = router.query.teamId;
@@ -61,8 +61,8 @@ export default function AppStateInit({ children }) {
 
     const firstGlobalUpdate = state.global.status === SLICE_STATUS.IDLE;
 
-    const leagueInURL = leagueId !== undefined;
-    const teamInURL = teamId !== undefined;
+    leagueInURL = leagueId !== undefined;
+    teamInURL = teamId !== undefined;
     const storeLeagueID = state.league.league?.id;
     const storeURLLeagueID = state.league.urlLeagueId;
     const storeTeamID = state.league.urlTeamId;
@@ -100,14 +100,17 @@ export default function AppStateInit({ children }) {
       }
     }
 
-    areRostersReadyForCurrentWeek = currentRosters < state.league.league.teams.length;
+    console.log(currentRosters, state.league.league.teams.length);
+
+    areRostersReadyForCurrentWeek = currentRosters === state.league.league.teams.length;
   }
 
   if (leagueId) {
     // Make sure the league has been fetched since the week was updated
-    if (!leagueFetched || !areRostersReadyForCurrentWeek) {
+    if (!leagueFetched || (teamInURL && !areRostersReadyForCurrentWeek)) {
       return <HuddleUpLoader />;
     } else {
+      console.log(leagueFetched, teamInURL, areRostersReadyForCurrentWeek);
       return children;
     }
   } else if (userLoggedIn) {
