@@ -64,7 +64,7 @@ function Login() {
   return (
     <div className='bg-gray-300'>
       <div className='grid content-center h-screen place-items-center'>
-        <div className='place-items-center h-auto w-5/12 content-center bg-white rounded-lg'>
+        <div className='place-items-center h-auto w-10/12 md:w-5/12 content-center bg-white rounded-lg'>
           <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold'>
             LOGIN
           </h1>
