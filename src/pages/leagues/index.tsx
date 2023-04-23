@@ -63,7 +63,7 @@ function Leagues() {
             ) : (
               <div className='grid place-items-left py-4'>
                 <div className='text-2xl font-varsity text-darkBlue'>
-                  You can't join or create new leagues now that the NFL season has begun
+                  {`NFL Week ${currentWeek} - Leagues locked for remainder of the NFL season`}
                 </div>
               </div>
             )}

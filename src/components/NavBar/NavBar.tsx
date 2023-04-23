@@ -17,7 +17,7 @@ export default function Navbar() {
   const [burgerOpen, { toggle }] = useDisclosure(false);
 
   let burgerVisible = false;
-  if (windowSize[0] < 600 && windowSize[0] !== 0) {
+  if (windowSize[0] < 700 && windowSize[0] !== 0) {
     burgerVisible = true;
   }
 
@@ -43,14 +43,16 @@ export default function Navbar() {
     );
   };
 
-  const getHomeAndLeagues = () => {
+  const getHomeAndLeagues = (flexCol = false) => {
     return user === null ? (
       <></>
     ) : (
       <>
         <li className='nav-item'>
           <Link
-            className='px-4 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+            className={`${
+              flexCol ? 'px-8' : 'px-4'
+            } py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75`}
             href='/home'
           >
             Home
@@ -58,7 +60,9 @@ export default function Navbar() {
         </li>
         <li className='nav-item'>
           <Link
-            className='px-4 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+            className={`${
+              flexCol ? 'px-8' : 'px-4'
+            } py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75`}
             href='/leagues'
           >
             Leagues
@@ -68,12 +72,14 @@ export default function Navbar() {
     );
   };
 
-  const getLoginOrProfile = () => {
+  const getLoginOrProfile = (flexCol = false) => {
     return (
       <li className='nav-item'>
         {user == null ? (
           <Link
-            className='bg-orange rounded-lg px-4 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+            className={`${
+              flexCol ? 'px-8' : 'px-4'
+            } bg-orange rounded-lg py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75`}
             href='/login'
           >
             Login
@@ -81,7 +87,9 @@ export default function Navbar() {
         ) : (
           <Link
             href='#'
-            className='text-orange px-4 py-2 flex items-center  hover:opacity-75'
+            className={`${
+              flexCol ? 'px-8' : 'px-4'
+            } text-orange py-2 flex items-center  hover:opacity-75`}
             onClick={() => onProfileClick()}
           >
             <FaRegUser size='1.7rem' />
@@ -115,16 +123,18 @@ export default function Navbar() {
     return (
       <ul className={`flex list-none ${flexCol ? 'flex-col' : 'flex-row'}`}>
         <>
-          {getHomeAndLeagues()}
+          {getHomeAndLeagues(flexCol)}
           <li className='nav-item'>
             <Link
-              className='px-4 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+              className={`${
+                flexCol ? 'px-8' : 'px-4'
+              } py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75`}
               href='/about'
             >
               About
             </Link>
           </li>
-          {getLoginOrProfile()}
+          {getLoginOrProfile(flexCol)}
         </>
       </ul>
     );
