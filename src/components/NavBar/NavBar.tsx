@@ -50,7 +50,7 @@ export default function Navbar() {
       <>
         <li className='nav-item'>
           <Link
-            className='px-2 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+            className='px-4 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
             href='/home'
           >
             Home
@@ -58,7 +58,7 @@ export default function Navbar() {
         </li>
         <li className='nav-item'>
           <Link
-            className='px-2 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+            className='px-4 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
             href='/leagues'
           >
             Leagues
@@ -73,7 +73,7 @@ export default function Navbar() {
       <li className='nav-item'>
         {user == null ? (
           <Link
-            className='bg-orange rounded-lg px-2 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+            className='bg-orange rounded-lg px-4 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
             href='/login'
           >
             Login
@@ -81,7 +81,7 @@ export default function Navbar() {
         ) : (
           <Link
             href='#'
-            className='text-orange px-2 py-2 flex items-center  hover:opacity-75'
+            className='text-orange px-4 py-2 flex items-center  hover:opacity-75'
             onClick={() => onProfileClick()}
           >
             <FaRegUser size='1.7rem' />
@@ -118,7 +118,7 @@ export default function Navbar() {
           {getHomeAndLeagues()}
           <li className='nav-item'>
             <Link
-              className='px-2 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+              className='px-4 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
               href='/about'
             >
               About
@@ -133,10 +133,10 @@ export default function Navbar() {
   return (
     <>
       <nav className={'flex flex-wrap items-center justify-between py-3 bg-darkBlue'}>
-        <div className='px-2'>
+        <div className='px-8'>
           <div className='w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start'>
             <Link
-              className='text-3xl font-varsity leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white'
+              className='text-3xl font-varsity leading-relaxed inline-block py-2 whitespace-nowrap uppercase text-white'
               href='/'
             >
               Huddle Up

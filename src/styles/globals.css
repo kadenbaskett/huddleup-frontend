@@ -10,9 +10,9 @@
 html, body {
     margin: 0;
     padding: 0;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden; */
 }
 
 
