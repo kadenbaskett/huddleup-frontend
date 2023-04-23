@@ -15,17 +15,17 @@ const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
   return (
     <Provider store={store}>
       <Authorization>
-        <NavBar />
-        <AppStateInit>
-          <RouteGuard>
-            <div id='page-container'>
-              <div id='content-wrap'>
+        <div id='page-container' className='w-full'>
+          <div id='content-wrap'>
+            <NavBar />
+            <AppStateInit>
+              <RouteGuard>
                 <Component {...props.pageProps} />
-              </div>
-              <Footer />
-            </div>
-          </RouteGuard>
-        </AppStateInit>
+                <Footer />
+              </RouteGuard>
+            </AppStateInit>
+          </div>
+        </div>
       </Authorization>
     </Provider>
   );

@@ -13,9 +13,9 @@ export default function Navbar() {
   const windowSize: number[] = useWindowResize();
   const [profilePopupOpen, setProfilePopupOpen] = useState(false);
 
-  let flexWrap = '';
+  const flexWrap = '';
   if (windowSize[0] < 600 && windowSize[0] !== 0) {
-    flexWrap = 'flex-wrap';
+    // flexWrap = 'flex-wrap';
   }
 
   const onProfileClick = () => {
@@ -34,10 +34,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className={`relative flex items-center justify-between px-2 py-3 bg-darkBlue ${flexWrap}`}
-      >
-        <div className='container px-4'>
+      <nav className={`flex flex-wrap items-center justify-between py-3 bg-darkBlue ${flexWrap}`}>
+        <div className='pl-4'>
           <div className='w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start'>
             <Link
               className='text-3xl font-varsity leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white'
@@ -47,7 +45,7 @@ export default function Navbar() {
             </Link>
           </div>
         </div>
-        <div className={'lg:flex flex-grow items-center px-4'} id='example-navbar-danger'>
+        <div className={'flex items-center pr-4'} id='example-navbar-danger'>
           <ul className='flex list-none'>
             {user !== null && (
               <>

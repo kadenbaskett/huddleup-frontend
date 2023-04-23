@@ -22,12 +22,12 @@ export default function Home() {
         <main className={styles.main}>
           <Image src={logo} alt='huddle logo' width={700} height={700} />
           <Link href='/about'>
-            <p className='landingText underline hover:text-orange'>Learn More </p>
+            <p className='landingText underline hover:text-orange py-8'>Learn More </p>
           </Link>
           {user ? (
             <></>
           ) : (
-            <Group>
+            <Group position='center'>
               <Link href='/signup'>
                 <div className='pt-5'>
                   <Button
