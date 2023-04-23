@@ -33,6 +33,20 @@ export default function Navbar() {
     await logout();
   };
 
+  const getPopup = () => {
+    return (
+      <>
+        {burgerOpen ? (
+          <>
+            <div className='popout'>I POP OUT AT UR PARTY</div>
+          </>
+        ) : (
+          <></>
+        )}
+      </>
+    );
+  };
+
   const getHomeAndLeagues = () => {
     return user === null ? (
       <></>
@@ -154,6 +168,7 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+      {getPopup()}
     </>
   );
 }
