@@ -36,13 +36,9 @@ export default function Navbar() {
   const getPopup = () => {
     return (
       <>
-        {burgerOpen ? (
-          <>
-            <div className='popout'>I POP OUT AT UR PARTY</div>
-          </>
-        ) : (
-          <></>
-        )}
+        <div onClick={() => toggle()} className={burgerOpen ? 'popout bg-darkBlue open' : 'popout'}>
+          <>{navItems(true)}</>
+        </div>
       </>
     );
   };
@@ -115,25 +111,21 @@ export default function Navbar() {
     );
   };
 
-  const navItems = () => {
+  const navItems = (flexCol = false) => {
     return (
-      <ul className='flex list-none'>
-        {!burgerVisible ? (
-          <>
-            {getHomeAndLeagues()}
-            <li className='nav-item'>
-              <Link
-                className='px-2 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
-                href='/about'
-              >
-                About
-              </Link>
-            </li>
-            {getLoginOrProfile()}
-          </>
-        ) : (
-          <></>
-        )}
+      <ul className={`flex list-none ${flexCol ? 'flex-col' : 'flex-row'}`}>
+        <>
+          {getHomeAndLeagues()}
+          <li className='nav-item'>
+            <Link
+              className='px-2 py-2 flex items-center text-2xl uppercase font-varsity leading-snug text-white hover:opacity-75'
+              href='/about'
+            >
+              About
+            </Link>
+          </li>
+          {getLoginOrProfile()}
+        </>
       </ul>
     );
   };
@@ -156,7 +148,7 @@ export default function Navbar() {
             <ul className='flex list-none'>{getBurger()}</ul>
           </div>
           <div className={'flex items-center px-2'}>
-            {navItems()}
+            {!burgerVisible ? navItems() : <></>}
             {user !== null && (
               <ProfilePopup
                 opened={profilePopupOpen}
