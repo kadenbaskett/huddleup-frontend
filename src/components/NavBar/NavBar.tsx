@@ -83,15 +83,21 @@ export default function Navbar() {
 
   const getBurger = () => {
     return (
-      <li className='nav-item py-2'>
-        <Burger
-          size='xl'
-          color='white'
-          className='bg-transparent'
-          opened={burgerOpen}
-          onClick={toggle}
-        />
-      </li>
+      <>
+        {!burgerVisible ? (
+          <></>
+        ) : (
+          <li className='nav-item py-2'>
+            <Burger
+              size='xl'
+              color='white'
+              className='bg-transparent'
+              opened={burgerOpen}
+              onClick={toggle}
+            />
+          </li>
+        )}
+      </>
     );
   };
 
@@ -121,7 +127,7 @@ export default function Navbar() {
   return (
     <>
       <nav className={'flex flex-wrap items-center justify-between py-3 bg-darkBlue'}>
-        <div className='pl-4'>
+        <div className='px-2'>
           <div className='w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start'>
             <Link
               className='text-3xl font-varsity leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white'
@@ -131,17 +137,21 @@ export default function Navbar() {
             </Link>
           </div>
         </div>
-        <div className={'flex items-center pr-4'} id='example-navbar-danger'>
-          {navItems()}
-          {getBurger()}
-          {user !== null && (
-            <ProfilePopup
-              opened={profilePopupOpen}
-              onClose={onProfilePopupClose}
-              user={user}
-              handleLogout={handleLogout}
-            />
-          )}
+        <div className='flex justify-end'>
+          <div className={'flex items-center px-2'}>
+            <ul className='flex list-none'>{getBurger()}</ul>
+          </div>
+          <div className={'flex items-center px-2'}>
+            {navItems()}
+            {user !== null && (
+              <ProfilePopup
+                opened={profilePopupOpen}
+                onClose={onProfilePopupClose}
+                user={user}
+                handleLogout={handleLogout}
+              />
+            )}
+          </div>
         </div>
       </nav>
     </>
