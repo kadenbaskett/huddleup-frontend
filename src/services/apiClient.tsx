@@ -21,6 +21,7 @@ const api = axios.create({
 async function getRequest(url: string): Promise<respObj> {
   try {
     const resp = await api.get(url);
+    // console.log(resp.status);
     return { data: resp.data, error: null };
   } catch (err) {
     console.log(err);
