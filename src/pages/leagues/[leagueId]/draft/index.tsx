@@ -25,6 +25,8 @@ export default function index() {
   const user = store.user;
   const userTeam = store.league.userTeam;
 
+  const isCommissioner = league?.commissioner_id === user?.userInfo.id;
+
   const draftOrder = store.draft.draftOrder;
   const draftState = store.draft;
   const currentPickTeamId = store.draft.currentPickTeamId;
@@ -164,10 +166,10 @@ export default function index() {
     <>
       {leagueInfoFetchStatus !== 'succeeded' && (
         <>
-          <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold'>
+          <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold  min-h-screen'>
             Loading draft content...
+            <HuddleUpLoader />
           </h1>
-          <HuddleUpLoader />
         </>
       )}
       {teams.length > 0 && leagueInfoFetchStatus === 'succeeded' && (
@@ -176,15 +178,19 @@ export default function index() {
             <div className='text-4xl font-varsity font-darkBlue pr-3 text-center'>
               {league.name} Draft - Round {draftState.currentRoundNum} - Pick{' '}
               {draftState.currentPickNum}{' '}
-              <Button
-                className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
-                variant='default'
-                radius='lg'
-                size='lg'
-                onClick={async () => await clickFinishDraft()}
-              >
-                Finish Draft
-              </Button>
+              {isCommissioner ? (
+                <Button
+                  className='hover:bg-transparent hover:text-darkBlue text-xl font-bold hover:border hover:border-darkBlue bg-darkBlue text-white border-transparent transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0'
+                  variant='default'
+                  radius='lg'
+                  size='lg'
+                  onClick={async () => await clickFinishDraft()}
+                >
+                  Finish Draft
+                </Button>
+              ) : (
+                ''
+              )}
             </div>
             <div className='p-3 sm:pb-9 md:pb-3'>
               <DraftBelt
@@ -218,10 +224,10 @@ export default function index() {
 
   const draftLoadingContent = (
     <>
-      <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold'>
+      <h1 className='font-varsity text-darkBlue mt-10 text-center text-form-title font-bold  min-h-screen'>
         Connecting to draft...
+        <HuddleUpLoader />
       </h1>
-      <HuddleUpLoader />
     </>
   );
 
