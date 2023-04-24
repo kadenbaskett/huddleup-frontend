@@ -32,18 +32,18 @@ export default function index() {
           </Link>
         </Group>
       </div>
-      <div className='bg-white rounded-xl p-5 xl:pl-20 xl:pr-20 2xl:pl-40 2xl:pr-40'>
+      <div className='bg-white rounded-xl p-5 pl-5 xl:pl-20 2xl:pl-40'>
         <div className='font-varsity text-4xl text-darkBlue text-center pb-5'>
           We are huddle up!
         </div>
         <Group position='center'>
-          <Image src={TeamHuddleUp} alt='Huddle Up Team' width={700} height={700} />
+          <Image src={TeamHuddleUp} alt='Joe Rodman' width={700} height={700} />
         </Group>
-        <div className='font-varsity text-4xl text-darkBlue text-center pt-5 pb-5'>
+        <div className='font-varsity text-4xl text-darkBlue text-center pt-2 pb-5'>
           Team Members
         </div>
         <div className='text-center'>
-          <Grid className=''>
+          <Grid className='p-5'>
             <Grid.Col span={spanCol}>
               <div className='font-varsity font-bold text-4xl'>Jake White</div>
               <div className='font-openSans text-2xl text-left'>

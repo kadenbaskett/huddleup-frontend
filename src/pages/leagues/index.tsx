@@ -67,11 +67,7 @@ function Leagues() {
                 </div>
               </div>
             )}
-            {userLeagues.length === 0 ? (
-              <div className='pt-10 font-varsity text-left text-2xl'>You are in no leagues</div>
-            ) : (
-              <div className='pt-5'>{userLeagues.map((league) => renderLeague(league))}</div>
-            )}
+            <div className='pt-5'>{userLeagues.map((league) => renderLeague(league))}</div>
           </div>
         </>
       )}

@@ -109,11 +109,7 @@ function leagues() {
                   },
                 })}
               />
-              {results.length === 0 ? (
-                <div className='pt-10 font-varsity text-left text-2xl'>No public leagues found</div>
-              ) : (
-                <div className='pt-5'>{results.map((league) => renderLeague(league))}</div>
-              )}
+              <div className='pt-5'>{results.map((league) => renderLeague(league))}</div>
             </div>
           </div>
 
