@@ -52,18 +52,29 @@ html, body {
   border-radius: 50%;
 }
 
-/* #page-container {
+#page-container {
   position: relative;
   min-height: 100vh;
   display: inline-flex;
   width: 100%;
-} */
+}
 
 #content-wrap {
-  padding-bottom: 6rem; /* Footer height */
   width: 100%;
 }
 
 .settings-table tr td {
   width: 50%;
+}
+
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
 }
