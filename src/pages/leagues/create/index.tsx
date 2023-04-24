@@ -1,13 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {
-  Button,
-  Group,
-  NativeSelect,
-  RangeSlider,
-  Slider,
-  Textarea,
-  TextInput,
-} from '@mantine/core';
+import { Button, Grid, Group, RangeSlider, Slider, Textarea, TextInput } from '@mantine/core';
 import Link from 'next/link';
 import { createLeague } from '@services/apiClient';
 import { useSelector } from 'react-redux';
@@ -38,8 +30,6 @@ const numPlayers: numPlayersSlider[] = [
   { value: 2, label: '2' },
   { value: 3, label: '3' },
   { value: 4, label: '4' },
-  { value: 5, label: '5' },
-  { value: 6, label: '6' },
 ];
 
 export default function index() {
@@ -49,7 +39,6 @@ export default function index() {
   const [maxPlayerRange, setMaxPlayerRange] = useState(4);
   const [leagueName, setLeagueName] = useState<string>('');
   const [leagueDescription, setLeagueDescription] = useState<string>('');
-  const [publicOrPrivate, setPublicOrPrivate] = useState('Public');
   const [draftDate, setDraftDate] = useState<Date | null>(new Date());
   const [draftTime, setDraftTime] = useState<string>('12:00 PM');
 
@@ -66,7 +55,11 @@ export default function index() {
   };
 
   const handleSubmit = preventDefault(async () => {
-    const scoring = document.querySelector('input[name="hosting"]:checked').getAttribute('value');
+    const scoring = document.querySelector('input[name="scoring"]:checked').getAttribute('value');
+    const visibility = document
+      .querySelector('input[name="visibility"]:checked')
+      .getAttribute('value');
+    console.log('visibility', visibility);
     const league = {
       commissionerId: user.userInfo.id,
       leagueName,
@@ -74,11 +67,12 @@ export default function index() {
       minPlayers: minPlayerRange,
       maxPlayers: maxPlayerRange,
       leagueDescription,
-      publicJoin: publicOrPrivate === 'Public',
+      publicJoin: visibility === 'Public',
       scoring,
       date: draftDate.toISOString().split('T')[0], // only get the date of of the string. take away the time
       draftTime,
     };
+
     const newLeague = await createLeague(league);
     await router.push({
       pathname: `/leagues/${Number(newLeague.data.id)}/create`,
@@ -145,27 +139,31 @@ export default function index() {
                 ? `${minPlayerRange}`
                 : `${minPlayerRange} - ${maxPlayerRange}`}
             </label>
-            <RangeSlider
-              label={(val: number) => numPlayers.find((mark) => mark.value === val)?.label}
-              labelTransition='skew-down'
-              labelTransitionDuration={150}
-              labelTransitionTimingFunction='ease'
-              min={2}
-              max={6}
-              value={[minPlayerRange, maxPlayerRange]}
-              onChange={setRange}
-              minRange={0}
-              step={1}
-              marks={numPlayers}
-              color='orange'
-            />
+            <Grid>
+              <Grid.Col span={6}>
+                <RangeSlider
+                  label={(val: number) => numPlayers.find((mark) => mark.value === val)?.label}
+                  labelTransition='skew-down'
+                  labelTransitionDuration={150}
+                  labelTransitionTimingFunction='ease'
+                  min={2}
+                  max={4}
+                  value={[minPlayerRange, maxPlayerRange]}
+                  onChange={setRange}
+                  minRange={0}
+                  step={1}
+                  marks={numPlayers}
+                  color='orange'
+                />
+              </Grid.Col>
+            </Grid>
           </div>
 
           <div>
             <label className='font-OpenSans font-bold text-2xl'>Scoring:</label>
             <div className='grid grid-cols-2 gap-4'>
               <div>
-                <input type='radio' id='PPR' name='hosting' value='PPR' className='hidden peer' />
+                <input type='radio' id='PPR' name='scoring' value='PPR' className='hidden peer' />
                 <label
                   htmlFor='PPR'
                   className='inline-flex justify-between items-center p-5 w-full text-darkBlue bg-white rounded-lg border border-white cursor-pointer hover:text-orange border-white peer-checked:text-orange peer-checked:border-orange peer-checked:text-orange hover:text-orange hover:bg-gray-100 text-darkBlue'
@@ -186,7 +184,7 @@ export default function index() {
                   type='radio'
                   defaultChecked
                   id='NPPR'
-                  name='hosting'
+                  name='scoring'
                   value='NPPR'
                   className='hidden peer'
                 />
@@ -207,12 +205,44 @@ export default function index() {
 
           <div>
             <label className='font-OpenSans font-bold text-2xl'>Public or Private:</label>
-            <NativeSelect
-              data={['Public', 'Private']}
-              label='Allow anyone to join or only people you invite'
-              value={publicOrPrivate}
-              onChange={(event) => setPublicOrPrivate(event.currentTarget.value)}
-            />
+            <div className='grid grid-cols-2 gap-4'>
+              <div>
+                <input
+                  type='radio'
+                  id='Public'
+                  name='visibility'
+                  value='Public'
+                  className='hidden peer'
+                  defaultChecked
+                />
+                <label
+                  htmlFor='Public'
+                  className='inline-flex justify-between items-center p-5 w-full text-darkBlue bg-white rounded-lg border border-white cursor-pointer hover:text-orange border-white peer-checked:text-orange peer-checked:border-orange peer-checked:text-orange hover:text-orange hover:bg-gray-100 text-darkBlue'
+                >
+                  <div className='block'>
+                    <div className='w-full text-lg font-OpenSans font-bold'>Public</div>
+                  </div>
+                </label>
+              </div>
+
+              <div>
+                <input
+                  type='radio'
+                  id='Private'
+                  name='visibility'
+                  value='Private'
+                  className='hidden peer'
+                />
+                <label
+                  htmlFor='Private'
+                  className='inline-flex justify-between items-center p-5 w-full text-darkBlue bg-white rounded-lg border border-white cursor-pointer hover:text-orange border-white peer-checked:text-orange peer-checked:border-orange peer-checked:text-orange hover:text-orange hover:bg-gray-100 text-darkBlue'
+                >
+                  <div className='block'>
+                    <div className='w-full text-lg font-OpenSans font-bold'>Private</div>
+                  </div>
+                </label>
+              </div>
+            </div>
           </div>
 
           <div>
