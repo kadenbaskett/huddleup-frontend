@@ -84,6 +84,15 @@ export function RecentActivityTable(props: RecentActivityTableProps) {
           </tr>
         </thead>
         <tbody>{rows}</tbody>
+        <>
+          {rows.length ? (
+            <></>
+          ) : (
+            <>
+              <div className='font-bold text-lg text-darkBlue p-2'>No recent activity</div>
+            </>
+          )}
+        </>
       </Table>
     </div>
   );

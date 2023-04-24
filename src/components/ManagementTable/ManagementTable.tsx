@@ -137,6 +137,11 @@ export function ManagementTable({ proposals, teamId, userId }: ManagementTablePr
           </tr>
         </thead>
         <tbody>{[...relatedRows, ...proposedRows]}</tbody>
+        {!relatedRows.length && !proposedRows.length ? (
+          <div className='py-4'>No proposals to add, drop, or trade players</div>
+        ) : (
+          <></>
+        )}
       </Table>
     </>
   );

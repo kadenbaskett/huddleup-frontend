@@ -378,10 +378,17 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
           <div className='p-3'>
             <SegmentedControl fullWidth value={week} data={weeks} onChange={(e) => setWeek(e)} />
           </div>
+          {week < currentWeek ? (
+            <>
+              <div className='text-xl font-varsity py-4'>Previous week's rosters are view only</div>
+            </>
+          ) : (
+            <></>
+          )}
           <DndContext onDragEnd={handleDragEnd}>
             {/* QuarterBacks */}
             <Grid>
-              <Grid.Col span={7}>
+              <Grid.Col sm={12} md={7}>
                 <div className='text-xl font-varsity text-darkBlue'>Quarterback:</div>
                 <Droppable key={'QB'} id={'QB'}>
                   {QB.map((child) => {
@@ -458,7 +465,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
                   })}
                 </Droppable>
               </Grid.Col>
-              <Grid.Col span={5}>
+              <Grid.Col sm={12} md={5}>
                 <div className='text-xl font-varsity text-darkBlue'>Bench:</div>
                 <Droppable key={'Bench'} id={'Bench'}>
                   {bench.map((child) => {

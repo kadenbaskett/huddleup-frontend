@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className='text-center bg-darkBlue text-white absolute bottom-0 w-full h-24'>
-      <div className='px-6 pt-6'>
+    <footer className='text-center bg-darkBlue text-white text-lg fixed bottom-0 w-full h-24 flex justify-center items-center footerZ'>
+      {/* <div className='px-6 pt-6'>
         <div className='flex justify-center mb-6'>
           <a
             href='#!'
@@ -135,12 +135,11 @@ export default function Footer() {
             </svg>
           </a>
         </div>
-      </div>
+      </div> */}
 
-      <div className='text-center p-6 pt-0 bg-darkBlue'>
-        © 2023 Copyright:
-        <span className='text-whitehite'> HuddleUp Fantasy</span>
-      </div>
+      {/* <div className='text-center h-full bg-darkBlue'> */}
+      <p>© 2023 Copyright: HuddleUp Fantasy</p>
+      {/* </div> */}
     </footer>
   );
 }

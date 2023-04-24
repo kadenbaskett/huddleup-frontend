@@ -30,8 +30,6 @@ export default function AppStateInit({ children }) {
   let areRostersReadyForCurrentWeek = true;
 
   const startLeagueSliceUpdateLoop = (leagueIdParam: number, teamIdParam: number) => {
-    // console.log('Start league slice update loop for league id: ', leagueIdParam);
-
     const data: any = { leagueIdURL: leagueIdParam, teamIdURL: teamIdParam };
 
     clearInterval(leaguePollTimeoutID);
@@ -100,8 +98,6 @@ export default function AppStateInit({ children }) {
       }
     }
 
-    console.log(currentRosters, state.league.league.teams.length);
-
     areRostersReadyForCurrentWeek = currentRosters === state.league.league.teams.length;
   }
 
@@ -110,7 +106,6 @@ export default function AppStateInit({ children }) {
     if (!leagueFetched || (teamInURL && !areRostersReadyForCurrentWeek)) {
       return <HuddleUpLoader />;
     } else {
-      console.log(leagueFetched, teamInURL, areRostersReadyForCurrentWeek);
       return children;
     }
   } else if (userLoggedIn) {
