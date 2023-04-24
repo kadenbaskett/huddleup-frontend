@@ -14,6 +14,7 @@ export interface TeamCardProps {
 }
 
 export function TeamCard(props: TeamCardProps) {
+  console.log('Team card re render');
   const [lineup, setLineup] = useState(true);
   const [management, setManagement] = useState(false);
 

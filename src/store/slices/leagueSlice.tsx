@@ -1,6 +1,7 @@
 import { Team } from '@interfaces/league.interface';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchLeagueInfo, fetchLeaguePlayers } from '@services/apiClient';
+import { objectsEqual } from '@services/helpers';
 import { SLICE_STATUS } from '@store/slices/common';
 
 export interface leagueSliceState {
@@ -8,7 +9,6 @@ export interface leagueSliceState {
   viewingTeam: Team;
   playerList: any[];
   userTeam: Team;
-  transactions: any[];
   status: SLICE_STATUS;
   urlLeagueId: number;
   urlTeamId: number;
@@ -19,7 +19,6 @@ const initialState: leagueSliceState = {
   viewingTeam: null,
   playerList: null,
   userTeam: null,
-  transactions: null,
   status: SLICE_STATUS.IDLE,
   urlLeagueId: null,
   urlTeamId: null,
@@ -47,10 +46,22 @@ export const leagueSlice = createSlice({
 
         if (data.league.id === state.urlLeagueId) {
           if (data.status) {
-            state.playerList = data.players;
-            state.league = data.league;
-            state.userTeam = data.userTeam;
-            state.viewingTeam = data.viewingTeam;
+            const stateChange = !objectsEqual(state, data);
+            console.log('State change: ', stateChange);
+
+            const leagueChanged = !objectsEqual(state.league, data.league);
+            const leaguePlayersChanged = !objectsEqual(state.playerList, data.players);
+            const userTeamChanged = !objectsEqual(state.userTeam, data.userTeam);
+            const viewingTeamChanged = !objectsEqual(state.viewingTeam, data.viewingTeam);
+
+            if (leaguePlayersChanged) state.playerList = data.players;
+
+            if (leagueChanged) state.league = data.league;
+
+            if (userTeamChanged) state.userTeam = data.userTeam;
+
+            if (viewingTeamChanged) state.viewingTeam = data.viewingTeam;
+
             state.urlLeagueId = data.leagueIdURL;
             state.urlTeamId = data.teamIdURL;
             state.status = SLICE_STATUS.SUCCEEDED;
