@@ -63,11 +63,15 @@ function Leagues() {
             ) : (
               <div className='grid place-items-left py-4'>
                 <div className='text-2xl font-varsity text-darkBlue'>
-                  You can't join or create new leagues now that the NFL season has begun
+                  {`NFL Week ${currentWeek} - Leagues locked for remainder of the NFL season`}
                 </div>
               </div>
             )}
-            <div className='pt-5'>{userLeagues.map((league) => renderLeague(league))}</div>
+            {userLeagues.length === 0 ? (
+              <div className='pt-10 font-varsity text-left text-2xl'>You are in no leagues</div>
+            ) : (
+              <div className='pt-5'>{userLeagues.map((league) => renderLeague(league))}</div>
+            )}
           </div>
         </>
       )}

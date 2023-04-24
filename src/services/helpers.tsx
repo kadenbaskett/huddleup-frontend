@@ -271,6 +271,8 @@ export function useWindowResize() {
   const [dimension, setDimension] = useState([0, 0]);
 
   useEffect(() => {
+    setDimension([window.innerWidth, window.innerHeight]);
+
     window.addEventListener('resize', () => {
       setDimension([window.innerWidth, window.innerHeight]);
     });
