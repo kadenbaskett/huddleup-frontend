@@ -15,7 +15,6 @@ function league() {
   const [proposalNotification, setProposalNotification] = useState(undefined);
 
   const store = useSelector((state: StoreState) => state);
-
   const leagueInfoFetchStatus: String = store.league.status;
   const league = store.league.league;
   const viewingTeam = store.league.viewingTeam;
