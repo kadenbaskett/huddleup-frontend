@@ -111,6 +111,12 @@ export async function proposeTrade(
   return await postRequest(url, data);
 }
 
+export async function sendSetWeek(week: number) {
+  const url = '/database/advanceWeek';
+  const data = { week };
+  return await postRequest(url, data);
+}
+
 export async function addPlayer(
   addPlayerId: number,
   addPlayerExternalId: number,
