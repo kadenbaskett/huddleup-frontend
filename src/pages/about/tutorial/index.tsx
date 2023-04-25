@@ -20,7 +20,7 @@ export default function index() {
             </Link>
           </Group>
         </div>
-        <div className='bg-white rounded-xl p-5 pl-5 xl:pl-20 2xl:pl-40'>
+        <div className='bg-white rounded-xl p-5 pl-5 xl:pl-20 xr:pr-20 2xl:pr-40 2xl:pl-40'>
           <div className='font-varsity text-4xl text-darkBlue text-center pb-5'>User Tutorial</div>
           <div className='font-openSans text-lg text-darkBlue text-left pb-5'>
             Huddle Up operates in three key phases: pre-draft, draft, and post-draft. During the
