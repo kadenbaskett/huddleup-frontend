@@ -46,9 +46,6 @@ export const leagueSlice = createSlice({
 
         if (data.league.id === state.urlLeagueId) {
           if (data.status) {
-            const stateChange = !objectsEqual(state, data);
-            console.log('State change: ', stateChange);
-
             const leagueChanged = !objectsEqual(state.league, data.league);
             const leaguePlayersChanged = !objectsEqual(state.playerList, data.players);
             const userTeamChanged = !objectsEqual(state.userTeam, data.userTeam);

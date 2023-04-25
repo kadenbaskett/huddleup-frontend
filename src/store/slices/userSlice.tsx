@@ -4,6 +4,7 @@ import { User } from '@interfaces/user.interface';
 import { fetchUser, fetchUserLeagues, fetchUserTeams } from '@services/apiClient';
 import { SLICE_STATUS } from '@store/slices/common';
 import { logout, auth } from '../../firebase/firebase';
+import { objectsEqual } from '@services/helpers';
 
 export interface userSliceState {
   userInfo: User;
@@ -46,7 +47,10 @@ export const userSlice = createSlice({
         if (auth.currentUser) {
           state.status = SLICE_STATUS.SUCCEEDED;
           state.firebaseStatus = SLICE_STATUS.SUCCEEDED;
-          state.userInfo = action.payload.user;
+
+          if (!objectsEqual(state.userInfo, action.payload.user))
+            state.userInfo = action.payload.user;
+
           state.leagues = action.payload.leagues;
           state.teams = action.payload.teams;
         } else {
