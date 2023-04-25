@@ -32,6 +32,20 @@ const numPlayers: numPlayersSlider[] = [
   { value: 4, label: '4' },
 ];
 
+const getMinDate = () => {
+  const now = new Date();
+  now.setDate(now.getDate() + 1);
+  console.log(now);
+  return now;
+};
+
+const getDefaultDate = () => {
+  const now = new Date();
+  now.setDate(now.getDate() + 1);
+  now.setHours(now.getHours() + 1);
+  return now;
+};
+
 export default function index() {
   const user: userSliceState = useSelector((state: StoreState) => state.user);
   const [teams, setTeamValue] = useState(10);
@@ -39,7 +53,7 @@ export default function index() {
   const [maxPlayerRange, setMaxPlayerRange] = useState(4);
   const [leagueName, setLeagueName] = useState<string>('');
   const [leagueDescription, setLeagueDescription] = useState<string>('');
-  const [draftDate, setDraftDate] = useState<Date | null>(new Date());
+  const [draftDate, setDraftDate] = useState<Date | null>(getDefaultDate());
   const [draftTime, setDraftTime] = useState<string>('12:00 PM');
 
   const ref = useRef<HTMLInputElement>();
@@ -248,7 +262,12 @@ export default function index() {
           <div>
             <label className='font-OpenSans font-bold text-2xl'>Date of Draft:</label>
             <Group position='left'>
-              <DatePicker className='bg-white' value={draftDate} onChange={setDraftDate} />
+              <DatePicker
+                className='bg-white'
+                value={draftDate}
+                onChange={setDraftDate}
+                minDate={getMinDate()}
+              />
             </Group>
           </div>
 

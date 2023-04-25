@@ -17,6 +17,7 @@ export interface globalSliceState {
   season: number;
   status: SLICE_STATUS;
   seasonComplete: Boolean;
+  isSettingWeek: boolean;
   news: News[];
 }
 
@@ -28,13 +29,21 @@ const initialState: globalSliceState = {
   season: null,
   status: SLICE_STATUS.IDLE,
   seasonComplete: false,
+  isSettingWeek: false,
   news: [],
 };
 
 export const globalSlice = createSlice({
   name: 'global',
   initialState,
-  reducers: {},
+  reducers: {
+    setIsSettingWeek: (state, action) => {
+      return {
+        ...state,
+        isSettingWeek: action.payload,
+      };
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(handleGlobalInitThunk.fulfilled, (state, action) => {
@@ -71,3 +80,4 @@ export const handleGlobalInitThunk = createAsyncThunk('global/init', async () =>
 });
 
 export default globalSlice;
+export const { setIsSettingWeek } = globalSlice.actions;
