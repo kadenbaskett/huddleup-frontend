@@ -42,7 +42,11 @@ export default function Home(props: any) {
 
   return (
     <>
-      {showLoading && <HuddleUpLoader />}
+      {showLoading && (
+        <div className='min-h-screen'>
+          <HuddleUpLoader />
+        </div>
+      )}
       {!showLoading && (
         <div className='gap-6 bg-lightGrey p-10 min-h-screen'>
           {user.userInfo.username.includes('talloryx0') && (
