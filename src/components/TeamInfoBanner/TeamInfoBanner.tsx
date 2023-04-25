@@ -50,7 +50,6 @@ export function TeamInfoBanner(props: TeamInfoBannerProps) {
 
     setHomeScore(getTeamScore(newUserRoster, props.week));
 
-    console.log('newOtherRoster', newOtherRoster);
     setOtherScore(getTeamScore(newOtherRoster, props.week));
   }, [props.week]);
 
