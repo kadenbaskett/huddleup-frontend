@@ -109,7 +109,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
     // Another team owns this player - so propose a trade
     else {
       const tradeTeam = league.teams.find((t) => t.id === playerTeam.id);
-      const tradeRoster = tradeTeam.rosters.find((r) => r.week === currentWeek);
+      const tradeRoster = tradeTeam.rosters.find((r) => Number(r.week) === Number(currentWeek));
 
       setTradeRoster(tradeRoster);
       setTradePopupOpen(true);
@@ -117,13 +117,13 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
   };
 
   const getMyRoster = () => {
-    return myTeam ? myTeam.rosters.find((r) => r.week === Number(currentWeek)) : [];
+    return myTeam ? myTeam.rosters.find((r) => Number(r.week === Number(currentWeek))) : [];
   };
 
   useEffect(() => {
     // Don't update the positions unless the lineup change came from the database (as opposed to the client making the local change)
     if (!lineupChange) {
-      const players = rosters.find((roster) => roster.week.toString() === week)?.players;
+      const players = rosters.find((roster) => Number(roster.week) === Number(week))?.players;
       setPlayers(players);
       const activeQB = players
         .filter(
@@ -212,7 +212,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
       const outOfPosition = [];
 
       for (const playerInPosRosterId of playersInPosition) {
-        const roster = rosters.find((r) => r.week === Number(currentWeek));
+        const roster = rosters.find((r) => Number(r.week) === Number(currentWeek));
         const rosterPlayer = roster.players.find(
           (rosterPlayer) => rosterPlayer.id === playerInPosRosterId,
         );
@@ -378,7 +378,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
           <div className='p-3'>
             <SegmentedControl fullWidth value={week} data={weeks} onChange={(e) => setWeek(e)} />
           </div>
-          {week < currentWeek ? (
+          {Number(week) < Number(currentWeek) ? (
             <>
               <div className='text-xl font-varsity py-4'>Previous week's rosters are view only</div>
             </>
@@ -397,7 +397,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
                         key={child}
                         id={child}
                         player={players.find(({ id }) => id === child).player}
-                        disabled={disabled || week !== currentWeek}
+                        disabled={disabled || Number(week) !== Number(currentWeek)}
                       >
                         {child}
                       </Draggable>
@@ -412,7 +412,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
                         key={child}
                         id={child}
                         player={players.find(({ id }) => id === child).player}
-                        disabled={disabled || week !== currentWeek}
+                        disabled={disabled || Number(week) !== Number(currentWeek)}
                       >
                         {child}
                       </Draggable>
@@ -427,7 +427,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
                         key={child}
                         id={child}
                         player={players.find(({ id }) => id === child).player}
-                        disabled={disabled || week !== currentWeek}
+                        disabled={disabled || Number(week) !== Number(currentWeek)}
                       >
                         {child}
                       </Draggable>
@@ -442,7 +442,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
                         key={child}
                         id={child}
                         player={players.find(({ id }) => id === child).player}
-                        disabled={disabled || week !== currentWeek}
+                        disabled={disabled || Number(week) !== Number(currentWeek)}
                       >
                         {child}
                       </Draggable>
@@ -457,7 +457,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
                         key={child}
                         id={child}
                         player={players.find(({ id }) => id === child).player}
-                        disabled={disabled || week !== currentWeek}
+                        disabled={disabled || Number(week) !== Number(currentWeek)}
                       >
                         {child}
                       </Draggable>
@@ -474,7 +474,7 @@ export function DraggableLineupTable({ rosters, currentWeek, disabled, proposals
                         key={child}
                         id={child}
                         player={players.find(({ id }) => id === child).player}
-                        disabled={disabled || week !== currentWeek}
+                        disabled={disabled || Number(week) !== Number(currentWeek)}
                       >
                         {child}
                       </Draggable>
