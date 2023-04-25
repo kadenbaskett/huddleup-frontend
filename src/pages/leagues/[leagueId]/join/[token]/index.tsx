@@ -25,8 +25,8 @@ export default function index() {
   const fiveMins = 60 * 5;
   const teamFilled =
     userTeam?.rosters[0].players.length < league.settings.roster_settings.roster_size_limit;
-
-  const readyToDraft = inSeconds < fiveMins && teamFilled;
+  const leagueFilled = league.teams.length === league.settings.num_teams;
+  const readyToDraft = inSeconds < fiveMins && teamFilled && leagueFilled;
 
   const [JoinTeamByTokenPopUp, setJoinTeamByTokenPopUp] = useState(false);
   // const draftTime = useSelector(
