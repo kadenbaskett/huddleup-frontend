@@ -18,6 +18,7 @@ function league() {
         leagueId={Number(league.id)}
         page='home'
       />
+
       <LeagueHomeNavigation
         leagueId={Number(league.id)}
         leagueName={league.name}
