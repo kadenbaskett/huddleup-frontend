@@ -23,7 +23,7 @@ html, body {
     width: 100%;
     transition: 1s;
     height: 0px;
-    
+    z-index: 1000;    
 }
 
 .popout.open {
