@@ -51,7 +51,11 @@ export default function MyTeams(props: MyTeamsProps) {
       <div className='flex font-varsity justify-left p-4 text-3xl bg-darkBlue text-white rounded-t-xl'>
         My Teams
       </div>
-      <div className=''>{props.teams.map((team) => renderRow(team, props.leagues))}</div>
+      {props.teams.length === 0 ? (
+        <div className='p-2 font-varsity text-xl'>No Teams</div>
+      ) : (
+        <div className=''>{props.teams.map((team) => renderRow(team, props.leagues))}</div>
+      )}
     </div>
   );
 }
