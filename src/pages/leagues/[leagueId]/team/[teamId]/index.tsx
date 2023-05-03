@@ -12,6 +12,7 @@ import { TeamBanner } from '@components/TeamBanner/TeamBanner';
 import { SLICE_STATUS } from '@store/slices/common';
 
 function league() {
+  console.log('re render team');
   const [proposalNotification, setProposalNotification] = useState(undefined);
 
   const store = useSelector((state: StoreState) => state);

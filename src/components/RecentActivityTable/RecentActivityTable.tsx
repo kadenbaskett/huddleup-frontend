@@ -70,6 +70,8 @@ export function RecentActivityTable(props: RecentActivityTableProps) {
       <td>{getActivityDetail(p)}</td>
     </tr>
   ));
+  // show the most recent activity at the top
+  rows.reverse();
   return (
     <div className='bg-white rounded-xl hover:drop-shadow-md'>
       <div className='p-4 font-varsity justify-left text-2xl bg-darkBlue text-white rounded-t-xl'>
