@@ -284,6 +284,10 @@ export function useWindowResize() {
   return dimension;
 }
 
+export function objectsEqual(obj1: any, obj2: any): boolean {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
 export function getLeagueIcon(leagueName: string, screenSize: number) {
   const size = screenSize > 700 || screenSize === 0 ? 100 : 75;
   const color = stc(leagueName);

@@ -6,7 +6,7 @@ import { GiAmericanFootballHelmet } from 'react-icons/gi';
 const renderRow = (team: Team, leagues: League[]) => {
   const userLeague = leagues.find((league) => league.id === team.league.id);
   const activeLeague =
-    userLeague.settings.roster_settings.roster_size_limit !== team.rosters[0]?.players.length;
+    team.rosters[0]?.players.length < userLeague.settings.roster_settings.roster_size_limit - 5;
 
   const leagueLink = activeLeague
     ? `/leagues/${Number(team.league.id)}/join/${team.league.token}`

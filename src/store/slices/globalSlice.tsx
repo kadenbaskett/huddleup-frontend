@@ -50,7 +50,10 @@ export const globalSlice = createSlice({
         state.status = SLICE_STATUS.SUCCEEDED;
         state.publicLeagues = action.payload.publicLeagues;
         state.privateLeagues = action.payload.privateLeagues;
-        state.week = action.payload.timeframe.week;
+
+        if (state.week !== action.payload.timeframe.week)
+          state.week = action.payload.timeframe.week;
+
         state.season = action.payload.timeframe.season;
         state.seasonComplete =
           action.payload.timeframe.has_ended && action.payload.timeframe.week === 18;
